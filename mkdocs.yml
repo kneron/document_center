@@ -1,2 +1,7 @@
 site_name: Kneron Toolchain Manual
-theme: 'rtd-dropdown'
+repo_url: http://192.168.200.1:8088/jiyuan/toolchain_manual
+repo_name: GitLab
+theme: 'windmill'
+nav:
+  - Home: index.md
+#theme: 'rtd-dropdown'
