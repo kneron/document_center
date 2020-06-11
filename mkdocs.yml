@@ -1,7 +1,7 @@
 site_name: Kneron Toolchain Manual
 repo_url: http://192.168.200.1:8088/jiyuan/toolchain_manual
 repo_name: GitLab
-theme: 'mkdocs'
+theme: 'windmill'
 nav:
   - Home: index.md
   - Getting Start: getting_start.md
