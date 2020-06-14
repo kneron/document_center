@@ -10,12 +10,9 @@ Host API is the API to setup communication channels between host (such as PC, Em
 
 [The System API](host_api/system.md)
 
+[The Application API](host_api/app_api.md)
 
-
-The Application API
-
-
-The DME API
+[The DME API](host_api/dme_api.md)
 
 
 

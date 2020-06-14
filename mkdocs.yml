@@ -1,10 +1,10 @@
-site_name: Kneron Toolchain Manual
-repo_url: http://192.168.200.1:8088/jiyuan/toolchain_manual
-repo_name: GitLab
+site_name: Kneron Document Center
+#repo_url: http://192.168.200.1:8088/jiyuan/toolchain_manual
+#repo_name: GitLab
 theme: 'windmill'
 nav:
   - Home: index.md
-  - Getting Start: getting_start.md
+  - Getting Started: getting_start.md
   - Host API Reference: 
     - Host API Intro: host_api_reference.md
     - Application API reference: host_api/app_api.md

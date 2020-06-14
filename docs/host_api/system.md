@@ -105,6 +105,7 @@ System API is for system control, init/deinit system, and update firmware and mo
  * img_buf, buf_len: the fw image buffer and file size
  * return value: 0 if succeed, else error code
  
+
 ### Update SPL
 
 `int kdp_update_spl(int dev_idx, uint32_t mode, uint16_t auth_type, uint16_t spl_size,
