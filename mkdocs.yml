@@ -5,5 +5,10 @@ theme: 'windmill'
 nav:
   - Home: index.md
   - Getting Start: getting_start.md
-  - Linux Toolchain Manual: manual.md
+  - Host API Reference: 
+    - Host API Intro: host_api_reference.md
+    - Application API reference: host_api/app_api.md
+    - DME API reference: host_api/dme_api.md
+    - System API reference: host_api/system.md
+  - Linux Toolchain Manual: manual.md 
 #theme: 'rtd-dropdown'
