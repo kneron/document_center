@@ -382,13 +382,257 @@ The top 5 results for each image is printed out. After finishing the inference f
 
 We can compare the classification index results with the index list on here: [Imagenet Class Index](<https://gist.github.com/yrevar/942d3a0ac09ec9e5eb3a>)
 
-## 8. More advance user can dive into SDK example and create their own application
+## 8. Create New SDK Application
 
-1. explain how to register pre/post process function
-2. explain how to register cpu op
-3. explain how to make application call in scpu
-4. explain how to use host mode template for quick prototype if user like host mode (only for 96 board)
-5. explain how to use companion mode template for quick prototype if user like companion mode
+### 8.1. KL520 Firmware Architecture
+
+KL520 firmware is consisted of two bootloaders, IPL and SPL, and two RTOS (Real Time Operating System) images running on system cpu (SCPU) and NPU-assisting cpu (NCPU).
+
+When IPL (Initial Program Loader) in ROM starts to run on SCPU after power-on or reset, it loads SPL (Secondary Program Loader) from flash (automatically or type 1 in UART menu), then SPL loads SCPU firmware image from flash, and finally SCPU firmware loads NCPU firmware image which runs on NCPU.
+
+Both SCPU and NCPU firmware run RTOS with SCPU handling application, media input/output and peripheral drivers and NCPU handling CNN model pre/post processing. Two CPUs use interrupts and shared memory to achieve IPC (Inter Processor Communication).
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/8_1_1.png">
+</div>
+
+The examples of SDK here are for SCPU RTOS firmware and NCPU RTOS firmware. Both uses ARM Keil RTX.
+
+
+### 8.2. Firmware components
+
+* SCPU firmware:
+    * Project: companion or host
+        * a. Output: fw_scpu.bin
+    * Libs:
+        * a. sdk.lib			-- system/middle/peripheral drivers
+        * b. kapp.lib		-- FDR application lib [lib only]
+        * c. kdp-system.lib		-- System lib [lib only]
+        * d. kcomm.lib		-- Communication handler driver
+* NCPU firmware:
+    * Project: ncpu
+        * a. Output: fw_ncpu.bin
+    * Libs:
+        * a. kdpio-lib.lib		-- NPU i/o lib [lib only]
+        * b. sdk-ncpu.lib		-- NCPU supporting drivers
+* Workspace
+    * Multiple projects can be organized together
+        * a. example_projects/*
+    * A workspace includes projects from
+        * a. scpu/project/[APP]/[host, companion]/
+        * b. scpu/lib/[LIB]
+        * c. ncpu/project/[APP]/
+        * d. ncpu/lib/[kdpio, sdk-ncpu]
+
+### 8.3. Application Architecture
+
+An application is consisted of one or multiple CNN models for specific purposes, and corresponding preprocessing and postprocessing.
+There are many kinds of applications depending on specific use cases. Some application could have their image processing streamlined for best performance and some may not. Some applications could have multiple models, and some may have single model.
+
+A host mode application means that camera(s) and maybe display are located on the same board with KL520, and a companion mode application assumes camera image comes from outside like a different chip or PC.
+
+Tiny Yolo is a single model application with streamlined processing. Both companion mode and host mode are supported. Figure below is a companion mode example. 
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/8_3_1.png">
+</div>
+
+
+
+### 8.4. Create New Application Project
+
+* Use existing application project as template
+
+Example: ./scpu/project/tiny_yolo_v3/companion/
+Copy whole directory to a new one with files like this:
+
+```
+scpu/project/tiny_yolo_v3/companion/RTE/CMSIS/RTX_Config.c
+scpu/project/tiny_yolo_v3/companion/RTE/CMSIS/RTX_Config.h
+scpu/project/tiny_yolo_v3/companion/RTE/Device/ARMCM4_FP/startup_ARMCM4.s
+scpu/project/tiny_yolo_v3/companion/RTE/Device/ARMCM4_FP/system_ARMCM4.c
+scpu/project/tiny_yolo_v3/companion/companion.uvoptx
+scpu/project/tiny_yolo_v3/companion/companion.uvprojx
+scpu/project/tiny_yolo_v3/companion/main/main.c
+scpu/project/tiny_yolo_v3/companion/mozart_96.sct
+scpu/project/tiny_yolo_v3/companion/post_build.bat
+scpu/project/tiny_yolo_v3/companion/vtor.ini
+```
+
+Host mode may include more files to support UART console, camera image inference:
+
+```
+scpu/project/tiny_yolo_v3/host/main/main.c
+scpu/project/tiny_yolo_v3/host/main/kapp_tiny_yolo_console.c
+scpu/project/tiny_yolo_v3/host/main/kapp_tiny_yolo_inf.c
+scpu/project/tiny_yolo_v3/host/main/kapp_tiny_yolo_inf.h
+```
+
+Furthermore, make sure libraries are included such as these for companion application:
+
+```
+kapp.lib
+kdp-system.lib
+kcomm.lib
+sdk.lib
+```
+
+Host mode application may include less libraries if no communication (kapp.lib or kcomm.lib) with another chip or PC is needed:
+
+```
+kdp-system.lib
+sdk.lib
+```
+
+### 8.5. Create New NCPU Project
+
+* Use existing application’s Project:ncpu as template
+
+Example: ./ncpu/project/tiny_yolo_v3/
+Copy whole directory toa new one with files like this:
+
+```
+ncpu/project/tiny_yolo_v3/RTE/CMSIS/RTX_Config.c
+ncpu/project/tiny_yolo_v3/RTE/CMSIS/RTX_Config.h
+ncpu/project/tiny_yolo_v3/RTE/Device/ARMCM4_FP/startup_ARMCM4.s
+ncpu/project/tiny_yolo_v3/RTE/Device/ARMCM4_FP/system_ARMCM4.c
+ncpu/project/tiny_yolo_v3/main/main.c
+ncpu/project/tiny_yolo_v3/ncpu.uvoptx
+ncpu/project/tiny_yolo_v3/ncpu.uvprojx
+ncpu/project/tiny_yolo_v3/post_build.bat
+```
+
+Also, must include libraries:
+
+```
+kdpio-lib.lib
+sdk-ncpu.lib
+```
+
+### 8.6. Create New Workspace to Include All Projects
+
+* Use existing application’s workspace as template
+
+Copy the workspace.uvmpw file to your directory, add/remove projects as needed.
+`example_projects/tiny_yolo_v3_companion/workspace.uvmpw`
+A companion application workspace usually contains these projects:
+
+```
+Project:sdk
+Project:kcomm-lib
+Project:companion
+Project:sdk-ncpu
+Project:ncpu
+```
+
+A host application workspace usually contains these projects:
+```
+Project:sdk
+Project:companion
+Project:sdk-ncpu
+Project:ncpu
+```
+
+### 8.7. Create ISI Companion Application
+
+Main tasks in main.c
+
+* Initialize OS
+* Initialize SDK with companion mode
+`main_init(0)`
+* Load ncpu firmware
+`main_load_ncpu(0)`
+* Initialize communication module
+`kcomm_start()`
+
+Add operations for ISI command handler, e.g. in a shared directory/file (app/tiny_yolo_ops.c):
+```
+static struct kapp_ops kapp_tiny_yolo_ops = {
+    .start          = tiny_yolo_start,
+    .run_image      = tiny_yolo_run_image,
+    .get_result_len = tiny_yolo_get_result_len,
+};
+
+/**
+  .start: check application id at init time
+  .run_image: pass image and parameters to middleware driver to
+              run with the model(s) (model id TINY_YOLO_V3 here) 
+              of the application
+  .get_result_len: tell the length in bytes of a result buffer
+**/
+
+struct kapp_ops *tiny_yolo_get_ops(void)
+{
+    return &kapp_tiny_yolo_ops;
+}
+```
+
+Register new ops with ISI command handler:
+```
+struct kapp_ops *ops;
+
+ops = tiny_yolo_get_ops();
+kcomm_enable_isi_cmds(ops);
+```
+
+#### Support multiple models:
+	
+When an application includes multiple models, each model needs a separate result memory, and all result memory buffers must be allocated in DDR using kmdw_ddr_reserve() because they are filled up by NCPU.
+
+For companion mode this can be all done in .run_image callback function like age_gender ISI example where two models (KNERON_FDSSD and KNERON_AGE_GENDER) are run one after another.
+`scpu/project/age_gender/app/age_gender_ops.c`
+
+#### Parallel image processing for NPU and NCPU:
+
+When incoming images could be fed to NPU running model while previous image’s postposing to run on NCPU in parallel, a parallel bit can be set in image format to enable this feature.
+
+`define IMAGE_FORMAT_PARALLEL_PROC          BIT27`
+
+
+### 8.8. Create Host Mode Application with MIPI Camera
+Main tasks in main.c
+
+* Initialize OS
+* Initialize SDK with host mode (camera/display is initialized, ncpu firmware is loaded )
+`main_init(1)`
+* Initialize application console
+`console_entry()`
+
+Add your application needed console/camera/display and inference controls, such as those in:
+```
+scpu/project/tiny_yolo_v3/host/main/kapp_tiny_yolo_console.c
+scpu/project/tiny_yolo_v3/host/main/kapp_tiny_yolo_inf.c
+scpu/project/tiny_yolo_v3/host/main/kapp_tiny_yolo_inf.h
+```
+Host mode application can use the common operations as in companion mode with example in kapp_tiny_yolo_inf.c:
+```
+struct kapp_ops *ops;
+
+ops = tiny_yolo_get_ops();
+kcomm_enable_isi_cmds(ops);
+```
+
+### 8.9. Register New Pre/Post Processing and CPU functions
+
+For application that using new model, users need to register the corresponding pre and post process functions. User can refer to tiny_yolo_v3_companion project's main function in ncpu. 
+
+First, user need to define an new model ID for the model. For example, `TINY_YOLO_V3` is defined model ID for tiny yolo v3 model.
+
+There is a default pre-processing function to handle scaling, cropping, rotation, 0-normalization with hardware acceleration. 
+
+If a special processing is needed for incoming raw image, this API can be called to register in `void pre_processing_add(void)` function.
+
+`kdpio_pre_processing_register(TINY_YOLO_V3, new_pre_yolo_v3);`
+
+Same procedure can be applied to post process as well. We need to add the following into the `void post_processing_add(void)` function.
+
+`kdpio_post_processing_register(TINY_YOLO_V3, new_post_yolo_v3);`
+
+Sometime, KL520 NPU cannot handle some layers in the model, and user need to implement a CPU function to complete the model. The user will require to register the cpu function so that the runtime library knows what to do during the cpu node. Users can do it in `void cpu_processing_add(void)` function, add the cpu funcitons:
+
+`kdpio_cpu_op_register(ZERO_UPSAMPLE, new_zero_upsample_op);`
+
+Please note that user needs to define an new cpu function ID for this cpu function.
 
 ## 9. More SDK example code for SOC peripheral drivers
 
