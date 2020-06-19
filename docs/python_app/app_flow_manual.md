@@ -10,7 +10,7 @@ Kneron simulator uses a JSON file to specify parameters used throughout the test
 <img src="../imgs/python_app/json.png">
 </div>
 
-The outermost key, "flow1", indicates one whole test flow: preprocess -> simulator -> postprocess. In the example, there is only one test for face detection, but you can test multiple flows sequentially by adding more outer "flow" keys. In each flow, there are three sections (pre_proc, emulator, post_proc) to define parameters necessary to complete the testing process. 
+The outermost key, "flow1", indicates one whole test flow: preprocess -> simulator -> postprocess. In the example, there is only one test for face detection, but you can test multiple flows sequentially by adding more outer "flow" keys. In each flow, there are three sections (pre_proc, emulator, post_proc) to define parameters necessary to complete the testing process.
 
 If any of the required keys are missing, the program will end. If any other key is missing, the default value is used.
 #### Preprocess Parameters
@@ -80,7 +80,32 @@ While not "required", some parameters without values may cause errors during exe
 **Required keys:** pop_func_name
  - postproc: Specifies whether postprocess should be done.
     - Acceptable values: [true, false], default value: true
- - pop_func_name: Name of the postprocess function to run.
+ - **pop_func_name**: Name of the postprocess function to run.
 	- Acceptable values: ["app_flow_postproc_face_recog", "app_flow_postproc_landmark", "app_flow_postproc_nir_liveness", "app_flow_postproc_nir_liveness_float", "app_flow_postproc_ssd_face_detect", "app_flow_postproc_ssd_face_detect_float"] or any custom defined functions
  - bFinal: Specifies whether this flow is the last one in the testing process.
 	 - Acceptable values: [true, false], default value: true
+
+## Adding custom preprocess or postprocess function
+Since inference results can vary based on users' intentions, we provide support for integrating custom preprocess and postprocess functions.
+
+### Python defined
+If your functions are defined in Python, integration is simple.
+1. Import the module containing your preprocess and postprocess functions to preprocess.py and postprocess.py, respectively.
+2. Add the specific function to the mappings in the files, PREPROCESS_MAPPING or POSTPROCESS_MAPPING. The key should be the same as the func_name field that you specify in the input JSON configuration. The value will be the name of your custom function.
+3. Run the flow!
+
+### C defined
+If your functions are defined in C or C++, integration is a bit trickier. To be able to run the code through Python, you first need to compile the C functions into a shared library for Python to import.
+
+1. Compile the C/C++ functions into a shared library (.so). Be sure to add ```extern "C"``` to any C++ functions you intend to directly call in the Python flow. 
+2. Copy the library into this project's python_flow directory.
+3. Import the shared library into the [constants](python_flow/common/constants.py) module using the standard ctypes module:
+    ```
+    MY_LIB = ctypes.CDLL("./my_lib.so")
+    ```
+4. Define any C/C++ structures that are needed as classes in Python. Some examples can be found in the [classes](python_flow/common/classes.py) module. These classes must extend ```ctypes.Structure``` and must define the same variables, including type and name.
+5. Define a wrapper to the C/C++ function you wish to call. Simply get the function name, define the argument and return types, and call the function. Here is an [example](examples/my_functions.py) of the Python implementation.
+6. Add the wrapper function into the mappings in the files, PREPROCESS_MAPPING or POSTPROCESS_MAPPING.
+7. Run the flow!
+
+If there are any parameters necessary for your custom function, simply add another field in the respective section in the input JSON configuration. Additionally, before running the flow, you may need to modify the data returned from the Kneron simulator to fit the inputs for your custom postprocess function. (Link to other section here)
