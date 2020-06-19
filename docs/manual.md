@@ -5,7 +5,8 @@
 
 # Kneron Linux Toolchain Manual
 
-** 2020 April **
+** 2020 June **
+** V0.6.1 **
 
 ## 0. Overview
 
@@ -146,12 +147,12 @@ If there’s customized input shape for the model file, you need to use the foll
 python /workspace/onnx-keras/generate_onnx.py absolute_path_of_input_model_file -o absolute_path_of_output_model_file -I 1 model_input_width model_input_height num_of_channel
 ```
 
-Then need to run the command in [3.3.6 ONNX to ONNX](#336-onnx-to-onnx).
+Then need to run the command in [3.3.6.1 Optimize onnx files ](#3361-Optimize-onnx-files).
 
 #### 3.3.2 Tensorflow to ONNX
 
 ```bash
-python /workspace/scripts/tensorflow2onnx absolute_path_of_input_model_file absolute_path_of_output_onnx_model_file
+python /workspace/scripts/tensorflow2onnx.py absolute_path_of_input_model_file absolute_path_of_output_onnx_model_file
 ```
 
 For the provided example model: `mnist.pb`
@@ -160,7 +161,7 @@ For the provided example model: `mnist.pb`
 python /workspace/scripts/tensorflow2onnx.py /data1/tensorflow/model/mnist.pb /data1/mnist.pb.onnx
 ```
 
-Then need to run the command in [3.3.6 ONNX to ONNX](#336-onnx-to-onnx).
+Then need to run the command in [3.3.6.1 Optimize onnx files ](#3361-Optimize-onnx-files).
 
 #### 3.3.3 Pytorch to ONNX
 
@@ -174,7 +175,7 @@ For the provided example model: `resnet34.pth`
 python /workspace/scripts/pytorch2onnx.py /data1/pytorch/models/resnet34.pth 3 224 224 /data1/resnet34.onnx
 ```
 
-Then need to run the command in [3.3.6 ONNX to ONNX](#336-onnx-to-onnx).
+Then need to run the command in [ 3.3.6.1 Optimize onnx files ](#3361-Optimize-onnx-files).
 
 #### 3.3.5 Caffe to ONNX
 
@@ -188,10 +189,10 @@ For the provided example model: `mobilenetv2.caffemodel`
 python /workspace/onnx-caffe/generate_onnx.py -o /data1/mobilenetv2.onnx -w /data1/caffe/models/mobilenetv2.caffemodel -n /data1/caffe/models/mobilenetv2.prototxt
 ```
 
-Then need to run the command in [3.3.6 ONNX to ONNX](#336-onnx-to-onnx).
+Then need to run the command in [3.3.6.1 Optimize onnx files ](#3361-Optimize-onnx-files).
 
 #### 3.3.6 ONNX to ONNX
-
+##### 3.3.6.1 Optimize onnx files 
 After converting models from other frameworks to onnx format, you need to run the following command:
 
 ```bash
@@ -201,6 +202,12 @@ python /workspace/scripts/onnx2onnx.py absolute_path_of_your_input_onnx_model_fi
 Add `–m` only when there is customized layer in your model.
 
 This script will optimize the layer in your model.
+##### 3.3.6.2 Optimize model with empty branch 
+If the model has empty branch, which means one of the branch has no convolution or batchnorm layer, you need to run the following command to optimize the model:
+
+```bash
+python /workspace/scripts/onnx2onnx.py absolute_path_of_your_input_onnx_model_file -o absolute_path_of_output_onnx_model_file --add-bn-on-skip
+```
 
 #### 3.3.7 Model Editor
 
@@ -284,13 +291,13 @@ optional arguments:
 1. In the `/workspace/scripts/res` folder, there is a VDSR model from Tensorflow. Convert this model firstly.
 
 ```bash
-cd /workspace/scripts && ./tf2onnx.sh res/vdsr_41_20layer_1.pb res/tmp.onnx images:0 output:0
+cd /workspace/scripts && python tensorflow2onnx.py  res/vdsr_41_20layer_1.pb res/tmp.onnx 
 ```
 
 2. This onnx file seems valid. But, it's channel last for the input and output. It is using `Transpose` to convert to channel first, affecting the performance. Thus, now use the editor to delete these `Transpose` and reset the shapes.
 
 ```bash
-cd /workspace/scripts && python editor.py res/tmp.onnx new.onnx -d Conv2D__6 Conv2D_19__84 -i 'images:0 1 3 41 41' -o 'output:0 1 3 41 41'
+cd /workspace/scripts && python editor.py res/tmp.onnx new.onnx -d Conv2D__6 Conv2D_19__84 -i 'images:0 1 3 41 41' -o 'raw_output___3:0 1 3 41 41' 
 ```
 
 Now, it has no `Transpose` and take channel first inputs directly.
