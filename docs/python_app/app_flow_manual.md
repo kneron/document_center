@@ -109,3 +109,20 @@ If your functions are defined in C or C++, integration is a bit trickier. To be 
 7. Run the flow!
 
 If there are any parameters necessary for your custom function, simply add another field in the respective section in the input JSON configuration. Additionally, before running the flow, you may need to modify the data returned from the Kneron simulator to fit the inputs for your custom postprocess function. (Link to other section here)
+
+## Running a set of images
+usage: python3 example.py [-h] [-d DIRECTORY] [-i {binary, image}] [-t {1, 2}] [-s {1, 2, 3}] [-w WORKERS]
+
+Options:
+ - -h: displays the help message
+ - -d: specifies the directory of images to test
+	 - The directory of images should be placed in the bin folder 
+ - -i: specifies the type of image input to be tested
+	 - The default image type is binary.
+ - -t: specifies the type of test to run
+	 - The specified types are Kneron tests. To create your own test, check example.py for guidance; the two tests are rgb_fdr and nir_liveness.
+ - -s: specifies the number of stages to run through
+ - -w: specifies the number of worker processes to utilize
+	 - The default number of workers is one, or sequential processing.
+
+To modify the argument parser, check the setup_parser function in example.py. To add a custom test, add it in the example.py module and the TEST_TYPES mapping.
