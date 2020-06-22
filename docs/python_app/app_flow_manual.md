@@ -78,16 +78,16 @@ If your functions are defined in C or C++, integration is a bit trickier. To be 
 
 1. Compile the C/C++ functions into a shared library (.so). Be sure to add ```extern "C"``` to any C++ functions you intend to directly call in the Python flow. 
 2. Copy the library into this project's python_flow directory.
-3. Import the shared library into the [constants](python_flow/common/constants.py) module using the standard ctypes module:
+3. Import the shared library into the constants module using the standard ctypes module:
     ```
     MY_LIB = ctypes.CDLL("./my_lib.so")
     ```
-4. Define any C/C++ structures that are needed as classes in Python. Some examples can be found in the [classes](python_flow/common/classes.py) module. These classes must extend ```ctypes.Structure``` and must define the same variables, including type and name.
-5. Define a wrapper to the C/C++ function you wish to call. Simply get the function name, define the argument and return types, and call the function. Here is an [example](examples/my_functions.py) of the Python implementation.
+4. Define any C/C++ structures that are needed as classes in Python. Some examples can be found in the classes module. These classes must extend ```ctypes.Structure``` and must define the same variables, including type and name.
+5. Define a wrapper to the C/C++ function you wish to call. Simply get the function name, define the argument and return types, and call the function.
 6. Add the wrapper function into the mappings in the files, PREPROCESS_MAPPING or POSTPROCESS_MAPPING.
 7. Run the flow!
 
-If there are any parameters necessary for your custom function, simply add another field in the respective section in the input JSON configuration. Additionally, before running the flow, you may need to modify the data returned from the Kneron simulator to fit the inputs for your custom postprocess function. (Link to other section here)
+If there are any parameters necessary for your custom function, simply add another field in the respective section in the input JSON configuration. Additionally, before running the flow, you may need to [modify the data](#simulator-output) returned from the Kneron simulator to fit the inputs for your custom postprocess function.
 
 ## Running a set of images
 usage: python3 example.py [-h] [-d DIRECTORY] [-i {binary, image}] [-t {1, 2}] [-s {1, 2, 3}] [-w WORKERS]
@@ -115,6 +115,11 @@ The Dynasty output is a list of float values for every output node in the given 
 
 ## Putting different flows together
 To see an example of multiple tests together, here is the predefined rgb_fdr test, where it performs face detection, landmark detection, and face recognition together on one image.
+<div align="center">
+<img src="../imgs/python_app/test_flow.png">
+</div>
 Simply specify the input JSON configuration file for the corresponding test being performed. You may also define any classes that allow for sharing of data between the testing flows. Then call the simulator for each flow and any other processing of data you may need to do. 
-In the example, there is only one test for face detection, but you can test multiple flows sequentially by adding more outer "flow" keys. CHAGNE THIS
-
+In the example, each of the JSON configurations defined has only one flow key, and the entire process uses three configuration files for face detection, landmark detection, and face recognition. However, you can test multiple flows sequentially by adding more outer "flow" keys to one single JSON.
+<div align="center">
+<img src="../imgs/python_app/mult_flow_json.png">
+</div>
