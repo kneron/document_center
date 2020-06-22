@@ -15,6 +15,7 @@ If any of the required keys are missing, the program will end. If any other key 
 **Required keys:** rgba_img_path, raw_img_fmt, prp_func_name
 
 While not "required", some parameters without values may cause errors during execution: npu_width, npu_height, bit_width, radix, img_in_width, and img_in_height.
+
 | Name | Description | Default Value | Acceptable Values |
 |:----:|:-----------:|:-------------:|:-----------------:|
 | is_bin_img | Specifies whether input test images are binary files (true) or image files (false) | true | "true", "false" |
@@ -43,6 +44,7 @@ While not "required", some parameters without values may cause errors during exe
 **Required keys if hardware csim is used:** setup_file, cmd_file, weight_file, dram_dump_file, emu_dump_file_prefix
 **Required key if dynasty float is used:** onnx_file
 **Required keys if dynasty fixed is used:** onnx_file, json_file
+
 | Name | Description | Default Value | Acceptable Values |
 |:----:|:-----------:|:-------------:|:-----------------:|
 | setup_file | Name of the binary setup file used for Kneron hardware csim | X | any string |
@@ -58,6 +60,7 @@ While not "required", some parameters without values may cause errors during exe
 
 #### Postprocess Parameters
 **Required keys:** pop_func_name
+
 | Name | Description | Default Value | Acceptable Values |
 |:----:|:-----------:|:-------------:|:-----------------:|
 | postproc | Specifies whether postprocess should be done | true | true, false |
