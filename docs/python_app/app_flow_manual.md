@@ -10,79 +10,59 @@ Kneron simulator uses a JSON file to specify parameters used throughout the test
 </div>
 The outermost key, "flow1", indicates one whole test flow: preprocess -> simulator -> postprocess. In each flow, there are three sections (pre_proc, emulator, post_proc) to define parameters necessary to complete the testing process. The parameters shown are used in Kneron's testing flow; you may add new parameters to fit your custom preprocess or postprocess functions.
 
-If any of the required keys are missing, the program will end. If any other key is missing, the default value is used.
+If any of the required keys are missing, the program will end. If any other key is missing, the default value is used. None of the following parameters in the appropriate section are required if you are using custom preprocess or postprocess functions.
 #### Preprocess Parameters
 **Required keys:** rgba_img_path, raw_img_fmt, prp_func_name
 
 While not "required", some parameters without values may cause errors during execution: npu_width, npu_height, bit_width, radix, img_in_width, and img_in_height.
- - is_bin_img: Specifies whether the input test images are binary files (true) or image files (false).
-    - Acceptable values: [true, false], default value: true
- - **raw_img_fmt**: Color format of the test images.
-    - Acceptable values: ["NIR888", "RGB565", "RGB888"]
- - **rgba_img_path**: Name of the preprocessed RGBA binary file. This will be the input for the simulator.
- - preproc: Specifies whether preprocessing should be done.
-    - Acceptable values: [true, false], default value: true
- - **prp_func_name**: Name of the preprocess function to run.
-    - Acceptable values: ["app_flow_preproc_face_recognition", "app_flow_preproc_landmark", "app_flow_preproc_nir_liveness", "app_flow_preproc_primitive"] or any custom defined functions
- - out_img_fmt: Color format of the preprocessed image.
-    - Acceptable values: ["BGR", "L", "RGB"], default value: "L"
- - npu_width: Width of the image for the model input.
-    - Acceptable values: Non-negative integers, default value: 0
- - npu_height: Height of the image for the model input.
-    - Acceptable values: Non-negative integers, default value: 0
- - bKeepRatio: Specifies whether to keep the aspect ratio of the original image after preprocess.
-    - Acceptable values: [true, false], default value: true
- - norm_mode: Normalization mode.
-    - Acceptable values: ["yolo", "kneron", "caffe", "tf", "torch"], default value: "kneron"
- - bit_width: Bit width of image pixels.
-    - Acceptable values: Non-negative integers, default value: 0
- - radix: Radix for converting float values to int values. int((float)x * 2<sup>radix</sup>)
-    - Acceptable values: Non-negative integers, default value: 0
- - img_in_width: Width of the original input image before preprocess.
-    - Acceptable values: Non-negative integers, default value: 0
- - img_in_height: Height of the original input image before preprocess.
-    - Acceptable values: Non-negative integers, default value: 0
- - pad_mode: Type of padding to be done. 1 indicates one side of padding (right or bottom) and 0 indicates both sides.
-    - Acceptable values: [0, 1], default value: 0
- - rotate: Type of rotation to be done. 0 indicates no rotate, 1 indicates a clockwise rotation, and 2 indicates counter-clockwise rotation.
-    - Acceptable values: [0, 1, 2], default value: 0
- - bCropFirstly: Specifies whether the image needs to be cropped. 0 indicates no crop and any other value indicates crop.
-    - Acceptable values: Non-negative integers, default value: 0
- - crop_x: Upper left x coordinate of the original image to start the crop.
-    - Acceptable values: Integers between 0 and img_in_width, default value: 0
- - crop_y: Upper left y coordinate of the original image to start the crop.
-    - Acceptable values: Integers between 0 and img_in_height, default value: 0
- - crop_w: Width of crop.
-    - Acceptable values: Non-negative integers, default value: 0
- - crop_h: Height of crop.
-    - Acceptable values: Non-negative integers, default value: 0
+| Name | Description | Default Value | Acceptable Values |
+|:----:|:-----------:|:-------------:|:-----------------:|
+| is_bin_img | Specifies whether input test images are binary files (true) or image files (false) | true | "true", "false" |
+| **raw_img_fmt** | Color format of the input test images | X | "NIR888", "RGB565", "RGB888" |
+| **rgba_img_path** | Name of the preprocessed RGBA binary file used as simulator input | X | any string |
+| preproc | Specifies whether preprocessing should be done | true | "true", "false" |
+| **prp_func_name** | Name of the preprocess function to run | X | "app_flow_preproc_face_recognition", "app_flow_preproc_landmark", "app_flow_preproc_nir_liveness", "app_flow_preproc_primitive", or any custom defined functions |
+| out_img_fmt | Color format of the preprocessed image | "L" | "BGR", "L", "RGB" |
+| npu_width | Width of the image for the model input | 0 | non-negative integers |
+| npu_height | Height of the image for the model input | 0 | non-negative integers |
+| bKeepRatio | Specifies whether to keep the aspect ratio of the original image after preprocess | true | "true", "false" |
+| norm_mode | Normalization mode | "kneron" | "yolo", "kneron", "caffe", "tf", "torch" |
+| bit_width | Bit width of image pixels | 0 | non-negative integers |
+| radix | Radix for converting float values to int values, int((float)x * 2<sup>radix</sup>) | 0 | non-negative integers |
+| img_in_width | Width of the original input image before preprocessing | 0 | non-negative integers |
+| img_in_height | Height of the original input image before preprocessing | 0 | non-negative integers |
+| pad_mode | Type of padding to be done, 1 indicates one side of padding (right or bottom) and 0 indicates both sides | 0 | 0, 1 |
+| rotate | Type of rotation to be done, 0 indicates no rotate, 1 indicates a clockwise rotation, and 2 indicates counter-clockwise rotation | 0 | 0, 1, 2 |
+| bCropFirstly | Specifies whether the image needs to be cropped, 0 indicates no crop and any other value indicates crop | 0 | non-negative integers |
+| crop_x | Upper left x coordinate of the original image to start the crop | 0 | integers between 0 and img_in_width |
+| crop_y | Upper left y coordinate of the original image to start the crop | 0 | integers between 0 and img_in_height |
+| crop_w | Width of crop | 0 | non-negative integers |
+| crop_y | Height of crop | 0 | non-negative integers |
 
 #### Simulator Parameters
 **Required keys if hardware csim is used:** setup_file, cmd_file, weight_file, dram_dump_file, emu_dump_file_prefix
 **Required key if dynasty float is used:** onnx_file
 **Required keys if dynasty fixed is used:** onnx_file, json_file
- - setup_file: Name of binary setup file used for Kneron hardware csim.
- - cmd_file: Name of binary command file used for Kneron hardware csim.
- - weight_file: Name of binary weight file used for Kneron hardware csim.
- - exec_emulator: Specifies whether simulation should be done.
-	 - Acceptable values: [true, false], default value: true
- - dram_dump_file: Name of file to dump Kneron hardware csim results.
- - emu_dump_files_prefix: Name of prefix to distinguish dram_dump_file results.
- - run_float_dynasty: Specifies whether to run Kneron dynasty float point simulator.
-	 - Acceptable values: [true, false], default value: false
- - run_fixed_dynasty: Specifies whether to run Kneron dynasty fixed point simulator. This value is ignored if run_float_dynasty is set to true.
-	 - Acceptable values: [true, false], default value: false
- - "onnx_file": Name of onnx file to use for the Kneron dynasty simulator.
- - "json_file": Name of json file to use for the Kneron dynasty fixed point simulator.
+| Name | Description | Default Value | Acceptable Values |
+|:----:|:-----------:|:-------------:|:-----------------:|
+| setup_file | Name of the binary setup file used for Kneron hardware csim | X | any string |
+| cmd_file | Name of the binary command file used for Kneron hardware csim | X | any string |
+| weight_file | Name of binary weight file used for Kneron hardware csim | X | any string |
+| exec_emulator | Specifies whether simulation should be done | true | true, false |
+| dram_dump_file | Name of file to dump Kneron hardware csim results | X | any string |
+| emu_dump_files_prefix | Name of prefix to distinguish dram_dump_file results | X | any string |
+| run_float_dynasty | Specifies whether to run Kneron dynasty float point simulator | false | true, false |
+| run_fixed_dynasty | Specifies whether to run Kneron dynasty fixed point simulator, this value is ignored if run_float_dynasty is set to true | false | true, false |
+| onnx_file | Name of ONNX file to use for the Kneron dynasty simulator | X | any string |
+| json_file | Name of JSON file to use for the Kneron dynasty fixed point simulator | X | any string |
 
 #### Postprocess Parameters
 **Required keys:** pop_func_name
- - postproc: Specifies whether postprocess should be done.
-    - Acceptable values: [true, false], default value: true
- - **pop_func_name**: Name of the postprocess function to run.
-	- Acceptable values: ["app_flow_postproc_face_recog", "app_flow_postproc_landmark", "app_flow_postproc_nir_liveness", "app_flow_postproc_nir_liveness_float", "app_flow_postproc_ssd_face_detect", "app_flow_postproc_ssd_face_detect_float"] or any custom defined functions
- - bFinal: Specifies whether this flow is the last one in the testing process.
-	 - Acceptable values: [true, false], default value: true
+| Name | Description | Default Value | Acceptable Values |
+|:----:|:-----------:|:-------------:|:-----------------:|
+| postproc | Specifies whether postprocess should be done | true | true, false |
+| **pop_func_name** | Name of the postprocess function to run | X | "app_flow_postproc_face_recog", "app_flow_postproc_landmark", "app_flow_postproc_nir_liveness", "app_flow_postproc_nir_liveness_float", "app_flow_postproc_ssd_face_detect", "app_flow_postproc_ssd_face_detect_float", or any custom defined functions |
+| bFinal | Specifies whether this flow is the last one in the testing process | true | true, false |
 
 ## Adding custom preprocess or postprocess function
 Since inference results can vary based on users' intentions, we provide support for integrating custom preprocess and postprocess functions.
@@ -136,3 +116,5 @@ The Dynasty output is a list of float values for every output node in the given 
 ## Putting different flows together
 To see an example of multiple tests together, here is the predefined rgb_fdr test, where it performs face detection, landmark detection, and face recognition together on one image.
 Simply specify the input JSON configuration file for the corresponding test being performed. You may also define any classes that allow for sharing of data between the testing flows. Then call the simulator for each flow and any other processing of data you may need to do. 
+In the example, there is only one test for face detection, but you can test multiple flows sequentially by adding more outer "flow" keys. CHAGNE THIS
+
