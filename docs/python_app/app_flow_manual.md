@@ -5,18 +5,17 @@ This project allows users to perform image inference using Kneron's built in sim
 ## Configuring Input
 
 Kneron simulator uses a JSON file to specify parameters used throughout the testing process.
-
 <div align="center">
 <img src="../imgs/python_app/json.png">
 </div>
-
-The outermost key, "flow1", indicates one whole test flow: preprocess -> simulator -> postprocess. In the example, there is only one test for face detection, but you can test multiple flows sequentially by adding more outer "flow" keys. In each flow, there are three sections (pre_proc, emulator, post_proc) to define parameters necessary to complete the testing process.
+The outermost key, "flow1", indicates one whole test flow: preprocess -> simulator -> postprocess. In each flow, there are three sections (pre_proc, emulator, post_proc) to define parameters necessary to complete the testing process. The parameters shown are used in Kneron's testing flow; you may add new parameters to fit your custom preprocess or postprocess functions.
 
 If any of the required keys are missing, the program will end. If any other key is missing, the default value is used.
 #### Preprocess Parameters
 **Required keys:** rgba_img_path, raw_img_fmt, prp_func_name
+
 While not "required", some parameters without values may cause errors during execution: npu_width, npu_height, bit_width, radix, img_in_width, and img_in_height.
- - is_bin_img: Specifies whether the test images are binary files (true) or image files (false).
+ - is_bin_img: Specifies whether the input test images are binary files (true) or image files (false).
     - Acceptable values: [true, false], default value: true
  - **raw_img_fmt**: Color format of the test images.
     - Acceptable values: ["NIR888", "RGB565", "RGB888"]
@@ -126,3 +125,14 @@ Options:
 	 - The default number of workers is one, or sequential processing.
 
 To modify the argument parser, check the setup_parser function in example.py. To add a custom test, add it in the example.py module and the TEST_TYPES mapping.
+
+## Simulator output
+The results of the simulator vary depending on which one is invoked: hardware csim or dynasty. 
+### Hardware csim
+The hardware csim output is binary data for every output node in the ONNX model. The results are stored in the following format: [height][channel][width]. The data is also 16-byte aligned, and each data point is one byte. The byte data is in fixed point format, so you will first need to convert if you wish to use floating point values. To do this conversion, a specific radix and scale for each output node will need to be provided. These results are stored in a file called "image_name.bin_dram.bin".
+### Dynasty
+The Dynasty output is a list of float values for every output node in the given ONNX model. The results for each output are in channel last format. These results are stored in a file called "image_name_test_rgba.bin.onnx_out_num.txt". Be sure to verify that the "num" result file matches the output of the ONNX model you want by checking the number of lines in the file is equal to channel * row * column. After getting the values from the correct files, you can use them in your custom postprocess functions.
+
+## Putting different flows together
+To see an example of multiple tests together, here is the predefined rgb_fdr test, where it performs face detection, landmark detection, and face recognition together on one image.
+Simply specify the input JSON configuration file for the corresponding test being performed. You may also define any classes that allow for sharing of data between the testing flows. Then call the simulator for each flow and any other processing of data you may need to do. 
