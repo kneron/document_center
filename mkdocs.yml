@@ -10,5 +10,7 @@ nav:
     - Application API reference: host_api/app_api.md
     - DME API reference: host_api/dme_api.md
     - System API reference: host_api/system.md
-  - Linux Toolchain Manual: manual.md 
+  - Toolchain Docker: 
+    - Manual: manual.md
+    - End to End Simulator: python_app/app_flow_manual.md 
 #theme: 'rtd-dropdown'
