@@ -6,7 +6,7 @@ This project allows users to perform image inference using Kneron's built in sim
 
 Kneron simulator uses a JSON file to specify parameters used throughout the testing process.
 <div align="center">
-<img src="../imgs/python_app/json.png">
+<img src="../../imgs/python_app/json.png">
 </div>
 The outermost key, "flow1", indicates one whole test flow: preprocess -> simulator -> postprocess. In each flow, there are three sections (pre_proc, emulator, post_proc) to define parameters necessary to complete the testing process. The parameters shown are used in Kneron's testing flow; you may add new parameters to fit your custom preprocess or postprocess functions.
 
@@ -72,6 +72,7 @@ Since inference results can vary based on users' intentions, we provide support 
 
 ### Python defined
 If your functions are defined in Python, integration is simple.
+
 1. Import the module containing your preprocess and postprocess functions to preprocess.py and postprocess.py, respectively.
 2. Add the specific function to the mappings in the files, PREPROCESS_MAPPING or POSTPROCESS_MAPPING. The key should be the same as the func_name field that you specify in the input JSON configuration. The value will be the name of your custom function.
 3. Run the flow!
@@ -119,10 +120,10 @@ The Dynasty output is a list of float values for every output node in the given 
 ## Putting different flows together
 To see an example of multiple tests together, here is the predefined rgb_fdr test, where it performs face detection, landmark detection, and face recognition together on one image.
 <div align="center">
-<img src="../imgs/python_app/test_flow.png">
+<img src="../../imgs/python_app/test_flow.png">
 </div>
 Simply specify the input JSON configuration file for the corresponding test being performed. You may also define any classes that allow for sharing of data between the testing flows. Then call the simulator for each flow and any other processing of data you may need to do. 
 In the example, each of the JSON configurations defined has only one flow key, and the entire process uses three configuration files for face detection, landmark detection, and face recognition. However, you can test multiple flows sequentially by adding more outer "flow" keys to one single JSON.
 <div align="center">
-<img src="../imgs/python_app/mult_flow_json.png">
+<img src="../../imgs/python_app/mult_flow_json.png">
 </div>
