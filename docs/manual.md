@@ -196,18 +196,13 @@ Then need to run the command in [3.3.6.1 Optimize onnx files ](#3361-Optimize-on
 After converting models from other frameworks to onnx format, you need to run the following command:
 
 ```bash
-python /workspace/scripts/onnx2onnx.py absolute_path_of_your_input_onnx_model_file -o absolute_path_of_output_onnx_model_file (-m)
+python /workspace/scripts/onnx2onnx.py absolute_path_of_your_input_onnx_model_file -o absolute_path_of_output_onnx_model_file -t --add-bn-on-skip (-m)
 ```
 
 Add `–m` only when there is customized layer in your model.
 
 This script will optimize the layer in your model.
-##### 3.3.6.2 Optimize model with empty branch 
-If the model has empty branch, which means one of the branch has no convolution or batchnorm layer, you need to run the following command to optimize the model:
 
-```bash
-python /workspace/scripts/onnx2onnx.py absolute_path_of_your_input_onnx_model_file -o absolute_path_of_output_onnx_model_file --add-bn-on-skip
-```
 
 #### 3.3.7 Model Editor
 
