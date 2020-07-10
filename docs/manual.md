@@ -89,7 +89,7 @@ Each time when there is a new version of Linux command toolchain released, you n
 The command to pull the latest image is:
 
 ```bash
-docker pull kneron/toolchain:linux_command_toolchain
+docker pull kneron/toolchain:linux_command_toolchain_520
 ```
 
 After finishing this command, the Docker image is saved in your local side, and only when you want to update the image to the latest one, you need to connect to the Internet to repeat this command again. Otherwise, you can finish the following parts without the connection to the Internet.
@@ -100,26 +100,26 @@ To check whether the Docker image is pulled successfully, type in this command:
 docker image ls
 ```
 
-If the image is pulled successfully, you will see the image, kneron/toolchain:linux_command_toolchain in the Docker image list.
+If the image is pulled successfully, you will see the image, kneron/toolchain:linux_command_toolchain_520 in the Docker image list.
 
 ### 3.2 Start the docker image
 
 Then you can start the docker image you just pulled, and get a docker container to run the toolchain. When you start it, you need to configure a local folder as the one for communicating between your local environment and the container. Let’s call it as Interactive Folder. Assume the absolute path of the folder you configure is `absolute_path_of_your_folder`. And the start command is:
 
 ```bash
-docker run -it --rm -v absolute_path_of_your_folder:/data1 kneron/toolchain:linux_command_toolchain
+docker run -it --rm -v absolute_path_of_your_folder:/data1 kneron/toolchain:linux_command_toolchain_520
 ```
 
 For example, if the absolute path of the path folder you configure is `/home/kneron/Document/test_docker`, and then the related command is:
 
 ```bash
-docker run -it --rm -v /home/kneron/Document/test_docker:/data1 kneron/toolchain:linux_command_toolchain
+docker run -it --rm -v /home/kneron/Document/test_docker:/data1 kneron/toolchain:linux_command_toolchain_520
 ```
 
 If using Windows, please mount the shared folder in the c disk, and the command is:
 
 ```bash
-docker run -it --rm -v /c/Users/username/test_docker:/data1 kneron/toolchain:linux_command_toolchain
+docker run -it --rm -v /c/Users/username/test_docker:/data1 kneron/toolchain:linux_command_toolchain_520
 ```
 
 After running the start command, you’ll enter into the docker container. Then, copy the example materials to the Interactive Folder by the following command:
