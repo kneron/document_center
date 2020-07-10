@@ -5,8 +5,8 @@
 
 # Kneron Linux Toolchain Manual
 
-** 2020 June **
-** V0.6.1 **
+** 2020 July **
+** V0.7.0 **
 
 ## 0. Overview
 
@@ -116,6 +116,12 @@ For example, if the absolute path of the path folder you configure is `/home/kne
 docker run -it --rm -v /home/kneron/Document/test_docker:/data1 kneron/toolchain:linux_command_toolchain
 ```
 
+If using Windows, please mount the shared folder in the c disk, and the command is:
+
+```bash
+docker run -it --rm -v /c/Users/username/test_docker:/data1 kneron/toolchain:linux_command_toolchain
+```
+
 After running the start command, you’ll enter into the docker container. Then, copy the example materials to the Interactive Folder by the following command:
 
 ```bash
@@ -192,22 +198,19 @@ python /workspace/onnx-caffe/generate_onnx.py -o /data1/mobilenetv2.onnx -w /dat
 Then need to run the command in [3.3.6.1 Optimize onnx files ](#3361-Optimize-onnx-files).
 
 #### 3.3.6 ONNX to ONNX
-##### 3.3.6.1 Optimize onnx files 
+
+##### 3.3.6.1 Optimize onnx files
+
 After converting models from other frameworks to onnx format, you need to run the following command:
 
 ```bash
-python /workspace/scripts/onnx2onnx.py absolute_path_of_your_input_onnx_model_file -o absolute_path_of_output_onnx_model_file (-m)
+python /workspace/scripts/onnx2onnx.py absolute_path_of_your_input_onnx_model_file -o absolute_path_of_output_onnx_model_file -t --add-bn-on-skip (-m)
 ```
 
 Add `–m` only when there is customized layer in your model.
 
 This script will optimize the layer in your model.
-##### 3.3.6.2 Optimize model with empty branch 
-If the model has empty branch, which means one of the branch has no convolution or batchnorm layer, you need to run the following command to optimize the model:
 
-```bash
-python /workspace/scripts/onnx2onnx.py absolute_path_of_your_input_onnx_model_file -o absolute_path_of_output_onnx_model_file --add-bn-on-skip
-```
 
 #### 3.3.7 Model Editor
 
@@ -528,6 +531,25 @@ cd /workspace/scripts && python bintoPng.py -i input_rgb565_file_path –o outpu
 ```bash
 cd /workspace/scripts && python post_process.py -i emulator_result_folder, -m model_type
 ```
+
+### 3.10 E2ESimulator workflow
+
+E2ESimulator workflow is implemented in C, which will get the extactly same result as the hardware platform's.
+
+The detailed manual of E2ESimulator can be found at <http://doc.kneron.com:8888/docs/#python_app/app_flow_manual/> .
+
+#### 3.10.1 test case data
+
+The folder `/workspace/scripts/E2E_Simulator/bin/test1` provides the input data for the face detection test case.
+
+#### 3.10.2 test case command
+
+```bash
+cd /workspace/scripts/E2E_Simulator/python_flow && python example.py -d ../bin/test1 -i binary -t 1
+```
+
+And the final result will be saved at the path: `/workspace/scripts/E2E_Simulator/bin/`.
+
 
 ## FAQ
 
