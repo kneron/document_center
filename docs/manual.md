@@ -532,7 +532,7 @@ cd /workspace/scripts && python post_process.py -i emulator_result_folder, -m mo
 ### 3.10 E2ESimulator workflow
 E2ESimulator workflow is implemented in C, which will get the extactly same result as the hardware platform's.
 
-The detailed manual of E2ESimulator can be found at http://75.26.5.105:8888/docs/#python_app/app_flow_manual .
+The detailed manual of E2ESimulator can be found at http://doc.kneron.com:8888/docs/#python_app/app_flow_manual/ .
 
 #### 3.10.1 test case data
 The folder /workspace/scripts/E2E_Simulator/bin/test1 provides the input data for the face detection test case.
