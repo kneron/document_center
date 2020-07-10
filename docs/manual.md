@@ -115,7 +115,8 @@ For example, if the absolute path of the path folder you configure is `/home/kne
 ```bash
 docker run -it --rm -v /home/kneron/Document/test_docker:/data1 kneron/toolchain:linux_command_toolchain
 ```
-If using windows, please mount the shared folder in the c disk, and the command is:
+
+If using Windows, please mount the shared folder in the c disk, and the command is:
 
 ```bash
 docker run -it --rm -v /c/Users/username/test_docker:/data1 kneron/toolchain:linux_command_toolchain
@@ -197,7 +198,9 @@ python /workspace/onnx-caffe/generate_onnx.py -o /data1/mobilenetv2.onnx -w /dat
 Then need to run the command in [3.3.6.1 Optimize onnx files ](#3361-Optimize-onnx-files).
 
 #### 3.3.6 ONNX to ONNX
-##### 3.3.6.1 Optimize onnx files 
+
+##### 3.3.6.1 Optimize onnx files
+
 After converting models from other frameworks to onnx format, you need to run the following command:
 
 ```bash
@@ -530,18 +533,22 @@ cd /workspace/scripts && python post_process.py -i emulator_result_folder, -m mo
 ```
 
 ### 3.10 E2ESimulator workflow
+
 E2ESimulator workflow is implemented in C, which will get the extactly same result as the hardware platform's.
 
-The detailed manual of E2ESimulator can be found at http://doc.kneron.com:8888/docs/#python_app/app_flow_manual/ .
+The detailed manual of E2ESimulator can be found at <http://doc.kneron.com:8888/docs/#python_app/app_flow_manual/> .
 
 #### 3.10.1 test case data
-The folder /workspace/scripts/E2E_Simulator/bin/test1 provides the input data for the face detection test case.
+
+The folder `/workspace/scripts/E2E_Simulator/bin/test1` provides the input data for the face detection test case.
 
 #### 3.10.2 test case command
+
 ```bash
 cd /workspace/scripts/E2E_Simulator/python_flow && python example.py -d ../bin/test1 -i binary -t 1
 ```
-And the final result will be saved at the path: /workspace/scripts/E2E_Simulator/bin/
+
+And the final result will be saved at the path: `/workspace/scripts/E2E_Simulator/bin/`.
 
 
 ## FAQ
