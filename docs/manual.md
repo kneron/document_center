@@ -136,13 +136,13 @@ cp -r /workspace/examples/* /data1/
 Since that the Onet model is in keras format, you need to convert it from keras to onnx by the following command:
 
 ```bash
-python /workspace/onnx-keras/generate_onnx.py -o absolute_path_of_output_model_file  absolute_path_of_input_model_file -O --duplicate-shared-weights
+python /workspace/keras-onnx/generate_onnx.py -o absolute_path_of_output_model_file  absolute_path_of_input_model_file -O --duplicate-shared-weights
 ```
 
 For Onet example here, the detailed command is:
 
 ```bash
-python /workspace/onnx-keras/generate_onnx.py -o /data1/onet-0.417197.onnx /data1/keras/onet-0.417197.hdf5 -O --duplicate-shared-weights
+python /workspace/keras-onnx/generate_onnx.py -o /data1/onet-0.417197.onnx /data1/keras/onet-0.417197.hdf5 -O --duplicate-shared-weights
 ```
 
 There might be some warning log when running this problem, and you can check whether the convert works successfully by checking whether the onnx file is generated.
@@ -150,7 +150,7 @@ There might be some warning log when running this problem, and you can check whe
 If there’s customized input shape for the model file, you need to use the following command:
 
 ```bash
-python /workspace/onnx-keras/generate_onnx.py absolute_path_of_input_model_file -o absolute_path_of_output_model_file -I 1 model_input_width model_input_height num_of_channel
+python /workspace/keras-onnx/generate_onnx.py absolute_path_of_input_model_file -o absolute_path_of_output_model_file -I 1 model_input_width model_input_height num_of_channel
 ```
 
 Then need to run the command in [3.3.6.1 Optimize onnx files ](#3361-Optimize-onnx-files).
@@ -186,13 +186,13 @@ Then need to run the command in [ 3.3.6.1 Optimize onnx files ](#3361-Optimize-o
 #### 3.3.5 Caffe to ONNX
 
 ```bash
-python /workspace/onnx-caffe/generate_onnx.py -o absolute_path_of_output_onnx_model_file -w absolute_path_of_input_caffe_weight_file -n absolute_path_of_input_caffe_model_file
+python /workspace/caffe-onnx/generate_onnx.py -o absolute_path_of_output_onnx_model_file -w absolute_path_of_input_caffe_weight_file -n absolute_path_of_input_caffe_model_file
 ```
 
 For the provided example model: `mobilenetv2.caffemodel`
 
 ```bash
-python /workspace/onnx-caffe/generate_onnx.py -o /data1/mobilenetv2.onnx -w /data1/caffe/models/mobilenetv2.caffemodel -n /data1/caffe/models/mobilenetv2.prototxt
+python /workspace/caffe-onnx/generate_onnx.py -o /data1/mobilenetv2.onnx -w /data1/caffe/models/mobilenetv2.caffemodel -n /data1/caffe/models/mobilenetv2.prototxt
 ```
 
 Then need to run the command in [3.3.6.1 Optimize onnx files ](#3361-Optimize-onnx-files).
@@ -308,7 +308,7 @@ Now, it has no `Transpose` and take channel first inputs directly.
 #### 3.3.8 Add RGBN to YYNN layer for keras model
 
 ```bash
-cd /workspace/onnx-keras && python rgba2yynn.py input_hdf5_file output_hdf5_file
+cd /workspace/keras-onnx && python rgba2yynn.py input_hdf5_file output_hdf5_file
 ```
 
 ### 3.4 FpAnalyser, Compiler and IpEvaluator
