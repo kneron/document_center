@@ -469,6 +469,7 @@ And a folder called batch_compile will be generated in Interactive Folder, which
 In Interactive Folder, you’ll find a folder called `batch_compile`, which contains the output files of the fpAnalyer and batch compile. If you have questions for the meaning of the output files, please refer to the [FAQ question 8](#8-how-to-use-customized-methods-for-image-preprocess).
 
 Also, to compile the all_model.bin and fw_info.bin files, please use the following command:
+
 ```bash
 cd /workspace/scripts && ./generate_ota_binary -model fw_info_file_in  all_model_file_in model_out_file
 ```
