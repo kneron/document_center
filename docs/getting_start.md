@@ -636,5 +636,11 @@ Please note that user needs to define an new cpu function ID for this cpu functi
 
 ## 9. More SDK example code for SOC peripheral drivers
 
-1. refer to API and SDK example project
+KL520 also provides some simple examples to show how to use basic peripherals such as, I2C, PWM, DMA, GPIO...
+User can find them from **sdkexamples** folder.
+
+There is also a PDF file to briefly describe the peripheral APIs. Please down it from the following link:
+<div align="center">
+<a href="../pdf/KL520_Peripheral_Driver_APIs.pdf">KL520_Peripheral_Driver_APIs.pdf</a>
+</div>
 
