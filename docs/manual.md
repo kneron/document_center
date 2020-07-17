@@ -200,13 +200,13 @@ Then need to run the command in [3.3.6.1 Optimize onnx files ](#3361-Optimize-on
 #### 3.3.6 TF Lite to ONNX
 
 ```bash
-python /workspace/tflite-onnx/generate_onnx.py --tflite path_of_input_tflite_model -save_path path_of_output_onnx_file
+python /workspace/tflite-onnx/generate_onnx.py -tflite path_of_input_tflite_model -save_path path_of_output_onnx_file -release_mode True
 ```
 
 For the provided example model: `model_unquant.tflite`
 
 ```bash
-python /workspace/tflite-onnx/generate_onnx.py -tflite /data1/tflite/model/model_unquant.tflite -save_path /data1/tflite/model/model_unquant.tflite.onnx
+python /workspace/tflite-onnx/generate_onnx.py -tflite /data1/tflite/model/model_unquant.tflite -save_path /data1/tflite/model/model_unquant.tflite.onnx -release_mode True
 ```
 
 Then need to run the command in [3.3.7.1 Optimize onnx files ](#3361-Optimize-onnx-files).
