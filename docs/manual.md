@@ -6,7 +6,7 @@
 # Kneron Linux Toolchain Manual
 
 ** 2020 July **
-** V0.7.0 **
+** V0.7.2 **
 
 ## 0. Overview
 
@@ -197,9 +197,23 @@ python /workspace/caffe-onnx/generate_onnx.py -o /data1/mobilenetv2.onnx -w /dat
 
 Then need to run the command in [3.3.6.1 Optimize onnx files ](#3361-Optimize-onnx-files).
 
-#### 3.3.6 ONNX to ONNX
+#### 3.3.6 TF Lite to ONNX
 
-##### 3.3.6.1 Optimize onnx files
+```bash
+python /workspace/tflite-onnx/generate_onnx.py --tflite path_of_input_tflite_model -save_path path_of_output_onnx_file
+```
+
+For the provided example model: `model_unquant.tflite`
+
+```bash
+python /workspace/tflite-onnx/generate_onnx.py -tflite /data1/tflite/model/model_unquant.tflite -save_path /data1/tflite/model/model_unquant.tflite.onnx
+```
+
+Then need to run the command in [3.3.7.1 Optimize onnx files ](#3361-Optimize-onnx-files).
+
+#### 3.3.7 ONNX to ONNX
+
+##### 3.3.7.1 Optimize onnx files
 
 After converting models from other frameworks to onnx format, you need to run the following command:
 
@@ -212,13 +226,13 @@ Add `–m` only when there is customized layer in your model.
 This script will optimize the layer in your model.
 
 
-#### 3.3.7 Model Editor
+#### 3.3.8 Model Editor
 
-##### 3.3.7.1 Introduction
+##### 3.3.8.1 Introduction
 
 KL520 NPU supports most of the compute extensive OPs, such as Convolution, fully connected/GEMM, in order to speed up the model inference run time. On the other hand, there are some OPs that KL520 NPU cannot support well, such as `Softmax` or `Sigmod`. However, these OPs usually are not compute extensive and they are better to execute in CPU. Therefore, Kneron provides a model editor to help user modify the model so that KL520 NPU can run the model more efficiently.
 
-##### 3.3.7.2 General Editor Guideline
+##### 3.3.8.2 General Editor Guideline
 
 Here are some general guideline to edit a model to take full advantage of KL520 NPU MAC efficiency:
 
@@ -231,7 +245,7 @@ Here are some general guideline to edit a model to take full advantage of KL520 
 <p><span style="font-weight: bold;">Figure 4.</span> Pre-edited model </p>
 </div>
 
-##### 3.3.7.3 Feature
+##### 3.3.8.3 Feature
 There is a script called `edit.py` in the folder `/workspace/scripts`, and it is an simple ONNX editor which achieves the following functions:
 
 1. Add nop `BN` or `Conv` nodes.
@@ -239,7 +253,7 @@ There is a script called `edit.py` in the folder `/workspace/scripts`, and it is
 3. Cut the graph from certain node (Delete all the nodes following the node).
 4. Reshape inputs and outputs
 
-#### 3.3.7.4 Usage
+#### 3.3.8.4 Usage
 
 ```bash
 editor.py [-h] [-c CUT_NODE [CUT_NODE ...]]
@@ -289,7 +303,7 @@ optional arguments:
         add nop bn using specific input
 ```
 
-##### 3.3.7.4 Example
+##### 3.3.8.5 Example
 
 1. In the `/workspace/scripts/res` folder, there is a VDSR model from Tensorflow. Convert this model firstly.
 
@@ -305,7 +319,7 @@ cd /workspace/scripts && python editor.py res/tmp.onnx new.onnx -d Conv2D__6 Con
 
 Now, it has no `Transpose` and take channel first inputs directly.
 
-#### 3.3.8 Add RGBN to YYNN layer for keras model
+#### 3.3.9 Add RGBN to YYNN layer for keras model
 
 ```bash
 cd /workspace/keras-onnx && python rgba2yynn.py input_hdf5_file output_hdf5_file
