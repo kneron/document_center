@@ -641,6 +641,6 @@ User can find them from **sdkexamples** folder.
 
 There is also a PDF file to briefly describe the peripheral APIs. Please down it from the following link:
 <div align="center">
-<a href="../pdf/KL520_Peripheral_Driver_APIs.pdf">KL520_Peripheral_Driver_APIs.pdf</a>
+<a href="../docs/pdf/KL520_Peripheral_Driver_APIs.pdf">KL520_Peripheral_Driver_APIs.pdf</a>
 </div>
 
