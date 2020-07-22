@@ -639,7 +639,7 @@ Please note that user needs to define an new cpu function ID for this cpu functi
 KL520 also provides some simple examples to show how to use basic peripherals such as, I2C, PWM, DMA, GPIO...
 User can find them from **sdkexamples** folder.
 
-There is also a PDF file to briefly describe the peripheral APIs. Please down it from the following link:
+There is also a PDF file to briefly describe the peripheral APIs. Please download it from the following link:
 <div align="center">
 <a href="../pdf/KL520_Peripheral_Driver_APIs.pdf">KL520_Peripheral_Driver_APIs.pdf</a>
 </div>
