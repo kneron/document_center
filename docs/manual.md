@@ -375,9 +375,10 @@ And a folder called simulator will be generated in Interactive Folder, which sto
 For running the emulator:
 
 ```bash
-cd /workspace/scripts && ./emulator.sh.x
+cd /workspace/scripts && ./emulator.sh.x (fl)
 ```
 
+When adding option fl, the emulator will run in floatng mode. 
 And a folder called emulator will be generated in Interactive Folder, which stores the result of the emulator.
 
 #### 3.5.3 Get the result
