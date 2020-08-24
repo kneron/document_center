@@ -5,8 +5,8 @@
 
 # Kneron Linux Toolchain Manual
 
-** 2020 July **
-** V0.7.2 **
+** 2020 August **
+** V0.7.2.3 **
 
 ## 0. Overview
 
