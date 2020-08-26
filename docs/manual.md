@@ -598,7 +598,7 @@ The image preprocess methods, input for fpAnlayer, and the related formats are f
 `yolo`: RGB/255.0  
 `pytorch`: (RGB/255. -[0.485, 0.456, 0.406]) / [0.229, 0.224, 0.225]  
 `caffe`(BGR format) BGR  - [103.939, 116.779, 123.68]  
-`customized”`: please refer to FAQ question 9  
+`customized”`: please refer to FAQ question 8  
 6. `input_onnx_file`  
 The absolute path of the onnx file, which works as the input file for fpAnalyser.  
 7. `keep_aspect_ratio`  
