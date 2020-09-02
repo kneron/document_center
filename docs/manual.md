@@ -336,9 +336,13 @@ Before running the programs, you need to configure the input parameters by the `
 After filling the related parameters in `input_params.json`, you can run the programs by the following command:
 
 ```bash
-# cd /workspace/scripts && ./fpAnalyserCompilerIpevaluator.sh.x thread_number
-cd /workspace/scripts && ./fpAnalyserCompilerIpevaluator.sh.x 8
+# cd /workspace/scripts && ./fpAnalyserCompilerIpevaluator.sh.x thread_number param_holder dp_pct
+cd /workspace/scripts && ./fpAnalyserCompilerIpevaluator.sh.x 8 _ 0.999
 ```
+
+thread_number: the number of thread to run
+param_holder: a holder of a unassigned parameter
+dp_pct: percentage of range in datapath analysis, default: 0.999. option: 0.999 or 1.0
 
 After running this program, the folders called compiler and fpAnalyser will be generated in the Interactive Folder, which store the result of compiler, ipEvaluator and fpAnalyser.
 
@@ -473,9 +477,13 @@ And the follow will give two examples for how to configure the `batch_compile_in
 For running the compiler and ip evaluator:
 
 ```bash
-# cd /workspace/scripts && ./fpAnalyserBatchCompile.sh.x thread_number
-cd /workspace/scripts && ./fpAnalyserBatchCompile.sh.x 8
+# cd /workspace/scripts && ./fpAnalyserBatchCompile.sh.x thread_number param_holder dp_pct
+cd /workspace/scripts && ./fpAnalyserBatchCompile.sh.x 8 _ 0.999
 ```
+
+thread_number: the number of thread to run
+param_holder: a holder of a unassigned parameter
+dp_pct: percentage of range in datapath analysis, default: 0.999. option: 0.999 or 1.0
 
 And a folder called batch_compile will be generated in Interactive Folder, which stores the result of the fpAnalyer and batch-compile.
 
