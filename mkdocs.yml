@@ -1,7 +1,9 @@
-site_name: Kneron Document Center
+site_name: Document Center
 #repo_url: http://192.168.200.1:8088/jiyuan/toolchain_manual
 #repo_name: GitLab
-theme: 'windmill'
+theme:
+    name: 'windmill'
+    custom_dir: 'custom_theme/'
 nav:
   - Home: index.md
   - Getting Started: getting_start.md
@@ -13,4 +15,6 @@ nav:
   - Toolchain Docker: 
     - Manual: manual.md
     - End to End Simulator: python_app/app_flow_manual.md 
-#theme: 'rtd-dropdown'
+extra:
+    logo: 'imgs/logo.png'
+
