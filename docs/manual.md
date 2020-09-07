@@ -6,13 +6,14 @@
 # Kneron Linux Toolchain Manual
 
 ** 2020 August **
-** V0.7.2.4 **
+** toolchain 520 V0.7.5 **
+** toolchain 720 V0.1.0 **
 
 ## 0. Overview
 
-KDP toolchain is a software integrating a series of libraries to simulate the operation in the hardware KDP 520. Table 1 shows the list of functions KDP520 supports base on ONNX 1.4.0.
+KDP toolchain is a software integrating a series of libraries to simulate the operation in the hardware KDP 520 and 720. Table 1.1 shows the list of functions KDP520 supports base on ONNX 1.4.0, Table 1.2 shows for KDP720.
 
-*Table 1. The functions KDP520 NPU supports*
+*Table 1.1 The functions KDP520 NPU supports*
 
 | Layers/Modules   | Functions/Parameters          | Applicable Subset | Spec.                 |
 | ---------------- | ----------------------------- | ----------------- | --------------------- |
@@ -36,6 +37,9 @@ KDP toolchain is a software integrating a series of libraries to simulate the op
 |                  | Add                           |                   | support               |
 |                  | Gemm or Dense/Fully Connected |                   | support               |
 |                  | Flatten                       |                   | support               |
+
+*Table 1.2 The functions KDP720 NPU supports*  
+wait to be filled
 
 ## 1. Introduction
 
@@ -89,7 +93,11 @@ Each time when there is a new version of Linux command toolchain released, you n
 The command to pull the latest image is:
 
 ```bash
+#for toolchain 520
 docker pull kneron/toolchain:linux_command_toolchain_520
+
+#for toolchain 720
+docker pull kneron/toolchain:linux_command_toolchain_720
 ```
 
 After finishing this command, the Docker image is saved in your local side, and only when you want to update the image to the latest one, you need to connect to the Internet to repeat this command again. Otherwise, you can finish the following parts without the connection to the Internet.
@@ -100,26 +108,38 @@ To check whether the Docker image is pulled successfully, type in this command:
 docker image ls
 ```
 
-If the image is pulled successfully, you will see the image, kneron/toolchain:linux_command_toolchain_520 in the Docker image list.
+If the image is pulled successfully, you will see the image, kneron/toolchain:linux_command_toolchain_520 or kneron/toolchain:linux_command_toolchain_720 in the Docker image list.
 
 ### 3.2 Start the docker image
 
 Then you can start the docker image you just pulled, and get a docker container to run the toolchain. When you start it, you need to configure a local folder as the one for communicating between your local environment and the container. Let’s call it as Interactive Folder. Assume the absolute path of the folder you configure is `absolute_path_of_your_folder`. And the start command is:
 
 ```bash
+#for toolchain 520
 docker run -it --rm -v absolute_path_of_your_folder:/data1 kneron/toolchain:linux_command_toolchain_520
+
+#for toolchain 720
+docker run -it --rm -v absolute_path_of_your_folder:/data1 kneron/toolchain:linux_command_toolchain_720
 ```
 
 For example, if the absolute path of the path folder you configure is `/home/kneron/Document/test_docker`, and then the related command is:
 
 ```bash
+#for toolchain 520
 docker run -it --rm -v /home/kneron/Document/test_docker:/data1 kneron/toolchain:linux_command_toolchain_520
+
+#for toolchain 720
+docker run -it --rm -v /home/kneron/Document/test_docker:/data1 kneron/toolchain:linux_command_toolchain_720
 ```
 
 If using Windows, please mount the shared folder in the c disk, and the command is:
 
 ```bash
+#for toolchain 520
 docker run -it --rm -v /c/Users/username/test_docker:/data1 kneron/toolchain:linux_command_toolchain_520
+
+#for toolchain 720
+docker run -it --rm -v /c/Users/username/test_docker:/data1 kneron/toolchain:linux_command_toolchain_720
 ```
 
 After running the start command, you’ll enter into the docker container. Then, copy the example materials to the Interactive Folder by the following command:
@@ -172,13 +192,13 @@ Then need to run the command in [3.3.6.1 Optimize onnx files ](#3361-Optimize-on
 #### 3.3.3 Pytorch to ONNX
 
 ```bash
-python /workspace/scripts/pytorch2onnx.py absolute_path_of_input_model_file channel_number model_input_height model_input_width  absolute_path_of_output_model_file
+python /workspace/scripts/pytorch2onnx.py --input-size input_size_of_model absolute_path_of_input_model_file  absolute_path_of_output_model_file
 ```
 
 For the provided example model: `resnet34.pth`
 
 ```bash
-python /workspace/scripts/pytorch2onnx.py /data1/pytorch/models/resnet34.pth 3 224 224 /data1/resnet34.onnx
+python /workspace/scripts/pytorch2onnx.py --input-size 3 224 224  /data1/pytorch/models/resnet34.pth /data1/resnet34.onnx
 ```
 
 Then need to run the command in [ 3.3.6.1 Optimize onnx files ](#3361-Optimize-onnx-files).
@@ -329,15 +349,20 @@ cd /workspace/keras-onnx && python rgba2yynn.py input_hdf5_file output_hdf5_file
 
 #### 3.4.1 Fill the input parameters
 
-Before running the programs, you need to configure the input parameters by the `input_params.json` in Interactive Folder. The initial file of `input_params.json` is for Keras Onet model. And you can see the detailed explanation for the input parameters in the part FAQ question 1.
+Before running the programs, you need to configure the input parameters by the `input_params.json` for toolchain 520 in Interactive Folder (for toolchain 720, the json's name is `input_params_720.json`). The initial file of `input_params.json` is for Keras Onet model. And you can see the detailed explanation for the input parameters in the part FAQ question 1.
 
 #### 3.4.2 Running the program
 
-After filling the related parameters in `input_params.json`, you can run the programs by the following command:
+After filling the related parameters in `input_params.json` (for toolchain 720, the json's name is `input_params_720.json`), you can run the programs by the following command:
 
 ```bash
+# for toolchain 520
 # cd /workspace/scripts && ./fpAnalyserCompilerIpevaluator.sh.x thread_number param_holder dp_pct
 cd /workspace/scripts && ./fpAnalyserCompilerIpevaluator.sh.x 8 _ 0.999
+
+#for toolchain 720
+# cd /workspace/scripts && ./fpAnalyserCompilerIpevaluator_720.sh.x thread_number
+cd /workspace/scripts && ./fpAnalyserCompilerIpevaluator_720.sh.x 8
 ```
 
 thread_number: the number of thread to run
@@ -348,13 +373,14 @@ After running this program, the folders called compiler and fpAnalyser will be g
 
 #### 3.4.3 Get the result
 
-In Interactive Folder, you’ll find a folder called fpAnlayer, which contains the preprocessed image txt files; a folder called `compiler`, which contains the binary files generated by compiler, as well as evaluation result of ipEvaluator, i.e. `evaluation_result.txt`.
+In Interactive Folder, you’ll find a folder called fpAnlayer, which contains the preprocessed image txt files; a folder called `compiler`, which contains the binary files generated by compiler, as well as evaluation result of ipEvaluator, i.e. i.e. `evaluation_result.txt` for toolchain 520, while `ProfileResult.txt` for toolchain 720.
 
 #### 3.4.4 Hardware validation
 
 This step will make sure whether the simulator’s result is the same as the hardware’s.
 
 ```bash
+#for toolchain 520
 cd /workspace/scripts && ./hardware_validate.sh.x
 ```
 
@@ -364,14 +390,18 @@ Emulator is just the same as simulator running on a folder of images, but emulat
 
 #### 3.5.1 Fill the input parameters
 
-Fill the simulator and emulator input parameters in the `input_params.json` in Interactive Folder. Please refer on the FAQ question 1 to fill the related parameters.
+Fill the simulator and emulator input parameters in the `input_params.json` in Interactive Folder (for toolchain 720, the json's name is `input_params_720.json`). Please refer on the FAQ question 1 to fill the related parameters.
 
 #### 3.5.2 Running the programs
 
 For running the simulator:
 
 ```bash
+#for toolchain 520
 cd /workspace/scripts && ./simulator.sh.x
+
+#for toolchain 720
+cd /workspace/scripts && ./simulator_720.sh.x
 ```
 
 And a folder called simulator will be generated in Interactive Folder, which stores the result of the simulator.
@@ -379,7 +409,11 @@ And a folder called simulator will be generated in Interactive Folder, which sto
 For running the emulator:
 
 ```bash
+#for toolchain 520
 cd /workspace/scripts && ./emulator.sh.x (fl)
+
+#for toolchain 720
+cd /workspace/scripts && ./emulator_720.sh.x
 ```
 
 When adding option fl, the emulator will run in floatng mode. 
@@ -405,6 +439,7 @@ Fill the simulator and emulator input parameters in the `input_params.json` in I
 For running the compiler and ip evaluator:
 
 ```bash
+#for toolchain 520
 cd /workspace/scripts && ./compilerIpevaluator.sh.x
 ```
 
@@ -412,14 +447,14 @@ And a folder called compiler will be generated in Interactive Folder, which stor
 
 #### 3.6.3 Get the result
 
-In Interactive Folder, you’ll find a folder called compiler, which contains the output files of the compiler and ipEvaluator , i.e. `evaluation_result.txt`.
+In Interactive Folder, you’ll find a folder called compiler, which contains the output files of the compiler and ipEvaluator , i.e. `evaluation_result.txt` for toolchain 520, while `ProfileResult.txt` for toolchain 720.
 
 ### 3.7 FpAnalyser and Batch-Compile
 
 This part is the instructions for batch-compile, which will generate the binary file requested by firmware.
 
 #### 3.7.1 Fill the input parameters
-Fill the simulator and emulator input parameters in the `/data1/batch_compile_input_params.json` in Interactive Folder. Please refer on the [FAQ question 7](#7-whats-the-meaning-of-the-output-files-of-batch-compile) to fill the related parameters.
+Fill the simulator and emulator input parameters in the `/data1/batch_compile_input_params.json` in Interactive Folder (for toolchain 720, the json's name is `batch_compile_input_params_720.json`). Please refer on the [FAQ question 7](#7-whats-the-meaning-of-the-output-files-of-batch-compile) to fill the related parameters.
 
 And the follow will give two examples for how to configure the `batch_compile_input_params.json`.
 
@@ -477,8 +512,13 @@ And the follow will give two examples for how to configure the `batch_compile_in
 For running the compiler and ip evaluator:
 
 ```bash
+# for toolchain 520
 # cd /workspace/scripts && ./fpAnalyserBatchCompile.sh.x thread_number param_holder dp_pct
 cd /workspace/scripts && ./fpAnalyserBatchCompile.sh.x 8 _ 0.999
+
+# for toolchain 720
+# cd /workspace/scripts && ./fpAnalyserBatchCompile_720.sh.x thread_number
+cd /workspace/scripts && ./fpAnalyserBatchCompile_720.sh.x 8
 ```
 
 thread_number: the number of thread to run
