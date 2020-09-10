@@ -11,6 +11,7 @@ nav:
     - Host API Intro: host_api_reference.md
     - Application API reference: host_api/app_api.md
     - DME API reference: host_api/dme_api.md
+    - ISI API reference: host_api/isi_api.md
     - System API reference: host_api/system.md
   - Toolchain Docker: 
     - Manual: manual.md
