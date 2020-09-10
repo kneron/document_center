@@ -5,12 +5,17 @@
 There are several ways to get the Kneron host example:
 
 1. Get the example folder for Linux environment  
-Prerequisite: Cmake, OpenCV  
-Download the code here: Link
+    Prerequisite: Cmake, OpenCV  
+    Download the code here: **[Link](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/host_lib/&download=297)**
+
 2. Get the VM for the windows and Mac  
-Prerequisite: VMware Workstation  
-Download the VM here: Link  
-Map USB port and share drive into VM: doc link
+     Prerequisite: VMware Workstation  
+       Download the VM  total five files :**[Part1](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=276)**  **[Part2](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=277)** **[Part3](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=278)** **[Part4](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=279)**  **[Part5](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=280)**
+
+       Map USB port and share drive into VM: **[Link](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/Windows/&download=320)**
+
+
+
 
 ## 2. File Structure
 In the Kneron folder, you will see the following file folders:
@@ -576,7 +581,7 @@ kcomm_enable_isi_cmds(ops);
 ```
 
 #### Support multiple models:
-	
+
 When an application includes multiple models, each model needs a separate result memory, and all result memory buffers must be allocated in DDR using kmdw_ddr_reserve() because they are filled up by NCPU.
 
 For companion mode this can be all done in .run_image callback function like age_gender ISI example where two models (KNERON_FDSSD and KNERON_AGE_GENDER) are run one after another.
