@@ -2,8 +2,9 @@
 
 Host API is the API to setup communication channels between host (such as PC, Embedded Chips) and KL520. Users can use Host API to write programs that utilize low power and high performance KL520 to accelarate their deep learning model application. There are three types of APIs:
 
-* Application specific API: These APIs are specific to centain applications, such as Age/gender, Object Detection, and Face Recognition etc.
+* Application specific API: These APIs are specific to certain applications (RGB Face Recognition, and Light Weight 3D Face Recognition).
 * DME Mode API: These APIs are for setting up dynamic loaded model, and inference.
+* ISI Mode API: These APIs are for setting up image streaming interface, and inference.
 * System API: These APIs are used to monitor KL520 system, update firmware and models in flash. 
 
 ## KL520 Host API Overview
@@ -14,5 +15,5 @@ Host API is the API to setup communication channels between host (such as PC, Em
 
 [The DME API](host_api/dme_api.md)
 
-
+[The ISI API](host_api/isi_api.md)
 
