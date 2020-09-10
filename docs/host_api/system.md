@@ -80,6 +80,25 @@ System API is for system control, init/deinit system, and update firmware and mo
  * nbuild_id: the build number of the ncpu firmware in device
  * return value: 0 on succeed, else -1
 
+### Get KN Number
+
+`int kdp_get_kn_number(int dev_idx, uint32_t *kn_num);`
+
+ * request for system KN number
+ * dev_idx: connected device ID. A host can connect several devices
+ * kn_num: the pointer to store KN number
+ * return value: 0 on succeed, else -1
+
+### Get Model Info
+
+`int kdp_get_model_info(int dev_idx, int from_ddr, char *data_buf);`
+
+ * request for model IDs in DDR or Flash
+ * dev_idx: connected device ID. A host can connect several devices
+ * from_ddr: if models are in ddr (1) or flash (0)
+ * data_buf: the pointer to store model info
+ * return value: 0 on succeed, else -1
+
 ### Update Firmware
 
 `int kdp_update_fw(int dev_idx, uint32_t* module_id, char* img_buf, int buf_len);`

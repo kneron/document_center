@@ -35,7 +35,7 @@ DME APIs are for setting up dynamic loaded model, and inference.
  * calling KL520 to do inference with provided model
  * dev_idx: connected device ID. A host can connect several devices
  * img_buf, buf_len: the image buffer and file size
- * inf_size: the size of inference result
+ * inf_size: the size of inference result in DME serial mode; the session id of the image in DME async mode
  * res_flag: indicate whether result is requested and available
  * inf_res: contains the returned inference result
  * model: running mode: normal or async mode 
@@ -54,7 +54,7 @@ DME APIs are for setting up dynamic loaded model, and inference.
  * inf_res: contains the retrieving result
  * return 0 on succeed, error code on failure
 
-### Get Status
+### Get Status (Used in DME Async Mode)
 
 `int kdp_dme_get_status(int dev_idx, uint16_t *ssid, uint16_t *status, uint32_t* inf_size, char* inf_res);`
 
@@ -65,4 +65,12 @@ DME APIs are for setting up dynamic loaded model, and inference.
  * inf_size: inference data size
  * inf_res: inference result data
  * return 0 on succeed, error code on failure
+
+### End DME Mode
+
+`int kdp_end_dme(int dev_idx);`
+
+ * request for ending dme mode
+ * dev_idx: connected device ID. A host can connect several devices
+ * return value: 0 on succeed, else for error code
 
