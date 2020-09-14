@@ -27,11 +27,16 @@ Kneron-|
                        |-> ota/ready_to_load
                        |-> ...
        |-> common               (common shared file between host and KL520)
-       |-> example              (host program for different example)
+       |-> dll                  (dll files for Windows MSYS2)
+       |-> docs                 (images in README)
+       |-> example              (host program for different C++ examples)
+       |-> pkgs                 (Python whl files for different platforms)
+       |-> python               (host program for different Python examples)
        |-> src                  (source files for host lib, which communicate with KL520)
        |-> test_images          (test image binary)
        |-> CMakeList.txt        (top level cmake list)
-       |-> README.md            (simple instruction to build)
+       |-> README_CPP.md        (simple instruction to build for C++ examples)
+       |-> README_Python.md     (simple instruction for Python examples)
 ```
 
 ## 3. Compile and Build
@@ -54,63 +59,250 @@ Tiny Yolo v3 is an object detection algorithm, and it can classify 80 different 
 
 Here is the class list: Link
 
-Let’s take a look at the example program, isi_yolo.cpp. In this test, we send two different images image_608_1.bin and image_608_2.bin (two RGB565 bianries) into KL520, and get the detection results back.
+### 4.1 C++ Example
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/4_1.png">
-</div>
+Let’s take a look at the C++ example program, isi_async_parallel_yolo.cpp. In this test, we send two different images image_608_1.bin and image_608_2.bin (two RGB565 bianries) into KL520, and get the detection results back.
+
+```cpp
+#define TEST_ISI_DIR        "../../test_images/odty/"
+#define ISI_IMAGE_FILE      (TEST_ISI_DIR "image_608_1.bin")
+#define ISI_IMAGE_FILE_T    (TEST_ISI_DIR "image_608_2.bin")
+#define IMG_SOURCE_W        608
+#define IMG_SOURCE_H        608
+#define ISI_IMG_SIZE        (IMG_SOURCE_W * IMG_SOURCE_H * 2)
+#define ISI_APP_ID          APP_TINY_YOLO3
+// isi initial result memory size in bytes
+#define ISI_RESULT_SIZE     2048
+```
 
 After we setup the images and image buffer size, the program uses kdp_start_isi_mode to notify the communication and inference setup.
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/4_2.png">
-</div>
+```cpp
+uint16_t width  = IMG_SOURCE_W;
+uint16_t height = IMG_SOURCE_H;
+// image format flags
+// IMAGE_FORMAT_SUB128: subtract 128 for R/G/B value in Kneron device
+// NPU_FORMAT_RGB565: image input is RGB565
+// IMAGE_FORMAT_PARALLEL_PROC: pipeline between ncpu and npu
+uint32_t format = IMAGE_FORMAT_SUB128 | NPU_FORMAT_RGB565 | IMAGE_FORMAT_PARALLEL_PROC;
+
+// Flash the firmware code with companion mode for tiny_yolo_v3 !!!
+printf("starting ISI mode ...\n");
+// call kdp_start_isi_mode to start isi mode        
+int ret = kdp_start_isi_mode(
+    dev_idx, ISI_APP_ID, ISI_RESULT_SIZE, width, height, format, &error_code, &image_buf_size);
+if (ret != 0) {
+    printf("could not set to ISI mode: %d ..\n", ret);
+    return -1;
+}
+
+if (image_buf_size < 3) {
+    printf("ISI mode window %d too small...\n", image_buf_size);
+    return -1;
+}
+
+printf("ISI mode succeeded (window = %d)...\n", image_buf_size);
+usleep(SLEEP_TIME);
+```
 
 Setup image buffer to load the image binaries.
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/4_3.png">
-</div>
+```cpp
+int n_len = read_file_to_buf(img_buf1, ISI_IMAGE_FILE, ISI_IMG_SIZE);
+if (n_len <= 0) {
+    printf("reading image file 1 failed:%d...\n", n_len);
+    return -1;
+}
 
-Since the KL520 application design use ping pong buffer to pipeline the image transfer and npu processing, we can fill up the image buffer first. Therefore, we can use kdp_isi_inference to send images to KL520, without getting the result back yet.
+n_len = read_file_to_buf(img_buf2, ISI_IMAGE_FILE_T, ISI_IMG_SIZE);
+if (n_len <= 0) {
+    printf("reading image file 2 failed:%d...\n", n_len);
+    return -1;
+}
+```
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/4_4.png">
-</div>
+Since the KL520 application design use image buffer to pipeline the image transfer and npu processing, we can fill up the image buffer first. Therefore, we can use kdp_isi_inference to send images to KL520, without getting the result back yet.
 
-Then the program must wait and get back the result then send the next image. It uses kdp_isi_retrieve_res to get the result, then check the result if it matches the expected results. After that, it uses kdp_isi_inference to send another images to KL520 to process. The loop is set to 100 to estimate the average FPS of 100 images.
+```cpp
+printf("starting ISI inference ...\n");
+uint32_t img_id_tx = 1234;
+uint32_t img_id_rx = img_id_tx;
+uint32_t img_left = 12;
+uint32_t result_size = 0;
+uint32_t buf_len = ISI_IMG_SIZE;
+char inf_res[ISI_RESULT_SIZE];
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/4_5.png">
-</div>
+// start time for the first frame
+double start_time = what_time_is_it_now();
+
+// Send 2 images first
+// do inference for each input
+ret = do_inference(dev_idx, img_buf1, buf_len, img_id_tx, &error_code, &img_left);
+if (ret)
+    return ret;
+img_id_tx++;
+// do inference for each input
+ret = do_inference(dev_idx, img_buf2, buf_len, img_id_tx, &error_code, &img_left);
+if (ret)
+    return ret;
+img_id_tx++;
+
+// Send the rest and get result in loop, with 2 images alternatively
+uint32_t loop = 0;
+if (test_loop > 3)
+    loop = test_loop - 2;
+
+while (loop) {
+    // do inference for each input
+    ret = do_inference(dev_idx, img_buf1, buf_len, img_id_tx, &error_code, &img_left);
+    if (ret)
+        return ret;
+    img_id_tx++;
+```
+
+Then the program must wait and get back the result then send the next image. It uses kdp_isi_retrieve_res to get the result, then check the result if it matches the expected results. After that, it uses kdp_isi_inference to send another images to KL520 to process. The loop is set to 1000 to estimate the average FPS of 1000 images.
+
+```cpp
+    ret = do_get_result(dev_idx, img_id_rx, &error_code, &result_size, inf_res);
+    if (ret)
+        return ret;
+    img_id_rx++;
+
+    loop--;
+    // Odd loop case
+    if (loop == 0)
+        break;
+    // do inference for each input
+    ret = do_inference(dev_idx, img_buf2, buf_len, img_id_tx, &error_code, &img_left);
+    if (ret)
+        return ret;
+    img_id_tx++;
+
+    // retrieve the detection results for each input
+    ret = do_get_result(dev_idx, img_id_rx, &error_code, &result_size, inf_res);
+    if (ret)
+        return ret;
+    img_id_rx++;
+
+    loop--;
+}
+```
 
 Lastly, the program needs to retrieve all the remaining image results, using kdp_isi_retrieve_res.
 
+```cpp
+// Get last 2 results
+// retrieve the detection results for each input
+ret = do_get_result(dev_idx, img_id_rx, &error_code, &result_size, inf_res);
+if (ret)
+    return ret;
+img_id_rx++;
+// retrieve the detection results for each input
+ret = do_get_result(dev_idx, img_id_rx, &error_code, &result_size, inf_res);
+if (ret)
+    return ret;
+img_id_rx++;
+// calculate the FPS based on the time for 1000 frames
+if (1) {
+    double end_time = what_time_is_it_now();
+    double elapsed_time, avg_elapsed_time, avg_fps;
+
+    elapsed_time = (end_time - start_time) * 1000;
+    avg_elapsed_time = elapsed_time / test_loop;
+    avg_fps = 1000.0f / avg_elapsed_time;
+
+    printf("\n=> Avg %.2f FPS (%.2f ms = %.2f/%d)\n\n",
+        avg_fps, avg_elapsed_time, elapsed_time, test_loop);
+}
+```
+
+Run the executable binaries, and we can see initialization messages, and the buffer depth is 3. Image index is keep increasing and the expected 5 and 3 objects are toggling because we ping pong transfer two images, so the results are ping pong as 5 objects and 3 objects as well
+
 <div align="center">
-<img src="../imgs/getting_start_imgs/4_6.png">
+<img src="../imgs/getting_start_imgs/4_1_1.png">
 </div>
 
-Run the executable binaries, and we can see initialization messages, and the buffer depth is 3. Image index is keep increasing and the expected 2 and 4 objects are toggling because we ping pong transfer two images, so the results are ping pong as 2 objects and 4 objects as well
+Lastly, we can see the average FPS for running 1000 images is 12.4, each image take average 81ms to finish.
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/4_7.png">
+<img src="../imgs/getting_start_imgs/4_1_2.png">
 </div>
 
-Lastly, we can see the average FPS for running 100 images is 11.8, each image take average 84ms to finish.
+### 4.2. Python Example
+
+Let’s take a look at the Python example program, cam_isi_async_parallel_yolo.py. In this test, we send frames (RGB565) of camera into KL520, and get the detection results back.
+
+Setup video capture device for the image width and height
+
+```python
+"""User test cam yolo."""
+image_source_h = 480
+image_source_w = 640
+app_id = constants.APP_TINY_YOLO3
+image_size = image_source_w * image_source_h * 2
+frames = []
+
+# Setup video capture device.
+capture = kdp_wrapper.setup_capture(0, image_source_w, image_source_h)
+if capture is None:
+    return -1
+```
+
+After we setup the video capture device, the program uses start_isi_parallel to notify the communication and inference setup.
+
+```python
+# Start ISI mode.
+if kdp_wrapper.start_isi_parallel(dev_idx, app_id, image_source_w, image_source_h):
+    return -1
+```
+
+Since the KL520 application design use image buffer to pipeline the image transfer and npu processing, we can fill up the image buffer first. Therefore, we can use fill_buffer to send frames to KL520, without getting the result back yet.
+
+```python
+start_time = time.time()
+# Fill up the image buffers.
+ret, img_id_tx, img_left, buffer_depth = kdp_wrapper.fill_buffer(
+    dev_idx, capture, image_size, frames)
+if ret:
+    return -1
+```
+
+Then the program must wait and get back the result then send the next image. It uses pipeline_inference to get the result and to send another images to KL520 to process. The loop is set to 1000 to estimate the average FPS of 1000 images.
+
+```python
+# Send the rest and get result in loop, with 2 images alternatively
+print("Companion image buffer depth = ", buffer_depth)
+kdp_wrapper.pipeline_inference(
+    dev_idx, app_id, test_loop - buffer_depth, image_size,
+    capture, img_id_tx, img_left, buffer_depth, frames, handle_result)
+
+end_time = time.time()
+diff = end_time - start_time 
+estimate_runtime = float(diff/test_loop)
+fps = float(1/estimate_runtime)    
+print("Parallel inference average estimate runtime is ", estimate_runtime)
+print("Average FPS is ", fps)
+```
+
+Run the Python example, and we can see initialization messages, and the buffer depth is 3. Image index keeps increasing and the number of detected objects are outputted
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/4_8.png">
+<img src="../imgs/getting_start_imgs/4_2_1.png">
 </div>
 
-> If there is a python version with swig or native, explain how to use
+Lastly, we can see the average FPS for running 1000 images is 12.2, each image take average 82ms to finish.
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/4_2_2.png">
+</div>
 
 ## 5. Run OTA to Swap Another Pre-build Application Binary Mask Face Detection
 
 Besides Tiny Yolo v3, Kneron also provides many other applications:
 
 * Age_gender: detect faces and return age and gender estimation of the target face
-* Cpn_fdr: simple face recognition
 * Objection_detection: Kneron 8 class detections
+* Pedestrian_detection: Kneron pedestrian detection
 * Ssd_fd: Mask face detection, detect face with mask and without mask
 
 <div align="center">
@@ -289,7 +481,7 @@ The evaluation result does not count in the time to do pre/post process and cpu 
 
 ## 7. Run Model Binaries in DME Mode 
 
-Please refer to the example code in example/user_test_dme_async_mobilenet_classification.cpp
+Please refer to the example code in example/dme_async_mobilenet_classification.cpp
 
 ### 7.1. DME mode Introduction
 
@@ -317,11 +509,9 @@ Reformat: Transfer original format, such as RGB565 or YUV422, to RGBA8888
 
 Resize: Resize image size to model input size 
 
-Subtract: Subtract the same value for all data
+Subtract: Subtract 128 for all data if configured 
 
-Pad: Pad the same value to any position that applied 
-
-Right-shift if configured 
+Right-shift for 1 bit if configured 
 
 Because this MobileNetV2 model needs to apply tensorflow preprocess, which is `X/127.5 -1`, it is similar to apply DME default pre process. In section 7.3, we will see how to config the pre process for this MobileNetV2 model.
 
