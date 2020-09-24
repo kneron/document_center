@@ -14,7 +14,8 @@ nav:
     - ISI API reference: host_api/isi_api.md
     - System API reference: host_api/system.md
   - Toolchain Docker: 
-    - Manual: manual.md
+    - Toolchain 520 Manual: manual_520.md
+    - Toolchain 720 Manual: manual_720.md
     - End to End Simulator: python_app/app_flow_manual.md 
 extra:
     logo: 'imgs/logo.png'
