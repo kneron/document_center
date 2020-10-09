@@ -470,25 +470,7 @@ And a folder called batch_compile will be generated in Interactive Folder, which
 
 ##### 3.6.3.1 Hardware Parameters
 
-KL720, Beethoven, 512KB SRAM, 7.8GB/s
-
-##### 3.6.3.2 Performace Table
-
-| Model                | Size    | FPS   |
-| -------------------- | ------- | ----- |
-| Inceptionv3          | 224x224 | 103.8 |
-| Inception v4         | 299x299 | 28.3  |
-| Mobilenet V1         | 224x224 | 507.7 |
-| Mobilenet V2         | 224x224 | 842.1 |
-| Mobilenet v1 ssd     | 300x300 | 18.2  |
-| Mobilenet v2 ssdlite | 300x300 | 342.1 |
-| Resnet50 v1.5        | 224x224 | 75.0  |
-| openpose             | 256x256 | 5.3   |
-| SRCNN                | 300x300 | 137.0 |
-| Tiny yolo v3         | 416x416 | 157.4 |
-| Yolo v3              | 416x416 | 14.1  |
-| Yolo v4              | 416x416 | 14.5  |
-| Yolo v5s             | 336x336 | 37.7  |
+KL720, Beethoven, 1MB SRAM
 
 
 ### 3.7 Other utilities
