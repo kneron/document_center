@@ -1,0 +1,739 @@
+
+<div align="center">
+<img src="../imgs/manual/kneron_log.png">
+</div>
+
+# Kneron Linux Toolchain 720 Manual 
+
+** 2020 October **
+** toolchain 720 V0.1.0 **
+
+## 0. Overview
+
+KDP toolchain is a software integrating a series of libraries to simulate the operation in the hardware KDP 720. Table 1.1 shows the list of functions KDP720 supports base on ONNX 1.4.1.
+
+*Table 1.1 The functions KDP720 NPU supports*
+
+| Node               | Applicable Subset    | Spec.                           |
+| ------------------ | -------------------- | ------------------------------- |
+| Relu               |                      | support                         |
+| PRelu              |                      | support                         |
+| LeakyRelu          |                      | support                         |
+| Sigmoid            |                      | support                         |
+| Clip               |                      | min = 0                         |
+| Tanh               |                      | support                         |
+| BatchNormalization | 4D input             | support                         |
+| Conv               |                      | strides < [4, 16]               |
+| Pad                |                      | spacial dimension only          |
+| ConvTranspose      |                      | strides = [1, 1], [2, 2]        |
+| Upsample           |                      | support                         |
+| Gemm               | 2D input             | support                         |
+| Flatten            | Before Gemm          | support                         |
+| Add                |                      | support                         |
+| Concat             |                      | support                         |
+| Mul                |                      | support                         |
+| MaxPool            |                      | kernel = [1, 1], [2, 2], [3, 3] |
+| AveragePool        | 3x3                  | kernel = [1, 1], [2, 2], [3, 3] |  |
+| GlobalAveragePool  | 4D input             | support                         |
+| GlobalMaxPool      |                      | support                         |
+| MaxRoiPool         |                      | support                         |
+| Slice              | input dimension <= 4 | support                         |
+
+## 1. Introduction
+
+### 1.1 Working Flow
+
+To fully utilize Kneron SDK and get detailed information from the running programs, besides the toolchain GUI, Kneron provides a Linux command toolchain containing the following functions:
+
+1. converting deep learning models from different deep learning frameworks (Keras, Tensorflow, Pytorch, Caffe) to ONNX format;
+2. conducting fixed pointer analysis on the selected model and image dataset; compiling the related model file to Kneron IP’s corresponding instructions, weight file, and data flow controls;
+3. Running ip evaluator, as well as simulator and emulator on the selected model.
+
+<div align="center">
+<img src="../imgs/manual/toolchain_process.png">
+<p><span style="font-weight: bold;">Figure 1.</span> Diagram of working flow</p>
+</div>
+
+## 2. Installation
+
+### 2.1 System requirement
+
+Windows 10 home or Ubuntu 16.0.4
+
+### 2.2 Prerequisite
+
+For Windows 10 home, please install [Docker Toolbox](https://download.docker.com/win/stable/DockerToolbox.exe).
+
+For Ubuntu 16.0.4, please follow these instructions (<https://docs.docker.com/install/linux/docker-ce/ubuntu/>) to install.
+
+### 2.3 Docker check
+
+Before using this toolchain, you need to start Docker properly.
+
+For Windows 10 home users, if you successfully installed Docker Toolbox, introduced in Part 2.2, you can search and find the Docker Quickstart Terminal in your computer. Every time you want to use this toolchain, please remember to start the Docker Quickstart Terminal. Figure 2 shows the appearance of a Docker Quickstart Terminal that is started properly. If the terminal does not show this appearance, there was some problem for the installation of Docker.
+
+<div align="center">
+<img src="../imgs/manual/docker_windows.png">
+<p><span style="font-weight: bold;">Figure 2. </span>Appearance of Docker Quickstart Terminal</p>
+</div>
+
+For Ubuntu 16.0.4 users, please refer to this link <https://www.digitalocean.com/community/questions/how-to-check-for-docker-installation> to check whether docker is installed successfully.
+
+
+## 3. Tutorial Example
+
+During this tutorial, it will use Keras Onet model as an example. For the Window 10 home users, you need to type the commands by Docker Quickstart terminal, and for the Ubuntu 16.0.4 users, you need to type the commands by Ubuntu terminal.
+
+### 3.1 Pull the Docker image
+
+Each time when there is a new version of Linux command toolchain released, you need to pull the latest Docker image.
+
+The command to pull the latest image is:
+
+```bash
+#for toolchain 720
+docker pull kneron/toolchain:linux_command_toolchain_720
+```
+
+After finishing this command, the Docker image is saved in your local side, and only when you want to update the image to the latest one, you need to connect to the Internet to repeat this command again. Otherwise, you can finish the following parts without the connection to the Internet.
+
+To check whether the Docker image is pulled successfully, type in this command:
+
+```bash
+docker image ls
+```
+
+If the image is pulled successfully, you will see the image, kneron/toolchain:linux_command_toolchain_720 in the Docker image list.
+
+### 3.2 Start the docker image
+
+Then you can start the docker image you just pulled, and get a docker container to run the toolchain. When you start it, you need to configure a local folder as the one for communicating between your local environment and the container. Let’s call it as Interactive Folder. Assume the absolute path of the folder you configure is `absolute_path_of_your_folder`. And the start command is:
+
+```bash
+#for toolchain 720
+docker run -it --rm -v absolute_path_of_your_folder:/data1 kneron/toolchain:linux_command_toolchain_720
+```
+
+For example, if the absolute path of the path folder you configure is `/home/kneron/Document/test_docker`, and then the related command is:
+
+```bash
+#for toolchain 720
+docker run -it --rm -v /home/kneron/Document/test_docker:/data1 kneron/toolchain:linux_command_toolchain_720
+```
+
+If using Windows, please mount the shared folder in the c disk, and the command is:
+
+```bash
+#for toolchain 720
+docker run -it --rm -v /c/Users/username/test_docker:/data1 kneron/toolchain:linux_command_toolchain_720
+```
+
+After running the start command, you’ll enter into the docker container. Then, copy the example materials to the Interactive Folder by the following command:
+
+```bash
+cp -r /workspace/examples/* /data1/
+```
+
+
+### 3.3 Converters
+
+#### 3.3.1 Keras to ONNX
+
+Since that the Onet model is in keras format, you need to convert it from keras to onnx by the following command:
+
+```bash
+python /workspace/libs/ONNX_Convertor/keras-onnx/generate_onnx.py -o absolute_path_of_output_model_file  absolute_path_of_input_model_file -O --duplicate-shared-weights
+```
+
+For Onet example here, the detailed command is:
+
+```bash
+python /workspace/libs/ONNX_Convertor/keras-onnx/generate_onnx.py -o /data1/onet-0.417197.onnx /data1/keras/onet-0.417197.hdf5 -O --duplicate-shared-weights
+```
+
+There might be some warning log when running this problem, and you can check whether the convert works successfully by checking whether the onnx file is generated.
+
+If there’s customized input shape for the model file, you need to use the following command:
+
+```bash
+python /workspace/libs/ONNX_Convertor/keras-onnx/generate_onnx.py absolute_path_of_input_model_file -o absolute_path_of_output_model_file -I 1 model_input_width model_input_height num_of_channel
+```
+
+Then need to run the command in [3.3.6.1 Optimize onnx files ](#3361-Optimize-onnx-files).
+
+#### 3.3.2 Tensorflow to ONNX
+
+```bash
+python /workspace/libs/ONNX_Convertor/optimizer_scripts/tensorflow2onnx.py absolute_path_of_input_model_file absolute_path_of_output_onnx_model_file
+```
+
+For the provided example model: `mnist.pb`
+
+```bash
+python /workspace/libs/ONNX_Convertor/optimizer_scripts/tensorflow2onnx.py /data1/tensorflow/model/mnist.pb /data1/mnist.pb.onnx
+```
+
+Then need to run the command in [3.3.6.1 Optimize onnx files ](#3361-Optimize-onnx-files).
+
+#### 3.3.3 Pytorch to ONNX
+
+```bash
+python /workspace/libs/ONNX_Convertor/optimizer_scripts/pytorch2onnx.pyabsolute_path_of_input_model_file  absolute_path_of_output_model_file --input-size input_size_of_model
+```
+
+For the provided example model: `resnet34.pth`
+
+```bash
+python /workspace/libs/ONNX_Convertor/optimizer_scripts/pytorch2onnx.py/data1/pytorch/models/resnet34.pth /data1/resnet34.onnx --input-size 3 224 224 
+```
+
+Then need to run the command in [ 3.3.6.1 Optimize onnx files ](#3361-Optimize-onnx-files).
+
+#### 3.3.5 Caffe to ONNX
+
+```bash
+python /workspace/libs/ONNX_Convertor/caffe-onnx/generate_onnx.py -o absolute_path_of_output_onnx_model_file -w absolute_path_of_input_caffe_weight_file -n absolute_path_of_input_caffe_model_file
+```
+
+For the provided example model: `mobilenetv2.caffemodel`
+
+```bash
+python /workspace/libs/ONNX_Convertor/caffe-onnx/generate_onnx.py -o /data1/mobilenetv2.onnx -w /data1/caffe/models/mobilenetv2.caffemodel -n /data1/caffe/models/mobilenetv2.prototxt
+```
+
+Then need to run the command in [3.3.6.1 Optimize onnx files ](#3361-Optimize-onnx-files).
+
+#### 3.3.6 TF Lite to ONNX
+
+```bash
+python /workspace/libs/ONNX_Convertor/tflite-onnx/onnx_tflite/tflite2onnx.py -tflite path_of_input_tflite_model -save_path path_of_output_onnx_file
+```
+
+For the provided example model: `model_unquant.tflite`
+
+```bash
+python /workspace/libs/ONNX_Convertor/tflite-onnx/onnx_tflite/tflite2onnx.py -tflite /data1/tflite/model/model_unquant.tflite -save_path /data1/tflite/model/model_unquant.tflite.onnx
+```
+
+Then need to run the command in [3.3.7.1 Optimize onnx files ](#3361-Optimize-onnx-files).
+
+#### 3.3.7 ONNX to ONNX
+
+##### 3.3.7.1 Optimize onnx files
+
+After converting models from other frameworks to onnx format, you need to run the following command:
+
+```bash
+python /workspace/libs/ONNX_Convertor/optimizer_scripts/onnx2onnx.py absolute_path_of_your_input_onnx_model_file -o absolute_path_of_output_onnx_model_file -t --add-bn-on-skip (-m)
+```
+
+Add `–m` only when there is customized layer in your model.
+
+This script will optimize the layer in your model.
+
+
+#### 3.3.8 Model Editor
+
+##### 3.3.8.1 Introduction
+
+KL720 NPU supports most of the compute extensive OPs, such as Convolution, fully connected/GEMM, in order to speed up the model inference run time. On the other hand, there are some OPs that KL720 NPU cannot support well, such as `Softmax` or `Sigmod`. However, these OPs usually are not compute extensive and they are better to execute in CPU. Therefore, Kneron provides a model editor to help user modify the model so that KL720 NPU can run the model more efficiently.
+
+##### 3.3.8.2 General Editor Guideline
+
+Here are some general guideline to edit a model to take full advantage of KL720 NPU MAC efficiency:
+
+**Step 1:** Start from each output nodes of the model, user should trace back to a OP that has significant compute workload, such as `GlobalAveragePool`, `Gemm`(fully connect), or `Conv`. Then user could cut to the ouput of that OP. For example, there is a model such as Figure 4, and it has two output nodes 350 and 349. From output node 349, user can trace back to the `Gemm` above the red line because the `Div`, `Clip`, `Add` and `Mul` only have 1x5 dimension, and these OPs are not very heavy computation. Since `Mul` and `Div` are not support in NPU, so it is recommend to cut the rest of the OPs and let the model finish at the output of the `Gemm` (red line). For the other output node 350, since it is the output of a `Gemm`, there is no need to do any edition.
+
+**Step 2:** If both input nodes and output nodes are channel last, then the model is transposed into channel first, the model editor can swap the input channels and output channels and remove the `Transpose`.
+
+<div align="center">
+<img src="../imgs/manual/fig4_pre_edited_model.png">
+<p><span style="font-weight: bold;">Figure 4.</span> Pre-edited model </p>
+</div>
+
+##### 3.3.8.3 Feature
+There is a script called `edit.py` in the folder `/workspace/libs/ONNX_Convertor/optimizer_scripts`, and it is an simple ONNX editor which achieves the following functions:
+
+1. Add nop `BN` or `Conv` nodes.
+2. Delete specific nodes or inputs.
+3. Cut the graph from certain node (Delete all the nodes following the node).
+4. Reshape inputs and outputs
+
+#### 3.3.8.4 Usage
+
+```bash
+editor.py [-h] [-c CUT_NODE [CUT_NODE ...]]
+             [--cut-type CUT_TYPE [CUT_TYPE ...]]
+             [-d DELETE_NODE [DELETE_NODE ...]]
+             [--delete-input DELETE_INPUT [DELETE_INPUT ...]]
+             [-i INPUT_CHANGE [INPUT_CHANGE ...]]
+             [-o OUTPUT_CHANGE [OUTPUT_CHANGE ...]]
+             [--add-conv ADD_CONV [ADD_CONV ...]]
+             [--add-bn ADD_BN [ADD_BN ...]]
+             in_file out_file
+```
+
+Edit an ONNX model. The processing sequense is 'delete nodes/values' -> 'add nodes' -> 'change shapes'. Cutting cannot be done with other operations together.
+
+```
+positional arguments:
+
+in_file   input ONNX FILE
+out_file  ouput ONNX FILE
+
+optional arguments:
+
+        -h, --help            show this help message and exit
+        -c CUT_NODE [CUT_NODE ...], --cut CUT_NODE [CUT_NODE ...]
+        remove nodes from the given nodes(inclusive)
+
+        --cut-type CUT_TYPE [CUT_TYPE ...]
+        remove nodes by type from the given nodes(inclusive)
+
+        -d DELETE_NODE [DELETE_NODE ...], --delete DELETE_NODE [DELETE_NODE ...]
+        delete nodes by names and only those nodes
+
+        --delete-input DELETE_INPUT [DELETE_INPUT ...]
+        delete inputs by names
+
+        -i INPUT_CHANGE [INPUT_CHANGE ...], --input INPUT_CHANGE [INPUT_CHANGE ...]
+        change input shape (e.g. -i 'input_0 1 3 224 224')
+
+        -o OUTPUT_CHANGE [OUTPUT_CHANGE ...], --output OUTPUT_CHANGE [OUTPUT_CHANGE ...]
+        change output shape (e.g. -o 'input_0 1 3 224 224')
+
+        --add-conv ADD_CONV [ADD_CONV ...]
+        add nop conv using specific input
+
+        --add-bn ADD_BN [ADD_BN ...]
+        add nop bn using specific input
+```
+
+##### 3.3.8.5 Example
+
+1. In the `/workspace/scripts/res` folder, there is a VDSR model from Tensorflow. Convert this model firstly.
+
+```bash
+cd /workspace/libs/ONNX_Convertor/optimizer_scripts && python tensorflow2onnx.py  res/vdsr_41_20layer_1.pb res/tmp.onnx 
+```
+
+2. This onnx file seems valid. But, it's channel last for the input and output. It is using `Transpose` to convert to channel first, affecting the performance. Thus, now use the editor to delete these `Transpose` and reset the shapes.
+
+```bash
+cd /workspace/libs/ONNX_Convertor/optimizer_scripts && python editor.py res/tmp.onnx new.onnx -d Conv2D__6 Conv2D_19__84 -i 'images:0 1 3 41 41' -o 'raw_output___3:0 1 3 41 41' 
+```
+
+Now, it has no `Transpose` and take channel first inputs directly.
+
+#### 3.3.9 Add RGBN to YYNN layer for keras model
+
+```bash
+cd /workspace/libs/ONNX_Convertor/keras-onnx && python rgba2yynn.py input_hdf5_file output_hdf5_file
+```
+
+### 3.4 FpAnalyser, Compiler and IpEvaluator
+
+#### 3.4.1 Fill the input parameters
+
+Before running the programs, you need to configure the input parameters by the `input_params.json` for toolchain 720 in Interactive Folder. The initial file of `input_params.json` is for Keras Onet model. And you can see the detailed explanation for the input parameters in the part FAQ question 1.
+
+#### 3.4.2 Running the program
+
+After filling the related parameters in `input_params.json`, you can run the programs by the following command:
+
+```bash
+# for toolchain 720
+# cd /workspace/scripts && ./fpAnalyserCompilerIpevaluator_720.sh.x thread_number param_holder dp_pct
+cd /workspace/scripts && ./fpAnalyserCompilerIpevaluator_720.sh.x 8 _ 0.999
+```
+
+thread_number: the number of thread to run
+param_holder: a holder of a unassigned parameter
+dp_pct: percentage of range in datapath analysis, default: 0.999. option: 0.999 or 1.0
+
+After running this program, the folders called compiler and fpAnalyser will be generated in the Interactive Folder, which store the result of compiler, ipEvaluator and fpAnalyser.
+
+#### 3.4.3 Get the result
+
+In Interactive Folder, you’ll find a folder called fpAnlayer, which contains the preprocessed image txt files; a folder called `compiler`, which contains the binary files generated by compiler, as well as evaluation result of ipEvaluator, i.e. i.e. `evaluation_result.txt` for toolchain 720.
+
+### 3.5 Simulator and Emulator
+
+Emulator is just the same as simulator running on a folder of images, but emulator supports multi-process to accelerate the speed.
+
+#### 3.5.1 Fill the input parameters
+
+Fill the simulator and emulator input parameters in the `input_params.json` in Interactive Folder. Please refer on the FAQ question 1 to fill the related parameters.
+
+#### 3.5.2 Running the programs
+
+For running the simulator:
+
+```bash
+#for toolchain 720
+cd /workspace/scripts && ./simulator_720.sh.x
+```
+
+And a folder called simulator will be generated in Interactive Folder, which stores the result of the simulator.
+
+For running the emulator:
+
+```bash
+#for toolchain 720
+cd /workspace/scripts && ./emulator_720.sh.x (fl)
+```
+
+When adding option fl, the emulator will run in floatng mode. 
+And a folder called emulator will be generated in Interactive Folder, which stores the result of the emulator.
+
+#### 3.5.3 Get the result
+
+In Interactive Folder, you’ll find a folder called simulator, which contains the output files of simulator; a folder called emulator, which contains the output folders of simulator.
+
+In each folder, there are three files: one is the input image file, one whose format is `temp***.txt` is the output of the last layer, and the other one is the preprocess image result.
+
+### 3.6 FpAnalyser and Batch-Compile
+
+This part is the instructions for batch-compile, which will generate the binary file requested by firmware.
+
+#### 3.6.1 Fill the input parameters
+Fill the simulator and emulator input parameters in the `/data1/batch_compile_input_params.json` in Interactive Folder. Please refer on the [FAQ question 7](#7-whats-the-meaning-of-the-output-files-of-batch-compile) to fill the related parameters.
+
+And the follow will give two examples for how to configure the `batch_compile_input_params.json`.
+
+1. tiny_yolo_v3
+
+```json
+
+{
+    "input_image_folder": ["/data1/caffe/images"],
+    "img_channel": ["RGB"],
+    "model_input_width": [224],
+    "model_input_height": [224],
+    "img_preprocess_method": ["yolo"],
+    "input_onnx_file": ["/data1/yolov3-tiny-224.h5.onnx"],
+    "keep_aspect_ratio": ["True"],
+    "command_addr": "0x30000000",
+    "weight_addr": "0x40000000",
+    "sram_addr": "0x50000000",
+    "dram_addr": "0x60000000",
+    "whether_encryption": "No",
+    "encryption_key": "0x12345678",
+    "model_id_list": [19],
+    "model_version_list": [1],
+    "add_norm": ["True"],
+    "dedicated_output_buffer": "False"
+}
+```
+
+2. tiny_yolo_v3 and Onet
+
+```json
+{
+    "input_image_folder": ["/data1/caffe/images", "/data1/keras/n000645"],
+    "img_channel": ["RGB", "L"],
+    "model_input_width": [224, 48],
+    "model_input_height": [224, 48],
+    "img_preprocess_method": ["yolo", "kneron"],
+    "input_onnx_file": ["/data1/yolov3-tiny-224.h5.onnx", "/data1/onet-0.417197.onnx"],
+    "keep_aspect_ratio": ["True", "True"],
+    "command_addr": "0x30000000",
+    "weight_addr": "0x40000000",
+    "sram_addr": "0x50000000",
+    "dram_addr": "0x60000000",
+    "whether_encryption": "No",
+    "encryption_key": "0x12345678",
+    "model_id_list": [19, 20],
+    "model_version_list": [1, 1],
+    "add_norm": ["True", "False"],
+    "dedicated_output_buffer": "False"
+}
+```
+
+#### 3.6.2 Running the programs
+
+For running the compiler and ip evaluator:
+
+```bash
+# for toolchain 720
+# cd /workspace/scripts && ./fpAnalyserBatchCompile_720.sh.x thread_number param_holder dp_pct
+cd /workspace/scripts && ./fpAnalyserBatchCompile_720.sh.x 8 _ 0.999
+```
+
+thread_number: the number of thread to run
+param_holder: a holder of a unassigned parameter
+dp_pct: percentage of range in datapath analysis, default: 0.999. option: 0.999 or 1.0
+
+And a folder called batch_compile will be generated in Interactive Folder, which stores the result of the fpAnalyer and batch-compile.
+
+#### 3.6.3 Reference Models
+
+##### 3.6.3.1 Hardware Parameters
+
+KL720, Beethoven, 512KB SRAM, 7.8GB/s
+
+##### 3.6.3.2 Performace Table
+
+| Model                | Size    | FPS   |
+| -------------------- | ------- | ----- |
+| Inceptionv3          | 224x224 | 103.8 |
+| Inception v4         | 299x299 | 28.3  |
+| Mobilenet V1         | 224x224 | 507.7 |
+| Mobilenet V2         | 224x224 | 842.1 |
+| Mobilenet v1 ssd     | 300x300 | 18.2  |
+| Mobilenet v2 ssdlite | 300x300 | 342.1 |
+| Resnet50 v1.5        | 224x224 | 75.0  |
+| openpose             | 256x256 | 5.3   |
+| SRCNN                | 300x300 | 137.0 |
+| Tiny yolo v3         | 416x416 | 157.4 |
+| Yolo v3              | 416x416 | 14.1  |
+| Yolo v4              | 416x416 | 14.5  |
+| Yolo v5s             | 336x336 | 37.7  |
+
+
+### 3.7 Other utilities
+
+#### 3.7.1 Convert bin file to png
+
+```bash
+cd /workspace/scripts/utils && python bintoPng.py -i input_rgb565_file_path –o output_png_file_path –he rgb565_height –w rgb565_width -f bin_format
+```
+
+#### 3.7.2 Post process
+
+```bash
+cd /workspace/scripts/utils && python post_process.py -i emulator_result_folder -m model_type
+```
+
+### 3.8 E2ESimulator workflow
+
+E2ESimulator workflow is implemented in C, which will get the extactly same result as the hardware platform's.
+
+The detailed manual of E2ESimulator can be found at <http://doc.kneron.com/docs/#python_app/app_flow_manual/> .
+
+#### 3.8.1 test case data
+
+The folder `/workspace/scripts/E2E_Simulator/bin/test1` provides the input data for the face detection test case.
+
+#### 3.8.2 test case command
+
+```bash
+cd /workspace/libs/E2E_Simulator/python_flow && python example.py -d ../bin/test1 -i binary -t 1
+```
+
+And the final result will be saved at the path: `/workspace/scripts/E2E_Simulator/bin/`.
+
+
+## FAQ
+
+### 1. How to configure the `input_params.json`?
+
+By following the above instructions, the `input_params.json` will be saved in Interactive Folder.
+Please do not change the parameters’ names.
+
+The parameters in `input_params.json` are:
+
+1. `input_image_folder`  
+The absolute path of input image folder for fpAnalyser.  
+2. `img_channel`  
+Options: L, RGB  
+The channel information after the input image is preprocessed. L means single channel. Input for fpAnalyer.  
+3. `model_input_width`  
+The width of the model input size.Input for fpAnalyer.  
+4. `model_input_height`  
+The height of the model input size.  
+5. `img_preprocess_method`  
+Options: `kneron`, `tensorflow`, `yolo`, `caffe`, `pytorch`  
+The image preprocess methods, input for fpAnlayer, and the related formats are following:  
+`kneron`: RGB/256 - 0.5,  
+`tensorflow`: RGB/127.5 - 1.0,  
+`yolo`: RGB/255.0  
+`pytorch`: (RGB/255. -[0.485, 0.456, 0.406]) / [0.229, 0.224, 0.225]  
+`caffe`(BGR format) BGR  - [103.939, 116.779, 123.68]  
+`customized”`: please refer to FAQ question 8  
+6. `input_onnx_file`  
+The absolute path of the onnx file, which works as the input file for fpAnalyser.  
+7. `keep_aspect_ratio`  
+Options: True, False  
+Indicates whether or not to keep the aspect ratio.  
+8. `command_addr`  
+Address for command, input for compiler.  
+9. `weight_addr`  
+Address for weight, input for compiler.  
+10. `sram_addr`  
+Address for sram, input for compiler.  
+11. `dram_addr`  
+Address for dram, input for compiler.  
+12. `whether_encryption`  
+Option: Yes, No  
+Whether add encryption on the bin files generated by compiler, input for compiler.  
+13. `encryption_key`  
+Encryption key for bin files, input for compiler.  
+14. `simulator_img_file`  
+Input for simulator.  
+The absolute path of the image you want to inferenced by simulator.  
+15. `emulator_img_folder`  
+The absolute path of the image folder you want to inferenced by emulator.  
+16. `cmd_bin`  
+The absolute path of command binary file, which is the input file for simulator or emulator.  
+17. `weight_bin`  
+The absolute path of weight binary file, which is the input file for simulator or emulator.  
+18. `setup_bin`  
+The absolute path of setup binary file, which is the input file for simulator or emulator.  
+19. `whether_npu_preprocess`  
+The option for whether simulator or emulator using the same image processing as the npu uses.  
+If false, the parameters (20) - (25) will not be utilized.  
+Parameters (20) - (25) is for npu image preprocessing.  
+20. `raw_img_fmt`  
+The input image format for simulator and emulator  
+Options: IMG, RGB565, NIR888  
+IMG: jpg/png/jpeg/bmp image files  
+RGB565: binary file with rgb565 format;  
+NIR888: binary file with nir888 format.  
+21. `radix`  
+The radix information for the npu image process.  
+The formula for radix is 7 – ceil(log2 (abs_max))  
+For example, if the image processing method we utilize is “kneron”, which is introduced in the parameter (5). So the related image processing formula is “kneron”: RGB/256 - 0.5, and the processed value range will be (-0.5, 0.5), and then  
+abs_max = max(abs(-0.5), abs(0.5)) = 0.5  
+Radix = 7 – ceil(log2(abs_max)) = 7 - (-1) = 8  
+22. `pad_mode`  
+This is the option for the mode of adding paddings, and it will be utilized only when (7) keep_aspect_ratio is True.  
+And it has two options: 0 and 1.  
+0 – If the original width is too small, the padding will be added at both right and left sides equally; if the original height is too small, the padding will be added at both up and down sides equally.  
+1 – If the original width is too small, the padding will be added at the right side only, if the original height is too small, the padding will be only added at the down side.  
+23. `rotate`  
+It has three options:  
+0 – no rotating operation  
+1 – rotate 90 degrees in clockwise direction  
+2 – rotate 90 degrees in counter-clockwise direction  
+24. `pCrop`  
+The parameters for cropping image.  
+And it has four sub parameters.  
+-bCropFirstly, whether cropping the image firstly, if false, the following parameters won’t be utilized, and there won’t be any cropping operations.  
+-crop_x, cropy, the left-up cropping point coordinate.  
+-crop_w, the width of the cropped image.  
+-crop_h,  the height of the cropped image.  
+25. `imgSize`  
+-width: input image width  
+-height: input image height  
+26. `add_norm`  
+Option: `True` / `False`  
+This option is whether add an extra conv layer at the beginning of the model, it will help when dealing with the image preprocess. For example, when you choose `yolo` as the image preprocess method, the preprocess’s output range would be 0~1, in this case, all the computation is finished in CPU, which is time-consuming; when you choose add_norm as `True`, the image preprocess will be split into two parts: firstly, the CPU will finish the part of the preprocess, and the internal output range is –0.5 ~ 0.5, and then the NPU (the extra norm layer) will finish the remaining adding computation (+0.5),  and the final will be 0~1.
+
+
+### 2. Fails when implement models with SSD structure.
+
+Currently, our NPU does not support SSD like network since it has Reshape and Concat operations in the end of the model, but we do offer a work around solution to this situation.
+
+The reason we do not support Reshape and Concat operation is that we do offer Reshape operation capability, However, we only support regular shape transportation. Which means you could flatten your data or extract some channels form the feature map. However, NPU does not expect complex transportation. For example, in Figure 13, you could notice there is a 1x12x4x5 feature map reshapes to 1x40x6.
+
+For Concat operation, the NPU also supports channel-based feature map concatenation. However, it does not support Concate operation based on another axis. For example, in Figure 14, The concatenation on based on axis 1 and the following concatenation is based on axis 2.
+
+The workaround we will offer is that deleting these Reshape and Concat operations and enable make the model to a multiple outputs model since they are in the end of the models and they do not change the output feature map data. So converted model should look like this as in Figure 15.
+
+
+<div align="center">
+<img src="../imgs/manual/fig13_invalid.png">
+<p><span style="font-weight: bold;">Figure 13.</span>  Invalid Reshape operation  </p>
+</div>
+<div align="center">
+<img src="../imgs/manual/fig14_invalid.png">
+<p><span style="font-weight: bold;">Figure 14.</span>  Invalid Concat operation </p>
+</div>
+<div align="center">
+<img src="../imgs/manual/fig15_valid.png">
+<p><span style="font-weight: bold;">Figure 15.</span>  Valid SSD operation </p>
+</div>
+
+### 3. Fails in the step of FpAnalyser
+
+When it shows the log `mystery`, it means there are some customized layers in the model you input, which are not support now.
+
+When it shows the log `start datapath analysis`, you need to check whether you input the proper image pre-process parameters.
+
+
+### 4. Other unsupported models
+
+This version of SDK doesn’t support the models in the following situations:
+
+1. Have customized layers.
+
+### 5. What’s the meaning of simulator’s output?
+
+* estimate FPS float => average Frame Per Second
+* total time => total time duration for single image inference on NPU
+* MAC idle time => time duration when NPU MAC engine is waiting for weight loading or data loading
+* MAC running time => time duration when NPU MAC engine is running
+* average DRAM bandwidth => average DRAM bandwidth used by NPU to complete inference
+* total theoretical convolution time => theoretically minimum total run time of the model when MAC efficiency is 100%
+* MAC efficiency to total time => time ratio of the theoretical convolution time to the total time
+
+### 6. How to configure the `batch_compile_input_params.json`?
+
+By following the above instructions, the `batch_compile_input_params.json` will be saved in Interactive Folder. Please do not change the parameters’ names. The parameters in `batch_compile_input_params.json` are:
+
+1. `input_image_folder`  
+The absolute path of input image folder for fpAnalyser. Since that batch-compile can compile more than one models together, the order of the input_imgae_folder is related to the order of `input_onnx_file`.  
+2. `img_channel`  
+Options: L, RGB  
+The channel information after the input image is preprocessed. L means single channel. Input for fpAnalyer. Same as (1), the order of the `img_channel` is related to the order of `input_onnx_file`.  
+3. `model_input_width`  
+The width of the model input size.Input for fpAnalyer. Same as (1), the order of the model_input_width is related to the order of input_onnx_file.  
+4. `model_input_height`  
+The height of the model input size. Same as (1), the order of the `model_input_height` is related to the order of `input_onnx_file`.  
+5. `img_preprocess_method`  
+Options: kneron, tensorflow, yolo, caffe, pytorch. Same as (1), the order of the `img_preprocess_method` is related to the order of `input_onnx_file`.  
+The image preprocess methods, input for fpAnlayer, and the related formats are following:  
+`kneron`: RGB/256 - 0.5,  
+`tensorflow`: RGB/127.5 - 1.0,  
+`yolo`: RGB/255.0  
+`pytorch`: (RGB/255. -[0.485, 0.456, 0.406]) / [0.229, 0.224, 0.225]  
+`caffe`(BGR format) BGR  - [103.939, 116.779, 123.68]  
+6. `input_onnx_file`  
+The absolute path of the onnx file, which works as the input file for fpAnalyser. Since that the batch-compile can compile more than one models at a time. The order of the model in the array of input_onnx_file decides the model binary’s order in all_models.bin  
+7. `keep_aspect_ratio`  
+Options: `True`, `False`  
+Indicates whether or not to keep the aspect ratio.  
+8. `command_addr`  
+Address for command, input for compiler.  
+9. `weight_addr`  
+Address for weight, input for compiler.  
+10. `sram_addr`  
+Address for sram, input for compiler.  
+11. `dram_addr`  
+Address for dram, input for compiler.  
+12. `whether_encryption`  
+Option: Yes, No  
+Whether add encryption on the bin files generated by compiler, input for compiler.  
+13. `encryption_key`  
+Encryption key for bin files, input for compiler.  
+14. `model_id_list`  
+The list of model id information  
+15. `model_version_list`  
+The list of model version information.  
+16. `add_norm_list`  
+The list of whether add norm layer on each model.  
+17. `dedicated_output_buffer`  
+Default: false  
+If the option is chosen as true, the output nodes’ results would be saved together, which will then be good for multiple output node models or parallel processing.
+
+
+### 7. What’s the meaning of the output files of batch-compile?
+
+The result of 3.7 FpAnalyser and Batch-Compile is generated at a folder called batch_compile at Interactive Folder, and it has two sub-folders called fpAnalyser and compiler.
+
+In fpAnalyser subfolder, it has the folders with name format as `input_img_txt_X`, which contains the .txt files after image preprocessing. The index X is the related to the order of model file in FAQ question 7 (6), which means the folder `input_img_txt_X` is number X model’s preprocess image text files.
+
+In compile subfolder, it will have the following files: `all_model.bin`, `fw_info.bin`, `temp_X_ioinfo.csv`. The X is still the order of the models.
+
+-`all_model.bin` and `fw_info.bin` is for firmware to use.
+
+-`temp_X_ioinfo.csv` contains the information that cpu node and output node.
+
+If you find the cpu node in `temp_X_ioinfo.csv`, whose format is `c,\**,**`”`, you need to implement and register this function in SDK.
+
+
+#### 8. How to use customized methods for image preprocess? 
+
+1. Configure the `input_params.json`, and fill the value of `img_preprocess_method` as `customized`;
+2. edit the file `/workspace/scripts/utils/img_preprocess.py`, search for the text `#this is the customized part` and add your customized image preprocess method there.
