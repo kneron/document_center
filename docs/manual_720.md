@@ -6,11 +6,134 @@
 # Kneron Linux Toolchain 720 Manual 
 
 ** 2020 October **
-** toolchain 720 V0.1.0 **
+** Toolchain 720 v1.0.0 **
 
 ## 0. Overview
 
-KDP toolchain is a software integrating a series of libraries to simulate the operation in the hardware KDP 720. Table 1.1 shows the list of functions KDP720 supports base on ONNX 1.4.1.
+KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 720. For better
+environment compatibility, we provide a docker which include all the dependencies as well as the toolchain software.
+
+**This document is compatible with `kneron/toolchain:720_v1.0.0`.**
+
+In this document, you'll learn:
+
+1. How to install and use the toolchain docker.
+2. What tools are in the toolchain.
+3. How to use scripts to utilize the tools.
+
+## 1. Installation
+
+**Review the system requirements below before start installing and using the toolchain.**
+
+### 1.1 System requirements
+
+1. **Hardware**: Minimum quad-core CPU, 4GB RAM and 6GB free disk space.
+2. **Operating system**: Window 10 x64 version 1903 or higher with build 18362 or higher. Ubuntu 16.04 x64 or higher.
+Other OS which can run docker later than 19.03 may also work. But they are not tested. Please take the risk yourself.
+3. **Docker**: Docker Desktop later than 19.03. Here is a [link](https://www.docker.com/products/docker-desktop) to
+download Docker Desktop.
+
+> **TIPS:**
+>
+> For Windows 10 users, we recommend using docker with wsl2, which is Windows subsystem Linux provided by Microsoft.
+> Here is [how to install wsl2](https://docs.microsoft.com/en-us/windows/wsl/install-win10) and
+> [how to install and run docker with wsl2](https://docs.docker.com/docker-for-windows/wsl/)
+
+Please double-check whether the docker is successfully installed and callable from the console before going on to the
+next section. If there is any problem about the docker installation, please search online or go to the docker community
+for further support. The questions about the docker is beyond the reach of this document.
+
+### 1.2 Pull the latest toolchain image
+
+All the following steps are on the command line. Please make sure you have the access to it.
+
+> TIPS:
+>
+> You may need `sudo` to run the docker commands, which depends on your system configuration.
+
+
+You can use the following command to pull the specific version of toolchain 720, for example, v1.0.0 which is described
+in this document.
+
+```bash
+docker pull kneron/toolchain:720_v1.0.0
+```
+
+Use the following command to pull the latest toolchain docker for 720. Note that the latest version of the toolchain may
+not compatible with this document, you may need to visit [the latest document](http://doc.kneron.com/docs/#manual_720/).
+
+```bash
+docker pull kneron/toolchain:720
+```
+
+## 2. Toolchain Docker Overview
+
+After pulling the desired toolchain, now we can start walking through the process. In all the following sections, we use
+`kneron/toolchain:720_v1.0.0` as the docker image. Before we actually start the docker, we'd better provide a folder
+which contains the model files you want to test in our docker, for example, `/mnt/docker`. Then, we can use the
+following command to start the docker and work in the docker environment: 
+
+```bash
+docker run --rm -it -v /mnt/docker:/docker_mount kneron/toolchain:720_v1.0.0
+```
+
+> TIPS:
+>
+> The mount folder path here is recommended to be an absolute path.
+
+Here are the brief explanations for the flags. For detailed explanations, please visit [docker documents](https://docs.docker.com/engine/reference/run/).
+
+* `--rm`: the container will be removed after it exists. Each time we use `docker run`, we create a new docker
+container. Thus, without this flag, the docker will consumes more and more disk space.
+* `-it`: enter the interactive mode so we can use the bash.
+* `-v`: mount a folder into the docker container. Thus, we can visit the desired files from the host and save the result
+from the container.
+
+### 2.1 Folder structure
+
+After logging into the container, you are under `/workspace`, where all the tools are. Here is the folder structure and
+their usage:
+
+```
+/workspace
+|-- E2E_Simulator       # End to end simulator
+|-- cmake               # Environment
+|-- examples            # Example for the workflow, will be used later.
+|-- libs                # The libraries
+|   |-- ONNX_Convertor  # ONNX Converters and optimizer scripts, will be discussed in section 3.
+|   |-- compiler        # Compiler for kdp720 hardware and the IP evaluator to infer the performance.
+|   |-- dynasty         # Simulator which only simulates the kdp720 calculation.
+|   |-- fpAnalyser      # Analyze the model and provide fixed point information.
+|   `-- hw_c_sim        # Hardware simulator which simulate all the kdp720 hardware behaviours.
+|-- miniconda           # Environment
+|-- scripts             # Scripts to run the tools, will be discussed in section 3.
+`-- version.txt            
+```
+
+### 2.2 Work flow
+
+Before we start actually introducing the scripts, let me introduce the general work flow.
+
+<div align="center">
+<img src="../imgs/manual/toolchain_process.png">
+<p><span style="font-weight: bold;">Figure 1.</span> Diagram of working flow</p>
+</div>
+
+To keep the diagram as clear as possible, some inputs and outputs are omitted. But it is enough to show the general
+steps:
+
+1. Convert and optimize the models. Generate an optimized onnx file. Details are in [section 3.1](#31-Converters)
+2. Use the optimized onnx file and a set of images to do the model analysis. Generate an encrypted bie file.
+3. Compile the bie file to generate binaries for hardware simulator. This step also generates the IP evaluation result.
+4. Use the binaries generated in step 3 and an image as input to simulate kdp720. Get the results as txt files.
+5. Use the bie file and the same image in step 4 as input to simulate the calculation. Get the result as txt files.
+6. Compare the txt files generated in step 4 and step 5 to make sure this model can be taken by the kdp720 hardware.
+
+Step 1 is in section 3.1. Step 2-6 are automated in step 3.2 using scripts.
+
+### 2.3 Supported operators
+
+Table 1.1 shows the list of functions KDP720 supports base on ONNX 1.4.1.
 
 *Table 1.1 The functions KDP720 NPU supports*
 
@@ -33,177 +156,158 @@ KDP toolchain is a software integrating a series of libraries to simulate the op
 | Concat             |                      | support                         |
 | Mul                |                      | support                         |
 | MaxPool            |                      | kernel = [1, 1], [2, 2], [3, 3] |
-| AveragePool        | 3x3                  | kernel = [1, 1], [2, 2], [3, 3] |  |
+| AveragePool        | 3x3                  | kernel = [1, 1], [2, 2], [3, 3] |
 | GlobalAveragePool  | 4D input             | support                         |
 | GlobalMaxPool      |                      | support                         |
 | MaxRoiPool         |                      | support                         |
 | Slice              | input dimension <= 4 | support                         |
 
-## 1. Introduction
+## 3. Toolchain Scripts Usage
 
-### 1.1 Working Flow
+In this section, we'll go through how to run the tools using scripts.
 
-To fully utilize Kneron SDK and get detailed information from the running programs, besides the toolchain GUI, Kneron provides a Linux command toolchain containing the following functions:
+### 3.1 Converters
 
-1. converting deep learning models from different deep learning frameworks (Keras, Tensorflow, Pytorch, Caffe) to ONNX format;
-2. conducting fixed pointer analysis on the selected model and image dataset; compiling the related model file to Kneron IP’s corresponding instructions, weight file, and data flow controls;
-3. Running ip evaluator, as well as simulator and emulator on the selected model.
+ONNX_Convertor is an open-source project on [Github](https://github.com/kneron/ONNX_Convertor). If there is any bugs in
+the ONNX_Convertor project inside the docker, don't hesitate to try `git pull` under the project folder to get the
+latest update. And if the problem persists, you can raise an issue there. We also welcome contributions to the project.
 
-<div align="center">
-<img src="../imgs/manual/toolchain_process.png">
-<p><span style="font-weight: bold;">Figure 1.</span> Diagram of working flow</p>
-</div>
+The general process for model conversion is as following:
 
-## 2. Installation
+1. Convert the model from other platforms to onnx using the specific converters. See section 3.1.1 - 3.1.5.
+2. Optimize the onnx for Kneron toolchain using `onnx2onnx.py`. See [section 3.1.6](#316-onnx-to-onnx-onnx-optimization).
+3. Check the model and do further customization using `editor.py` (optional). See [section 3.1.7](#317-model-editor)
 
-### 2.1 System requirement
-
-Windows 10 home or Ubuntu 16.0.4
-
-### 2.2 Prerequisite
-
-For Windows 10 home, please install [Docker Toolbox](https://download.docker.com/win/stable/DockerToolbox.exe).
-
-For Ubuntu 16.0.4, please follow these instructions (<https://docs.docker.com/install/linux/docker-ce/ubuntu/>) to install.
-
-### 2.3 Docker check
-
-Before using this toolchain, you need to start Docker properly.
-
-For Windows 10 home users, if you successfully installed Docker Toolbox, introduced in Part 2.2, you can search and find the Docker Quickstart Terminal in your computer. Every time you want to use this toolchain, please remember to start the Docker Quickstart Terminal. Figure 2 shows the appearance of a Docker Quickstart Terminal that is started properly. If the terminal does not show this appearance, there was some problem for the installation of Docker.
-
-<div align="center">
-<img src="../imgs/manual/docker_windows.png">
-<p><span style="font-weight: bold;">Figure 2. </span>Appearance of Docker Quickstart Terminal</p>
-</div>
-
-For Ubuntu 16.0.4 users, please refer to this link <https://www.digitalocean.com/community/questions/how-to-check-for-docker-installation> to check whether docker is installed successfully.
+> TIPS:
+>
+> ONNX exported by Pytorch **cannot** skip step 1 and directly go into step 2. Please check
+> [section 3.1.2](#312-Pytorch-to-ONNX) for details.
 
 
-## 3. Tutorial Example
+#### 3.1.1 Keras to ONNX
 
-During this tutorial, it will use Keras Onet model as an example. For the Window 10 home users, you need to type the commands by Docker Quickstart terminal, and for the Ubuntu 16.0.4 users, you need to type the commands by Ubuntu terminal.
+For Keras, our converter support models from Keras 2.2.4. Note that tf.keras and Keras 2.3 is not supported. You may
+need to export the model as tflite model and see [section 3.1.5](#315-TF-Lite-to-ONNX) for TF Lite model conversion.
 
-### 3.1 Pull the Docker image
-
-Each time when there is a new version of Linux command toolchain released, you need to pull the latest Docker image.
-
-The command to pull the latest image is:
+Suppose there is an hdf5 model exported By Keras, you need to convert it to onnx by the following command:
 
 ```bash
-#for toolchain 720
-docker pull kneron/toolchain:linux_command_toolchain_720
+python /workspace/libs/ONNX_Convertor/keras-onnx/generate_onnx.py -o absolute_path_of_output_model_file -O --duplicate-shared-weights absolute_path_of_input_model_file 
 ```
 
-After finishing this command, the Docker image is saved in your local side, and only when you want to update the image to the latest one, you need to connect to the Internet to repeat this command again. Otherwise, you can finish the following parts without the connection to the Internet.
-
-To check whether the Docker image is pulled successfully, type in this command:
+For example, if the model is `/docker_mount/onet.hdf5`, and you want to convert it to `/docker_mount/onet.onnx`, the
+detailed command is:
 
 ```bash
-docker image ls
+python /workspace/libs/ONNX_Convertor/keras-onnx/generate_onnx.py -o /docker_mount/onet.onnx  -O --duplicate-shared-weights /docker_mount/onet.hdf5
 ```
 
-If the image is pulled successfully, you will see the image, kneron/toolchain:linux_command_toolchain_720 in the Docker image list.
+There might be some warning log printed out by the TensorFlow backend, but we can ignore it since we do not actually run
+it. You can check whether the conversion succeed by checking whether the onnx file is generated.
 
-### 3.2 Start the docker image
+You need to run the command in [3.3.6.1 Optimize onnx files ](#316-onnx-to-onnx-onnx-optimization) after this step.
 
-Then you can start the docker image you just pulled, and get a docker container to run the toolchain. When you start it, you need to configure a local folder as the one for communicating between your local environment and the container. Let’s call it as Interactive Folder. Assume the absolute path of the folder you configure is `absolute_path_of_your_folder`. And the start command is:
+*__Input shape change__(optional)*
+
+If there’s customized input shape for the model file, you need to use `-I` flag in the command. Here is an example:
 
 ```bash
-#for toolchain 720
-docker run -it --rm -v absolute_path_of_your_folder:/data1 kneron/toolchain:linux_command_toolchain_720
+python /workspace/libs/ONNX_Convertor/keras-onnx/generate_onnx.py abs_path_of_input_model -o abs_path_of_output_model -I 1 model_input_width model_input_height num_of_channel -O --duplicate-shared-weights
 ```
 
-For example, if the absolute path of the path folder you configure is `/home/kneron/Document/test_docker`, and then the related command is:
+*__Add RGBN to YYNN layer for Keras model__(optional)*
+
+Some of the models might take gray scale images instead of RGB images as the input. Here is a small script to add an
+extra layer to let the model take RGB input.
 
 ```bash
-#for toolchain 720
-docker run -it --rm -v /home/kneron/Document/test_docker:/data1 kneron/toolchain:linux_command_toolchain_720
+cd /workspace/libs/ONNX_Convertor/keras-onnx && python rgba2yynn.py input_hdf5_file output_hdf5_file
 ```
 
-If using Windows, please mount the shared folder in the c disk, and the command is:
+#### 3.1.2 Pytorch to ONNX
+
+The `pytorch2onnx.py` script not only takes `pth` file as the input. It also takes Pytorch exported `onnx` as the input.
+In fact, we recommend using the Pytorch exported `onnx` file instead of the `pth` file, since the Pytorch do not has a
+very good model save and load API. You can check TIPS below on how to export models to onnx.
+
+We currently only support models exported by Pytorch version >=1.0.0, <1.6.0, no matter it is a `pth` file or an `onnx`
+file exported by `torch.onnx`.
+
+> TIPS
+>
+> You can use `torch.onnx` to export your model into onnx format. Here is the
+> [Pytorch 1.3.0 version document](https://pytorch.org/docs/1.3.1/onnx.html) for `onnx.torch`. An example code for
+> exporting the model is:
+
+```python
+import torch.onnx
+dummy_input = torch.randn(1, 3, 224, 224)
+torch.onnx.export(model, dummy_input, 'output.onnx', keep_initializers_as_inputs=True, opset_version=9)
+```
+
+> In the example, `(1, 3, 224, 224)` are batch size, input channel, input height and input width. `model` is the model
+> object you want to export. `output.onnx` is the output file. For Pytorch version before 1.3.0, 
+> `keep_initializers_as_inputs=True` is not needed. Otherwise, it is required.
+
+*__Run pytorch2onnx with pth file__*
+
+Suppose the input file is called `/docker_mount/resnet34.pth` and you want to save the onnx as
+`/docker_mount/resnet34.onnx`. The input channel, height, width for the model are (3, 224, 224). Here is the example
+command:
 
 ```bash
-#for toolchain 720
-docker run -it --rm -v /c/Users/username/test_docker:/data1 kneron/toolchain:linux_command_toolchain_720
+python /workspace/libs/ONNX_Convertor/optimizer_scripts/pytorch2onnx.py /data1/pytorch/models/resnet34.pth /data1/resnet34.onnx --input-size 3 224 224 
 ```
 
-After running the start command, you’ll enter into the docker container. Then, copy the example materials to the Interactive Folder by the following command:
+You need to run the command in [3.3.6.1 Optimize onnx files](#316-onnx-to-onnx-onnx-optimization) after this step.
+
+*__Run pytorch2onnx with onnx file__*
+
+Suppose the input file is called `/docker_mount/resnet34.onnx` and you want to save the optimized onnx as
+`/docker_mount/resnet34.opt.onnx`. Here is the example
+command:
 
 ```bash
-cp -r /workspace/examples/* /data1/
+python /workspace/libs/ONNX_Convertor/optimizer_scripts/pytorch2onnx.py /data1/pytorch/models/resnet34.onnx /data1/resnet34.opt.onnx
 ```
 
+You need to run the command in [3.3.6.1 Optimize onnx files ](#316-onnx-to-onnx-onnx-optimization) after this step.
 
-### 3.3 Converters
+*__Crash due to name conflict__*
 
-#### 3.3.1 Keras to ONNX
+If you meet the errors related to `node not found` or `invalid input`, this might be caused by a bug in the onnx
+library. Please try using `--no-bn-fusion` flag.
 
-Since that the Onet model is in keras format, you need to convert it from keras to onnx by the following command:
+
+#### 3.1.3 Caffe to ONNX
+
+For caffe, we only support model which can be loaded by [Intel Caffe 1.0](https://github.com/intel/caffe).
+
+Suppose you have model structure definition file `/docker_mount/mobilenetv2.prototxt` and model weight file
+`/docker_mount/mobilenetv2.caffemodel` and you want to output the result as `/docker_mount/mobilenetv2.onnx`, Here is
+the example command:
 
 ```bash
-python /workspace/libs/ONNX_Convertor/keras-onnx/generate_onnx.py -o absolute_path_of_output_model_file  absolute_path_of_input_model_file -O --duplicate-shared-weights
+python /workspace/libs/ONNX_Convertor/caffe-onnx/generate_onnx.py -o /docker_mount/mobilenetv2.onnx -w /docker_mount/mobilenetv2.caffemodel -n /docker_mount/mobilenetv2.prototxt
 ```
 
-For Onet example here, the detailed command is:
+You need to run the command in [3.3.6.1 Optimize onnx files ](#316-onnx-to-onnx-onnx-optimization) after this step.
+
+#### 3.1.4 Tensorflow to ONNX
+
+Tensorflow to onnx script only support Tensorflow 1.x and the operator support is very limited. If it cannot work on
+your model, please try to export the model as tflite and convert it using [section 3.1.5](#315-TF-Lite-to-ONNX).
+
+Suppose you want to convert the model `/docker_mount/mnist.pb` to `/docker_mount/mnist.onnx`, here is the example
+command:
 
 ```bash
-python /workspace/libs/ONNX_Convertor/keras-onnx/generate_onnx.py -o /data1/onet-0.417197.onnx /data1/keras/onet-0.417197.hdf5 -O --duplicate-shared-weights
+python /workspace/libs/ONNX_Convertor/optimizer_scripts/tensorflow2onnx.py /docker_mount/mnist.pb /docker_mount/mnist.onnx
 ```
 
-There might be some warning log when running this problem, and you can check whether the convert works successfully by checking whether the onnx file is generated.
+You need to run the command in [3.3.6.1 Optimize onnx files ](#316-onnx-to-onnx-onnx-optimization) after this step.
 
-If there’s customized input shape for the model file, you need to use the following command:
-
-```bash
-python /workspace/libs/ONNX_Convertor/keras-onnx/generate_onnx.py absolute_path_of_input_model_file -o absolute_path_of_output_model_file -I 1 model_input_width model_input_height num_of_channel
-```
-
-Then need to run the command in [3.3.6.1 Optimize onnx files ](#3361-Optimize-onnx-files).
-
-#### 3.3.2 Tensorflow to ONNX
-
-```bash
-python /workspace/libs/ONNX_Convertor/optimizer_scripts/tensorflow2onnx.py absolute_path_of_input_model_file absolute_path_of_output_onnx_model_file
-```
-
-For the provided example model: `mnist.pb`
-
-```bash
-python /workspace/libs/ONNX_Convertor/optimizer_scripts/tensorflow2onnx.py /data1/tensorflow/model/mnist.pb /data1/mnist.pb.onnx
-```
-
-Then need to run the command in [3.3.6.1 Optimize onnx files ](#3361-Optimize-onnx-files).
-
-#### 3.3.3 Pytorch to ONNX
-
-```bash
-python /workspace/libs/ONNX_Convertor/optimizer_scripts/pytorch2onnx.pyabsolute_path_of_input_model_file  absolute_path_of_output_model_file --input-size input_size_of_model
-```
-
-For the provided example model: `resnet34.pth`
-
-```bash
-python /workspace/libs/ONNX_Convertor/optimizer_scripts/pytorch2onnx.py/data1/pytorch/models/resnet34.pth /data1/resnet34.onnx --input-size 3 224 224 
-```
-
-Then need to run the command in [ 3.3.6.1 Optimize onnx files ](#3361-Optimize-onnx-files).
-
-#### 3.3.5 Caffe to ONNX
-
-```bash
-python /workspace/libs/ONNX_Convertor/caffe-onnx/generate_onnx.py -o absolute_path_of_output_onnx_model_file -w absolute_path_of_input_caffe_weight_file -n absolute_path_of_input_caffe_model_file
-```
-
-For the provided example model: `mobilenetv2.caffemodel`
-
-```bash
-python /workspace/libs/ONNX_Convertor/caffe-onnx/generate_onnx.py -o /data1/mobilenetv2.onnx -w /data1/caffe/models/mobilenetv2.caffemodel -n /data1/caffe/models/mobilenetv2.prototxt
-```
-
-Then need to run the command in [3.3.6.1 Optimize onnx files ](#3361-Optimize-onnx-files).
-
-#### 3.3.6 TF Lite to ONNX
+#### 3.1.5 TF Lite to ONNX
 
 ```bash
 python /workspace/libs/ONNX_Convertor/tflite-onnx/onnx_tflite/tflite2onnx.py -tflite path_of_input_tflite_model -save_path path_of_output_onnx_file
@@ -217,51 +321,67 @@ python /workspace/libs/ONNX_Convertor/tflite-onnx/onnx_tflite/tflite2onnx.py -tf
 
 Then need to run the command in [3.3.7.1 Optimize onnx files ](#3361-Optimize-onnx-files).
 
-#### 3.3.7 ONNX to ONNX
+#### 3.1.6 ONNX to ONNX (ONNX optimization)
 
-##### 3.3.7.1 Optimize onnx files
-
-After converting models from other frameworks to onnx format, you need to run the following command:
+After converting models from other frameworks to onnx format, you need to run the following command to optimize the 
+model for Kneron hardware, suppose your model is `input.onnx` and the output model is called `output.onnx`:
 
 ```bash
-python /workspace/libs/ONNX_Convertor/optimizer_scripts/onnx2onnx.py absolute_path_of_your_input_onnx_model_file -o absolute_path_of_output_onnx_model_file -t --add-bn-on-skip (-m)
+python /workspace/libs/ONNX_Convertor/optimizer_scripts/onnx2onnx.py input.onnx -o output.onnx --add-bn -t
 ```
 
-Add `–m` only when there is customized layer in your model.
+*__Crash due to name conflict__*
 
-This script will optimize the layer in your model.
+If you meet the errors related to `node not found` or `invalid input`, this might be caused by a bug in the onnx
+library. Please try using `--no-bn-fusion` flag.
 
+#### 3.1.7 Model Editor
 
-#### 3.3.8 Model Editor
+KL720 NPU supports most of the compute extensive OPs, such as Conv, BatchNormalization, Fully Connect/GEMM, in order to
+speed up the model inference run time. On the other hand, there are some OPs that KL720 NPU cannot support well, such as
+`Softmax` or `Sigmod`. However, these OPs usually are not compute extensive and they are better to execute in CPU.
+Therefore, Kneron provides a model editor which is `editor.py` to help user modify the model so that KL720 NPU can run
+the model more efficiently.
 
-##### 3.3.8.1 Introduction
-
-KL720 NPU supports most of the compute extensive OPs, such as Convolution, fully connected/GEMM, in order to speed up the model inference run time. On the other hand, there are some OPs that KL720 NPU cannot support well, such as `Softmax` or `Sigmod`. However, these OPs usually are not compute extensive and they are better to execute in CPU. Therefore, Kneron provides a model editor to help user modify the model so that KL720 NPU can run the model more efficiently.
-
-##### 3.3.8.2 General Editor Guideline
+*__General Editor Guideline__*
 
 Here are some general guideline to edit a model to take full advantage of KL720 NPU MAC efficiency:
 
-**Step 1:** Start from each output nodes of the model, user should trace back to a OP that has significant compute workload, such as `GlobalAveragePool`, `Gemm`(fully connect), or `Conv`. Then user could cut to the ouput of that OP. For example, there is a model such as Figure 4, and it has two output nodes 350 and 349. From output node 349, user can trace back to the `Gemm` above the red line because the `Div`, `Clip`, `Add` and `Mul` only have 1x5 dimension, and these OPs are not very heavy computation. Since `Mul` and `Div` are not support in NPU, so it is recommend to cut the rest of the OPs and let the model finish at the output of the `Gemm` (red line). For the other output node 350, since it is the output of a `Gemm`, there is no need to do any edition.
+**Step 1:** Start from each output node of the model, we should trace back to an operator that has significant compute
+workload, such as `GlobalAveragePool`, `Gemm`(fully connect), or `Conv`. Then, we could cut to the output of that OP.
+For example, there is a model looks Figure 4, and it has two output nodes: `350` and `349`. From output node `349`, we
+can trace back to the `Gemm` above the red line because the `Div`, `Clip`, `Add` and `Mul` only have 1x5 dimension, and
+these OPs are not very heavy computation. Since `Mul` and `Div` are not support in NPU, so it is recommend to cut the
+rest of the OPs and let the model finish at the output of the `Gemm` (red line). For the other output node `350`, since
+it is the output of a `Gemm`, there is no need to do any more edition.
 
-**Step 2:** If both input nodes and output nodes are channel last, then the model is transposed into channel first, the model editor can swap the input channels and output channels and remove the `Transpose`.
+**Step 2:** If both input nodes and output nodes are channel last, and there is a `Transpose` after the input and before
+the output, then the model is transposed into channel first. We can use the model editor to safely remove the
+`Transpose`.
+
+**Step 3:** If the input shape is not availble or invalid, we can usethe editor to give it a valid shape.
+
+**Step 4:** The model need to pass `onnx2onnx.py` again after running the editor.  See
+[3.3.7.1 Optimize onnx files ](#3361-Optimize-onnx-files).
 
 <div align="center">
 <img src="../imgs/manual/fig4_pre_edited_model.png">
 <p><span style="font-weight: bold;">Figure 4.</span> Pre-edited model </p>
 </div>
 
-##### 3.3.8.3 Feature
-There is a script called `edit.py` in the folder `/workspace/libs/ONNX_Convertor/optimizer_scripts`, and it is an simple ONNX editor which achieves the following functions:
+_**Feature**_
+The script called `editor.py` is under the folder `/workspace/libs/ONNX_Convertor/optimizer_scripts`. It is a simple
+ONNX editor which achieves the following functions:
 
 1. Add nop `BN` or `Conv` nodes.
 2. Delete specific nodes or inputs.
 3. Cut the graph from certain node (Delete all the nodes following the node).
 4. Reshape inputs and outputs
+5. Rename the output.
 
-#### 3.3.8.4 Usage
+*__Usage__*
 
-```bash
+```
 editor.py [-h] [-c CUT_NODE [CUT_NODE ...]]
              [--cut-type CUT_TYPE [CUT_TYPE ...]]
              [-d DELETE_NODE [DELETE_NODE ...]]
@@ -271,11 +391,10 @@ editor.py [-h] [-c CUT_NODE [CUT_NODE ...]]
              [--add-conv ADD_CONV [ADD_CONV ...]]
              [--add-bn ADD_BN [ADD_BN ...]]
              in_file out_file
-```
 
-Edit an ONNX model. The processing sequense is 'delete nodes/values' -> 'add nodes' -> 'change shapes'. Cutting cannot be done with other operations together.
+Edit an ONNX model. The processing sequense is 'delete nodes/values' -> 'add nodes' -> 'change shapes' -> 'cut node'.
+Cutting is not recommended to be done with other operations together.
 
-```
 positional arguments:
 
 in_file   input ONNX FILE
@@ -309,69 +428,73 @@ optional arguments:
         add nop bn using specific input
 ```
 
-##### 3.3.8.5 Example
+### 3.2 FpAnalyser, Compiler and IpEvaluator
 
-1. In the `/workspace/scripts/res` folder, there is a VDSR model from Tensorflow. Convert this model firstly.
-
-```bash
-cd /workspace/libs/ONNX_Convertor/optimizer_scripts && python tensorflow2onnx.py  res/vdsr_41_20layer_1.pb res/tmp.onnx 
-```
-
-2. This onnx file seems valid. But, it's channel last for the input and output. It is using `Transpose` to convert to channel first, affecting the performance. Thus, now use the editor to delete these `Transpose` and reset the shapes.
+In the following part of this section, we'll use the `LittleNet` as an example. You can find the folder under
+`/workspace/examples`. To use it copy it under `/data1`.
 
 ```bash
-cd /workspace/libs/ONNX_Convertor/optimizer_scripts && python editor.py res/tmp.onnx new.onnx -d Conv2D__6 Conv2D_19__84 -i 'images:0 1 3 41 41' -o 'raw_output___3:0 1 3 41 41' 
+mkdir /data1 && cp -r /workspace/examples/LittleNet /data1
+cp /data1/LittleNet/input_params.json /data1
 ```
 
-Now, it has no `Transpose` and take channel first inputs directly.
+#### 3.2.1 Prepare the input
 
-#### 3.3.9 Add RGBN to YYNN layer for keras model
+Before running the programs, you need to prepare the inputs. In our toolchain all the outputs are placed under `/data1`.
+We call it the Interactivate Folder. So, we recommend you create this folder if it is not already there. Then we need to
+configure the input parameters using `input_params.json` for toolchain 720 in Interactive Folder. As an example,
+`input_params.json` for `LittleNet` model is under `/data1/LittleNet`, if you have already copy the folder as described
+in the beginning of section 3.2. You already has the `input_params.json` ready. You can see the detailed explaination
+for the input parameters in the part FAQ question 1.
+
+#### 3.2.2 Running the program
+
+After preparing `input_params.json`, you can run the programs by the following command:
 
 ```bash
-cd /workspace/libs/ONNX_Convertor/keras-onnx && python rgba2yynn.py input_hdf5_file output_hdf5_file
+# cd /workspace/scripts && ./fpAnalyserCompilerIpevaluator_720.sh thread_number
+cd /workspace/scripts && ./fpAnalyserCompilerIpevaluator_720.sh 8
 ```
 
-### 3.4 FpAnalyser, Compiler and IpEvaluator
+`thread_number`: the number of thread to use.
 
-#### 3.4.1 Fill the input parameters
+After running this program, the folders called `compiler` and `fpAnalyser` will be generated in the Interactive Folder.
+`compiler` stores the result of compiler and ipEvaluator. `fpAnalyser` stores the result of the model analyzer.
 
-Before running the programs, you need to configure the input parameters by the `input_params.json` for toolchain 720 in Interactive Folder. The initial file of `input_params.json` is for Keras Onet model. And you can see the detailed explanation for the input parameters in the part FAQ question 1.
+#### 3.2.3 Get the result
 
-#### 3.4.2 Running the program
+Under `/data1/fpAnalyser`, we can find `output.quan.bias.bie` which is the encrypted result of the model analyzer.
 
-After filling the related parameters in `input_params.json`, you can run the programs by the following command:
+Under `/data1/compiler`, we can find three binary files generated by the compiler which are the inputs of the simulator.
+We can also find `ProfileResult.txt` which is the evaluation result of ipEvaluator. You can check the estimate
+performance of your model from it.
+
+#### 3.2.4 Hardware validation
+
+This step will make sure whether the mathematical simulator’s result is the same as the hardware simulator’s. In other
+words, this step makes sure the model can run correctly on the hardware.
 
 ```bash
-# for toolchain 720
-# cd /workspace/scripts && ./fpAnalyserCompilerIpevaluator_720.sh.x thread_number param_holder dp_pct
-cd /workspace/scripts && ./fpAnalyserCompilerIpevaluator_720.sh.x 8 _ 0.999
+cd /workspace/scripts && ./hardware_validate_720.sh
 ```
 
-thread_number: the number of thread to run
-param_holder: a holder of a unassigned parameter
-dp_pct: percentage of range in datapath analysis, default: 0.999. option: 0.999 or 1.0
+If it succeeds, you can the command line print out log: `[info] hardware validating successes!`. And you can find the
+simulator result and the hardware simulator result under `/validate/dynasty` and `/validate/hw_c_sim`.
 
-After running this program, the folders called compiler and fpAnalyser will be generated in the Interactive Folder, which store the result of compiler, ipEvaluator and fpAnalyser.
+### 3.3 Simulator and Emulator
 
-#### 3.4.3 Get the result
+`emulator_720.sh` is just the simulator running on a folder of images. It supports multi-process to accelerate the speed.
 
-In Interactive Folder, you’ll find a folder called fpAnlayer, which contains the preprocessed image txt files; a folder called `compiler`, which contains the binary files generated by compiler, as well as evaluation result of ipEvaluator, i.e. i.e. `evaluation_result.txt` for toolchain 720.
+#### 3.3.1 Fill the input parameters
 
-### 3.5 Simulator and Emulator
+Fill the simulator and emulator input parameters in the `input_params.json` in Interactive Folder. Please refer on the FAQ question 1 to fill the related parameters. And here as an example, we'll also use `LittleNet` mentioned at the beginning of section 3.2.
 
-Emulator is just the same as simulator running on a folder of images, but emulator supports multi-process to accelerate the speed.
-
-#### 3.5.1 Fill the input parameters
-
-Fill the simulator and emulator input parameters in the `input_params.json` in Interactive Folder. Please refer on the FAQ question 1 to fill the related parameters.
-
-#### 3.5.2 Running the programs
+#### 3.3.2 Running the programs
 
 For running the simulator:
 
 ```bash
-#for toolchain 720
-cd /workspace/scripts && ./simulator_720.sh.x
+cd /workspace/scripts && ./simulator_720.sh
 ```
 
 And a folder called simulator will be generated in Interactive Folder, which stores the result of the simulator.
@@ -379,99 +502,106 @@ And a folder called simulator will be generated in Interactive Folder, which sto
 For running the emulator:
 
 ```bash
-#for toolchain 720
-cd /workspace/scripts && ./emulator_720.sh.x (fl)
+cd /workspace/scripts && ./emulator_720.sh
 ```
 
-When adding option fl, the emulator will run in floatng mode. 
-And a folder called emulator will be generated in Interactive Folder, which stores the result of the emulator.
+Those two scripts need the output from the model analyzer as input. Thus, please run
+`fpAnalyserCompilerIpevaluator_720.sh` first.
 
-#### 3.5.3 Get the result
+#### 3.3.3 Get the result
 
-In Interactive Folder, you’ll find a folder called simulator, which contains the output files of simulator; a folder called emulator, which contains the output folders of simulator.
+In Interactive Folder, you’ll find a folder called `simulator`, which contains the output files of simulator; a folder
+called `emulator`, which contains the output folders of emulator.
 
-In each folder, there are three files: one is the input image file, one whose format is `temp***.txt` is the output of the last layer, and the other one is the preprocess image result.
+In each folder, there are three files: one is the input image file, one whose format is `layer_output_***_fl.txt` is the
+output of the last layer, and the other one is the preprocess image result and result in binary format.
 
-### 3.6 FpAnalyser and Batch-Compile
+### 3.4 Compiler and Evaluator
+
+This part is similar with [part 3.2](#32-fpanalyser-compiler-and-ipevaluator), and the difference is that this part does
+not run fpAnalyser, it can be used when your model structure is prepared but hasn’t been trained.
+
+#### 3.4.1 Running the programs
+
+To run the compile and the ip evaluator, you need to have an onnx or a bie file as the input. Here we take the
+`LittleNet` as the example:
+
+```bash
+cd /workspace/scripts && ./compilerIpevaluator_720.sh /data1/LittleNet/LittleNet.onnx
+```
+
+And a folder called `compiler` will be generated in Interactive Folder, which stores the result of the compiler and
+ipEvaluator. The files should be the same name as the result from `fpAnalyserCompilerIpevaluator_720.sh`.
+
+It uses the default configuration for the kdp720 and not available for fine-tuning.
+
+### 3.5 FpAnalyser and Batch-Compile
 
 This part is the instructions for batch-compile, which will generate the binary file requested by firmware.
 
-#### 3.6.1 Fill the input parameters
-Fill the simulator and emulator input parameters in the `/data1/batch_compile_input_params.json` in Interactive Folder. Please refer on the [FAQ question 7](#7-whats-the-meaning-of-the-output-files-of-batch-compile) to fill the related parameters.
+Again, we'll use the `LittleNet` as an example. But this time, we need to copy the config `batch_compile_input_params.json`
 
-And the follow will give two examples for how to configure the `batch_compile_input_params.json`.
-
-1. tiny_yolo_v3
-
-```json
-
-{
-    "input_image_folder": ["/data1/caffe/images"],
-    "img_channel": ["RGB"],
-    "model_input_width": [224],
-    "model_input_height": [224],
-    "img_preprocess_method": ["yolo"],
-    "input_onnx_file": ["/data1/yolov3-tiny-224.h5.onnx"],
-    "keep_aspect_ratio": ["True"],
-    "command_addr": "0x30000000",
-    "weight_addr": "0x40000000",
-    "sram_addr": "0x50000000",
-    "dram_addr": "0x60000000",
-    "whether_encryption": "No",
-    "encryption_key": "0x12345678",
-    "model_id_list": [19],
-    "model_version_list": [1],
-    "add_norm": ["True"],
-    "dedicated_output_buffer": "False"
-}
+```bash
+cp /data1/LittleNet/batch_compile_input_params.json /data1
 ```
 
-2. tiny_yolo_v3 and Onet
+#### 3.5.1 Fill the input parameters
+Fill the simulator and emulator input parameters in the `/data1/batch_compile_input_params.json` in Interactive Folder.
+Please refer on the [FAQ question 7](#7-whats-the-meaning-of-the-output-files-of-batch-compile) to fill the related
+parameters. We already have this file under `/data1` if we followed the example.
 
-```json
-{
-    "input_image_folder": ["/data1/caffe/images", "/data1/keras/n000645"],
-    "img_channel": ["RGB", "L"],
-    "model_input_width": [224, 48],
-    "model_input_height": [224, 48],
-    "img_preprocess_method": ["yolo", "kneron"],
-    "input_onnx_file": ["/data1/yolov3-tiny-224.h5.onnx", "/data1/onet-0.417197.onnx"],
-    "keep_aspect_ratio": ["True", "True"],
-    "command_addr": "0x30000000",
-    "weight_addr": "0x40000000",
-    "sram_addr": "0x50000000",
-    "dram_addr": "0x60000000",
-    "whether_encryption": "No",
-    "encryption_key": "0x12345678",
-    "model_id_list": [19, 20],
-    "model_version_list": [1, 1],
-    "add_norm": ["True", "False"],
-    "dedicated_output_buffer": "False"
-}
-```
-
-#### 3.6.2 Running the programs
+#### 3.5.2 Running the programs
 
 For running the compiler and ip evaluator:
 
 ```bash
-# for toolchain 720
-# cd /workspace/scripts && ./fpAnalyserBatchCompile_720.sh.x thread_number param_holder dp_pct
-cd /workspace/scripts && ./fpAnalyserBatchCompile_720.sh.x 8 _ 0.999
+# cd /workspace/scripts && ./fpAnalyserBatchCompile_720.sh thread_number
+cd /workspace/scripts && ./fpAnalyserBatchCompile_720.sh 8
 ```
 
-thread_number: the number of thread to run
-param_holder: a holder of a unassigned parameter
-dp_pct: percentage of range in datapath analysis, default: 0.999. option: 0.999 or 1.0
+`thread_number`: the number of thread to use
 
-And a folder called batch_compile will be generated in Interactive Folder, which stores the result of the fpAnalyer and batch-compile.
+And a folder called batch_compile will be generated in Interactive Folder, which stores the result of the fpAnalyer and
+batch-compile.
 
-#### 3.6.3 Reference Models
+#### 3.5.3 Get the result
 
-##### 3.6.3.1 Hardware Parameters
+In Interactive Folder, you’ll find a folder called `batch_compile`, which contains the output files of the fpAnalyer and
+batch compile. If you have questions for the meaning of the output files, please refer to the 
+[FAQ question 8](#8-how-to-use-customized-methods-for-image-preprocess).
 
-KL720, Beethoven, 1MB SRAM
+Also, to compile the all_model.bin and fw_info.bin files, please use the following command:
 
+// FIXME
+```bash
+cd /workspace/scripts && ./generate_ota_binary -model fw_info_file_in  all_model_file_in model_out_file
+```
+
+### 3.6 Draw Yolo result on images
+
+The toolchain also provides the function of drawing final result on images for yolo model, i.e. drawing the box and
+class name.
+
+#### 3.6.1 Steps
+
+**Step 1:** Follow the [part 3.3 Simulator and Emulator](#33-simulator-and-emulator), it will generate the result of 
+emulator for multiply images, and the result folder path is `/data1/emulator`. In this folder,  the original image, the
+preprocess image txt file and the final output of the model are classified in different folder.
+
+**Step 2:** Fill the anchor and class name information. Go to the folder path `/workspace/scripts/utils/yolo/kerasyolo3/model_data`, fill the `anchor.txt` and `classes.txt` based on the information of your model.
+
+**Step 3:** Run the scripts to draw the yolo result.
+
+```bash
+cd /workspace/scripts/utils/yolo && python convert_sim_result_yolo.py --input_size your_model_input_size --output_num the_num_of_your_models_output_node --keep_aspect_ratio whether_keep_aspect_ratio --score your_score
+
+# input_size is the height/width of the model’s input, e.g.  if the input onnx model’s input is (3,416,416), the input_size is 416;
+# output_num is the number of the model’s output nodes;
+# whether_keep_aspect_ratio should be the same when you configured in part 3.7.3;
+# your_score is the score threshold you set for the detection box
+```
+
+**Step 4:** After step 3, the drawing result will be saved in the subfolders of `/data1/emulator`, with the format `imgname_thresh_xxx.png`, `xxx` means the threshold for the box score, which means only the boxes with score higher than this threshold will be drawn in this image.
 
 ### 3.7 Other utilities
 
@@ -500,7 +630,7 @@ The folder `/workspace/scripts/E2E_Simulator/bin/test1` provides the input data 
 #### 3.8.2 test case command
 
 ```bash
-cd /workspace/libs/E2E_Simulator/python_flow && python example.py -d ../bin/test1 -i binary -t 1
+cd /workspace/E2E_Simulator/python_flow && python example.py -d ../bin/test1 -i binary -t 1
 ```
 
 And the final result will be saved at the path: `/workspace/scripts/E2E_Simulator/bin/`.
@@ -598,7 +728,7 @@ And it has four sub parameters.
 25. `imgSize`  
 -width: input image width  
 -height: input image height  
-26. `add_norm`  
+26. `add_norm` (deprecated)  
 Option: `True` / `False`  
 This option is whether add an extra conv layer at the beginning of the model, it will help when dealing with the image preprocess. For example, when you choose `yolo` as the image preprocess method, the preprocess’s output range would be 0~1, in this case, all the computation is finished in CPU, which is time-consuming; when you choose add_norm as `True`, the image preprocess will be split into two parts: firstly, the CPU will finish the part of the preprocess, and the internal output range is –0.5 ~ 0.5, and then the NPU (the extra norm layer) will finish the remaining adding computation (+0.5),  and the final will be 0~1.
 
@@ -640,7 +770,7 @@ This version of SDK doesn’t support the models in the following situations:
 
 1. Have customized layers.
 
-### 5. What’s the meaning of simulator’s output?
+### 5. What’s the meaning of IP Evaluator’s output?
 
 * estimate FPS float => average Frame Per Second
 * total time => total time duration for single image inference on NPU
@@ -693,7 +823,7 @@ Encryption key for bin files, input for compiler.
 The list of model id information  
 15. `model_version_list`  
 The list of model version information.  
-16. `add_norm_list`  
+16. `add_norm_list`(deprecated)
 The list of whether add norm layer on each model.  
 17. `dedicated_output_buffer`  
 Default: false  
