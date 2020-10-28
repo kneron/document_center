@@ -572,9 +572,8 @@ batch compile. If you have questions for the meaning of the output files, please
 
 Also, to compile the all_model.bin and fw_info.bin files, please use the following command:
 
-// FIXME
 ```bash
-cd /workspace/scripts && ./generate_ota_binary -model fw_info_file_in  all_model_file_in model_out_file
+cd /workspace/scripts && ./generate_ota_binary_for_720 -model fw_info_file_in  all_model_file_in model_out_file
 ```
 
 ### 3.6 Draw Yolo result on images
@@ -585,8 +584,8 @@ class name.
 #### 3.6.1 Steps
 
 **Step 1:** Follow the [part 3.3 Simulator and Emulator](#33-simulator-and-emulator), it will generate the result of 
-emulator for multiply images, and the result folder path is `/data1/emulator`. In this folder,  the original image, the
-preprocess image txt file and the final output of the model are classified in different folder.
+the emulator for multiply images, and the result folder path is `/data1/emulator`. In this folder,  the original image,
+the preprocess image txt file and the final output of the model are classified in different folders.
 
 **Step 2:** Fill the anchor and class name information. Go to the folder path `/workspace/scripts/utils/yolo/kerasyolo3/model_data`, fill the `anchor.txt` and `classes.txt` based on the information of your model.
 
@@ -601,7 +600,7 @@ cd /workspace/scripts/utils/yolo && python convert_sim_result_yolo.py --input_si
 # your_score is the score threshold you set for the detection box
 ```
 
-**Step 4:** After step 3, the drawing result will be saved in the subfolders of `/data1/emulator`, with the format `imgname_thresh_xxx.png`, `xxx` means the threshold for the box score, which means only the boxes with score higher than this threshold will be drawn in this image.
+**Step 4:** After step 3, the drawing result will be saved in the subfolders of `/data1/emulator`, with the format `imgname_thresh_xxx.png`, `xxx` means the threshold for the box score, which means only the boxes with the score higher than this threshold will be drawn in this image.
 
 ### 3.7 Other utilities
 
@@ -619,7 +618,7 @@ cd /workspace/scripts/utils && python post_process.py -i emulator_result_folder 
 
 ### 3.8 E2ESimulator workflow
 
-E2ESimulator workflow is implemented in C, which will get the extactly same result as the hardware platform's.
+E2ESimulator workflow is implemented in C, which will get the exactly same result as the hardware platform.
 
 The detailed manual of E2ESimulator can be found at <http://doc.kneron.com/docs/#python_app/app_flow_manual/> .
 
