@@ -6,14 +6,14 @@
 # Kneron Linux Toolchain 720 Manual 
 
 ** 2020 October **
-** Toolchain 720 v1.0.0 **
+** Toolchain 720 v0.9.0 **
 
 ## 0. Overview
 
 KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 720. For better
 environment compatibility, we provide a docker which include all the dependencies as well as the toolchain software.
 
-**This document is compatible with `kneron/toolchain:720_v1.0.0`.**
+**This document is compatible with `kneron/toolchain:720_v0.9.0`.**
 
 In this document, you'll learn:
 
@@ -52,11 +52,11 @@ All the following steps are on the command line. Please make sure you have the a
 > You may need `sudo` to run the docker commands, which depends on your system configuration.
 
 
-You can use the following command to pull the specific version of toolchain 720, for example, v1.0.0 which is described
+You can use the following command to pull the specific version of toolchain 720, for example, v0.9.0 which is described
 in this document.
 
 ```bash
-docker pull kneron/toolchain:720_v1.0.0
+docker pull kneron/toolchain:720_v0.9.0
 ```
 
 Use the following command to pull the latest toolchain docker for 720. Note that the latest version of the toolchain may
@@ -69,12 +69,12 @@ docker pull kneron/toolchain:720
 ## 2. Toolchain Docker Overview
 
 After pulling the desired toolchain, now we can start walking through the process. In all the following sections, we use
-`kneron/toolchain:720_v1.0.0` as the docker image. Before we actually start the docker, we'd better provide a folder
+`kneron/toolchain:720_v0.9.0` as the docker image. Before we actually start the docker, we'd better provide a folder
 which contains the model files you want to test in our docker, for example, `/mnt/docker`. Then, we can use the
 following command to start the docker and work in the docker environment: 
 
 ```bash
-docker run --rm -it -v /mnt/docker:/docker_mount kneron/toolchain:720_v1.0.0
+docker run --rm -it -v /mnt/docker:/docker_mount kneron/toolchain:720_v0.9.0
 ```
 
 > TIPS:
@@ -848,3 +848,16 @@ If you find the cpu node in `temp_X_ioinfo.csv`, whose format is `c,\**,**`”`,
 
 1. Configure the `input_params.json`, and fill the value of `img_preprocess_method` as `customized`;
 2. edit the file `/workspace/scripts/utils/img_preprocess.py`, search for the text `#this is the customized part` and add your customized image preprocess method there.
+
+#### 9. Can I install packages in the toolchain?
+
+Of course you can.
+
+To install ubuntu packages, for example `vim`, you can use the following command `apt-get update && apt-get install vim`.
+
+To install python packages, for example `tornado`, you can use either `conda install -c tornado` or
+`pip install tornado`. **Not that `pip3` links the system python instead of the conda python. Do not use it.**
+
+But the environment will be reset each time you create a container from the image. You may need to remove `--rm` flag in
+the `docker run` command and learn how to start an existed docker container from the
+[docker document](https://docs.docker.com/engine/reference/commandline/start/).
