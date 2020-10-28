@@ -129,7 +129,7 @@ steps:
 5. Use the bie file and the same image in step 4 as input to simulate the calculation. Get the result as txt files.
 6. Compare the txt files generated in step 4 and step 5 to make sure this model can be taken by the kdp520 hardware.
 
-Step 1 is in section 3.1. Step 2-6 are automated in step 3.2 using scripts.
+Step 1 is in section 3.1. Step 2-6 are automated in [section 3.2](#32-fpanalyser-compiler-and-ipevaluator) using scripts.
 
 ### 2.3 Supported operators
 
@@ -182,7 +182,7 @@ The general process for model conversion is as following:
 
 #### 3.1.1 Keras to ONNX
 
-For Keras, our converter support models from Keras 2.2.4. Note that tf.keras and Keras 2.3 is not supported. You may
+For Keras, our converter support models from Keras 2.2.4. **Note that `tf.keras` and Keras 2.3 is not supported.** You may
 need to export the model as tflite model and see [section 3.1.5](#315-TF-Lite-to-ONNX) for TF Lite model conversion.
 
 Suppose there is an hdf5 model exported By Keras, you need to convert it to onnx by the following command:
@@ -440,8 +440,8 @@ Before running the programs, you need to prepare the inputs. In our toolchain al
 We call it the Interactivate Folder. So, we recommend you create this folder if it is not already there. Then we need to
 configure the input parameters using `input_params.json` for toolchain 520 in Interactive Folder. As an example,
 `input_params.json` for `LittleNet` model is under `/data1/LittleNet`, if you have already copy the folder as described
-in the beginning of section 3.2. You already has the `input_params.json` ready. You can see the detailed explaination
-for the input parameters in the part FAQ question 1.
+in the beginning of section 3.2. You already has the `input_params.json` ready. You can see the detailed explanation
+for the input parameters in [section FAQ question 1](#1-how-to-configure-the-input_paramsjson).
 
 #### 3.2.2 Running the program
 
@@ -475,7 +475,7 @@ cd /workspace/scripts && ./hardware_validate_520.sh
 ```
 
 If it succeeds, you can the command line print out log: `[info] hardware validating successes!`. And you can find the
-simulator result and the hardware simulator result under `/validate/dynasty` and `/validate/hw_c_sim`.
+simulator result and the hardware simulator result under `/data1/validate/dynasty` and `/data1/validate/hw_c_sim`.
 
 ### 3.3 Simulator and Emulator
 
@@ -543,7 +543,7 @@ cp /data1/LittleNet/batch_compile_input_params.json /data1
 
 #### 3.5.1 Fill the input parameters
 Fill the simulator and emulator input parameters in the `/data1/batch_compile_input_params.json` in Interactive Folder.
-Please refer on the [FAQ question 7](#7-whats-the-meaning-of-the-output-files-of-batch-compile) to fill the related
+Please refer on the [FAQ question 6](#6-how-to-configure-the-batch_compile_input_paramsjson) to fill the related
 parameters. We already have this file under `/data1` if we followed the example.
 
 #### 3.5.2 Running the programs
@@ -616,20 +616,7 @@ cd /workspace/scripts/utils && python post_process.py -i emulator_result_folder 
 
 E2ESimulator workflow is implemented in C, which will get the exactly same result as the hardware platforms.
 
-The detailed manual of E2ESimulator can be found at <http://doc.kneron.com/docs/#python_app/app_flow_manual/> .
-
-#### 3.8.1 test case data
-
-The folder `/workspace/scripts/E2E_Simulator/bin/test1` provides the input data for the face detection test case.
-
-#### 3.8.2 test case command
-
-```bash
-cd /workspace/E2E_Simulator/python_flow && python example.py -d ../bin/test1 -i binary -t 1
-```
-
-And the final result will be saved at the path: `/workspace/scripts/E2E_Simulator/bin/`.
-
+The detailed manual of E2ESimulator can be found at <http://doc.kneron.com/docs/#python_app/app_flow_manual/>.
 
 ## FAQ
 
