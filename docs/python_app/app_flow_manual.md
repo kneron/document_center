@@ -83,14 +83,14 @@ Hardware CSIM will be used if both the "run_float" and "run_fixed" parameters ar
 | Name           | Description                                                                                                | Acceptable Values |
 |:--------------:|:----------------------------------------------------------------------------------------------------------:|:-----------------:|
 | emu_bypass     | Specifies whether simulator should be bypassed                                                             | true, false       |
-| model_output   | Used to create output directory for less confusion                                                         | any string        |
+| model_type     | Used to create output directory for less confusion                                                         | any string        |
 | setup_file     | Name of the binary setup file used for Kneron hardware CSIM                                                | any string        |
 | command_file   | Name of the binary command file used for Kneron hardware CSIM                                              | any string        |
 | weight_file    | Name of the binary weight file used for Kneron hardware CSIM                                               | any string        |
 | csim_output    | Name of folder to dump CSIM output                                                                         | any string        |
 | run_float      | Specifies whether to run Kneron Dynasty float point simulator                                              | true, false       |
 | run_fixed      | Specifies whether to run Kneron Dynasty fixed point simulator. Ignored if run_float_dynasty is set to true | true, false       |
-| onnx_file      | Name of ONNX file to use for the Kneron Dynasty simulator                                                  | any string        |
+| onnx_file      | Name of ONNX or BIE file to use for the Kneron Dynasty simulator.                                          | any string        |
 | json_file      | Name of JSON file to use for the Kneron Dynasty fixed point simulator                                      | any string        |
 | onnx_input     | Name of the input node to the ONNX model                                                                   | any string        |
 | dynasty_output | Name of folder to dump Dynasty output                                                                      | any string        |
@@ -227,11 +227,15 @@ optional arguments:
   -b BOX, --box BOX     flag to save bounding box results
 ```
 
- * -s: default number is all of the stages
- * -w: default number is 1
- * -f: default is "ALL", other format specifiers will filter the test images to only images with that prefix
- * -n: default is all of the images in the test directory
- * -b: default is false
+* -t: default will be one of the keys in your application's mapping.py
+	* The parameter here should be one of the keys in your application's mapping.py, with the exact same spelling
+* -s: default number is all of the stages
+* -w: default number is 1
+* -f: default is "ALL", other format specifiers will filter the test images to only images with that prefix
+* -n: default is all of the images in the test directory
+* -b: default is false
+	* If you use binary input, you will need a jpg file with the same name in your input directory for this to work
+	* The results will be saved in bin/out/path_to_your_input_image
 
 You will need the following to run a test.
 * a set of test images placed in the app folder
@@ -240,6 +244,11 @@ You will need the following to run a test.
 	* weight, setup, and command binaries if you are running CSIM
 * to modify the input JSON to fit the input data
 * setup flow.py and mapping.py in your application folder under app so the flow control knows what to run
+
+We have provided an example application at app/app1. There are the postprocess and preprocess functions, models, and example mapping.py and flow.py files. To run this example, be in the root directory and run this command, with test_image_folder as your folder of test images:
+```
+python3 simulator.py app/app1 app/test_image_folder
+```
 
 ## Simulator output
 The results of the simulator vary depending on which one is invoked: hardware CSIM or Dynasty. 
