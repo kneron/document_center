@@ -10,7 +10,7 @@ This project allows users to perform image inference using Kneron's built in sim
 ### 520
 
 <div align="center">
-<img src="../../imgs/python_app/app_folder.png">
+<img src="../../imgs/python_app/file_structure.png">
 <p>Example app folder structure</p>
 </div>
 
@@ -29,7 +29,7 @@ This project allows users to perform image inference using Kneron's built in sim
 	* kneron_preprocessing: kneron hardware PPP
 
 <div align="center">
-<img src="../../imgs/python_app/app_folder.png">
+<img src="../../imgs/python_app/user_app_example.png">
 <p>Example app folder structure</p>
 </div>
 
