@@ -7,17 +7,11 @@ This project allows users to perform image inference using Kneron's built in sim
 
 ## File Structure
 
-### 520
-
 <div align="center">
 <img src="../../imgs/python_app/file_structure.png">
 <p>Example app folder structure</p>
 </div>
 
-* app: where you should place your application and test images
-	* application: should hold input jsons, model files, and preprocess/postprocess files
-		* flow.py: filled out by the user to create testing flows for their application
-		* mappings.py: filled out by the user to set the flow control for postprocess/preprocess functions and tests to run
 * bin: all of the outputs that the application will dump
 	* csim_dump: model inference results will be dumped here if you used CSIM
 	* dynasty_dump: model inference results will be dumped here if you used Dynasty
@@ -33,23 +27,10 @@ This project allows users to perform image inference using Kneron's built in sim
 <p>Example app folder structure</p>
 </div>
 
-### 720
-
-* bin folder: all of the inputs and outputs that the application will use and dump, also used as the working directory
-	* app: binaries and other required files for the simulator to run, DO NOT MODIFY
-	* fdr: example model
-		* binaries, CSV, and INI files used as input for CSIM (720)
-		* ONNX and JSON used for Dynasty float and fixed inference
-	* input_jsons: example input JSONs for the application
-	* out: will store postprocessing results of test images
-	* test: default reference test image
-* example: example of how to connect C code with ctypes using a shared library
-* python_flow: all of the python code that makes up the application
-	* common: shared constants and classes
-	* emulator/preprocess/postprocess: code for their parts of the test flow 
-	* kneron_preprocessing: kneron hardware PPP
-	* logs: holds log dumps when application runs
-* src: holds our preprocessing/postprocessing C libraries
+* app: where you should place your application and test images
+	* application: should hold input jsons, model files, and preprocess/postprocess files
+		* flow.py: filled out by the user to create testing flows for their application
+		* mappings.py: filled out by the user to set the flow control for postprocess/preprocess functions and tests to run
 
 ## Configuring Input
 
@@ -117,24 +98,25 @@ Hardware CSIM will be used if both the "run_float" and "run_fixed" parameters ar
 #### Simulator Parameters for 720
 **Required keys if hardware CSIM is used:** ini_file, setup_file, cmd_file, weight_file, csv_file
 
-**Required key if Dynasty float is used:** onnx_file, onnx_input, onnx_output_nodes
+**Required key if Dynasty float is used:** onnx_file, onnx_input
 
-**Required keys if Dynasty fixed is used:** onnx_file, json_file, onnx_input, onnx_output_nodes
+**Required keys if Dynasty fixed is used:** onnx_file, json_file, onnx_input
 
-| Name | Description | Default Value | Acceptable Values |
-|:----:|:-----------:|:-------------:|:-----------------:|
-| emu_bypass | Specifies whether inference should be bypassed | false | true, false |
-| ini_file | Name of input configuration file for hardware CSIM | X | any string |
-| setup_file | Name of the binary setup file used for Kneron hardware CSIM. This path should be relative to the "ini_file" | X | any string |
-| cmd_file | Name of the binary command file used for Kneron hardware CSIM. This path should be relative to the "ini_file" | X | any string |
-| weight_file | Name of binary weight file used for Kneron hardware CSIM. This path should be relative to the "ini_file" | X | any string |
-| csv_file | Name of the csv file that holds input model dimensions. This path should be relative to the "ini_file" | X | any string |
-| run_float_dynasty | Specifies whether to run Kneron Dynasty float point simulator | false | true, false |
-| run_fixed_dynasty | Specifies whether to run Kneron Dynasty fixed point simulator. This value is ignored if run_float_dynasty is set to true | false | true, false |
-| onnx_file | Name of ONNX file to use for the Kneron Dynasty simulator | X | any string |
-| json_file | Name of JSON file to use for the Kneron Dynasty fixed point simulator | X | any string |
-| onnx_input | Name of the input node in the ONNX file | X | any string |
-| onnx_output | Name of the folder to store inference results | test_file_name + "_output" | any string |
+| Name           | Description                                                                                                | Acceptable Values |
+|:--------------:|:----------------------------------------------------------------------------------------------------------:|:-----------------:|
+| emu_bypass     | Specifies whether simulator should be bypassed                                                             | true, false       |
+| model_output   | Used to create output directory for less confusion                                                         | any string        |
+| ini_file       | Name of input configuration file for hardware CSIM                                                         | any string        |
+| setup_file     | Name of the binary setup file used for Kneron hardware CSIM                                                | any string        |
+| cmd_file       | Name of the binary command file used for Kneron hardware CSIM                                              | any string        |
+| weight_file    | Name of binary weight file used for Kneron hardware CSIM                                                   | any string        |
+| csv_file       | Name of the csv file that holds input model dimension                                                      | any string        |
+| run_float      | Specifies whether to run Kneron Dynasty float point simulator                                              | true, false       |
+| run_fixed      | Specifies whether to run Kneron Dynasty fixed point simulator. Ignored if run_float_dynasty is set to true | true, false       |
+| onnx_file      | Name of ONNX file to use for the Kneron Dynasty simulator                                                  | any string        |
+| json_file      | Name of JSON file to use for the Kneron Dynasty fixed point simulator                                      | any string        |
+| onnx_input     | Name of the input node to the ONNX model                                                                   | any string        |
+| dynasty_output | Name of the folder to dump Dynasty output                                                                  | any string        |
 
 #### Postprocess Parameters
 **Required keys:** post_type
@@ -159,30 +141,7 @@ If your preprocess functions are defined in Python, integration is simple.
 5. Add a key, value pair with your custom function as the value to the mapping called PRE in mapping.py. The key you add here should be the value that goes in the "pre_type" field in the input JSON.
 6. Run the flow!
 
-#### Python defined (720)
-1. Make sure your python function takes two parameters as input: an InputConfig class and an output data class. The InputConfig class holds the configurations parsed from the input JSON and the output data class holds the postprocessing results. More details about these classes can be found in the common directory.
-2. Make sure the preprocessed output is dumped into the path specified by "rgba_img_path" in the input JSON.
-3. Copy your python module into the preprocess subdirectory.
-4. In preprocess.py, import your python module.
-5. Add a key, value pair with your custom function as the value to the mapping called PREPROCESS_MAPPING in preprocess.py. The key you add here should be the value that goes in the "pre_type" field in the input JSON.
-6. Run the flow!
-
-#### C defined (520)
-If your functions are defined in C or C++, integration is a bit trickier. To be able to run the code through Python, you first need to compile the C functions into a shared library for Python to import.
-
-1. Compile the C/C++ functions into a shared library (.so). Be sure to add ```extern "C"``` to any C++ functions you intend to directly call in the Python flow. An example of how to do this is in the example folder.
-2. Copy the library into this project's python_flow directory.
-3. Import the shared library into the constants module using the standard ctypes module:
-    ```
-    MY_LIB = ctypes.CDLL("./my_lib.so")
-    ```
-4. Define any C/C++ structures that are needed for parameters as classes in Python. Some examples can be found in classes.py. These classes must extend ```ctypes.Structure``` and store the structure fields in the "_fields_" variable. This is a list of tuples where the first item is the name of the variable, and the second item is the type of that variable. The names  and order must be defined exactly as in the C code.
-5. Define a wrapper to the C/C++ function you wish to call. You need to specify three items: the function name as defined in the C code, the input argument types, and the result argument types.
-6. Create a function in preprocess.py that takes an InputConfig class and output data class as input that uses your wrapper. You can get the inputs you need from the Input Config class and pass it to the wrapper as needed.
-7. Add the function from step 6 into PREPROCESS_MAPPING similar to the Python case. 
-8. Run the flow!
-
-#### C defined (720)
+#### C defined
 1. Compile the C/C++ functions into a shared library (.so). Be sure to add ```extern "C"``` to any C++ functions you intend to directly call in the Python flow. An example of how to do this is in the example folder.
 2. Copy the library into your application's directory under "app/".
 3. Import the shared library into whichever module needs it using the standard ctypes module:
@@ -208,10 +167,10 @@ If your postprocess functions are defined in Python, integration is simple yet a
 
 #### Python defined (720)
 1. Make sure your python function takes the same two parameters as the preprocesses function.
-2. You will need to get the data from the output inference. Currently, only Dynasty works with python postprocessing. To get the output data, you should call dynasty_output_to_np in postprocess/wrappers.py. This will place all of the output data into a list of numpy arrays. Inputs to this function are the folder to ONNX results, the names of the output nodes, a flag of whether Dynasty float was used, and an input JSON file if Dynasty fixed was used. These are all found in the InputConfig class, and a reference example can be found in postprocess/fd.py in the fd_py function.
-3. Copy your python module into the postprocess subdirectory.
-4. In preprocess.py, import your python module.
-5. Add a key, value pair with your custom function as the value to the mapping called POSTPROCESS_MAPPING in postprocess.py. The key you add here should be the value that goes in the "post_type" field in the input JSON.
+2. You will need to get the data from the output inference. Currently, only Dynasty works with python postprocessing. To get the output data, you should call dynasty_output_to_np in python_flow/postprocess/convert.py. This will place all of the output data into a list of numpy arrays. Inputs to this function are the folder to ONNX results, the names of the output nodes, a flag of whether Dynasty float was used, and an input JSON file if Dynasty fixed was used. These are all found in the InputConfig class, and a reference example can be found in app/app1/postprocess/fd.py in the postprocess_py function.
+3. Copy your python module into your application's directory under "app/".
+4. In mapping.py, import your python module.
+5. Add a key, value pair with your custom function as the value to the mapping called POST in mapping.py. The key you add here should be the value that goes in the "post_type" field in the input JSON.
 6. Run the flow!
 
 #### C defined (520)
@@ -220,29 +179,24 @@ If your postprocess functions are defined in Python, integration is simple yet a
 3. Copy the library into your application's directory under "app/".
 4. Import the shared library into whichever module needs it using the standard ctypes module.
 5. Define any C/C++ structures and function wrappers that are needed as in the preprocess.
-6. Create a Python function that takes an InputConfig class and output data class as input that calls your function wrapper. To load the output data into memory, call either csim_to_memory or dynasty_to_memory. Information to how the data is loaded into memory can be found in python_flow/postprocess/convert.py. Example usage can be found in app/app1/postprocess/fd.py under the postprocess function.
+6. Create a Python function that takes an InputConfig class and output data class as input that calls your function wrapper. To load the output data into memory, call either csim_to_memory or dynasty_to_memory. Information to how the data is loaded into memory can be found in python_flow/postprocess/convert.py. Example usage can be found in app/app1/postprocess/fd.py under the postprocess_py function.
 7. Add a key, value pair with your custom function as the value to the mapping called POST in mapping.py.
 8. Run the flow!
 
 #### C defined (720)
 1. Like the preprocess, compile the C/C++ functions into a shared library (.so).
-2. However, your postprocess function should take in an KDPImage structure, as this holds data parsed from the model binaries. The Python class is defined in common/classes.py, and the C structure is defined in src/postprocess/kdpio.h. You may add to this structure however you wish, but make sure that you make changes in both kdpio.h and classes.py.
-3. Copy the library into this project's python_flow directory.
-4. Import the shared library into the constants module using the standard ctypes module:
-    ```
-    MY_LIB = ctypes.CDLL("./my_lib.so")
-    ```
+2. However, your postprocess function should take in an KDPImage structure, as this holds data parsed from the model binaries. The Python class is defined in python_flow/common/kdp_image.py (this is different than the one in 520), and the C structure is defined in app/app1/postprocess_c/kdpio.h.
+3. Copy the library into your application's directory under "app/".
+4. Import the shared library into whichever module needs it using the standard ctypes module.
 5. Define any C/C++ structures and function wrappers that are needed as in the preprocess. 
-6. Currently, only CSIM works with C postprocessing. To load the output data into memory, call the load_csim_data function under postprocess/wrappers.py. Example usage can be found in postprocess/fd.py under the fd_csim function.
-7. Accessing the data is a bit tricky, but examples can be found in src/postprocess/post_processing_main.c in the load_data function. Get the output node x you want by accessing the pNodePositions array for node x + 1 (the first node will be an input node). The memory location for the node data can be accessed by calling the macro OUT_NODE_ADDR(node).
-8. Add a key, value pair with your custom function as the value to the mapping called POSTPROCESS_MAPPING in postprocess.py.
+6. Currently, only CSIM works with C postprocessing. To load the output data into memory, call the load_csim_data function under python_flow/postprocess/convert.py. Example usage can be found in app/app1/postprocess/fd.py under the postprocess function.
+7. Accessing the data is a bit tricky, but examples can be found in app/app1/postprocess/post_processing_main.c in the load_data function. Get the output node x you want by accessing the pNodePositions array for node x + 1 (the first node will be an input node). The memory location for the node data can be accessed by calling the macro OUT_NODE_ADDR(node).
+7. Add a key, value pair with your custom function as the value to the mapping called POST in mapping.py.
 9. Run the flow!
 
 If there are any parameters necessary for your custom function, simply add another field in the respective section in the input JSON configuration. Additionally, before running the flow, you may need to [modify the data](#simulator-output) returned from the Kneron simulator to fit the inputs for your custom postprocess function.
 
 ## Usage
-
-### (520)
 
 ```
 simulator.py [-h] [-i {binary,image}] [-t TEST] [-s {1,2,3}]
@@ -279,41 +233,13 @@ optional arguments:
  * -n: default is all of the images in the test directory
  * -b: default is false
 
-### (720)
-<div align="center">
-<img src="../../imgs/python_app/options.png">
-</div>
-
- * -h: displays the help message
- * -d: specifies the directory of images to test
-	 * The directory of images should be placed in the bin folder.
- * -i: specifies the type of image input to be tested
-	 * The default image type is image (jpg, png, etc.)
- * -t: specifies the type of test to run
-	 * The specified types are Kneron tests. To create your own test, check [here](#Adding-own-flows) for guidance.
- * -s: specifies the number of stages to run through
-	 * The default number of stages is all of them
- * -w: specifies the number of worker processes to utilize
-	 * The default number of workers is one.
- * -p: specifies whether or not to print certain results out
-	 * The default is false.
- * -f: specifies format of input images
-	 * The default is "ALL"
-	 * The other format specifiers will filter the test images to only images with that prefix.
- * -n: specifies number of input images to test
-	 * The default is all of the images in the specified test directory.
- * -b: specifies whether or not to display the bounding box results
-	 * The default is false.
-
-To modify the argument parser, check the setup_parser function in example.py.
-
 You will need the following to run a test.
-* a set of test images
-* a test model:
+* a set of test images placed in the app folder
+* a test model placed in your application folder under app
 	* ONNX and JSON if you are running Dynasty
 	* weight, setup, and command binaries if you are running CSIM
-* to modify the input JSON to fit the input data:
-* all of these should be placed in the bin folder
+* to modify the input JSON to fit the input data
+* setup flow.py and mapping.py in your application folder under app so the flow control knows what to run
 
 ## Simulator output
 The results of the simulator vary depending on which one is invoked: hardware CSIM or Dynasty. 
@@ -345,14 +271,6 @@ To add your own test flow, add a file called "flow.py" into your current applica
 <img src="../../imgs/python_app/mapping.png">
 <p>Example mapping</p>
 </div>
-
-### (720)
-To add your own flow, go to app_flow.py. An example flow can be seen in the fdr function. 
-<div align="center">
-<img src="../../imgs/python_app/adding_flow.png">
-</div>
-For one stage in the flow, the main function that needs to be called is the run_simulator function. The inputs are input JSON configuration file, a class that holds the output data, the input test file, and the command line options. The input test file and command line options are passed as input from another function and should be accessed through the parameters of your test flow. The JSON configuration file can be set before running the simulator, and the output data class can be instantiated right at the beginning of the test flow. After getting those values, calling run_simulator will run the test. You can also add multiple stages that depend on each other, using the output data class to share data between the stages.
-Afterwards, go to example.py and add your new test to the TEST_TYPES mapping. Your flow can now be called through the application using the command line option, -t, with the key that you define.
 
 ---
 [^1]: yolo: data / 255,
