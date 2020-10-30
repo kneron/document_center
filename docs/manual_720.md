@@ -570,10 +570,10 @@ In Interactive Folder, you’ll find a folder called `batch_compile`, which cont
 batch compile. If you have questions for the meaning of the output files, please refer to the 
 [FAQ question 8](#8-how-to-use-customized-methods-for-image-preprocess).
 
-Also, to compile the all_model.bin and fw_info.bin files, please use the following command:
+Also, to compile the `all_model.bin` and `fw_info.bin` files into `dfu.bin`, please use the following command:
 
 ```bash
-cd /workspace/scripts && ./generate_ota_binary_for_720 -model fw_info_file_in  all_model_file_in model_out_file
+cd /workspace/scripts && ./generate_dfu_binary_for_720 -model fw_info.bin all_model.bin dfu.bin
 ```
 
 ### 3.6 Draw Yolo result on images
