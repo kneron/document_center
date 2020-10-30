@@ -294,7 +294,7 @@ To add your own test flow, add a file called "flow.py" into your current applica
 <p>Example mapping</p>
 </div>
 
-When adding a new application, make sure all imports and files are under the new application. For example, the existing application is called app1, and I create a new application called app2. Make sure that all your files go under this folder and imports in mapping.py and flow.py are from under app2.
+When adding a new application, make sure all imports and files are under the new application. For example, the existing application is called app1, and I create a new application called app2. Make sure that all your files go under this folder and imports in mapping.py and flow.py are from under app2. If you are copying from app1, make sure you change any instances of app1 names to app2.
 
 ---
 [^1]: yolo: data / 255,
