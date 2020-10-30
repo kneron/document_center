@@ -204,6 +204,9 @@ REMINDER for both 520 and 720: for your postprocess function, you should call th
 | dynasty_to_memory | Dynasty   | C (take in KDPImage as input)          |
 | dynasty_to_np     | Dynasty   | NumPy                                  |
 
+There are also additional preprocess conversion functions for your convenience under python_flow/preprocess/convert.py
+Use convert_binary_to_numpy to get a NumPy array from an input binary image. Use convert_pre_numpy_to_rgba to dumpy a NumPy array into RGBA binary used for the simulator.
+
 If there are any parameters necessary for your custom function, simply add another field in the respective section in the input JSON configuration. Additionally, before running the flow, you may need to [modify the data](#simulator-output) returned from the Kneron simulator to fit the inputs for your custom postprocess function.
 
 ## Usage
