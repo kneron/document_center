@@ -124,19 +124,26 @@ Hardware CSIM will be used if both the "run_float" and "run_fixed" parameters ar
 ## Adding custom preprocess or postprocess function
 Since inference results can vary based on users' intentions, we provide support for integrating custom preprocess and postprocess functions.
 
+For preprocess reference, you may look at app/app1/preprocess/primitive.py
+For postprocess reference, you may look at app/app1/postprocess/fd.py or lm.py.
+
+Both your preprocess and postprocess functions should take in an InputConfig class and an OutputData class.
+The InputConfig class contains the data parsed from the input JSON. You may add more fields to the JSON if needed for your functions. You can reference this class at python_flow/common/config.py.
+The OutputData class will be your custom defined class that is inherited from the OutputData class defined in python_flow/common/output_data.py. You can add any postprocessing results to this class. This can also be used to share data between multiple stages throughout your whole test
+
 ### Preprocess
 #### Python defined (520)
 If your preprocess functions are defined in Python, integration is simple.
 
-1. Make sure your python function takes two parameters as input: an InputConfig class and an output data class. The InputConfig class holds the configurations parsed from the input JSON. The output data class will be defined by you and holds the postprocessing results. For reference, the InputConfig class is in python_flow/common/config.py.
+1. Make sure your python function takes two parameters as input: an InputConfig class and an output data class.
 2. Make sure the preprocessed output is dumped into the path specified by "rgba_img_path" in the input JSON.
 3. Copy your python module into your application's directory under "app/".
 4. In mapping.py, import your python module.
 5. Add a key, value pair with your custom function as the value to the mapping called PRE in mapping.py. The key you add here should be the value that goes in the "pre_type" field in the input JSON.
-6. Run the flow!
+6. Run the flow if it ready!
 
 #### C defined
-1. Compile the C/C++ functions into a shared library (.so). Be sure to add ```extern "C"``` to any C++ functions you intend to directly call in the Python flow. An example of how to do this is in the example folder.
+1. Compile the C/C++ functions into a shared library (.so). Be sure to add ```extern "C"``` to any C++ functions you intend to directly call in the Python flow.
 2. Copy the library into your application's directory under "app/".
 3. Import the shared library into whichever module needs it using the standard ctypes module:
     ```
@@ -145,8 +152,8 @@ If your preprocess functions are defined in Python, integration is simple.
 4. Define any C/C++ structures that are needed for parameters as classes in Python. These classes must extend ```ctypes.Structure``` and store the structure fields in the "_fields_" variable. This is a list of tuples where the first item is the name of the variable, and the second item is the type of that variable. The names  and order must be defined exactly as in the C code.
 5. Define a wrapper to the C/C++ function you wish to call. You need to specify three items: the function name as defined in the C code, the input argument types, and the result argument types.
 6. Create a Python function that takes an InputConfig class and output data class as input that calls your function wrapper. You can get the inputs you need from the Input Config class and pass it to the wrapper as needed.
-7. Add the function from step 6 into PRE similar to as in the Python case. 
-8. Run the flow!
+7. Add the function from step 6 into PRE similar to as in the Python case.
+6. Run the flow if it ready!
 
 ### Postprocess
 #### Python defined (520)
@@ -157,7 +164,7 @@ If your postprocess functions are defined in Python, integration is simple yet a
 3. Copy your python module into your application's directory under "app/".
 4. In mapping.py, import your python module.
 5. Add a key, value pair with your custom function as the value to the mapping called POST in mapping.py. The key you add here should be the value that goes in the "post_type" field in the input JSON.
-6. Run the flow!
+6. Run the flow if it ready!
 
 #### Python defined (720)
 1. Make sure your python function takes the same two parameters as the preprocesses function.
@@ -165,7 +172,7 @@ If your postprocess functions are defined in Python, integration is simple yet a
 3. Copy your python module into your application's directory under "app/".
 4. In mapping.py, import your python module.
 5. Add a key, value pair with your custom function as the value to the mapping called POST in mapping.py. The key you add here should be the value that goes in the "post_type" field in the input JSON.
-6. Run the flow!
+6. Run the flow if it ready!
 
 #### C defined (520)
 1. Like the preprocess, compile the C/C++ functions into a shared library (.so).
@@ -175,7 +182,7 @@ If your postprocess functions are defined in Python, integration is simple yet a
 5. Define any C/C++ structures and function wrappers that are needed as in the preprocess.
 6. Create a Python function that takes an InputConfig class and output data class as input that calls your function wrapper. To load the output data into memory, call either csim_to_memory or dynasty_to_memory. Information to how the data is loaded into memory can be found in python_flow/postprocess/convert.py. Example usage can be found in app/app1/postprocess/fd.py under the postprocess_py function.
 7. Add a key, value pair with your custom function as the value to the mapping called POST in mapping.py.
-8. Run the flow!
+6. Run the flow if it ready!
 
 #### C defined (720)
 1. Like the preprocess, compile the C/C++ functions into a shared library (.so).
@@ -186,7 +193,16 @@ If your postprocess functions are defined in Python, integration is simple yet a
 6. Currently, only CSIM works with C postprocessing. To load the output data into memory, call the load_csim_data function under python_flow/postprocess/convert.py. Example usage can be found in app/app1/postprocess/fd.py under the postprocess function.
 7. Accessing the data is a bit tricky, but examples can be found in app/app1/postprocess/post_processing_main.c in the load_data function. Get the output node x you want by accessing the pNodePositions array for node x + 1 (the first node will be an input node). The memory location for the node data can be accessed by calling the macro OUT_NODE_ADDR(node).
 7. Add a key, value pair with your custom function as the value to the mapping called POST in mapping.py.
-9. Run the flow!
+6. Run the flow if it ready!
+
+REMINDER for both 520 and 720: for your postprocess function, you should call the corresponding conversion based on the simulator used and the type of postprocessing you would like to do
+
+| Name              | Simulator | Postprocess                            | 
+|:-----------------:|:---------:|:--------------------------------------:|
+| csim_to_memory    | CSIM      | C (take in KDPImage as input)          |
+| csim_to_np        | CSIM      | NumPy                                  |
+| dynasty_to_memory | Dynasty   | C (take in KDPImage as input)          |
+| dynasty_to_np     | Dynasty   | NumPy                                  |
 
 If there are any parameters necessary for your custom function, simply add another field in the respective section in the input JSON configuration. Additionally, before running the flow, you may need to [modify the data](#simulator-output) returned from the Kneron simulator to fit the inputs for your custom postprocess function.
 
@@ -274,6 +290,8 @@ To add your own test flow, add a file called "flow.py" into your current applica
 <img src="../../imgs/python_app/mapping.png">
 <p>Example mapping</p>
 </div>
+
+When adding a new application, make sure all imports and files are under the new application. For example, the existing application is called app1, and I create a new application called app2. Make sure that all your files go under this folder and imports in mapping.py and flow.py are from under app2.
 
 ---
 [^1]: yolo: data / 255,
