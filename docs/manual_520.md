@@ -201,7 +201,7 @@ python /workspace/libs/ONNX_Convertor/keras-onnx/generate_onnx.py -o /docker_mou
 There might be some warning log printed out by the TensorFlow backend, but we can ignore it since we do not actually run
 it. You can check whether the conversion succeed by checking whether the onnx file is generated.
 
-You need to run the command in [3.3.6.1 Optimize onnx files ](#316-onnx-to-onnx-onnx-optimization) after this step.
+You need to run the command in [section 3.1.6](#316-onnx-to-onnx-onnx-optimization) after this step.
 
 *__Input shape change__(optional)*
 
@@ -255,7 +255,7 @@ command:
 python /workspace/libs/ONNX_Convertor/optimizer_scripts/pytorch2onnx.py /data1/pytorch/models/resnet34.pth /data1/resnet34.onnx --input-size 3 224 224 
 ```
 
-You need to run the command in [3.3.6.1 Optimize onnx files](#316-onnx-to-onnx-onnx-optimization) after this step.
+You need to run the command in [section 3.1.6](#316-onnx-to-onnx-onnx-optimization) after this step.
 
 *__Run pytorch2onnx with onnx file__*
 
@@ -267,7 +267,7 @@ command:
 python /workspace/libs/ONNX_Convertor/optimizer_scripts/pytorch2onnx.py /data1/pytorch/models/resnet34.onnx /data1/resnet34.opt.onnx
 ```
 
-You need to run the command in [3.3.6.1 Optimize onnx files ](#316-onnx-to-onnx-onnx-optimization) after this step.
+You need to run the command in [section 3.1.6](#316-onnx-to-onnx-onnx-optimization) after this step.
 
 *__Crash due to name conflict__*
 
@@ -287,7 +287,7 @@ the example command:
 python /workspace/libs/ONNX_Convertor/caffe-onnx/generate_onnx.py -o /docker_mount/mobilenetv2.onnx -w /docker_mount/mobilenetv2.caffemodel -n /docker_mount/mobilenetv2.prototxt
 ```
 
-You need to run the command in [3.3.6.1 Optimize onnx files ](#316-onnx-to-onnx-onnx-optimization) after this step.
+You need to run the command in [section 3.1.6](#316-onnx-to-onnx-onnx-optimization) after this step.
 
 #### 3.1.4 Tensorflow to ONNX
 
@@ -301,21 +301,21 @@ command:
 python /workspace/libs/ONNX_Convertor/optimizer_scripts/tensorflow2onnx.py /docker_mount/mnist.pb /docker_mount/mnist.onnx
 ```
 
-You need to run the command in [3.3.6.1 Optimize onnx files ](#316-onnx-to-onnx-onnx-optimization) after this step.
+You need to run the command in [section 3.1.6](#316-onnx-to-onnx-onnx-optimization) after this step.
 
 #### 3.1.5 TF Lite to ONNX
 
 ```bash
-python /workspace/libs/ONNX_Convertor/tflite-onnx/onnx_tflite/tflite2onnx.py -tflite path_of_input_tflite_model -save_path path_of_output_onnx_file
+python /workspace/libs/ONNX_Convertor/tflite-onnx/onnx_tflite/tflite2onnx.py -tflite path_of_input_tflite_model -save_path path_of_output_onnx_file -release_mode True
 ```
 
 For the provided example model: `model_unquant.tflite`
 
 ```bash
-python /workspace/libs/ONNX_Convertor/tflite-onnx/onnx_tflite/tflite2onnx.py -tflite /data1/tflite/model/model_unquant.tflite -save_path /data1/tflite/model/model_unquant.tflite.onnx
+python /workspace/libs/ONNX_Convertor/tflite-onnx/onnx_tflite/tflite2onnx.py -tflite /data1/tflite/model/model_unquant.tflite -save_path /data1/tflite/model/model_unquant.tflite.onnx -release_mode True
 ```
 
-Then need to run the command in [3.3.7.1 Optimize onnx files ](#3361-Optimize-onnx-files).
+Then need to run the command in [section 3.1.6](#316-onnx-to-onnx-onnx-optimization).
 
 #### 3.1.6 ONNX to ONNX (ONNX optimization)
 
@@ -358,7 +358,7 @@ the output, then the model is transposed into channel first. We can use the mode
 **Step 3:** If the input shape is not availble or invalid, we can usethe editor to give it a valid shape.
 
 **Step 4:** The model need to pass `onnx2onnx.py` again after running the editor.  See
-[3.3.7.1 Optimize onnx files ](#3361-Optimize-onnx-files).
+[section 3.1.6](#316-onnx-to-onnx-onnx-optimization).
 
 <div align="center">
 <img src="../imgs/manual/fig4_pre_edited_model.png">
