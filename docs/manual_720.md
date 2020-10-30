@@ -730,6 +730,9 @@ And it has four sub parameters.
 26. `add_norm` (deprecated)  
 Option: `True` / `False`  
 This option is whether add an extra conv layer at the beginning of the model, it will help when dealing with the image preprocess. For example, when you choose `yolo` as the image preprocess method, the preprocess’s output range would be 0~1, in this case, all the computation is finished in CPU, which is time-consuming; when you choose add_norm as `True`, the image preprocess will be split into two parts: firstly, the CPU will finish the part of the preprocess, and the internal output range is –0.5 ~ 0.5, and then the NPU (the extra norm layer) will finish the remaining adding computation (+0.5),  and the final will be 0~1.
+27. `model_input_name`  
+The input name of the model. If you are not sure about it, you can check it through model visualize tool like
+[netron](https://netron.app/)
 
 
 ### 2. Fails when implement models with SSD structure.
