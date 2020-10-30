@@ -27,7 +27,7 @@ This project allows users to perform image inference using Kneron's built in sim
 <p>Example app folder structure</p>
 </div>
 
-* app: where you should place your application and test images
+* app: where you must place your application and test images
 	* application: should hold input jsons, model files, and preprocess/postprocess files
 		* flow.py: filled out by the user to create testing flows for their application
 		* mappings.py: filled out by the user to set the flow control for postprocess/preprocess functions and tests to run
@@ -76,9 +76,7 @@ Hardware CSIM will be used if both the "run_float" and "run_fixed" parameters ar
 
 **Required keys if hardware CSIM is used:** setup_file, command_file, weight_file
 
-**Required key if Dynasty float is used:** onnx_file, onnx_input
-
-**Required keys if Dynasty fixed is used:** onnx_file, json_file, onnx_input
+**Required key if Dynasty is used:** onnx_file, onnx_input
 
 | Name           | Description                                                                                                | Acceptable Values |
 |:--------------:|:----------------------------------------------------------------------------------------------------------:|:-----------------:|
@@ -90,17 +88,14 @@ Hardware CSIM will be used if both the "run_float" and "run_fixed" parameters ar
 | csim_output    | Name of folder to dump CSIM output                                                                         | any string        |
 | run_float      | Specifies whether to run Kneron Dynasty float point simulator                                              | true, false       |
 | run_fixed      | Specifies whether to run Kneron Dynasty fixed point simulator. Ignored if run_float_dynasty is set to true | true, false       |
-| onnx_file      | Name of ONNX or BIE file to use for the Kneron Dynasty simulator.                                          | any string        |
-| json_file      | Name of JSON file to use for the Kneron Dynasty fixed point simulator                                      | any string        |
+| onnx_file      | Name of ONNX (float) or BIE (fixed) file to use for the Kneron Dynasty simulator                           | any string        |
 | onnx_input     | Name of the input node to the ONNX model                                                                   | any string        |
 | dynasty_output | Name of folder to dump Dynasty output                                                                      | any string        |
 
 #### Simulator Parameters for 720
 **Required keys if hardware CSIM is used:** ini_file, setup_file, cmd_file, weight_file, csv_file
 
-**Required key if Dynasty float is used:** onnx_file, onnx_input
-
-**Required keys if Dynasty fixed is used:** onnx_file, json_file, onnx_input
+**Required key if Dynasty is used:** onnx_file, onnx_input
 
 | Name           | Description                                                                                                | Acceptable Values |
 |:--------------:|:----------------------------------------------------------------------------------------------------------:|:-----------------:|
@@ -113,8 +108,7 @@ Hardware CSIM will be used if both the "run_float" and "run_fixed" parameters ar
 | csv_file       | Name of the csv file that holds input model dimension                                                      | any string        |
 | run_float      | Specifies whether to run Kneron Dynasty float point simulator                                              | true, false       |
 | run_fixed      | Specifies whether to run Kneron Dynasty fixed point simulator. Ignored if run_float_dynasty is set to true | true, false       |
-| onnx_file      | Name of ONNX file to use for the Kneron Dynasty simulator                                                  | any string        |
-| json_file      | Name of JSON file to use for the Kneron Dynasty fixed point simulator                                      | any string        |
+| onnx_file      | Name of ONNX (float) or BIE (fixed) file to use for the Kneron Dynasty simulator                           | any string        |
 | onnx_input     | Name of the input node to the ONNX model                                                                   | any string        |
 | dynasty_output | Name of the folder to dump Dynasty output                                                                  | any string        |
 
