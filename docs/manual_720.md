@@ -616,6 +616,18 @@ cd /workspace/scripts/utils && python bintoPng.py -i input_rgb565_file_path –o
 cd /workspace/scripts/utils && python post_process.py -i emulator_result_folder -m model_type
 ```
 
+#### 3.7.3 Reference Models
+
+| Model                | Size    | FPS  | Time(ms) |
+| -------------------- | ------- | ---- | -------- |
+| Inceptionv3          | 224x224 | 80.9 | 12.3     |
+| Inception v4         | 299x299 | 19.9 | 50.2     |
+| Mobilenet V1         | 224x224 | 403  | 2.48     |
+| Mobilenet V2         | 224x224 | 624  | 1.60     |
+| Resnet50 v1.5        | 224x224 | 52.3 | 19.11    |
+| SRCNN                | 384x384 | 127  | 7.87     |
+| Tiny yolo v3         | 416x416 | 148  | 6.75     |
+
 ### 3.8 E2ESimulator workflow
 
 E2ESimulator workflow is implemented in C, which will get the exactly same result as the hardware platform.
