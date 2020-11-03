@@ -953,12 +953,11 @@ Connect JTAG/SWD.
 
 2. Select a specific device based on flash manufacturer
 
-   EX: 
-       `device KL520-WB	//Winbond`
+    EX:
 
-       `device KL520-MX	//Mxic`
-
-       `device KL520-GD	//GigaDevice`
+    device KL520-WB	//Winbond
+    device KL520-MX	//Mxic
+    device KL520-GD	//GigaDevice
 
 3. Copy the bin file to kl520_sdk\utils\JLink_programmer\bin folder
 
@@ -990,11 +989,10 @@ To program specific bin file to specific flash address
 2. Select a specific device+’-P’ based on flash manufacturer
 
     EX: 
-        `device KL520-WB-P	//Winbond`
 
-        `device KL520-MX-P	//Mxic`
-
-        `device KL520-GD-P	//GigaDevice`
+    device KL520-WB-P	//Winbond
+    device KL520-MX-P	//Mxic
+    device KL520-GD-P	//GigaDevice
 
 3. Edit loadbin command: Load *.bin file into target memory
 
