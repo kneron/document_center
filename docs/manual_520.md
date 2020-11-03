@@ -612,24 +612,6 @@ cd /workspace/scripts/utils && python bintoPng.py -i input_rgb565_file_path –o
 cd /workspace/scripts/utils && python post_process.py -i emulator_result_folder -m model_type
 ```
 
-#### 3.7.3 Reference Models
-
-##### 3.7.3.1 Hardware Parameters
-
-KL520, Mozart, 512KB SRAM, 0.8GB/s
-
-##### 3.7.3.2 Performace Table
-
-| Model                | Size    | FPS  | Time(ms) |
-| -------------------- | ------- | ---- | -------- |
-| Inceptionv3          | 224x224 | 6.3  | 157      |
-| Inception v4         | 299x299 | 0.48 | 2067     |
-| Mobilenet V1         | 224x224 | 60.7 | 16.4     |
-| Mobilenet V2         | 224x224 | 61.2 | 16.3     |
-| Resnet50 v1.5        | 224x224 | 7.02 | 142.4    |
-| SRCNN                | 384x384 | 7.04 | 141.9    |
-| Tiny yolo v3         | 416x416 | 22.8 | 43.7     |
-
 ### 3.8 E2ESimulator workflow
 
 E2ESimulator workflow is implemented in C, which will get the exactly same result as the hardware platforms.
