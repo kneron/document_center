@@ -839,3 +839,176 @@ There is also a PDF file to briefly describe the peripheral APIs. Please downloa
 <a href="../pdf/KL520_Peripheral_Driver_APIs.pdf">KL520_Peripheral_Driver_APIs.pdf</a>
 </div>
 
+## 10. Flash programming
+
+### 10.1. Board Overview
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/10_1_1.png">
+</div>
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/10_1_2.png">
+</div>
+
+### 10.2. Hardware Setting
+
+#### 10.2.1. Connecting UART0 (Program Flash via UART0 Interface)
+
+UART0: Command Port
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/10_2_1.png">
+</div>
+
+#### 10.2.2. Connecting 5V power and trun on power switch
+
+Power from Adapter or from Power Bank (USB PD)
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/10_2_2.png">
+</div>
+
+#### 10.2.3. Wake up chip from RTC power domain by pressing PTN button
+
+please do it every time after plugging in the power
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/10_2_3.png">
+</div>
+
+### 10.3. Program Flash via UART0 Interface
+
+#### 10.3.1. Flash programmer necessaries
+
+1.	Open command terminal for flash programmer execution
+
+    Tool path: kl520_sdk\utils\flash_programmer\flash_programmer.py
+
+2.	install Necessary python modules: kl520_sdk\utils\requirements.txt
+
+3.	limitations: Only the listed argument combinations below are allowed.
+
+#### 10.3.2. Edit python verification setting
+
+1. Check UART port number from device manager
+
+2. Edit setup.py, search “COM_ID” and modify the ID to match your UART port number
+
+    ex: COM_ID = 3 # COM3
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/10_3_1.png">
+</div>
+
+#### 10.3.3 Flash Chip Programming (FW + DATA)
+
+`>> python flash_programmer.py -a flash_fdfr_image.bin`
+
+Please press RESET BTN while you are seeing “Please press reset button!!”
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/10_3_2.png">
+</div>
+
+Afterwards, just wait until all progresses are finished (erase, program, verify)
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/10_3_3.png">
+</div>
+
+**Note**:
+"flash_programmer.py -a" means to do flash chip erase + programming + verification
+
+#### 10.3.4 Flash Verification (optional)
+
+`>> python flash_programmer.py -v flash_fdfr_image.bin`
+
+#### 10.3.5 Flash Erase (optional)
+
+`>> python flash_programmer.py -e`
+
+#### 10.3.6 Flash Partial Programming (optional)
+
+`>> python flash_programmer.py -i 0x00002000 -p fw_scpu.bin`
+
+**Note**:
+To program specific bin file to specific flash address
+"-i" means the flash index/address you would like to program
+"-p" means the FW code you would like to program
+
+### 10.4. Program Flash via JTAG/SWD Interface
+
+#### 10.4.1. Jlink programmer necessaries
+
+Connect JTAG/SWD.
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/10_4_1.png">
+</div>
+
+#### 10.4.2. Edit flash_prog.jlink device setting
+
+1. Check your flash manufacturer: Winbond or Mxic or GigaDevice 
+
+2. Select a specific device based on flash manufacturer
+    EX: device KL520-WB	//Winbond
+        device KL520-MX	//Mxic
+        device KL520-GD	//GigaDevice
+
+3. Copy the bin file to kl520_sdk\utils\JLink_programmer\bin folder
+    EX: flash_fdfr_image.bin, boot_spl.bin, fw_scpu.bin, fw_ncpu.bin, etc.
+
+
+#### 10.4.3. Double click "flash_prog.bat"
+
+Afterwards, just wait until all progresses are finished (chip erase, program, verify)
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/10_4_2.png">
+</div>
+
+#### 10.4.4. Check programming result
+
+Please ensure all the results are "O.K.", and enter "qc" to quit and close J-Link commander
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/10_4_3.png">
+</div>
+
+#### 10.4.5. Edit flash_prog_partial.jlink device setting(optional)
+
+To program specific bin file to specific flash address
+
+1. Copy the bin file to kl520_sdk\utils\JLink_programmer\bin\
+2. Select a specific device+’-P’ based on flash manufacturer
+    EX: device KL520-WB	//Winbond
+        device KL520-MX	//Mxic
+        device KL520-GD	//GigaDevice
+
+3. Edit loadbin command: Load *.bin file into target memory
+    **Syntax**:
+
+    `loadbin <filename>, <addr>`
+
+    `loadbin .\bin\boot_spl.bin,0x00000000`
+
+    `loadbin .\bin\fw_scpu.bin,0x00002000`
+
+    `loadbin .\bin\fw_ncpu.bin,0x00018000`
+
+4. Double click “flash_prog_partial.bat” and wait until all progresses are finished
+
+5. Check programming result
+    Please ensure the results is “O.K.”, and enter “qc” to quit and close J-Link commander
+    EX:
+	
+    <div align="center">
+    <img src="../imgs/getting_start_imgs/10_4_4.png">
+    </div>
+
+
+
+
+
+
