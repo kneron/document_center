@@ -871,7 +871,7 @@ Power from Adapter or from Power Bank (USB PD)
 
 #### 10.2.3. Wake up chip from RTC power domain by pressing PTN button
 
-please do it every time after plugging in the power
+Please do it every time after plugging in the power
 
 <div align="center">
 <img src="../imgs/getting_start_imgs/10_2_3.png">
@@ -881,13 +881,13 @@ please do it every time after plugging in the power
 
 #### 10.3.1. Flash programmer necessaries
 
-1.	Open command terminal for flash programmer execution
+1. Open command terminal for flash programmer execution
 
-    Tool path: kl520_sdk\utils\flash_programmer\flash_programmer.py
+   Tool path: kl520_sdk\utils\flash_programmer\flash_programmer.py
 
-2.	install Necessary python modules: kl520_sdk\utils\requirements.txt
+2. Install Necessary python modules: kl520_sdk\utils\requirements.txt
 
-3.	limitations: Only the listed argument combinations below are allowed.
+3. Limitations: Only the listed argument combinations below are allowed.
 
 #### 10.3.2. Edit python verification setting
 
@@ -895,11 +895,11 @@ please do it every time after plugging in the power
 
 2. Edit setup.py, search “COM_ID” and modify the ID to match your UART port number
 
-    ex: COM_ID = 3 # COM3
+   EX: COM_ID = 3 # COM3
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/10_3_1.png">
-</div>
+   <div align="center">
+   <img src="../imgs/getting_start_imgs/10_3_1.png">
+   </div>
 
 #### 10.3.3 Flash Chip Programming (FW + DATA)
 
@@ -952,12 +952,16 @@ Connect JTAG/SWD.
 1. Check your flash manufacturer: Winbond or Mxic or GigaDevice 
 
 2. Select a specific device based on flash manufacturer
-    EX: device KL520-WB	//Winbond
-        device KL520-MX	//Mxic
-        device KL520-GD	//GigaDevice
+
+   EX: device KL520-WB	//Winbond
+
+       device KL520-MX	//Mxic
+
+       device KL520-GD	//GigaDevice
 
 3. Copy the bin file to kl520_sdk\utils\JLink_programmer\bin folder
-    EX: flash_fdfr_image.bin, boot_spl.bin, fw_scpu.bin, fw_ncpu.bin, etc.
+
+   EX: flash_fdfr_image.bin, boot_spl.bin, fw_scpu.bin, fw_ncpu.bin, etc.
 
 
 #### 10.4.3. Double click "flash_prog.bat"
@@ -981,12 +985,17 @@ Please ensure all the results are "O.K.", and enter "qc" to quit and close J-Lin
 To program specific bin file to specific flash address
 
 1. Copy the bin file to kl520_sdk\utils\JLink_programmer\bin\
+
 2. Select a specific device+’-P’ based on flash manufacturer
-    EX: device KL520-WB	//Winbond
-        device KL520-MX	//Mxic
-        device KL520-GD	//GigaDevice
+
+    EX: device KL520-WB-P	//Winbond
+
+        device KL520-MX-P	//Mxic
+
+        device KL520-GD-P	//GigaDevice
 
 3. Edit loadbin command: Load *.bin file into target memory
+
     **Syntax**:
 
     `loadbin <filename>, <addr>`
@@ -1000,9 +1009,10 @@ To program specific bin file to specific flash address
 4. Double click “flash_prog_partial.bat” and wait until all progresses are finished
 
 5. Check programming result
+
     Please ensure the results is “O.K.”, and enter “qc” to quit and close J-Link commander
+
     EX:
-	
     <div align="center">
     <img src="../imgs/getting_start_imgs/10_4_4.png">
     </div>
