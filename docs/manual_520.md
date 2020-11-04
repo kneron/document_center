@@ -52,19 +52,15 @@ All the following steps are on the command line. Please make sure you have the a
 > You may need `sudo` to run the docker commands, which depends on your system configuration.
 
 
-You can use the following command to pull the specific version of toolchain 520, for example, v0.9.0 which is described
-in this document.
-
-```bash
-docker pull kneron/toolchain:520_v0.9.0
-```
-
-Use the following command to pull the latest toolchain docker for 520. Note that the latest version of the toolchain may
-not compatible with this document, you may need to visit [the latest document](http://doc.kneron.com/docs/#manual_520/).
+You can use the following command to pull the latest toolchain docker for 520.
 
 ```bash
 docker pull kneron/toolchain:520
 ```
+
+Note that this document is compatible with toolchain v0.9.0. You can find the version of the toolchain in
+`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.9.0, you may need to find the
+latest document from the [online document center](http://doc.kneron.com/docs).
 
 ## 2. Toolchain Docker Overview
 
