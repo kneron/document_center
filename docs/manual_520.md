@@ -18,10 +18,11 @@ environment compatibility, we provide a docker which include all the dependencie
 **This document is compatible with `kneron/toolchain:520_v0.9.0`.**
 
  *Performance simulation result on NPU:*
+
 | Model                | Size    | FPS (npu only) | Time(npu only) | Has CPU node(s)? |
 | -------------------- | ------- | -------------- | -------------- | ---------------- |
 | Inception v3         | 224x224 |    6.3         | 158 ms         |         No       |
-| Inception v4         | 299x299 |    0.48        | 2068 ms        |        No        | 
+| Inception v4         | 299x299 |    0.48        | 2068 ms        |        No        |
 | Mobilenet v1         | 224x224 |    60.7        | 16.5 ms        |        No        |
 | Mobilenet v2         | 224x224 |    61.3        | 16.3 ms        |        No        |
 | Mobilenet v2 ssdlite | 300x300 |    30.4        | 32.9 ms        |        No        |
