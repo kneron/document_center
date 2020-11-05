@@ -17,7 +17,8 @@ environment compatibility, we provide a docker which include all the dependencie
 
 **This document is compatible with `kneron/toolchain:720_v0.9.0`.**
 
- *Performance simulation result on NPU:*
+*Performance simulation result on NPU:*
+
 | Model                | Size    | FPS (npu only) | Time(npu only) | Has CPU node(s)? |
 | -------------------- | ------- | -------------- | -------------- | ---------------- |
 | Inception v3         | 224x224 |    80.9        | 12.4 ms        |         No       |
