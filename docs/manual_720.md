@@ -17,6 +17,22 @@ environment compatibility, we provide a docker which include all the dependencie
 
 **This document is compatible with `kneron/toolchain:720_v0.9.0`.**
 
+ *Performance simulation result on NPU:*
+| Model                | Size    | FPS (npu only) | Time(npu only) | Has CPU node(s)? |
+| -------------------- | ------- | -------------- | -------------- | ---------------- |
+| Inception v3         | 224x224 |    80.9        | 12.4 ms        |         No       |
+| Inception v4         | 299x299 |    19.9        | 50.2 ms        |        No       | 
+| Mobilenet v1         | 224x224 |    404         | 2.48 ms        |        No       |
+| Mobilenet v2         | 224x224 |    624         | 1.60 ms        |        No        |
+| Mobilenet v2 ssdlite | 300x300 |    283         | 3.54 ms        |        No        |
+| Resnet50 v1.5        | 224x224 |    52.3        | 19.1 ms        |        No        |
+| OpenPose             | 256x256 |    5.3         | 189 ms         |        No        |
+| SRCNN                | 384x384 |    127         | 7.87 ms        |        No        |
+| Tiny yolo v3         | 416x416 |    148         | 6.75 ms        |        No        |
+| Yolo v3              | 416x416 |    10.5        | 95.3 ms        |        No        |
+| Centernet res101     | 512x512 |    3.02        | 331 ms         |        No        |
+| Unet                 | 384x384 |    2.83        | 354 ms         |        No        |
+
 In this document, you'll learn:
 
 1. How to install and use the toolchain docker.
