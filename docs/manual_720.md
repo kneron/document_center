@@ -8,6 +8,8 @@
 ** 2020 October **
 ** Toolchain 720 v0.9.0 **
 
+[PDF Downloads](manual_720.pdf)
+
 ## 0. Overview
 
 KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 720. For better
@@ -64,12 +66,12 @@ latest document from the [online document center](http://doc.kneron.com/docs).
 ## 2. Toolchain Docker Overview
 
 After pulling the desired toolchain, now we can start walking through the process. In all the following sections, we use
-`kneron/toolchain:720_v0.9.0` as the docker image. Before we actually start the docker, we'd better provide a folder
+`kneron/toolchain:720` as the docker image. Before we actually start the docker, we'd better provide a folder
 which contains the model files you want to test in our docker, for example, `/mnt/docker`. Then, we can use the
 following command to start the docker and work in the docker environment: 
 
 ```bash
-docker run --rm -it -v /mnt/docker:/docker_mount kneron/toolchain:720_v0.9.0
+docker run --rm -it -v /mnt/docker:/docker_mount kneron/toolchain:720
 ```
 
 > TIPS:
@@ -707,7 +709,8 @@ This is the option for the mode of adding paddings, and it will be utilized only
 And it has two options: 0 and 1.  
 0 – If the original width is too small, the padding will be added at both right and left sides equally; if the original height is too small, the padding will be added at both up and down sides equally.  
 1 – If the original width is too small, the padding will be added at the right side only, if the original height is too small, the padding will be only added at the down side.  
-23. `rotate`  
+23. `roate`  
+It is actually a typo of rotate. But current examples and scripts are adapted to this typo. It will be fixed later.  
 It has three options:  
 0 – no rotating operation  
 1 – rotate 90 degrees in clockwise direction  

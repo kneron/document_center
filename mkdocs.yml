@@ -19,4 +19,5 @@ nav:
     - End to End Simulator: python_app/app_flow_manual.md 
 extra:
     logo: 'imgs/logo.png'
-
+plugins:
+  - pdf-export
