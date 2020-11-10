@@ -121,7 +121,7 @@ Hardware CSIM will be used if both the "run_float" and "run_fixed" parameters ar
 | post_bypass   | Specifies whether postprocess should be bypassed                  | true, false                 |
 | **post_type** | Name of the postprocess function to run                           | any key in the POST dictionary in mapping.py ([more info](#adding-own-flows))) |
 
-## Adding custom preprocess or postprocess function
+## Custom pre/postprocess
 Since inference results can vary based on users' intentions, we provide support for integrating custom preprocess and postprocess functions.
 
 For preprocess reference, you may look at app/app1/preprocess/primitive.py
