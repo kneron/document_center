@@ -56,7 +56,7 @@ The whole SDK package is composed of device firmware, Kneron models, and Khost l
 ### 2.1. Basic Concept
 The basic concept of FW folder structure is modularize and stratification for all source code. FW code belonged to same feature will be put to one dedicated folder and easy to include/exclude it. Refer to basic FW architecture shown below, the listed items will have corresponding folders.
 
-<img src="/imgs/getting_start_imgs_720/2_1.png" style="zoom: 50%;" />
+![](./imgs/getting_start_imgs_720/2_1.png)
 
 Here is the example folder design for Kneron SDK.  The <font color="#000066">**dark blue and bold** </font>fonts are mandatory folder name used in SDK. The normal words may vary in different SDK release or depends on your project.
 
@@ -517,7 +517,7 @@ Repeat section 5.1.1 and use the model from folder **YOLO3_608_MODEL_FOLDER**.
 
 ### 5.2. Run sample on Windows 10
 
-Almost the same as section 4.1 on Ubuntu 18.04, there are 2 parts different.
+Almost the same as section 5.1 on Ubuntu 18.04, there are 2 parts different.
 
 1. Executable file extension is **exe**.
 
