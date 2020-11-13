@@ -1,3 +1,5 @@
+# Getting Started
+
 ## 1. Environment Setup
 ### 1.1. Linux
 #### Install libusb
