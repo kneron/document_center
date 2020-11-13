@@ -815,45 +815,11 @@ This structure hosts a copy of the HW configuration registers
 #define 	AES_OFFSET_KEY   8
  
 #define 	AES_OFFSET_IV   40
- 
-#define 	AES_OFFSET_IV2   56
- 
-#define 	AES_OFFSET_KEY2   72
-
-#define 	AES_OFFSET_MASK   104
   
-#define 	AES_MODEID_ECB   BIT(8)
-			AES Mode Register value for ECB mode of operation.
+#define 	AES_OFFSET_KEY2   72
 
 #define 	AES_MODEID_CBC   BIT(9)
 			AES Mode Register value for CBC mode of operation.
-
-#define 	AES_MODEID_CTR   BIT(10)
-			AES Mode Register value for CTR mode of operation.
-
-#define 	AES_MODEID_CFB   BIT(11)
-			AES Mode Register value for CFB mode of operation.
- 
-#define 	AES_MODEID_OFB   BIT(12)
-			AES Mode Register value for OFB mode of operation.
- 
-#define 	AES_MODEID_CCM   BIT(13)
-			AES Mode Register value for CCM mode of operation.
- 
-#define 	AES_MODEID_GCM   BIT(14)
-			AES Mode Register value for GCM mode of operation.
- 
-#define 	AES_MODEID_XTS   BIT(15)
-			AES Mode Register value for XTS mode of operation.
- 
-#define 	AES_MODEID_CMA   BIT(16)
-			AES Mode Register value for CMAC mode of operation.
-
-#define 	AES_MODEID_CX_SAVE   BIT(5)
-			AES Mode Register value for AES context saving.
- 
-#define 	AES_MODEID_CX_LOAD   BIT(4)
-			AES Mode Register value for AES context loading.
 
 #define 	AES_MODEID_NO_CX   0x00000000
 			AES Mode Register value for AES no context.
@@ -878,31 +844,8 @@ This structure hosts a copy of the HW configuration registers
 
 #define 	AES_MODEID_KEY2   BIT(7)
 			AES Mode Register value to use Key2.
-
-#define 	AES_MODEID_KEYX_MASK   0x000000C0
-			AES Mode Register mask for hardware key 1 & 2.
-
-#define 	AES_HW_CFG_ECB_SUPPORTED_MASK   BIT(0)
  
 #define 	AES_HW_CFG_CBC_SUPPORTED_MASK   BIT(1)
- 
-#define 	AES_HW_CFG_CTR_SUPPORTED_MASK   BIT(2)
- 
-#define 	AES_HW_CFG_CFB_SUPPORTED_MASK   BIT(3)
- 
-#define 	AES_HW_CFG_OFB_SUPPORTED_MASK   BIT(4)
- 
-#define 	AES_HW_CFG_CCM_SUPPORTED_MASK   BIT(5)
- 
-#define 	AES_HW_CFG_GCM_SUPPORTED_MASK   BIT(6)
- 
-#define 	AES_HW_CFG_XTS_SUPPORTED_MASK   BIT(7)
- 
-#define 	AES_HW_CFG_CMAC_SUPPORTED_MASK   BIT(8)
-
-#define 	AES_HW_CFG_KEY_SIZE_LSB   24
- 
-#define 	AES_HW_CFG_KEY_SIZE_MASK   (0x7 << AES_HW_CFG_KEY_SIZE_LSB)
  
 #define 	AES_HW_CFG_KEY_SIZE_128_SUPPORTED_MASK   BIT(24)
  
@@ -918,32 +861,9 @@ This structure hosts a copy of the HW configuration registers
  
 #define 	AES_HW_CFG_2   (*(const volatile uint32_t*)CRYPTO_AES_HW_CFG_2_REG)
 
-#define 	AES_IV_GCM_SIZE   12
-			Size for IV in GCM mode.
-
 #define 	AES_IV_SIZE   16
 			Size for IV in all modes except GCM.
 
-#define 	AES_CTX_xCM_SIZE   32
-			Size for Context in GCM and CCM modes.
- 
-#define 	AES_CTX_SIZE   16
-			Size for Context in all modes except GCM and CCM.
-
-#define 	AES_MAC_SIZE   16
-			Size of a GCM/GMAC/CMAC message authentification code (MAC) or maximum size of a CCM MAC. More...
- 
-#define 	AES_KEY1_128   block_t_convert(&aes_hw_key1, 128/8)
-			First Hardware Key (of 128bits)
- 
-#define 	AES_KEY1_256   block_t_convert(&aes_hw_key1, 256/8)
-			First Hardware Key of 256b (for description, see AES_KEY1_128)
- 
-#define 	AES_KEY2_128   block_t_convert(&aes_hw_key2, 128/8)
-			Second Hardware Key of 128b (for description, see AES_KEY1_128)
- 
-#define 	AES_KEY2_256   block_t_convert(&aes_hw_key2, 256/8)
-			Second Hardware Key of 256b (for description, see AES_KEY1_128)
 ```
 
 #### Functions
@@ -1266,20 +1186,6 @@ Copyright
 
 #### Data Structures
 ```
-block_s Struct Reference
-
-Data Fields
-uint8_t * 	addr
-uint32_t 	len
-uint32_t 	flags
- 
-Detailed Description
-Array-like data abstraction handling both contiguous memory and hardware FIFO.
-Embedding side by side the data pointer and only the data length provides an abstraction which does not cover data coming from/to a hardware FIFO (data always read/written at the same address).
-The block_t structure embeds an additional field carrying enough information to work in both array mode (2 different words are stored at 2 different addresses) and FIFO mode (2 different words are loaded from the same address).
-A set of dedicated functions is provided to handle the basic operations (using a similar interface to memcpy/memset/memcmp).
-```
-```
 kdrv_crypto_dma_regs32_t Struct Reference
 
 Data Fields
@@ -1319,9 +1225,7 @@ Structure that represent a descriptor for the DMA module (in scatter-gather mode
 #### Macros
 ```
 #define 	CRYPTO_MASTER_REG   (CRYPTO_REG_BASE + 0x00000000)
- 
-#define 	CRYPTO_INCL_IPS_HW_CFG_REG   (CRYPTO_REG_BASE + 0x00000400)
- 
+  
 #define 	CRYPTO_AES_HW_CFG_1_REG   (CRYPTO_REG_BASE + 0x00000404)
  
 #define 	CRYPTO_AES_HW_CFG_2_REG   (CRYPTO_REG_BASE + 0x00000408)
@@ -1330,47 +1234,9 @@ Structure that represent a descriptor for the DMA module (in scatter-gather mode
  
 #define 	WAIT_CRYPTOMASTER_WITH_REGISTER_POLLING   1
  
-#define 	WAIT_RNG_WITH_REGISTER_POLLING   1
- 
-#define 	WAIT_PK_WITH_REGISTER_POLLING   1
- 
 #define 	CRYPTOMASTER_WAITIRQ_FCT()   ;
  
-#define 	RNG_WAITIRQ_FCT()   ;
- 
-#define 	PK_WAITIRQ_FCT()   ;
- 
 #define 	TRIGGER_HARDFAULT_FCT()   ;
- 
-#define 	PK_CM_ENABLED   0
- 
-#define 	DH_MAX_KEY_SIZE   (4096/8)
- 
-#define 	SRP_MAX_KEY_SIZE   (4096/8)
- 
-#define 	RSA_MAX_SIZE   (4096/8)
- 
-#define 	DSA_MAX_SIZE_P   (3072/8)
- 
-#define 	DSA_MAX_SIZE_Q   (256/8)
- 
-#define 	PRIME_MAX_SIZE   (RSA_MAX_SIZE/2)
- 
-#define 	ECC_MAX_KEY_SIZE   roundup_32(571/8 + 1)
- 
-#define 	DERIV_MAX_SALT_SIZE   (512)
- 
-#define 	DERIV_MAX_INFO_SIZE   (512)
- 
-#define 	RNG_CLKDIV   (0)
- 
-#define 	RNG_OFF_TIMER_VAL   (0)
- 
-#define 	RNG_FIFO_WAKEUP_LVL   (8)
- 
-#define 	RNG_INIT_WAIT_VAL   (512)
- 
-#define 	RNG_NB_128BIT_BLOCKS   (4)
  
 #define 	CRYPTOSOC_INCL_IPS_HW_CFG   (*((const volatile uint32_t*) CRYPTO_INCL_IPS_HW_CFG_REG))
  
@@ -1391,9 +1257,7 @@ Structure that represent a descriptor for the DMA module (in scatter-gather mode
 			mask for block_s.flags to only get DMA-related options More...
  
 #define 	BLK_LITARRAY(literal)   (block_t){(uint8_t *)(literal), sizeof(literal), BLOCK_S_INCR_ADDR}
- 
-#define 	CST_BLK_LITARRAY(literal)   {(uint8_t *)(literal), sizeof(literal), BLOCK_S_INCR_ADDR}
- 
+  
 #define 	MIN(a, b)   (a)<(b)? a:b
  
 #define 	roundup_32(value)   (((value) + 3) & ~3)
@@ -1416,18 +1280,10 @@ Structure that represent a descriptor for the DMA module (in scatter-gather mode
  
 #define 	DMA_AXI_START_PUSH   BIT(1)
  
-#define 	DMA_AXI_STATUS_MASK_FETCHER_BUSY   BIT(0)
- 
 #define 	DMA_AXI_STATUS_MASK_PUSHER_BUSY   BIT(1)
  
-#define 	DMA_AXI_STATUS_MASK_FIFOIN_AF   BIT(2)
- 
-#define 	DMA_AXI_STATUS_MASK_CORE_BUSY   BIT(3)
- 
 #define 	DMA_AXI_STATUS_MASK_FIFOIN_NOT_EMPTY   BIT(4)
- 
-#define 	DMA_AXI_STATUS_MASK_PUSHER_WAIT   BIT(5)
- 
+  
 #define 	DMA_AXI_STATUS_MASK_SOFT_RESET   BIT(6)
  
 #define 	DMA_AXI_STATUS_MASK_FIFOOUT_NDATA   0xFFFF0000
@@ -1440,18 +1296,6 @@ Structure that represent a descriptor for the DMA module (in scatter-gather mode
 #define 	DMA_AXI_RAWSTAT_MASK_PUSHER_ERROR   BIT(5)
 			dma_sg_regs_s.Rawstatus mask for pusher error bit More...
  
-#define 	DMA_AXI_INTEN_FETCHER_ENDOFBLOCK_EN   BIT(0)
- 
-#define 	DMA_AXI_INTEN_FETCHER_STOPPED_EN   BIT(1)
- 
-#define 	DMA_AXI_INTEN_FETCHER_ERROR_EN   BIT(2)
- 
-#define 	DMA_AXI_INTEN_PUSHER_ENDBLOCK_EN   BIT(3)
- 
-#define 	DMA_AXI_INTEN_PUSHER_STOPPED_EN   BIT(4)
- 
-#define 	DMA_AXI_INTEN_PUSHER_ERROR_EN   BIT(5)
- 
 #define 	DMA_AXI_INTEN_ALL_EN   0X0000003F
  
 #define 	DMA_AXI_DESCR_MASK_LENGTH   0x0FFFFFFF
@@ -1463,11 +1307,7 @@ Structure that represent a descriptor for the DMA module (in scatter-gather mode
  
 #define 	DMA_AXI_DESCR_DISCARD   BIT(30)
 			Indicates to the DMA to discard fetched data. More...
- 
-#define 	DMA_AXI_DESCR_INT_ENABLE   BIT(31)
- 
-#define 	DMA_AXI_DESCR_INT_DISABLE   0x00000000
- 
+   
 #define 	DMA_AXI_DESCR_NEXT_STOP   ((struct kdrv_crypto_dma_descr_s*)0x00000001)
 			Indicates to the DMA to not fetch another descriptor. More...
  
@@ -1497,32 +1337,13 @@ Structure that represent a descriptor for the DMA module (in scatter-gather mode
  
 #define 	DMA_SG_TAG_DATATYPE_AESHEADER   0x00000040
 			value for specifying data type header (will only be authenticated, not encrypted/decrypted) More...
- 
-#define 	DMA_SG_TAG_DATATYPE_SM4_PAYLOAD   0x00000000
-			value for specifying data type payload (will be encrypted/decrypted and authenticated) for SM4 More...
- 
-#define 	DMA_SG_TAG_DATATYPE_SM4_HEADER   0x00000040
-			value for specifying data type header (will only be authenticated, not encrypted/decrypted) for SM4 More...
- 
+
 #define 	DMA_SG_TAG_PADDING_MASK   0x1F
  
 #define 	DMA_SG_TAG_PADDING_OFFSET   8
  
 #define 	DMA_SG_TAG_SETINVALIDBYTES(a)
 			macro to set the amount of invalid bytes More...
-```
-
-#### Enumerations
-```
-enum dma_sg_EngineSelect_e
-
-Select which core the DMA will use. To set in descriptor kdrv_crypto_dma_descr_s.tag.
-
-| Enumerator     																|
-| DMA_SG_ENGINESELECT_BYPASS 	| Enum 0x00, direct bypass from input to outpu 	|
-| DMA_SG_ENGINESELECT_AES    	| Enum 0x01, data flow through AES				|
-| DMA_SG_ENGINESELECT_HASH    	| Enum 0x03, data flow through Hash				|
-| DMA_SG_ENGINESELECT_MASK     	| Enum 0xF, Mask on the engine					|
 ```
 
 #### Functions
@@ -2285,75 +2106,21 @@ Structures hosts a copy of the HW configuration registers
 
 #### Macros
 ```
-#define 	HASH_CONF_MODE_MD5   BIT(0)
-			Value for hash_regs_s.config, set mode to MD5. More...
- 
-#define 	HASH_CONF_MODE_SHA1   BIT(1)
- 
-#define 	HASH_CONF_MODE_SHA224   BIT(2)
- 
 #define 	HASH_CONF_MODE_SHA256   BIT(3)
- 
-#define 	HASH_CONF_MODE_SHA384   BIT(4)
- 
-#define 	HASH_CONF_MODE_SHA512   BIT(5)
- 
-#define 	HASH_CONF_MODE_SM3   BIT(6)
  
 #define 	HASH_CONF_HMAC   0x00000100
  
 #define 	HASH_CONF_HWPAD   0x00000200
  
 #define 	HASH_CONF_FINAL   0x00000400
- 
-#define 	HASH_HW_CFG_MD5_SUPPORTED_MASK   BIT(0)
- 
-#define 	HASH_HW_CFG_SHA1_SUPPORTED_MASK   BIT(1)
- 
-#define 	HASH_HW_CFG_SHA224_SUPPORTED_MASK   BIT(2)
- 
+  
 #define 	HASH_HW_CFG_SHA256_SUPPORTED_MASK   BIT(3)
- 
-#define 	HASH_HW_CFG_SHA384_SUPPORTED_MASK   BIT(4)
- 
-#define 	HASH_HW_CFG_SHA512_SUPPORTED_MASK   BIT(5)
- 
-#define 	HASH_HW_CFG_SM3_SUPPORTED_MASK   BIT(6)
  
 #define 	HASH_HW_CFG_PADDING_SUPPORTED_MASK   BIT(16)
  
 #define 	HASH_HW_CFG_HMAC_SUPPORTED_MASK   BIT(17)
- 
-#define 	HASH_HW_CFG_VERIFY_DIGEST_SUPPORTED_MASK   BIT(18)
- 
+  
 #define 	HASH_HW_CFG   (*(const volatile uint32_t*)CRYPTO_HASH_HW_CFG_REG)
- 
-#define 	MD5_BLOCKSIZE   64
-			Size of MD5 data block in bytes. More...
- 
-#define 	MD5_INITSIZE   16
-			Size of MD5 initialization value in bytes. More...
- 
-#define 	MD5_DIGESTSIZE   16
-			Size of MD5 digest in bytes. More...
- 
-#define 	SHA1_BLOCKSIZE   64
-			Size of SHA1 data block in bytes. More...
- 
-#define 	SHA1_INITSIZE   20
-			Size of SHA1 initialization value in bytes. More...
- 
-#define 	SHA1_DIGESTSIZE   20
-			Size of SHA1 digest in bytes. More...
- 
-#define 	SHA224_BLOCKSIZE   64
-			Size of SHA224 data block in bytes. More...
- 
-#define 	SHA224_INITSIZE   32
-			Size of SHA224 initialization value in bytes. More...
- 
-#define 	SHA224_DIGESTSIZE   28
-			Size of SHA224 digest in bytes. More...
  
 #define 	SHA256_BLOCKSIZE   64
 			Size of SHA256 data block in bytes. More...
@@ -2364,57 +2131,8 @@ Structures hosts a copy of the HW configuration registers
 #define 	SHA256_DIGESTSIZE   32
 			Size of SHA256 digest in bytes. More...
  
-#define 	SHA384_BLOCKSIZE   128
-			Size of SHA384 data block in bytes. More...
- 
-#define 	SHA384_INITSIZE   64
-			Size of SHA384 initialization value in bytes. More...
- 
-#define 	SHA384_DIGESTSIZE   48
-			Size of SHA384 digest in bytes. More...
- 
-#define 	SHA512_BLOCKSIZE   128
-			Size of SHA512 data block in bytes. More...
- 
-#define 	SHA512_INITSIZE   64
-			Size of SHA512 initialization value in bytes. More...
- 
-#define 	SHA512_DIGESTSIZE   64
-			Size of SHA512 digest in bytes. More...
- 
-#define 	SM3_BLOCKSIZE   64
-			Size of SM3 digest in bytes. More...
- 
-#define 	SM3_INITSIZE   32
-			Size of SM3 initialization value in bytes. More...
- 
-#define 	SM3_DIGESTSIZE   32
-			Size of SM3 digest in bytes. More...
- 
-#define 	MAX_BLOCKSIZE   SHA512_BLOCKSIZE
-			Maximum block size to be supported. More...
- 
-#define 	MAX_DIGESTSIZE   SHA512_DIGESTSIZE
-			Maximum digest size to be supported. More...
- 
 #define 	SX_HASH_ARRAY_MAX_ENTRIES   8
 			Maximum number of entries in kdrv_hash_array_blk and kdrv_hash_hmac_array_blk. More...
-```
-
-#### Enumerations
-```
-enum kdrv_hash_fct_e
-
-Enumerations of the supported hash algorithms.
-
-| Enumerator     					|
-| e_MD5 		|	Enum 1, MD5		|
-| e_SHA1 		|	Enum 2, SHA1	|
-| e_SHA224 		|	Enum 3, SHA224	|
-| e_SHA256 		|	Enum 4, SHA256	|
-| e_SHA384 		|	Enum 5, SHA384	|
-| e_SHA512 		|	Enum 6, SHA512	|
-| e_SM3 		|	Enum 7, SM3		|
 ```
 
 #### Functions
