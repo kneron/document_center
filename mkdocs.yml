@@ -6,7 +6,9 @@ theme:
     custom_dir: 'custom_theme/'
 nav:
   - Home: index.md
-  - Getting Started: getting_start.md
+  - Getting Started:
+    - KL520: getting_start.md
+    - KL720: getting_start_720.md
   - Host API Reference: 
     - Host API Intro: host_api_reference.md
     - Application API reference: host_api/app_api.md
@@ -19,4 +21,5 @@ nav:
     - End to End Simulator: python_app/app_flow_manual.md 
 extra:
     logo: 'imgs/logo.png'
-
+plugins:
+  - pdf-export
