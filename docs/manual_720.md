@@ -545,8 +545,8 @@ parameters. We already have this file under `/data1` if we followed the example.
 For running the compiler and ip evaluator:
 
 ```bash
-# python /workspace/scripts/fpAnalyserBatchCompile_720.sh -t thread_number
-python /workspace/scripts/fpAnalyserBatchCompile_720.sh -t 8
+# python /workspace/scripts/fpAnalyserBatchCompile_720.py-t thread_number
+python /workspace/scripts/fpAnalyserBatchCompile_720.py -t 8
 ```
 
 `thread_number`: the number of thread to use
@@ -574,25 +574,25 @@ similar with section 3.5, but with already existed FP-analyser result models.
 #### 3.6.1 Fill the input parameters
 Fill the input parameters in the `/data1/batch_input_params.json` in Interactive Folder.
 Please refer on the [FAQ question 6](#6-how-to-configure-the-batch_input_paramsjson) to fill the related
-parameters. We already have this file under `/data1` if we followed the example.
+parameters. We already have this file under `/data1` if we followed the example. But to run this part. we
+need some modifications.
 
 In the `batch_input_params.json` mentioned above, replaced the path of onnx model with the path to the bie model. And
-`input_params` fields are no longer needed.
+`input_params` fields are no longer needed. In the example, replace `/data1/LittleNet/LittleNet.onnx` with
+`/data1/fpAnalyser/LittleNet.quan.bias.bie`.
 
-Please check the FAQ 6 for new config fields.
+Please check the FAQ 6 for more details about the new config fields.
 
 #### 3.6.2 Running the programs
 
 For running the compiler and ip evaluator:
 
 ```bash
-# python /workspace/scripts/fpAnalyserBatchCompile_720.py -t thread_number
-python /workspace/scripts/fpAnalyserBatchCompile_720.py -t 8
+# python /workspace/scripts/batchCompile_720.py
+python /workspace/scripts/batchCompile_720.py
 ```
 
-`thread_number`: the number of thread to use
-
-And a folder called batch_compile will be generated in Interactive Folder, which stores the result of the batch-compile.
+And a folder called `batch_compile` will be generated in Interactive Folder, which stores the result of the batch-compile.
 
 #### 3.6.3 Get the result
 
@@ -631,7 +631,7 @@ python /workspace/scripts/upgrade_input_params.py old_input_params.json new_inpu
 
 E2ESimulator workflow is implemented in C, which will get the exactly same result as the hardware platforms.
 
-The detailed manual of E2ESimulator can be found at <http://doc.kneron.com/docs/#python_app/app_flow_manual/>.
+The detailed manual of E2ESimulator can be found at http://doc.kneron.com/docs/#python_app/app_flow_manual/.
 
 ## FAQ
 
