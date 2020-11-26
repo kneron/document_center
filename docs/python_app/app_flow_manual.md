@@ -27,10 +27,9 @@ This project allows users to perform image inference using Kneron's built in sim
 <p>Example app folder structure</p>
 </div>
 
-* app: where you must place your application and test images
+* app: where you must place your application
 	* application: should hold input jsons, model files, and preprocess/postprocess files
 		* flow.py: filled out by the user to create testing flows for their application
-		* mappings.py: filled out by the user to set the flow control for postprocess/preprocess functions and tests to run
 
 ## Configuring Input
 
@@ -54,6 +53,7 @@ If any of the required keys are missing, the program will end. If you need to ad
 | crop_y            | Upper left y coordinate of the original image to start the crop                              | integers between 0 and img_in_height |
 | crop_w            | Width of crop                                                                                | non-negative integers                |
 | crop_h            | Height of crop                                                                               | non-negative integers                |
+| dump_onnx_txt     | Flag to dump txt file for onnx input after preprocessing, default is False                   | True, False                          |
 | img_in_width      | Width of the original input image before preprocessing                                       | non-negative integers                |
 | img_in_height     | Height of the original input image before preprocessing                                      | non-negative integers                |
 | keep_aspect_ratio | Specifies whether to keep the aspect ratio of the original image after preprocess            | true, false                          |
@@ -63,7 +63,7 @@ If any of the required keys are missing, the program will end. If you need to ad
 | out_img_fmt       | Color format of the preprocessed image                                                       | "BGR", "L", "RGB"                    |
 | pad_mode          | Type of padding to be done                                                                   | 0, 1 [^2]                            |
 | pre_bypass        | Specifies whether preprocessing should be bypassed                                           | true, false                          |
-| pre_type          | Name of the preprocess function to run                                                       | any key in the PRE dictionary in mapping.py ([more info](#adding-own-flows)) |
+| pre_type          | Name of the preprocess function to run                                                       | any function inside your preprocess folder you wish to call |
 | radix             | Radix for converting float values to int values, int((float)x * 2<sup>radix</sup>)           | non-negative integers                |
 | **raw_img_fmt**   | Color format of the input test images                                                        | "NIR888", "RGB565", "RGB888"         |
 | **rgba_img_path** | Name of the preprocessed RGBA binary file used as simulator input                            | any string                           |
@@ -72,25 +72,26 @@ If any of the required keys are missing, the program will end. If you need to ad
 
 
 #### Simulator Parameters for 520
-Hardware CSIM will be used if both the "run_float" and "run_fixed" parameters are set to false.
+You only need to specify the parameters for the type of inferencer you intend to use.
+
+**Required key in general**: emu_mode
 
 **Required keys if hardware CSIM is used:** setup_file, command_file, weight_file
 
-**Required key if Dynasty is used:** onnx_file, onnx_input
+**Required keys if Dynasty is used:** onnx_file/bie_file (depending on emu_mode), onnx_input
 
 | Name           | Description                                                                                                | Acceptable Values |
 |:--------------:|:----------------------------------------------------------------------------------------------------------:|:-----------------:|
-| emu_bypass     | Specifies whether simulator should be bypassed                                                             | true, false       |
+|  **emu_mode**  | Specifies what inferencer to use                                                                           | "csim", "float", "fixed", "bypass" |
 | model_type     | Used to create output directory for less confusion                                                         | any string        |
 | setup_file     | Name of the binary setup file used for Kneron hardware CSIM                                                | any string        |
 | command_file   | Name of the binary command file used for Kneron hardware CSIM                                              | any string        |
 | weight_file    | Name of the binary weight file used for Kneron hardware CSIM                                               | any string        |
 | csim_output    | Name of folder to dump CSIM output                                                                         | any string        |
-| run_float      | Specifies whether to run Kneron Dynasty float point simulator                                              | true, false       |
-| run_fixed      | Specifies whether to run Kneron Dynasty fixed point simulator. Ignored if run_float_dynasty is set to true | true, false       |
-| onnx_file      | Name of ONNX (float) or BIE (fixed) file to use for the Kneron Dynasty simulator                           | any string        |
+| bie_file       | Name of BIE file to use for the Kneron Dynasty simulator, use with "fixed" mode                            | true, false       |
+| onnx_file      | Name of ONNX file to use for the Kneron Dynasty simulator, use with "float" mode                           | any string        |
 | onnx_input     | Name of the input node to the ONNX model                                                                   | any string        |
-| dynasty_output | Name of folder to dump Dynasty output                                                                      | any string        |
+| onnx_output    | Name of folder to dump Dynasty output                                                                      | any string        |
 
 #### Simulator Parameters for 720
 **Required keys if hardware CSIM is used:** ini_file, setup_file, cmd_file, weight_file, csv_file
@@ -115,11 +116,10 @@ Hardware CSIM will be used if both the "run_float" and "run_fixed" parameters ar
 #### Postprocess Parameters
 **Required keys:** post_type
 
-| Name          | Description                                                       | Acceptable Values           |
-|:-------------:|:-----------------------------------------------------------------:|:---------------------------:|
-| anchors | Name of numpy file for fd postprocessing anchors (only Python version). | any string ending in '.npy' |
-| post_bypass   | Specifies whether postprocess should be bypassed                  | true, false                 |
-| **post_type** | Name of the postprocess function to run                           | any key in the POST dictionary in mapping.py ([more info](#adding-own-flows))) |
+| Name          | Description                                                       | Acceptable Values                                            |
+|:-------------:|:-----------------------------------------------------------------:|:------------------------------------------------------------:|
+| post_bypass   | Specifies whether postprocess should be bypassed                  | true, false                                                  |
+| **post_type** | Name of the postprocess function to run                           | any function inside your postprocess folder you wish to call |
 
 ## Custom pre/postprocess
 Since inference results can vary based on users' intentions, we provide support for integrating custom preprocess and postprocess functions.
@@ -129,7 +129,7 @@ For postprocess reference, you may look at app/app1/postprocess/fd.py or lm.py.
 
 Both your preprocess and postprocess functions should take in an InputConfig class and an OutputData class.
 The InputConfig class contains the data parsed from the input JSON. You may add more fields to the JSON if needed for your functions. You can reference this class at python_flow/common/config.py.
-The OutputData class will be your custom defined class that is inherited from the OutputData class defined in python_flow/common/output_data.py. You can add any postprocessing results to this class. This can also be used to share data between multiple stages throughout your whole test
+The OutputData class will be your custom defined class that is inherited from the OutputData class defined in python_flow/common/output_data.py. You can add any postprocessing results to this class. This can also be used to share data between multiple stages throughout your whole test.
 
 ### Preprocess
 #### Python defined (520)
@@ -137,9 +137,8 @@ If your preprocess functions are defined in Python, integration is simple.
 
 1. Make sure your python function takes two parameters as input: an InputConfig class and an output data class.
 2. Make sure the preprocessed output is dumped into the path specified by "rgba_img_path" in the input JSON.
-3. Copy your python module into your application's directory under "app/".
-4. In mapping.py, import your python module.
-5. Add a key, value pair with your custom function as the value to the mapping called PRE in mapping.py. The key you add here should be the value that goes in the "pre_type" field in the input JSON.
+3. Copy your python module into your application's directory under "app/your_app/preprocess".
+5. The key that goes in the "pre_type" field in the input JSON will be the name of your function, as defined [here](#adding-own-flows).
 6. Run the flow if it ready!
 
 #### C defined
@@ -152,7 +151,7 @@ If your preprocess functions are defined in Python, integration is simple.
 4. Define any C/C++ structures that are needed for parameters as classes in Python. These classes must extend ```ctypes.Structure``` and store the structure fields in the "_fields_" variable. This is a list of tuples where the first item is the name of the variable, and the second item is the type of that variable. The names  and order must be defined exactly as in the C code.
 5. Define a wrapper to the C/C++ function you wish to call. You need to specify three items: the function name as defined in the C code, the input argument types, and the result argument types.
 6. Create a Python function that takes an InputConfig class and output data class as input that calls your function wrapper. You can get the inputs you need from the Input Config class and pass it to the wrapper as needed.
-7. Add the function from step 6 into PRE similar to as in the Python case.
+5. The key that goes in the "pre_type" field in the input JSON will be the name of your function, as defined [here](#adding-own-flows).
 6. Run the flow if it ready!
 
 ### Postprocess
@@ -161,10 +160,9 @@ If your postprocess functions are defined in Python, integration is simple yet a
 
 1. Make sure your python function takes the same two parameters as the preprocesses function.
 2. You will need to get the data from the output inference. To get the output data, you should call either csim_to_np or dynasty_to_np, depending on whether you are using CSIM or Dynasty inference. This will place all of the output data into a list of numpy arrays. This function can be referenced at python_flow/postprocess/convert.py, and example usage can be found in app/app1/postprocess/fd.py. Use this data in your postprocess function.
-3. Copy your python module into your application's directory under "app/".
-4. In mapping.py, import your python module.
-5. Add a key, value pair with your custom function as the value to the mapping called POST in mapping.py. The key you add here should be the value that goes in the "post_type" field in the input JSON.
-6. Run the flow if it ready!
+3. Copy your python module into your application's directory under "app/your_app/postprocess".
+4. The key that goes in the "pre_type" field in the input JSON will be the name of your function, as defined [here](#adding-own-flows).
+5. Run the flow if it ready!
 
 #### Python defined (720)
 1. Make sure your python function takes the same two parameters as the preprocesses function.
@@ -181,8 +179,8 @@ If your postprocess functions are defined in Python, integration is simple yet a
 4. Import the shared library into whichever module needs it using the standard ctypes module.
 5. Define any C/C++ structures and function wrappers that are needed as in the preprocess.
 6. Create a Python function that takes an InputConfig class and output data class as input that calls your function wrapper. To load the output data into memory, call either csim_to_memory or dynasty_to_memory. Information to how the data is loaded into memory can be found in python_flow/postprocess/convert.py. Example usage can be found in app/app1/postprocess/fd.py under the postprocess_py function.
-7. Add a key, value pair with your custom function as the value to the mapping called POST in mapping.py.
-6. Run the flow if it ready!
+7. The key that goes in the "post_type" field in the input JSON will be the name of your function, as defined [here](#adding-own-flows).
+8. Run the flow if it ready!
 
 #### C defined (720)
 1. Like the preprocess, compile the C/C++ functions into a shared library (.so).
@@ -204,7 +202,7 @@ REMINDER for both 520 and 720: for your postprocess function, you should call th
 | dynasty_to_memory | Dynasty   | C (take in KDPImage as input)          |
 | dynasty_to_np     | Dynasty   | NumPy                                  |
 
-There are also additional preprocess conversion functions for your convenience under python_flow/preprocess/convert.py
+There are also additional preprocess conversion functions for your convenience under python_flow/preprocess/convert.py.
 Use convert_binary_to_numpy to get a NumPy array from an input binary image. Use convert_pre_numpy_to_rgba to dumpy a NumPy array into RGBA binary used for the simulator.
 
 If there are any parameters necessary for your custom function, simply add another field in the respective section in the input JSON configuration. Additionally, before running the flow, you may need to [modify the data](#simulator-output) returned from the Kneron simulator to fit the inputs for your custom postprocess function.
@@ -212,24 +210,22 @@ If there are any parameters necessary for your custom function, simply add anoth
 ## Usage
 
 ```
-simulator.py [-h] [-i {binary,image}] [-t TEST] [-s {1,2,3}]
-                  [-w WORKERS] [-f {RGB,NIR,INF,ALL}] [-n NUM_IMAGES]
-                  [-b BOX]
-                  app_folder directory
+simulator.py [-h] [-i {binary,image}] [-s STAGES] [-w WORKERS]
+                  [-f {RGB,NIR,INF,ALL}] [-n NUM_IMAGES] [-b] [-r] [-d]
+                  app_folder image_directory test
 
 Runs a test on multiple images
 
 positional arguments:
-  app_folder            directory of your application, should be in the app folder)
-  directory             directory of images to test, images should be in the
-                        app folder ('app')
+  app_folder            directory of your application, should be in the app folder
+  image_directory       directory of images to test
+  test                  type of test to be run, should be one of your functions in your app's flow.py
 
 optional arguments:
   -h, --help            show this help message and exit
   -i {binary,image}, --inputs {binary,image}
                         type of inputs to be tested
-  -t TEST, --test TEST  type of test to be run
-  -s {1,2,3}, --stages {1,2,3}
+  -s STAGES, --stages STAGES
                         number of stages of the test to run through
   -w WORKERS, --workers WORKERS
                         number of worker processes to run
@@ -237,31 +233,35 @@ optional arguments:
                         format of the input images to test
   -n NUM_IMAGES, --num_images NUM_IMAGES
                         number of images to test
-  -b BOX, --box BOX     flag to save bounding box results
+  -b, --box             flag to save bounding box results
+  -r, --remove          flag to remove CSIM or Dynasty dumps on completion
+  -d, --dump            flag to dump intermediate node outputs for the simulator
 ```
 
-* -t: default will be one of the keys in your application's mapping.py
-	* The parameter here should be one of the keys in your application's mapping.py, with the exact same spelling
+* -i: default will look for image input (PNG, JPG, etc.)
+  * If binary, will look for binary files instead
 * -s: default number is all of the stages
 * -w: default number is 1
 * -f: default is "ALL", other format specifiers will filter the test images to only images with that prefix
 * -n: default is all of the images in the test directory
-* -b: default is false
+* -b: set this option to save your results to bin/out/path_to_your_input_image
 	* If you use binary input, you will need a jpg file with the same name in your input directory for this to work
-	* The results will be saved in bin/out/path_to_your_input_image
+* -r: set this option if you want to remove CSIM or Dynasty dumps
+* -d: set this option if you want to dump all node outputs in your model
 
 You will need the following to run a test.
-* a set of test images placed in the app folder
-* a test model placed in your application folder under app
-	* ONNX and JSON if you are running Dynasty
+* a set of test images
+* a test model placed in your application folder under app/model
+	* BIE if you are running Dynasty fixed, ONNX if you are running Dynasty float
 	* weight, setup, and command binaries if you are running CSIM
 * to modify the input JSON to fit the input data
-* setup flow.py and mapping.py in your application folder under app so the flow control knows what to run
+* setup flow.py and in your application folder under app so the flow control knows what to run
 
-We have provided an example application at app/app1. There are the postprocess and preprocess functions, models, and example mapping.py and flow.py files. To run this example, be in the root directory and run this command, with test_image_folder as your folder of test images:
+We have provided an example application at app/app1. There are the postprocess and preprocess functions, models, and example flow.py files. To run this example, be in the root directory and run this command, with test_image_folder as your folder of test images:
 ```
-python3 simulator.py app/app1 app/test_image_folder
+python3 simulator.py app/app1 app/test_image_folder fdr
 ```
+For more details, follow the [tutorial](#example).
 
 ## Simulator output
 The results of the simulator vary depending on which one is invoked: hardware CSIM or Dynasty. 
@@ -286,15 +286,34 @@ To add your own test flow, add a file called "flow.py" into your current applica
     1. Instantiate your output class. This class will be passed between each stage of your test flow, so you can pass data between each stage.
     2. Call run_simulator once for each stage in your flow. The inputs will be a string path to the input JSON file, the input image file, your output class object, and the Namespace object. The input image and Namespace object will be passed in from your function's parameters without modification. You can look for more information in the python_flow/flow.py file.
     3. Add any extra work you may need for your testing.
-4. Add any preprocess/postprocess functions you intend to call in their respective PRE/POST dictionaries in "mapping.py." The keys in these dictionaries will be the values you enter into the "pre_type"/"post_type" fields in your input JSON file.
-3. Add this function call to the TESTS dictionary in "mapping.py" in your current application folder. The key in this dictionary will be the command line argument for the "-t" option.
+3. Your preprocess/postprocess function calls will be determined through the input JSONs, specifically the "pre_type" and "post_type" fields. Set the values to be imported Python style, relative to the preprocess and postprocess folders. For example, if your function is called "my_function" and is located in app/my_app/preprcess/my_file.py, set your "pre_type" field to be "my_file.my_function".
+4. This function call will be the third argument you specify in the command line.
 
-<div align="center">
-<img src="../../imgs/python_app/mapping.png">
-<p>Example mapping</p>
-</div>
+When adding a new application, make sure all imports and files are under the new application. You can also use relative imports as well.
 
-When adding a new application, make sure all imports and files are under the new application. For example, the existing application is called app1, and I create a new application called app2. Make sure that all your files go under this folder and imports in mapping.py and flow.py are from under app2. If you are copying from app1, make sure you change any instances of app1 names to app2.
+## Example
+We will go over the existing FD application that you can use as a model for your own tests.
+
+1. First, you will need to define some data structures. You will need to create an OutputData class similar to the one in app/app1/common/output_data.py. This class will be used as input to your preprocess and postprocess functions. You can use this class to share data between your functions and save your postprocess results in here. There will be one OutputData class per image.
+2. The data structures in app/app1/common/library_wrappers.py are defined so that the ctypes Python module can pass data to the C library functions that we compiled into a .so file. You will need to do something similar if your functions are [defined in C](#C-defined). If your functions are strictly in Python, you do not need to do this step.
+3. [Add your preprocess and postprocess functions](#custom-pre/postprocess). Make sure your preprocess and postprocess functions are inside your app folder under preprocess and postprocess folders, respectively. You can see the examples at app/app1/preprocess and app/app1/postprocess.
+4. [Follow the steps to add your own test flow](#adding-own-flows). The function name you define here will be used as a command line argument. You can look at app/app1/flow.py in the fdr function for this example. Here is where you specify your input json and initialize your outputdata class.
+
+Now that you have defined all your functions, you need to prepare the data.
+
+1. Prepare your image dataset. This can be placed anywhere. The example dataset is in app/app1/test_image_folder.
+2. Prepare your model. If you are running CSIM, you need to get the setup, weight, and command binaries. For Dynasty fixed, you will need the BIE file; for Dynasty float, you will need the ONNX file.
+3. Place your models under the model folder of your application "app/your_app/model" as in app/app1/model. This is where the simulator will look for the models that you specify in the input JSON.
+4. Setup the input JSONS to match your dataset. All the parameters in the example JSON at app/app1/input_jsons/fd_rgb.json are explained [here](#Configuring-Input). You will only need to pay attention to the required keys. All other parameters can be ignored, depending on if your preprocess or postprocess functions will use them. You can also add extra parameters to the pre and post sections if your computations need those.
+
+Now that you prepared everything, you can run your test.
+```
+python3 simulator.py app/app1 app/test_image_folder fdr
+```
+This will run the fdr example set up in app/app1. To run your test, it will be similar to this, where my_test is the function that you defined in flow.py:
+```
+python3 simulator.py app/your_app path_to_your_test_images my_test
+```
 
 ---
 [^1]: yolo: data / 255,
