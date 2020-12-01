@@ -40,6 +40,15 @@ In this document, you'll learn:
 2. What tools are in the toolchain.
 3. How to use scripts to utilize the tools.
 
+**Changes compared to old versions:**
+
+1. Now, in the example, the mount folder `/docker_mount` is separated from the interactive folder `/data1` to avoid
+unexpected file changes. Users need to copy data between the mount folder and the interactive folder. Of course you can
+still mount on `/data1`. But please be careful that the results folder under `/data1` may be overwritten.
+2. `input_params.json` and `batch_input_params.json` have been changed a lot. Please check the document for details.
+3. `simulator.sh`, `emulator.sh` and draw yolo image scripts are no longer available from `/workspace/scripts`. They
+have been moved to E2E simulator. Please check its document for details.
+
 ## 1. Installation
 
 **Review the system requirements below before start installing and using the toolchain.**
@@ -198,6 +207,7 @@ The general process for model conversion is as following:
 > ONNX exported by Pytorch **cannot** skip step 1 and directly go into step 2. Please check
 > [section 3.1.2](#312-Pytorch-to-ONNX) for details.
 
+**If you're still confused reading the manual, please try our examples from <https://github.com/kneron/ConvertorExamples>**
 
 #### 3.1.1 Keras to ONNX
 
