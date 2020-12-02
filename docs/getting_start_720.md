@@ -6,7 +6,7 @@
 
 `sudo apt install libusb-1.0-0-dev`
 
-### 1.2. Windows(MINGW64/MSYS)
+### 1.2. Windows(MINGW64\MSYS)
 #### 1.2.1. WinUSB installation
 
 You will need administrator’s rights to perform the installation.
@@ -235,7 +235,7 @@ KERNEL=="ttyUSB*",ATTRS{idVendor}=="1a86",ATTRS{idProduct}=="7523",MODE="0777",S
 SUBSYSTEM=="usb",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0200",MODE="0666"
 ```
 
-### 3.2. Windows(MINGW64/MSYS)
+### 3.2. Windows(MINGW64\MSYS)
 #### 3.2.1. Build
 ```bash
  # to build opencv_3.4 example: cmake -DBUILD_OPENCV_EX=on .. -G"MSYS Makefiles"
@@ -263,7 +263,7 @@ make -j4
 |  | host_lib library | Example executable file |
 |------------------|------------------|-------------------------|
 | **Linux** | ./build/src/libhostkdp.so | ./build/bin_kdp720/* |
-| **Windows** | ./build/bin/libhostkdp.dll | ./build/bin_kdp720/*.exe |
+| **Windows** | .\build\bin\libhostkdp.dll | .\build\bin_kdp720\*.exe |
 
 ## 4. Flash Management
 
@@ -545,7 +545,7 @@ When IPL (Initial Program Loader) in ROM starts to run on SCPU after power-on or
 
 Both SCPU and NCPU firmware run RTOS with SCPU handling application, media input/output and peripheral drivers and NCPU handling CNN model pre/post processing. Two CPUs use interrupts and shared memory to achieve IPC (Inter Processor Communication).
 
-![](./imgs/getting_start_imgs_720/7_1.png)
+![](./imgs/getting_start_imgs_720/6_1.png)
 
 
 ### 6.2. Firmware components
@@ -571,16 +571,16 @@ Tiny Yolo is a single model application with streamlined processing. Both compan
 ### 6.4. Create New Application Project
 
 #### 6.4.1 Create steps
-* Create new application project by copying an existing application project in the path **firmaware/build/[example_xxx, solution_xxx]**
+* Create new application project by copying an existing application project in the path **firmaware\build\[example_xxx, solution_xxx]**
 * Find **main.c** and **project.h** and modify properly if needed:
     * **main.c**: app, middleware
     * **project.h**: driver, pcb, ic, memory, flash
 
 #### 6.4.2 Use existing application project as template
-* Example: **firmware/build/solution_companion/**
-* Copy whole directory to a new one, for example: **firmware/build/my_project/**
-* Modify firmware/build/solution_companion/main_scpu/**main.c**
-* Modify firmware/build/solution_companion/sn72096_9x9/**project.h**
+* Example: **firmware\build\solution_companion\**
+* Copy whole directory to a new one, for example: **firmware\build\my_project\**
+* Modify firmware\build\solution_companion\main_scpu\**main.c**
+* Modify firmware\build\solution_companion\sn72096_9x9\**project.h**
 
 ### 6.5. Create New NCPU Project
 
@@ -593,7 +593,7 @@ Tiny Yolo is a single model application with streamlined processing. Both compan
 
 Copy the workspace.uvmpw file to your directory, add/remove projects as needed.
 
-`firmware/build/solution_companion/sn72096_9x9/proj_yolo.uvmpw`
+`firmware\build\solution_companion\sn72096_9x9\proj_yolo.uvmpw`
 
 A companion application workspace usually contains these projects:
 
@@ -614,7 +614,7 @@ Main tasks in main.c
 * Initialize communication module
 `kcomm_start()`
 
-Add operations for ISI command handler, e.g. in a shared directory/file (firmware/app/tiny_yolo_ops.c):
+Add operations for ISI command handler, e.g. in a shared directory\file (firmware\app\tiny_yolo_ops.c):
 ```
 static struct kapp_ops kapp_tiny_yolo_ops = {
     .start          = tiny_yolo_start,
@@ -649,7 +649,7 @@ kcomm_enable_isi_cmds(ops);
 When an application includes multiple models, each model needs a separate result memory, and all result memory buffers must be allocated in DDR using kmdw_ddr_reserve() because they are filled up by NCPU.
 
 For companion mode this can be all done in .run_image callback function like age_gender ISI example where two models (KNERON_FDSSD and KNERON_AGE_GENDER) are run one after another.
-`firmware/app/kapp_center_app_ops.c`
+`firmware\app\kapp_center_app_ops.c`
 
 #### Parallel image processing for NPU and NCPU:
 
@@ -689,7 +689,7 @@ Please note that user needs to define an new cpu function ID for this cpu functi
 
 ### 6.9. Build Keil MDK to compile reference design
 
-* Open Keil project file **"firmware/build/solution_companion/sn72096_9x9/scpu_keil/comp.uvprojx"**.
+* Open Keil project file **"firmware\build\solution_companion\sn72096_9x9\scpu_keil\comp.uvprojx"**.
 
 * Select target “scpu” and then click build button
 
@@ -697,7 +697,72 @@ Please note that user needs to define an new cpu function ID for this cpu functi
 
 * User can edit and debug with Keil MDK development tool for further implementation https://www2.keil.com/mdk5/docs.
 
-## 7. SOC peripheral drivers
+
+## 7. Secure Boot
+
+Kneron KL720 provide secure protect with AES and SHA. The boot mechanism will apply AES 256 CBC mode and SHA256. For AES, this requires 256 bits Key and 128 bits IV to encrypt or decrypt the data. For SHA, this requires 256 bits space on SPI flash to keep the hash value.   
+
+The SEC_EN bit from eFuse is used to decide if the secure boot mechanism should be applied or ignored. The content of 32 bits authentication number, the 256 bits Key and 128 bits IV inside eFuse should be decided and write to eFuse before the SEC_EN bit is set.  If the  SEC_EN bit of eFuse is 1. The boot flow will enter secure boot, and the firmware of SPL, SCPU and NCPU need be encrypted with the correct key. 
+
+![](./imgs/getting_start_imgs_720/7_1.png)
+
+
+### 7.1. eFuse Programming
+
+The eFuse data will be programmed during chip or module production. The eFuse's data contains the following vendor's key information. The user only obtains the encrypted key(sbtkey.bin) and uses the sbtenc tool to perform firmware secure boot encryption.
+
+* Auth value: 32bits 
+* AES key size: 256bits
+* IV: 128bits
+
+### 7.2 Build Firmware and Create Encrypted Binary File
+
+If the SEC_EN bit of eFuse is 1. The boot flow will enter secure boot, and the firmware of SPL, SCPU and NCPU need be encrypted with the correct key. We provide a "sbtenc.exe" tool for users to encrypt their firmware with SBT key(sbtkey.bin) for secure boot. You can refer the example projects of secure boot for SPL, SCPU and NCPU.
+```
+sbtenc.exe optional arguments: 
+    -h, --help          Show this help message and exit
+    -hd, --header       Add header file.
+    -e, --encrypt       AES encryption.
+    -i INFILE, --infile INFILE
+                        Input firmware file for AES encryption.
+    -o OUTFILE, --outfile OUTFILE
+                        Encrypted output file.
+    -s SBTKEYFILE, --sbtkeyfile SBTKEYFILE
+                        Secure boot key file(sbtkey.bin)
+Example Command:
+Encrypt firmware with user's sbtkey.bin.
+​    sbtenc.exe -e -i fw_scpu_tmp.bin -o fw_scpu_enc.bin -s keys\sbtkey.bin.
+```
+
+
+### 7.3 KL720 SDK Secure Boot Example
+
+The following are the example projects and post_build_enc.bat for secure boot on the KL720 SDK.
+```
+Example key. 
+    .\firmware\utils\sbtenc\keys\sbtkey.bin
+        
+Example projects for SPL, SCPU and NCPU.
+​    SPL 
+​        .\firmware\platform\kl720\scpu\spl\sn720ev_9x9\scpu_keil\spl_enc.uvprojx
+​    SCPU 
+        .\firmware\build\example_sbt\scpu\sn720ev_9x9\scpu_keil\scpu_enc.uvprojx
+​    NCPU 
+​        .\firmware\build\example_sbt\ncpu\
+```
+After the project is built, please run flash programming to update the flash data.
+```
+    .\firmware\utils\JLink_programmer\flash_prog_enc.bat
+```
+Secure boot success message.
+![](./imgs/getting_start_imgs_720/7_3_1.png)
+
+Secure boot fail message.
+![](./imgs/getting_start_imgs_720/7_3_2.png)
+
+
+
+## 8. SOC peripheral drivers
 This chapter describes the peripheral definitions and prototypes for the application progamming reference.
 User can find the code in the following folder.
 
@@ -741,7 +806,7 @@ User can also refer to kdrv usage from the middleware(mdw) folder.
 │   │   ├───usbh2<br>
 │   │   └───utilities<br>
 
-### 7.0. Peripheral Name Description
+### 8.0. Peripheral Name Description
 The table below lists all the Kneron device peripherals along with the description.
 
 | Name          | Description   |
@@ -771,7 +836,7 @@ The table below lists all the Kneron device peripherals along with the descripti
 | KDRV_USBH2 | Kneron Driver - USB2 Host |
 | KDRV_WDT | Kneron Driver - Watchdog|
 
-### 7.1. KDRV_AES
+### 8.1. KDRV_AES
 Version
 
 * v1.0
@@ -911,7 +976,7 @@ Warning
 	kdrv_aes_initialize() must be previously called
 ```
 
-### 7.2. KDRV_CLOCK
+### 8.2. KDRV_CLOCK
 Version
 
 * v1.0
@@ -1175,7 +1240,7 @@ Returns
 	N/A
 ```
 
-### 7.3. KDRV_CRYPTO
+### 8.3. KDRV_CRYPTO
 Version
 
 * v1.0
@@ -1541,7 +1606,7 @@ Returns
 	N/A
 ```
 
-### 7.4. KDRV_GDMA
+### 8.4. KDRV_GDMA
 Version
 
 * v1.0
@@ -1875,7 +1940,7 @@ Returns
 	KDRV_STATUS_ERROR
 ```
 
-### 7.5. KDRV_GPIO
+### 8.5. KDRV_GPIO
 Version
 
 * v1.0
@@ -2065,7 +2130,7 @@ Returns
 	KDRV_STATUS_OK only
 ```
 
-### 7.6. KDRV_HASH
+### 8.6. KDRV_HASH
 Version
 
 * v1.0
@@ -2219,7 +2284,7 @@ Returns
 	KDRV_STATUS_OK if execution was successful, see kdrv_status_t
 ```
 
-### 7.7. KDRV_I2C
+### 8.7. KDRV_I2C
 Version
 
 * v1.0
@@ -2376,7 +2441,7 @@ Returns
 	kdrv_status_t see kdrv_status_t
 ```
 
-### 7.8. KDRV_IPC
+### 8.8. KDRV_IPC
 Version
 
 * v1.0
@@ -2417,7 +2482,7 @@ Returns
 	N/A
 ```
 
-### 7.9. KDRV_MPU
+### 8.9. KDRV_MPU
 Version
 
 * v1.0
@@ -2452,7 +2517,7 @@ Returns
 	N/A
 ```
 
-### 7.10. KDRV_NCPU
+### 8.10. KDRV_NCPU
 Version
 
 * v1.0
@@ -2503,7 +2568,7 @@ Returns
 	N/A
 ```
 
-### 7.11. KDRV_PINMUX_CONFIG
+### 8.11. KDRV_PINMUX_CONFIG
 Please refer to ./firmware/utils/pinmux/Kneron_pinmux_gpio_config_720.xlsm for the detailed pin multiplexer information
 
 Version
@@ -2677,7 +2742,7 @@ Returns
 	N/A
 ```
 
-### 7.12. KDRV_PLL
+### 8.12. KDRV_PLL
 Version
 
 * v1.0
@@ -3169,7 +3234,7 @@ Enumerations of list supported Audio clock.
 | ADO_CLK_TOTAL_SUPPORTED 	| Enum 1				|
 ```
 
-### 7.13. KDRV_POWER
+### 8.13. KDRV_POWER
 Version
 
 * v1.0
@@ -3288,7 +3353,7 @@ Returns
 	kdrv_status_t see kdrv_status_t
 ```
 
-### 7.14. KDRV_PWM
+### 8.14. KDRV_PWM
 Version
 
 * v1.0
@@ -3382,7 +3447,7 @@ Returns
 	kdrv_status_t see kdrv_status_t
 ```
 
-### 7.15. KDRV_RTC
+### 8.15. KDRV_RTC
 Version
 
 * v1.0
@@ -3572,7 +3637,7 @@ Returns
 	N/A
 ```
 
-### 7.16. KDRV_SDC
+### 8.16. KDRV_SDC
 Version
 
 * v1.0
@@ -4268,7 +4333,7 @@ Returns
 	kdrv_status_t
 ```
 
-### 7.17. KDRV_SPIF_NOR
+### 8.17. KDRV_SPIF_NOR
 Version
 
 * v1.0
@@ -4487,7 +4552,7 @@ Returns
 	N/A
 ```
 
-### 7.18. KDRV_SPIF_NAND
+### 8.18. KDRV_SPIF_NAND
 Version
 
 * v1.0
@@ -4723,7 +4788,7 @@ Returns
 	N/A
 ```
 
-### 7.19. KDRV_SYSTEM
+### 8.19. KDRV_SYSTEM
 Version
 
 * v1.0
@@ -4792,7 +4857,7 @@ Returns
 	N/A
 ```
 
-### 7.20. KDRV_TIMER
+### 8.20. KDRV_TIMER
 Version
 
 * v1.0
@@ -5007,7 +5072,7 @@ Returns
 	kdrv_status_t see kdrv_status_t
 ```
 
-### 7.21. KDRV_UART
+### 8.21. KDRV_UART
 Version
 
 * v1.0
@@ -5341,7 +5406,7 @@ Returns
 	kdrv_status_t see kdrv_status_t
 ```
 
-### 7.22. KDRV_USBD3
+### 8.22. KDRV_USBD3
 Version
 
 * v1.0
@@ -5515,7 +5580,7 @@ Returns
 	kdrv_status_t see kdrv_status_t
 ```
 
-### 7.23. KDRV_USBH2
+### 8.23. KDRV_USBH2
 Version
 
 * v1.0
@@ -5820,7 +5885,7 @@ Returns
 	kdrv_status_t see kdrv_status_t
 ```
 
-### 7.24. KDRV_WDT
+### 8.24. KDRV_WDT
 Version
 
 * v1.0
