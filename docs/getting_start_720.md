@@ -6,7 +6,7 @@
 
 `sudo apt install libusb-1.0-0-dev`
 
-### 1.2. Windows(MINGW64/MSYS)
+### 1.2. Windows(MINGW64\MSYS)
 #### 1.2.1. WinUSB installation
 
 You will need administrator’s rights to perform the installation.
@@ -235,7 +235,7 @@ KERNEL=="ttyUSB*",ATTRS{idVendor}=="1a86",ATTRS{idProduct}=="7523",MODE="0777",S
 SUBSYSTEM=="usb",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0200",MODE="0666"
 ```
 
-### 3.2. Windows(MINGW64/MSYS)
+### 3.2. Windows(MINGW64\MSYS)
 #### 3.2.1. Build
 ```bash
  # to build opencv_3.4 example: cmake -DBUILD_OPENCV_EX=on .. -G"MSYS Makefiles"
@@ -263,7 +263,7 @@ make -j4
 |  | host_lib library | Example executable file |
 |------------------|------------------|-------------------------|
 | **Linux** | ./build/src/libhostkdp.so | ./build/bin_kdp720/* |
-| **Windows** | ./build/bin/libhostkdp.dll | ./build/bin_kdp720/*.exe |
+| **Windows** | .\build\bin\libhostkdp.dll | .\build\bin_kdp720\*.exe |
 
 ## 4. Flash Management
 
@@ -571,16 +571,16 @@ Tiny Yolo is a single model application with streamlined processing. Both compan
 ### 6.4. Create New Application Project
 
 #### 6.4.1 Create steps
-* Create new application project by copying an existing application project in the path **firmaware/build/[example_xxx, solution_xxx]**
+* Create new application project by copying an existing application project in the path **firmaware\build\[example_xxx, solution_xxx]**
 * Find **main.c** and **project.h** and modify properly if needed:
     * **main.c**: app, middleware
     * **project.h**: driver, pcb, ic, memory, flash
 
 #### 6.4.2 Use existing application project as template
-* Example: **firmware/build/solution_companion/**
-* Copy whole directory to a new one, for example: **firmware/build/my_project/**
-* Modify firmware/build/solution_companion/main_scpu/**main.c**
-* Modify firmware/build/solution_companion/sn72096_9x9/**project.h**
+* Example: **firmware\build\solution_companion\**
+* Copy whole directory to a new one, for example: **firmware\build\my_project\**
+* Modify firmware\build\solution_companion\main_scpu\**main.c**
+* Modify firmware\build\solution_companion\sn72096_9x9\**project.h**
 
 ### 6.5. Create New NCPU Project
 
@@ -593,7 +593,7 @@ Tiny Yolo is a single model application with streamlined processing. Both compan
 
 Copy the workspace.uvmpw file to your directory, add/remove projects as needed.
 
-`firmware/build/solution_companion/sn72096_9x9/proj_yolo.uvmpw`
+`firmware\build\solution_companion\sn72096_9x9\proj_yolo.uvmpw`
 
 A companion application workspace usually contains these projects:
 
@@ -614,7 +614,7 @@ Main tasks in main.c
 * Initialize communication module
 `kcomm_start()`
 
-Add operations for ISI command handler, e.g. in a shared directory/file (firmware/app/tiny_yolo_ops.c):
+Add operations for ISI command handler, e.g. in a shared directory\file (firmware\app\tiny_yolo_ops.c):
 ```
 static struct kapp_ops kapp_tiny_yolo_ops = {
     .start          = tiny_yolo_start,
@@ -649,7 +649,7 @@ kcomm_enable_isi_cmds(ops);
 When an application includes multiple models, each model needs a separate result memory, and all result memory buffers must be allocated in DDR using kmdw_ddr_reserve() because they are filled up by NCPU.
 
 For companion mode this can be all done in .run_image callback function like age_gender ISI example where two models (KNERON_FDSSD and KNERON_AGE_GENDER) are run one after another.
-`firmware/app/kapp_center_app_ops.c`
+`firmware\app\kapp_center_app_ops.c`
 
 #### Parallel image processing for NPU and NCPU:
 
@@ -689,7 +689,7 @@ Please note that user needs to define an new cpu function ID for this cpu functi
 
 ### 6.9. Build Keil MDK to compile reference design
 
-* Open Keil project file **"firmware/build/solution_companion/sn72096_9x9/scpu_keil/comp.uvprojx"**.
+* Open Keil project file **"firmware\build\solution_companion\sn72096_9x9\scpu_keil\comp.uvprojx"**.
 
 * Select target “scpu” and then click build button
 
