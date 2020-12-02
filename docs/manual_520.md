@@ -8,12 +8,29 @@
 ** 2020 October **
 ** Toolchain 520 v0.9.0 **
 
+[PDF Downloads](manual_520.pdf)
+
 ## 0. Overview
 
 KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 520. For better
 environment compatibility, we provide a docker which include all the dependencies as well as the toolchain software.
 
 **This document is compatible with `kneron/toolchain:520_v0.9.0`.**
+
+ *Performance simulation result on NPU:*
+
+| Model                | Size    | FPS (npu only) | Time(npu only) | Has CPU node(s)? |
+| -------------------- | ------- | -------------- | -------------- | ---------------- |
+| Inception v3         | 224x224 |    6.3         | 158 ms         |         No       |
+| Inception v4         | 299x299 |    0.48        | 2068 ms        |        No        |
+| Mobilenet v1         | 224x224 |    60.7        | 16.5 ms        |        No        |
+| Mobilenet v2         | 224x224 |    61.3        | 16.3 ms        |        No        |
+| Mobilenet v2 ssdlite | 300x300 |    30.4        | 32.9 ms        |        No        |
+| Resnet50 v1.5        | 224x224 |    7.02        | 142.4 ms       |        No        |
+| OpenPose             | 256x256 |    0.61        | 1639 ms        |        No        |
+| SRCNN                | 384x384 |    7.04        | 142 ms         |        No        |
+| Tiny yolo v3         | 416x416 |    22.8        | 43.8 ms        |        Yes       |
+| Yolo v3              | 416x416 |    1.5         | 666.7 ms       |        Yes       |
 
 In this document, you'll learn:
 
@@ -52,29 +69,25 @@ All the following steps are on the command line. Please make sure you have the a
 > You may need `sudo` to run the docker commands, which depends on your system configuration.
 
 
-You can use the following command to pull the specific version of toolchain 520, for example, v0.9.0 which is described
-in this document.
-
-```bash
-docker pull kneron/toolchain:520_v0.9.0
-```
-
-Use the following command to pull the latest toolchain docker for 520. Note that the latest version of the toolchain may
-not compatible with this document, you may need to visit [the latest document](http://doc.kneron.com/docs/#manual_520/).
+You can use the following command to pull the latest toolchain docker for 520.
 
 ```bash
 docker pull kneron/toolchain:520
 ```
 
+Note that this document is compatible with toolchain v0.9.0. You can find the version of the toolchain in
+`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.9.0, you may need to find the
+latest document from the [online document center](http://doc.kneron.com/docs).
+
 ## 2. Toolchain Docker Overview
 
 After pulling the desired toolchain, now we can start walking through the process. In all the following sections, we use
-`kneron/toolchain:520_v0.9.0` as the docker image. Before we actually start the docker, we'd better provide a folder
+`kneron/toolchain:520` as the docker image. Before we actually start the docker, we'd better provide a folder
 which contains the model files you want to test in our docker, for example, `/mnt/docker`. Then, we can use the
 following command to start the docker and work in the docker environment: 
 
 ```bash
-docker run --rm -it -v /mnt/docker:/docker_mount kneron/toolchain:520_v0.9.0
+docker run --rm -it -v /mnt/docker:/docker_mount kneron/toolchain:520
 ```
 
 > TIPS:
@@ -695,7 +708,8 @@ This is the option for the mode of adding paddings, and it will be utilized only
 And it has two options: 0 and 1.  
 0 – If the original width is too small, the padding will be added at both right and left sides equally; if the original height is too small, the padding will be added at both up and down sides equally.  
 1 – If the original width is too small, the padding will be added at the right side only, if the original height is too small, the padding will be only added at the down side.  
-23. `rotate`  
+23. `roate`  
+It is actually a typo of rotate. But current examples and scripts are adapted to this typo. It will be fixed later.  
 It has three options:  
 0 – no rotating operation  
 1 – rotate 90 degrees in clockwise direction  
