@@ -215,77 +215,27 @@ Platform = board + dev + ASIC.
 
 <font color="#0000dd">**kl720**</font>: contain all peripheral drivers, real time OS, startup assembly code, and FW init code.
 
+## 3. Flash Management
 
-## 3. host_lib Compile and Build
-
-### 3.1. Linux
-#### 3.1.1. Build
-```bash
-mkdir build && cd build
- # to build opencv_3.4 example: cmake -DBUILD_OPENCV_EX=on ..
-cmake ..
-make -j4
-```
-
-#### 3.1.2. USB Device Permissions
-Add the following to /etc/udev/rules.d/10-local.rules
-```
-KERNEL=="ttyUSB*",ATTRS{idVendor}=="067b",ATTRS{idProduct}=="2303",MODE="0777",SYMLINK+="kneron_uart"
-KERNEL=="ttyUSB*",ATTRS{idVendor}=="1a86",ATTRS{idProduct}=="7523",MODE="0777",SYMLINK+="kneron_pwr"
-SUBSYSTEM=="usb",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0200",MODE="0666"
-```
-
-### 3.2. Windows(MINGW64\MSYS)
-#### 3.2.1. Build
-```bash
- # to build opencv_3.4 example: cmake -DBUILD_OPENCV_EX=on .. -G"MSYS Makefiles"
-mkdir build && cd build
-cmake .. -G"MSYS Makefiles"
-make -j4
-```
-
-#### 3.2.2. Runtime DLL Environment
-- Set PATH to add CV DLL location in Windows10
-    - Command line example: assume MSYS2 is installed in C:\git-sdk-64\mingw64
-
-    ```
-    set PATH=%PATH%;C:\git-sdk-64\mingw64\bin
-    ```
-
-- Copy additional DLLs to C:\git-sdk-64\mingw64 directory
-
-    ```
-    cp dll\*.dll C:\git-sdk-64\mingw64\bin\
-    ```
-
-
-### 3.3. Output Bin Files
-|  | host_lib library | Example executable file |
-|------------------|------------------|-------------------------|
-| **Linux** | ./build/src/libhostkdp.so | ./build/bin/* |
-| **Windows** | .\build\bin\libhostkdp.dll | .\build\bin\*.exe |
-
-## 4. Flash Management
-
-### 4.1. Board Overview
+### 3.1. Board Overview
 
 ![](./imgs/getting_start_imgs_720/4_1.png)
 
-### 4.2. Hardware Setting
+### 3.2. Hardware Setting
 
-#### 4.2.1. Connecting UART0 (Program Flash via UART0 Interface)
+#### 3.2.1. Connecting UART0 (Program Flash via UART0 Interface)
 
 UART0: Command Port (either CN10 or J8)
 
 ![](./imgs/getting_start_imgs_720/4_2_1.png)
 
-#### 4.2.2. Connecting JTAG (Program Flash via JTAG/SWD Interface)
+#### 3.2.2. Connecting JTAG (Program Flash via JTAG/SWD Interface)
 
-#### 4.2.3. Connecting USB3.0 for 5V power supply
+#### 3.2.3. Connecting USB3.0 for 5V power supply
 
-### 4.3. Program Flash via UART0 Interface
+### 3.3. Program Flash via UART0 Interface
 
-#### 4.3.1. Flash programmer necessaries
+#### 3.3.1. Flash programmer necessaries
 
 1. Open command terminal for flash programmer execution
 
@@ -293,7 +243,7 @@ UART0: Command Port (either CN10 or J8)
 
 2. install Necessary python modules: kl720_sdk\firmware\utils\flash_programmer\requirements.txt
 
-#### 4.3.2. Edit python verification setting
+#### 3.3.2. Edit python verification setting
 
 1. Check UART port number from device manager
 
@@ -303,7 +253,7 @@ UART0: Command Port (either CN10 or J8)
 
 ![](./imgs/getting_start_imgs_720/4_3_2.png)
 
-#### 4.3.3 Flash Chip Programming (FW + DATA)
+#### 3.3.3 Flash Chip Programming (FW + DATA)
 
 `>> python flash_programmer.py -a flash_fdfr_image.bin`
 
@@ -318,15 +268,15 @@ Afterwards, just wait until all progresses are finished (erase, program, verify)
 **Note**:
 "flash_programmer.py -a" means to do flash chip erase + programming + verification
 
-#### 4.3.4 Flash Verification (optional)
+#### 3.3.4 Flash Verification (optional)
 
 `>> python flash_programmer.py -v flash_fdfr_image.bin`
 
-#### 4.3.5 Flash Erase (optional)
+#### 3.3.5 Flash Erase (optional)
 
 `>> python flash_programmer.py -e`
 
-#### 4.3.6 Flash Partial Programming (optional)
+#### 3.3.6 Flash Partial Programming (optional)
 
 `>> python flash_programmer.py -i 0x00040000 -p fw_scpu.bin`
 
@@ -336,15 +286,15 @@ To program specific bin file to specific flash address
 "-p" means the FW code you would like to program
 
 
-### 4.4. Program Flash via JTAG/SWD Interface
+### 3.4. Program Flash via JTAG/SWD Interface
 
-#### 4.4.1. Jlink programmer necessaries
+#### 3.4.1. Jlink programmer necessaries
 
 Connect JTAG/SWD and USB3.0 for 5V power.
 
 ![](./imgs/getting_start_imgs_720/4_4_1.png)
 
-#### 4.4.2. Edit flash_prog.jlink device setting
+#### 3.4.2. Edit flash_prog.jlink device setting
 
 1. Check your flash type: Winbond SPI Nand flash 
 
@@ -355,19 +305,19 @@ Connect JTAG/SWD and USB3.0 for 5V power.
     EX: flash_fdfr_image.bin, boot_spl.bin, fw_scpu.bin, fw_ncpu.bin, fw_ncpu_dram.bin etc.
 
 
-#### 4.4.3. Double click "flash_prog.bat"
+#### 3.4.3. Double click "flash_prog.bat"
 
 Afterwards, just wait until all progresses are finished (chip erase, program, verify)
 
 ![](./imgs/getting_start_imgs_720/4_4_3.png)
 
-#### 4.4.4. Check programming result
+#### 3.4.4. Check programming result
 
 Please ensure all the results are "O.K.", and enter "qc" to quit and close J-Link commander
 
 ![](./imgs/getting_start_imgs_720/4_4_4.png)
 
-#### 4.4.5. Edit flash_prog_partial.jlink device setting(optional)
+#### 3.4.5. Edit flash_prog_partial.jlink device setting(optional)
 
 To program ncpu fw or update models to specific flash address(sector erase, program, verify)
 
@@ -389,6 +339,55 @@ To program ncpu fw or update models to specific flash address(sector erase, prog
     ![](./imgs/getting_start_imgs_720/4_4_5.png)
 
 4. Same to "flash_models.bat".
+
+## 4. host_lib Compile and Build
+
+### 4.1. Linux
+#### 4.1.1. Build
+```bash
+mkdir build && cd build
+ # to build opencv_3.4 example: cmake -DBUILD_OPENCV_EX=on ..
+cmake ..
+make -j4
+```
+
+#### 4.1.2. USB Device Permissions
+Add the following to /etc/udev/rules.d/10-local.rules
+```
+KERNEL=="ttyUSB*",ATTRS{idVendor}=="067b",ATTRS{idProduct}=="2303",MODE="0777",SYMLINK+="kneron_uart"
+KERNEL=="ttyUSB*",ATTRS{idVendor}=="1a86",ATTRS{idProduct}=="7523",MODE="0777",SYMLINK+="kneron_pwr"
+SUBSYSTEM=="usb",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0200",MODE="0666"
+```
+
+### 4.2. Windows(MINGW64\MSYS)
+#### 4.2.1. Build
+```bash
+ # to build opencv_3.4 example: cmake -DBUILD_OPENCV_EX=on .. -G"MSYS Makefiles"
+mkdir build && cd build
+cmake .. -G"MSYS Makefiles"
+make -j4
+```
+
+#### 4.2.2. Runtime DLL Environment
+- Set PATH to add CV DLL location in Windows10
+    - Command line example: assume MSYS2 is installed in C:\git-sdk-64\mingw64
+
+    ```
+    set PATH=%PATH%;C:\git-sdk-64\mingw64\bin
+    ```
+
+- Copy additional DLLs to C:\git-sdk-64\mingw64 directory
+
+    ```
+    cp dll\*.dll C:\git-sdk-64\mingw64\bin\
+    ```
+
+
+### 4.3. Output Bin Files
+|  | host_lib library | Example executable file |
+|------------------|------------------|-------------------------|
+| **Linux** | ./build/src/libhostkdp.so | ./build/bin/* |
+| **Windows** | .\build\bin\libhostkdp.dll | .\build\bin\*.exe |
 
 ## 5. host_lib Examples
 
