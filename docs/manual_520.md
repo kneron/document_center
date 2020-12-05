@@ -6,7 +6,7 @@
 # Kneron Linux Toolchain 520 Manual
 
 ** 2020 November **
-** Toolchain 520 v1.0.0 **
+** Toolchain 520 v0.10.0 **
 
 [PDF Downloads](manual_520.pdf)
 
@@ -15,7 +15,7 @@
 KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 520. For better
 environment compatibility, we provide a docker which include all the dependencies as well as the toolchain software.
 
-**This document is compatible with `kneron/toolchain:520_v1.0.0`.**
+**This document is compatible with `kneron/toolchain:520_v0.10.0`.**
 
  *Performance simulation result on NPU:*
 
@@ -84,8 +84,8 @@ You can use the following command to pull the latest toolchain docker for 520.
 docker pull kneron/toolchain:520
 ```
 
-Note that this document is compatible with toolchain v1.0.0. You can find the version of the toolchain in
-`/workspace/version.txt` inside the docker. If you find your toolchain is later than v1.0.0, you may need to find the
+Note that this document is compatible with toolchain v0.10.0. You can find the version of the toolchain in
+`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.10.0, you may need to find the
 latest document from the [online document center](http://doc.kneron.com/docs).
 
 ## 2. Toolchain Docker Overview
@@ -467,7 +467,7 @@ configure the input parameters using `input_params.json` for toolchain 520 in In
 in the beginning of section 3.2. You already has the `input_params.json` ready. You can see the detailed explanation
 for the input parameters in [section FAQ question 1](#1-how-to-configure-the-input_paramsjson).
 
-> The `input_params.json` is different from 1.0.0. Please check the FAQ for new config fields or use section 3.7.3 to
+> The `input_params.json` is different in 0.10.0. Please check the FAQ for new config fields or use section 3.7.3 to
 > upgrade your existed `input_params.json`.
 
 #### 3.2.2 Running the program
@@ -534,7 +534,7 @@ This part is the instructions for batch-compile, which will generate the binary 
 
 Again, we'll use the `LittleNet` as an example. But this time, we need to copy the config `batch_input_params.json`
 
-> The `batch_input_params.json` is different from 1.0.0. Please check the FAQ for new config fields.
+> The `batch_input_params.json` is different in 0.10.0. Please check the FAQ for new config fields.
 
 ```bash
 cp /data1/LittleNet/batch_input_params.json /data1
