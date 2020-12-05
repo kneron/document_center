@@ -295,8 +295,8 @@ When adding a new application, make sure all imports and files are under the new
 We will go over the existing FD application that you can use as a model for your own tests.
 
 1. First, you will need to define some data structures. You will need to create an OutputData class similar to the one in app/app1/common/output_data.py. This class will be used as input to your preprocess and postprocess functions. You can use this class to share data between your functions and save your postprocess results in here. There will be one OutputData class per image.
-2. The data structures in app/app1/common/library_wrappers.py are defined so that the ctypes Python module can pass data to the C library functions that we compiled into a .so file. You will need to do something similar if your functions are [defined in C](#C-defined). If your functions are strictly in Python, you do not need to do this step.
-3. [Add your preprocess and postprocess functions](#custom-pre/postprocess). Make sure your preprocess and postprocess functions are inside your app folder under preprocess and postprocess folders, respectively. You can see the examples at app/app1/preprocess and app/app1/postprocess.
+2. The data structures in app/app1/common/library_wrappers.py are defined so that the ctypes Python module can pass data to the C library functions that we compiled into a .so file. You will need to do something similar if your functions are [defined in C](#c-defined). If your functions are strictly in Python, you do not need to do this step.
+3. [Add your preprocess and postprocess functions](#custom-prepostprocess). Make sure your preprocess and postprocess functions are inside your app folder under preprocess and postprocess folders, respectively. You can see the examples at app/app1/preprocess and app/app1/postprocess.
 4. [Follow the steps to add your own test flow](#adding-own-flows). The function name you define here will be used as a command line argument. You can look at app/app1/flow.py in the fdr function for this example. Here is where you specify your input json and initialize your outputdata class.
 
 Now that you have defined all your functions, you need to prepare the data.
@@ -304,7 +304,7 @@ Now that you have defined all your functions, you need to prepare the data.
 1. Prepare your image dataset. This can be placed anywhere. The example dataset is in app/app1/test_image_folder.
 2. Prepare your model. If you are running CSIM, you need to get the setup, weight, and command binaries. For Dynasty fixed, you will need the BIE file; for Dynasty float, you will need the ONNX file.
 3. Place your models under the model folder of your application "app/your_app/model" as in app/app1/model. This is where the simulator will look for the models that you specify in the input JSON.
-4. Setup the input JSONS to match your dataset. All the parameters in the example JSON at app/app1/input_jsons/fd_rgb.json are explained [here](#Configuring-Input). You will only need to pay attention to the required keys. All other parameters can be ignored, depending on if your preprocess or postprocess functions will use them. You can also add extra parameters to the pre and post sections if your computations need those.
+4. Setup the input JSONS to match your dataset. All the parameters in the example JSON at app/app1/input_jsons/fd_rgb.json are explained [here](#configuring-input). You will only need to pay attention to the required keys. All other parameters can be ignored, depending on if your preprocess or postprocess functions will use them. You can also add extra parameters to the pre and post sections if your computations need those.
 
 Now that you prepared everything, you can run your test.
 ```
