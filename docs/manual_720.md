@@ -146,7 +146,7 @@ Before we start actually introducing the scripts, let me introduce the general w
 To keep the diagram as clear as possible, some inputs and outputs are omitted. But it is enough to show the general
 steps:
 
-1. Convert and optimize the models. Generate an optimized onnx file. Details are in [section 3.1](#31-Converters)
+1. Convert and optimize the models. Generate an optimized onnx file. Details are in [section 3.1](#31-converters)
 2. Use the optimized onnx file and a set of images to do the model analysis. Generate an encrypted bie file.
 3. Compile the bie file to generate binaries for hardware simulator. This step also generates the IP evaluation result.
 4. Use the binaries generated in step 3 and an image as input to simulate kdp720. Get the results as txt files.
@@ -205,14 +205,14 @@ The general process for model conversion is as following:
 > TIPS:
 >
 > ONNX exported by Pytorch **cannot** skip step 1 and directly go into step 2. Please check
-> [section 3.1.2](#312-Pytorch-to-ONNX) for details.
+> [section 3.1.2](#312-pytorch-to-onnx) for details.
 
 **If you're still confused reading the manual, please try our examples from <https://github.com/kneron/ConvertorExamples>**
 
 #### 3.1.1 Keras to ONNX
 
 For Keras, our converter support models from Keras 2.2.4. **Note that `tf.keras` and Keras 2.3 is not supported.** You may
-need to export the model as tflite model and see [section 3.1.5](#315-TF-Lite-to-ONNX) for TF Lite model conversion.
+need to export the model as tflite model and see [section 3.1.5](#315-tf-lite-to-onnx) for TF Lite model conversion.
 
 Suppose there is an hdf5 model exported By Keras, you need to convert it to onnx by the following command:
 
@@ -321,7 +321,7 @@ You need to run the command in [section 3.1.6](#316-onnx-to-onnx-onnx-optimizati
 #### 3.1.4 Tensorflow to ONNX
 
 Tensorflow to onnx script only support Tensorflow 1.x and the operator support is very limited. If it cannot work on
-your model, please try to export the model as tflite and convert it using [section 3.1.5](#315-TF-Lite-to-ONNX).
+your model, please try to export the model as tflite and convert it using [section 3.1.5](#315-tf-lite-to-onnx).
 
 Suppose you want to convert the model `/docker_mount/mnist.pb` to `/docker_mount/mnist.onnx`, here is the example
 command:
