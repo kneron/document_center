@@ -1,4 +1,4 @@
-# Getting Started
+﻿# Getting Started
 
 ## 1. Environment Setup
 ### 1.1. Linux
@@ -215,77 +215,27 @@ Platform = board + dev + ASIC.
 
 <font color="#0000dd">**kl720**</font>: contain all peripheral drivers, real time OS, startup assembly code, and FW init code.
 
+## 3. Flash Management
 
-## 3. host_lib Compile and Build
-
-### 3.1. Linux
-#### 3.1.1. Build
-```bash
-mkdir build && cd build
- # to build opencv_3.4 example: cmake -DBUILD_OPENCV_EX=on ..
-cmake ..
-make -j4
-```
-
-#### 3.1.2. USB Device Permissions
-Add the following to /etc/udev/rules.d/10-local.rules
-```
-KERNEL=="ttyUSB*",ATTRS{idVendor}=="067b",ATTRS{idProduct}=="2303",MODE="0777",SYMLINK+="kneron_uart"
-KERNEL=="ttyUSB*",ATTRS{idVendor}=="1a86",ATTRS{idProduct}=="7523",MODE="0777",SYMLINK+="kneron_pwr"
-SUBSYSTEM=="usb",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0200",MODE="0666"
-```
-
-### 3.2. Windows(MINGW64\MSYS)
-#### 3.2.1. Build
-```bash
- # to build opencv_3.4 example: cmake -DBUILD_OPENCV_EX=on .. -G"MSYS Makefiles"
-mkdir build && cd build
-cmake .. -G"MSYS Makefiles"
-make -j4
-```
-
-#### 3.2.2. Runtime DLL Environment
-- Set PATH to add CV DLL location in Windows10
-    - Command line example: assume MSYS2 is installed in C:\git-sdk-64\mingw64
-
-    ```
-    set PATH=%PATH%;C:\git-sdk-64\mingw64\bin
-    ```
-
-- Copy additional DLLs to C:\git-sdk-64\mingw64 directory
-
-    ```
-    cp dll\*.dll C:\git-sdk-64\mingw64\bin\
-    ```
-
-
-### 3.3. Output Bin Files
-|  | host_lib library | Example executable file |
-|------------------|------------------|-------------------------|
-| **Linux** | ./build/src/libhostkdp.so | ./build/bin_kdp720/* |
-| **Windows** | .\build\bin\libhostkdp.dll | .\build\bin_kdp720\*.exe |
-
-## 4. Flash Management
-
-### 4.1. Board Overview
+### 3.1. Board Overview
 
 ![](./imgs/getting_start_imgs_720/4_1.png)
 
-### 4.2. Hardware Setting
+### 3.2. Hardware Setting
 
-#### 4.2.1. Connecting UART0 (Program Flash via UART0 Interface)
+#### 3.2.1. Connecting UART0 (Program Flash via UART0 Interface)
 
 UART0: Command Port (either CN10 or J8)
 
 ![](./imgs/getting_start_imgs_720/4_2_1.png)
 
-#### 4.2.2. Connecting JTAG (Program Flash via JTAG/SWD Interface)
+#### 3.2.2. Connecting JTAG (Program Flash via JTAG/SWD Interface)
 
-#### 4.2.3. Connecting USB3.0 for 5V power supply
+#### 3.2.3. Connecting USB3.0 for 5V power supply
 
-### 4.3. Program Flash via UART0 Interface
+### 3.3. Program Flash via UART0 Interface
 
-#### 4.3.1. Flash programmer necessaries
+#### 3.3.1. Flash programmer necessaries
 
 1. Open command terminal for flash programmer execution
 
@@ -293,7 +243,7 @@ UART0: Command Port (either CN10 or J8)
 
 2. install Necessary python modules: kl720_sdk\firmware\utils\flash_programmer\requirements.txt
 
-#### 4.3.2. Edit python verification setting
+#### 3.3.2. Edit python verification setting
 
 1. Check UART port number from device manager
 
@@ -303,7 +253,7 @@ UART0: Command Port (either CN10 or J8)
 
 ![](./imgs/getting_start_imgs_720/4_3_2.png)
 
-#### 4.3.3 Flash Chip Programming (FW + DATA)
+#### 3.3.3 Flash Chip Programming (FW + DATA)
 
 `>> python flash_programmer.py -a flash_fdfr_image.bin`
 
@@ -318,15 +268,15 @@ Afterwards, just wait until all progresses are finished (erase, program, verify)
 **Note**:
 "flash_programmer.py -a" means to do flash chip erase + programming + verification
 
-#### 4.3.4 Flash Verification (optional)
+#### 3.3.4 Flash Verification (optional)
 
 `>> python flash_programmer.py -v flash_fdfr_image.bin`
 
-#### 4.3.5 Flash Erase (optional)
+#### 3.3.5 Flash Erase (optional)
 
 `>> python flash_programmer.py -e`
 
-#### 4.3.6 Flash Partial Programming (optional)
+#### 3.3.6 Flash Partial Programming (optional)
 
 `>> python flash_programmer.py -i 0x00040000 -p fw_scpu.bin`
 
@@ -336,15 +286,15 @@ To program specific bin file to specific flash address
 "-p" means the FW code you would like to program
 
 
-### 4.4. Program Flash via JTAG/SWD Interface
+### 3.4. Program Flash via JTAG/SWD Interface
 
-#### 4.4.1. Jlink programmer necessaries
+#### 3.4.1. Jlink programmer necessaries
 
 Connect JTAG/SWD and USB3.0 for 5V power.
 
 ![](./imgs/getting_start_imgs_720/4_4_1.png)
 
-#### 4.4.2. Edit flash_prog.jlink device setting
+#### 3.4.2. Edit flash_prog.jlink device setting
 
 1. Check your flash type: Winbond SPI Nand flash 
 
@@ -355,19 +305,19 @@ Connect JTAG/SWD and USB3.0 for 5V power.
     EX: flash_fdfr_image.bin, boot_spl.bin, fw_scpu.bin, fw_ncpu.bin, fw_ncpu_dram.bin etc.
 
 
-#### 4.4.3. Double click "flash_prog.bat"
+#### 3.4.3. Double click "flash_prog.bat"
 
 Afterwards, just wait until all progresses are finished (chip erase, program, verify)
 
 ![](./imgs/getting_start_imgs_720/4_4_3.png)
 
-#### 4.4.4. Check programming result
+#### 3.4.4. Check programming result
 
 Please ensure all the results are "O.K.", and enter "qc" to quit and close J-Link commander
 
 ![](./imgs/getting_start_imgs_720/4_4_4.png)
 
-#### 4.4.5. Edit flash_prog_partial.jlink device setting(optional)
+#### 3.4.5. Edit flash_prog_partial.jlink device setting(optional)
 
 To program ncpu fw or update models to specific flash address(sector erase, program, verify)
 
@@ -390,150 +340,735 @@ To program ncpu fw or update models to specific flash address(sector erase, prog
 
 4. Same to "flash_models.bat".
 
-## 5. Run samples
+## 4. host_lib Compile and Build
 
-### 5.1. Run sample on Ubuntu 18.04
+### 4.1. Linux
+#### 4.1.1. Build
+```bash
+mkdir build && cd build
+ # to build opencv_3.4 example: cmake -DBUILD_OPENCV_EX=on ..
+cmake ..
+make -j4
+```
+
+#### 4.1.2. USB Device Permissions
+Add the following to /etc/udev/rules.d/10-local.rules
+```
+KERNEL=="ttyUSB*",ATTRS{idVendor}=="067b",ATTRS{idProduct}=="2303",MODE="0777",SYMLINK+="kneron_uart"
+KERNEL=="ttyUSB*",ATTRS{idVendor}=="1a86",ATTRS{idProduct}=="7523",MODE="0777",SYMLINK+="kneron_pwr"
+SUBSYSTEM=="usb",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0200",MODE="0666"
+```
+
+### 4.2. Windows(MINGW64\MSYS)
+#### 4.2.1. Build
+```bash
+ # to build opencv_3.4 example: cmake -DBUILD_OPENCV_EX=on .. -G"MSYS Makefiles"
+mkdir build && cd build
+cmake .. -G"MSYS Makefiles"
+make -j4
+```
+
+#### 4.2.2. Runtime DLL Environment
+- Set PATH to add CV DLL location in Windows10
+    - Command line example: assume MSYS2 is installed in C:\git-sdk-64\mingw64
+
+    ```
+    set PATH=%PATH%;C:\git-sdk-64\mingw64\bin
+    ```
+
+- Copy additional DLLs to C:\git-sdk-64\mingw64 directory
+
+    ```
+    cp dll\*.dll C:\git-sdk-64\mingw64\bin\
+    ```
+
+
+### 4.3. Output Bin Files
+|  | host_lib library | Example executable file |
+|------------------|------------------|-------------------------|
+| **Linux** | ./build/src/libhostkdp.so | ./build/bin/* |
+| **Windows** | .\build\bin\libhostkdp.dll | .\build\bin\*.exe |
+
+## 5. host_lib Examples
+
+### 5.1. Run examples on Ubuntu 18.04
 
 Define folder path below:
 
-* **EXAMPLE_FOLDER** :
+* **EXAMPLE_PATH** :
 
-    `host_lib/build/bin_kdp720`
+    `host_lib/build/bin`
 
-* **TINY_YOLO3_416_MODEL_FOLDER** :
+* **UPDATE_PATH** :
 
-    `[SDK folder]/models/yolov3_tiny_416`
+    `host_lib/app_binaries/KL720/dfu/ready_to_load`
 
-* **TINY_YOLO3_608_MODEL_FOLDER** :
+* **MODEL_PATH** :
 
-    `[SDK folder]/models/yolov3_tiny_608`
+    | Model | Path |
+    |-----|-----|
+    | **CENTERNET_MOBILENETV2_MODEL_PATH** | host_lib/input_models/KL720/**centernet_mobilenetv2** |
+    | **YOLOV3_416_MODEL_PATH** | host_lib/input_models/KL720/**yolov3_416** |
+    | **YOLOV3_608_MODEL_PATH** | host_lib/input_models/KL720/**yolov3_608** |
+    | **TINY_YOLOV3_416_MODEL_PATH** | host_lib/input_models/KL720/**yolov3_tiny_416** |
+    | **TINY_YOLOV3_608_MODEL_PATH** | host_lib/input_models/KL720/**yolov3_tiny_608** |
+    | **YOLOV5S_MODEL_PATH** | host_lib/input_models/KL720/**kl720_yolov5s** |
+    | **FDFR_MODEL_PATH** | host_lib/input_models/KL720/**fdfr** |
 
-* **YOLO3_416_MODEL_FOLDER** :
+#### 5.1.1. <span style="color:blue;font-weight:bold;">isi examples</span>
 
-    `[SDK folder]/models/yolov3_416`
+##### 5.1.1.1 **kl720_cam_isi_center_app**
 
-* **YOLO3_608_MODEL_FOLDER** :
+* This example needs to have camera plug-in on computer, or it will show the error `Unable to connect to camera.`
 
-    `[SDK folder]/models/yolov3_608`
+* 5.1.1.1.1 **CENTERNET_MOBILENETV2_MODEL**
 
-#### 5.1.1. Run Tiny YOLO v3 416x416 host_lib sample
+    * Copy **models_720.nef** from **CENTERNET_MOBILENETV2_MODEL_PATH** to **UPDATE_PATH**
+    * Open terminal and change path to **EXAMPLE_PATH**
+    * Run `sudo ./kl720_update_nef_model` to update **models_720.nef** into device, logs will be shown in terminal
+    
+        <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
+        adding devices....
+        start kdp host lib....
+        doing test :0....
+        starting update nef model ...
+        update model succeeded...
+        de init kdp host lib....
+        </div>
 
-* Copy the Tiny YOLO v3 model files (**all_models.bin** and **fw_info.bin**) from **TINY_YOLO3_416_MODEL_FOLDER** to **EXAMPLE_FOLDER**
-* Open terminal and change directory to **EXAMPLE_FOLDER**
-* Load model into device
+    * Run `sudo ./kl720_cam_isi_center_app 0 20 200`, logs will be shown in terminal
+    
+        <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
+        adding devices....
+        start kdp host lib....
+        starting ISI mode ...
+        Config model 200...
+        ISI model 200 succeeded (window = 3)...
+        starting ISI inference ...
+        image 1 -> 3 object(s)
+          [0] {2: 0.132813}: (15, 158) (89, 207)
+          [1] {0: 0.109375}: (15, 154) (89, 203)
+          [2] {0: 0.109375}: (15, 158) (89, 207)
+        image 2 -> 0 object(s)
+        ..........
+        ..........
+        ..........
+        image 20 -> 6 object(s)
+          [0] {19: 0.203125}: (20, 27) (616, 609)
+          [1] {19: 0.187500}: (-3, 15) (559, 621)
+          [2] {19: 0.140625}: (11, 17) (573, 619)
+          [3] {14: 0.125000}: (20, 27) (616, 609)
+          [4] {8: 0.117188}: (20, 27) (616, 609)
+          [5] {14: 0.117188}: (-13, 102) (568, 644)
+        => Avg 7.90 FPS (126.65 ms = 2533.00/20)
+        </div>
+    
+    * The arguments of kl720_cam_isi_center_app are:
+    
+        <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[video mode]</span> 0: vga (640x480), 1: svga (800x600), 2: wxga (1280x720)
+        <span style="color:cyan;font-weight:bold;">[run_frames]</span>
+        <span style="color:cyan;font-weight:bold;">[model_id]</span> 200 = KNERON_OBJECTDETECTION_CENTERNET_512_512_3
+        </div>
 
-    1. Execute kl720_dme_load_model
+* 5.1.1.1.2 **YOLOV3_416_MODEL**
 
-        This app will look for fw_info.bin and all_models.bin in same directory and then download all_models.bin through USB interface to KL720 device
+    Repeat section 5.1.1.1.1. by different model:
+    
+    * Model: **YOLOV3_416_MODEL_PATH**.
+    
+    * Model ID: 205 = YOLO_V3_416_416_3
+    
+    * Run `sudo ./kl720_cam_isi_center_app 0 20 205`
+    
+* 5.1.1.1.3 **YOLOV3_608_MODEL**
+    
+    Repeat section 5.1.1.1.1. by different model:
+    
+    * Model: **YOLOV3_608_MODEL_PATH**.
+    
+    * Model ID: 210 = YOLO_V3_608_608_3
+    
+    * Run `sudo ./kl720_cam_isi_center_app 0 20 210`
+    
+* 5.1.1.1.4 **TINY_YOLOV3_416_MODEL**
+    
+    Repeat section 5.1.1.1.1. by different model:
+    
+    * Model: **TINY_YOLOV3_416_MODEL_PATH**.
+    
+    * Model ID: 33 = TINY_YOLO_V3_416_416_3
+    
+    * Run `sudo ./kl720_cam_isi_center_app 0 20 33`
+    
+* 5.1.1.1.5 **TINY_YOLOV3_608_MODEL**
+    
+    Repeat section 5.1.1.1.1. by different model:
+    
+    * Model: **TINY_YOLOV3_608_MODEL**.
+    
+    * Model ID: 34 = TINY_YOLO_V3_608_608_3
+    
+    * Run `sudo ./kl720_cam_isi_center_app 0 20 34`
+    
+* 5.1.1.1.6 **YOLOV5S_MODEL**
+    
+    Repeat section 5.1.1.1.1. by different model:
+    
+    * Model: **YOLOV5S_MODEL_PATH**.
+    
+    * Model ID: 211 = KNERON_YOLOV5S_640_640_3
+    
+    * Run `sudo ./kl720_cam_isi_center_app 0 20 211`
+    
+##### 5.1.1.2 **kl720_isi_center_app**
+    
+* 5.1.1.2.1 **CENTERNET_MOBILENETV2_MODEL**
+    
+    * Copy **models_720.nef** from **CENTERNET_MOBILENETV2_MODEL_PATH** to **UPDATE_PATH**
+    * Open terminal and change path to **EXAMPLE_PATH**
+    * Run `sudo ./kl720_update_nef_model` to update **models_720.nef** into device, logs will be shown in terminal
+    
+        <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
+        adding devices....
+        start kdp host lib....
+        doing test :0....
+        starting update nef model ...
+        update model succeeded...
+        de init kdp host lib....
+        </div>
+    
+    * Run `sudo ./kl720_isi_center_app 0 20 200`, logs will be shown in terminal
+    
+        <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
+        adding devices....
+        start kdp host lib....
+        starting ISI mode ...
+        Config model 200...
+        ISI model 200 succeeded (window = 3)...
+        starting ISI inference ...
+        image 1 -> 8 object(s)
+        image 2 -> 9 object(s)
+        image 3 -> 8 object(s)
+        image 4 -> 9 object(s)
+        ..........
+        ..........
+        ..........
+        image 13 -> 8 object(s)
+        image 14 -> 9 object(s)
+        image 15 -> 8 object(s)
+        image 16 -> 9 object(s)
+        image 17 -> 8 object(s)
+        image 18 -> 9 object(s)
+        image 19 -> 8 object(s)
+        image 20 -> 9 object(s)
+        => Avg 13.07 FPS (76.50 ms = 1530.00/20)
+        </div>
+    
+    * The arguments of kl720_isi_center_app are:
+    
+        <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[parallel_mode]</span> 0: non-parallel, 1: parallel
+        <span style="color:cyan;font-weight:bold;">[run_frames]</span>
+        <span style="color:cyan;font-weight:bold;">[model_id]</span> 200 = KNERON_OBJECTDETECTION_CENTERNET_512_512_3
+        </div>
 
-        `sudo ./kl720_dme_load_model`
+* 5.1.1.2.2 **YOLOV3_416_MODEL**
 
-    2. Logs will be shown in terminal
+    Repeat section 5.1.1.2.1. by different model:
+    
+    * Model: **YOLOV3_416_MODEL_PATH**.
+    
+    * Model ID: 205 = YOLO_V3_416_416_3
+    
+    * Run `sudo ./kl720_isi_center_app 0 20 205`
 
-        ![](./imgs/getting_start_imgs_720/5_1_1_1.png)
+* 5.1.1.2.3 **YOLOV3_608_MODEL**
 
-* Run sample
+    Repeat section 5.1.1.2.1. by different model:
+    
+    * Model: **YOLOV3_608_MODEL_PATH**.
+    
+    * Model ID: 210 = YOLO_V3_608_608_3
+    
+    * Run `sudo ./kl720_isi_center_app 0 20 210`
 
-    1. Execute kl720_isi_yolo with parameters **[parallel]** **[test_times]**
+* 5.1.1.2.4 **TINY_YOLOV3_416_MODEL**
 
-        `sudo ./kl720_isi_yolo 1 10`
+    Repeat section 5.1.1.2.1. by different model:
+    
+    * Model: **TINY_YOLOV3_416_MODEL_PATH**.
+    
+    * Model ID: 33 = TINY_YOLO_V3_416_416_3
+    
+    * Run `sudo ./kl720_isi_center_app 0 20 33`
 
-        (1) **[parallel]** 0 for serial mode and 1 for parallel mode
+* 5.1.1.2.5 **TINY_YOLOV3_608_MODEL**
 
-        (2) **[test_times]** 0 for infinite mode and non-zero is how many times you want to test
+    Repeat section 5.1.1.2.1. by different model:
+    
+    * Model: **TINY_YOLOV3_608_MODEL**.
+    
+    * Model ID: 34 = TINY_YOLO_V3_608_608_3
+    
+    * Run `sudo ./kl720_isi_center_app 0 20 34`
 
-    2. Logs will be shown on terminal
+* 5.1.1.2.6 **YOLOV5S_MODEL**
 
-        ![](./imgs/getting_start_imgs_720/5_1_1_2.png)
+    Repeat section 5.1.1.2.1. by different model:
+    
+    * Model: **YOLOV5S_MODEL_PATH**.
+    
+    * Model ID: 211 = KNERON_YOLOV5S_640_640_3
+    
+    * Run `sudo ./kl720_isi_center_app 0 20 211`
 
-#### 5.1.2. Run Tiny YOLO v3 608x608 host_lib sample
+#### 5.1.2. <span style="color:blue;font-weight:bold;">dme examples</span>
 
-Repeat section 5.1.1 and use the model from folder **TINY_YOLO3_608_MODEL_FOLDER**.
+##### 5.1.2.1 **kl720_dme_async_yolo**
 
-#### 5.1.3. Run YOLO v3 416x416 host_lib sample
+* Open terminal and change path to **EXAMPLE_PATH**
+* Run `sudo ./kl720_dme_async_yolo 1`, logs will be shown in terminal
 
-Repeat section 5.1.1 and use the model from folder **YOLO3_416_MODEL_FOLDER**.
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
+    adding devices....
+    start kdp host lib....
+    doing test :0....
+    starting DME mode ...
+    DME mode succeeded...
+    starting DME configure ...
+    DME configure model [33] succeeded...
+    starting DME inference in [async mode] ...
+    Image 1:
+    Number of class     = 80
+    Number of detection = 1
+    Box[0] (x1, y1, x2, y2, score, class) =  56,  88, 584, 453, 0.841797, 16
+    Image 2:
+    Number of class     = 80
+    Number of detection = 2
+    ..........
+    ..........
+    ..........
+    Image 98:
+    Number of class     = 80
+    Number of detection = 2
+    Box[0] (x1, y1, x2, y2, score, class) = 123,  22, 517, 480, 0.869141, 0
+    Box[1] (x1, y1, x2, y2, score, class) = 458,  13, 610, 115, 0.749023, 62
+    Image 99:
+    Number of class     = 80
+    Number of detection = 1
+    Box[0] (x1, y1, x2, y2, score, class) =  56,  88, 584, 453, 0.841797, 16
+    Image 100:
+    Number of class     = 80
+    Number of detection = 2
+    Box[0] (x1, y1, x2, y2, score, class) = 123,  22, 517, 480, 0.869141, 0
+    Box[1] (x1, y1, x2, y2, score, class) = 458,  13, 610, 115, 0.749023, 62
+    average time on 100 frames: 10.808333 ms/frame, fps: 92.521202
+    DME inference succeeded......
+    de init kdp host lib....
+    </div>
 
-#### 5.1.4. Run YOLO v3 608x608 host_lib sample
+* The argument of kl720_dme_async_yolo is:
 
-Repeat section 5.1.1 and use the model from folder **YOLO3_608_MODEL_FOLDER**.
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[user_id]</span> 0: post-proc in host, 1: post-proc in dsp
+    </div>
 
-#### 5.1.5. Run CenterNet+MobileNet Khost sample
+##### 5.1.2.2 **kl720_dme_serial_yolo**
 
-* The images for testing of this sample are as below.
+* Open terminal and change path to **EXAMPLE_PATH**
+* Run `sudo ./kl720_dme_serial_yolo 1`, logs will be shown in terminal
 
-    `host_lib/test_images/si/image1_small.bin`
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
+    adding devices....
+    start kdp host lib....
+    doing test :0....
+    starting DME inference in [serial mode] ...
+    DME mode succeeded...
+    starting DME configure ...
+    DME configure model[33] succeeded...
+    starting DME inference for [100] times ...
+    Image 1:
+    Number of class     = 80
+    Number of detection = 1
+    Box[1] (x1, y1, x2, y2, score, class) =  56,  88, 584, 453, 0.841797, 16
+    Image 2:
+    Number of class     = 80
+    Number of detection = 1
+    Box[1] (x1, y1, x2, y2, score, class) =  56,  88, 584, 453, 0.841797, 16
+    Image 3:
+    Number of class     = 80
+    ..........
+    ..........
+    ..........
+    Image 98:
+    Number of class     = 80
+    Number of detection = 1
+    Box[1] (x1, y1, x2, y2, score, class) =  56,  88, 584, 453, 0.841797, 16
+    Image 99:
+    Number of class     = 80
+    Number of detection = 1
+    Box[1] (x1, y1, x2, y2, score, class) =  56,  88, 584, 453, 0.841797, 16
+    Image 100:
+    Number of class     = 80
+    Number of detection = 1
+    Box[1] (x1, y1, x2, y2, score, class) =  56,  88, 584, 453, 0.841797, 16
+    average time on 100 frames: 22.024792 ms/frame, fps: 45.403381
+    DME inference succeeded...
+    de init kdp host lib....
+    </div>
 
-    `host_lib/test_images/si/image2_small.bin`
+* The argument of kl720_dme_serial_yolo is:
 
-    `host_lib/test_images/si/image3_small.bin`
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[user_id]</span> 0: post-proc in host, 1: post-proc in dsp
+    </div>
 
-    `host_lib/test_images/si/image4_small.bin`
+#### 5.1.3. <span style="color:blue;font-weight:bold;">fid examples</span>
 
-    `host_lib/test_images/si/image5_small.bin`
+##### 5.1.3.1 **kl720_fid_start**
 
-    `host_lib/test_images/si/image5_large.bin`
+* Copy **models_720.nef** from **FDFR_MODEL_PATH** to **UPDATE_PATH**
+* Open terminal and change path to **EXAMPLE_PATH**
+* Run `sudo ./kl720_update_nef_model` to update **models_720.nef** into device, logs will be shown in terminal
 
-* Image format :
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
+    adding devices....
+    start kdp host lib....
+    doing test :0....
+    starting update nef model ...
+    update model succeeded...
+    de init kdp host lib....
+    </div>
 
-    |  | Format | Resolution |
-    |-----|-----|-----|
-    | **Small** | RGB565 | 512x375 |
-    | **Large** | RGB565 | 1920x1080 |
+* Run `sudo ./kl720_fid_start`, logs will be shown in terminal
 
-* Open terminal and change directory to **EXAMPLE_FOLDER**
-* Send model and config to device
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
+    adding devices....
+    start kdp host lib....
+    doing test :0....
+    starting verify mode ...
+    starting verify mode successfuly, img size:614400...
+    removing user ...
+    removing user succeeded ...
+    starting verify mode ...
+    starting verify mode successfuly, img size:614400...
+    starting register mode 1...
+    register mode 1 succeeded...
+    ..........
+    ..........
+    ..........
+    find matched user id:2.
+    find matched user id:2.
+    starting verify user id all res ...
+    find matched user id:2.
+    starting verify user id all res ...
+    find matched user id:2.
+    starting verify user id all res ...
+    find matched user id:2.
+    verify_user id all res succeeded...
+    starting verify_user_id_generic ...
+    starting verify user id generic succeeded...
+    starting verify_user_id_generic ...
+    starting verify user id generic succeeded...
+    starting verify_user_id_generic ...
+    starting verify user id generic succeeded...
+    de init kdp host lib....
+    </div>
 
-    1. Execute kl720_si_config
+##### 5.1.3.2 **kl720_isi_fid**
 
-        `sudo ./kl720_si_config`
+* Copy **models_720.nef** from **FDFR_MODEL_PATH** to **UPDATE_PATH**
+* Open terminal and change path to **EXAMPLE_PATH**
+* Run `sudo ./kl720_update_nef_model` to update **models_720.nef** into device, logs will be shown in terminal
 
-    2. Logs will be shown in terminal
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
+    adding devices....
+    start kdp host lib....
+    doing test :0....
+    starting update nef model ...
+    update model succeeded...
+    de init kdp host lib....
+    </div>
 
-        ![](./imgs/getting_start_imgs_720/5_1_5_1.png)
+* Run `sudo ./kl720_isi_fid 0 10 3`, logs will be shown in terminal
 
-* Run sample
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
+    adding devices....
+    start kdp host lib....
+    starting ISI mode ...
+    Config model 3...
+    ISI model 3 succeeded (window = 3)...
+    starting ISI inference ...
+    image 1 -> 4 object(s)
+        [0] : class 1, score 0.999023: [231.000000 112.000000, 390.000000 276.000000]
+        [1] : class 1, score 0.999023: [238.000000 111.000000, 399.000000 273.000000]
+        [2] : class 1, score 0.997070: [223.000000 90.000000, 408.000000 279.000000]
+        [3] : class 1, score 0.572266: [225.000000 85.000000, 413.000000 275.000000]
+    image 2 -> 4 object(s)
+        [0] : class 1, score 0.999023: [231.000000 112.000000, 390.000000 276.000000]
+        [1] : class 1, score 0.999023: [238.000000 111.000000, 399.000000 273.000000]
+        [2] : class 1, score 0.997070: [223.000000 90.000000, 408.000000 279.000000]
+        [3] : class 1, score 0.572266: [225.000000 85.000000, 413.000000 275.000000]
+    ..........
+    ..........
+    ..........
+    image 9 -> 4 object(s)
+        [0] : class 1, score 0.999023: [231.000000 112.000000, 390.000000 276.000000]
+        [1] : class 1, score 0.999023: [238.000000 111.000000, 399.000000 273.000000]
+        [2] : class 1, score 0.997070: [223.000000 90.000000, 408.000000 279.000000]
+        [3] : class 1, score 0.572266: [225.000000 85.000000, 413.000000 275.000000]
+    image 10 -> 4 object(s)
+        [0] : class 1, score 0.999023: [231.000000 112.000000, 390.000000 276.000000]
+        [1] : class 1, score 0.999023: [238.000000 111.000000, 399.000000 273.000000]
+        [2] : class 1, score 0.997070: [223.000000 90.000000, 408.000000 279.000000]
+        [3] : class 1, score 0.572266: [225.000000 85.000000, 413.000000 275.000000]
+    => Avg 89.82 FPS (11.13 ms = 111.33/10)
+    </div>
 
-    1. Execute kl720_si_od2pass with parameters **[delay]** **[test_times]**
+* The arguments of kl720_isi_fid are:
 
-        `sudo ./kl720_si_od2pass 100 6`
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[parallel_mode]</span> 0: non-parallel, 1: parallel
+    <span style="color:cyan;font-weight:bold;">[run_frames]</span>
+    <span style="color:cyan;font-weight:bold;">[model_id]</span> 3 = FD, 5 = LM, 10 = FR
+    </div>
 
-        (1) **[delay]** delay time in millisecond
+#### 5.1.4. <span style="color:blue;font-weight:bold;">jpeg examples</span>
 
-        (2) **[test_times]** 0 for infinite mode and non-zero is how many times you want to test
+##### 5.1.4.1 **kl720_jpeg_dec**
 
-    2. Logs will be shown on terminal
+* Open terminal and change path to **EXAMPLE_PATH**
+* Run `sudo ./kl720_jpeg_dec 10 1`, logs will be shown in terminal
 
-        ![](./imgs/getting_start_imgs_720/5_1_5_2.png)
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
+    adding devices....
+    start kdp host lib....
+    Jpeg decoding output: addr(SCPU)=0x869f1e00, size=1843200
+    Jpeg decoding output: addr(SCPU)=0x869f1e00, size=1843200
+    Jpeg decoding output: addr(SCPU)=0x869f1e00, size=1843200
+    Jpeg decoding output: addr(SCPU)=0x869f1e00, size=1843200
+    Jpeg decoding output: addr(SCPU)=0x869f1e00, size=1843200
+    Jpeg decoding output: addr(SCPU)=0x869f1e00, size=1843200
+    ..........
+    ..........
+    ..........
+    Jpeg decoding output: addr(SCPU)=0x869f1e00, size=1843200
+    Jpeg decoding output: addr(SCPU)=0x869f1e00, size=1843200
+    Jpeg decoding output: addr(SCPU)=0x869f1e00, size=1843200
+    Jpeg decoding output: addr(SCPU)=0x869f1e00, size=1843200
+    Jpeg decoding output: addr(SCPU)=0x869f1e00, size=1843200
+    Jpeg decoding output: addr(SCPU)=0x869f1e00, size=1843200
+    Jpeg decoding output: addr(SCPU)=0x869f1e00, size=1843200
+    => Avg 5.54 FPS (180.52 ms = 7220.68/10)
+    Jpeg enc outputs are here: ../../input_images/jpeg_test_stuff/out/
+    tested frames: 40
+    </div>
 
-* **NOTE**
+* The jpeg dec outpus are saved to `../../input_images/jpeg_test_stuff/out/` as below, also the path has **yuvplayer.exe (Windows only)** to view the yuv files.
 
-    The demo program will cycle through 5 LD (512x375) images, doing Centernet on each.
-    For image #5, it will use the object detected and send in the HD version (1920x1080)
-    as image #6, for Mobilenet processing. Command window will show logs for each LD image with detection results and the HD image with classification results.
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">car_1280x720.yuv
+    cat_1280x720.yuv
+    chessboards.yuv
+    pokemon_1280x720.yuv
+    </div>
 
-    The current kl720_si_od2pass is written in similar manner as the isi example that sends in two images (#1 & #2) initially and then receives the results from #1, followed by sending image #3, receives #2, and so on.  At the end, after sending in image #n, it will receive results for #n-1 and #n, followed by a computed FPS number.
+* The arguments of kl720_jpeg_dec are:
 
-    NOTE: The FPS computation is based on the starting time of the test run and concludes when the run is completed (elapsed time / session count) so the drawing speed and PC performance will impact the FPS.  The actual 720 performance is better than the FPS shown.
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[loop times]</span> number of loops to run through all images
+    <span style="color:cyan;font-weight:bold;">[save result to file]</span> 0: does not save to file, run full speed; 1: save to file for verification
+    </div>
 
+##### 5.1.4.2 **kl720_jpeg_enc**
 
-### 5.2. Run sample on Windows 10
+* Open terminal and change path to **EXAMPLE_PATH**
+* Run `sudo ./kl720_jpeg_enc 0 75 10 1`, logs will be shown in terminal
+
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
+    adding devices....
+    start kdp host lib....
+    Jpeg encoding output: addr(SCPU)=0x867f7a00, size=82688
+    Jpeg encoding output: addr(SCPU)=0x867f7a00, size=160321
+    Jpeg encoding output: addr(SCPU)=0x867f7a00, size=64665
+    Jpeg encoding output: addr(SCPU)=0x867f7a00, size=64716
+    Jpeg encoding output: addr(SCPU)=0x867f7a00, size=82688
+    ..........
+    ..........
+    ..........
+    Jpeg encoding output: addr(SCPU)=0x867f7a00, size=64716
+    Jpeg encoding output: addr(SCPU)=0x867f7a00, size=82688
+    Jpeg encoding output: addr(SCPU)=0x867f7a00, size=160321
+    Jpeg encoding output: addr(SCPU)=0x867f7a00, size=64665
+    Jpeg encoding output: addr(SCPU)=0x867f7a00, size=64716
+    => Avg 16.37 FPS (61.10 ms = 2443.96/10)
+    Jpeg enc outputs are here: ../../input_images/jpeg_test_stuff/out/
+    tested frames: 40
+    </div>
+
+* The jpeg enc outpus are saved to `../../input_images/jpeg_test_stuff/out/` as below.
+
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">chessboards.jpg
+    car_1280x720.jpg
+    cat_1280x720.jpg
+    pokemon_1280x720.jpg
+    </div>
+
+* The arguments of kl720_jpeg_enc are:
+
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[resolution]</span> 0: test HD images, 1: test FHD images
+    <span style="color:cyan;font-weight:bold;">[quality]</span> 0 ~ 100
+    <span style="color:cyan;font-weight:bold;">[loop times]</span> number of loops to run through all images
+    <span style="color:cyan;font-weight:bold;">[save result to file]</span> 0: does not save to file, run full speed; 1: save to file for verification
+    </div>
+
+#### 5.1.5. <span style="color:blue;font-weight:bold;">misc examples</span>
+
+##### 5.1.5.1 **kl720_get_kn_num**
+
+* Open terminal and change path to **EXAMPLE_PATH**
+* Run `sudo ./kl720_get_kn_num`, logs will be shown in terminal
+
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
+    adding devices....
+    start kdp host lib....
+    doing test :0....
+    starting get KN number: 0, 0
+    KN number: 12345678
+    de init kdp host lib....
+    </div>
+
+* The **KN number** can be found from logs.
+
+##### 5.1.5.2 **kl720_get_model_info**
+
+* Open terminal and change path to **EXAMPLE_PATH**
+* Run `sudo ./kl720_get_model_info`, logs will be shown in terminal
+
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
+    adding devices....
+    start kdp host lib....
+    doing test :0....
+    Info for model in flash
+    Total model: 1
+    Model 0: ID 33
+    Info for model in DDR
+    Total model: 0
+    de init kdp host lib....
+    </div>
+
+##### 5.1.5.3 **kl720_get_nef_model_metadata**
+
+* Copy **models_720.nef** to **UPDATE_PATH**
+* Open terminal and change path to **EXAMPLE_PATH**
+* Run `sudo ./kl720_get_nef_model_metadata`, logs will be shown in terminal
+
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
+    adding devices....
+    start kdp host lib....
+    doing test :0....
+    starting get metadata from nef model ...
+    platform:
+    target:1
+    crc:0x12345678
+    kn number:0
+    encrypt type:0
+    toolchain version:
+    compiler version:v0.9.0(abcd1234)
+    get metadata from nef model succeeded...
+    de init kdp host lib....
+    </div>
+
+##### 5.1.5.4 **kl720_set_ckey**
+
+* Open terminal and change path to **EXAMPLE_PATH**
+* Run `sudo ./kl720_set_ckey 1234`, logs will be shown in terminal
+
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
+    adding devices....
+    start kdp host lib....
+    doing test :0....
+    starting set ckey: 0, 0x000004D2
+    set_status: 0, 0x00000001
+    Cannot burn eFuse!!!
+    de init kdp host lib....
+    </div>
+
+* Generally user should get KL720 (96board, EVB or dongle) without efuse jumper enabled, so it should show the log **"Cannot burn eFuse!!!"**, it means PASS.
+* If user has KL720 with efuse jumper enabled, it should show the log **"set ckey OK!!!"**
+
+* The argument of kl720_set_ckey is:
+
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[user_id]</span> customized key in decimal format
+    </div>
+
+#### 5.1.6. <span style="color:blue;font-weight:bold;">update examples</span>
+
+##### 5.1.6.1 **kl720_update_app_nef_model**
+
+* Copy **fw_scpu.bin**, **fw_ncpu.bin**, **models_720.nef** to **UPDATE_PATH**
+* Open terminal and change path to **EXAMPLE_PATH**
+* Run `sudo ./kl720_update_app_nef_model`, logs will be shown in terminal
+
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
+    adding devices....
+    start kdp host lib....
+    doing test :0....
+    doing test :0....
+    starting update fw ...
+    update SCPU firmware succeeded...
+    update NCPU firmware succeeded...
+    starting update model ...
+    update model succeeded...
+    starting report sys status ...
+    report sys status succeeded...
+    SCPU firmware_id 01020000 build_id 00000000
+    NCPU firmware_id 00000000 build_id 00000000
+    de init kdp host lib....
+    </div>
+
+* The example updates scpu first, then ncpu, the last is model.
+
+##### 5.1.6.2 **kl720_update_fw**
+
+* Copy **fw_scpu.bin**, **fw_ncpu.bin**, **models_720.nef** to **UPDATE_PATH**
+* Open terminal and change path to **EXAMPLE_PATH**
+* Run `sudo ./kl720_update_fw 1` for scpu, logs will be shown in terminal
+
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
+    adding devices....
+    start kdp host lib....
+    starting update fw ...
+    update firmware succeeded...
+    starting report sys status ...
+    report sys status succeeded...
+    SCPU firmware_id 01020000 build_id 00000000
+    NCPU firmware_id 00000000 build_id 00000000
+    </div>
+
+* Run `sudo ./kl720_update_fw 2` for ncpu, logs are the same as scpu.
+
+* The argument of kl720_update_fw is:
+
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[update_id]</span> 1: SCPU firmware, 2: NCPU firmware
+    </div>
+
+##### 5.1.6.3 **kl720_update_nef_model**
+
+* Copy **models_720.nef** to **UPDATE_PATH**
+* Open terminal and change path to **EXAMPLE_PATH**
+* Run `sudo ./kl720_update_nef_model`, logs will be shown in terminal
+
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
+    adding devices....
+    start kdp host lib....
+    doing test :0....
+    starting update nef model ...
+    update model succeeded...
+    de init kdp host lib....
+    </div>
+
+### 5.2. Run examples on Windows 10
 
 Almost the same as section 5.1 on Ubuntu 18.04, there are 2 parts different.
 
 1. Executable file extension is **exe**.
 
 2. Replace **Ubuntu Terminal** by **Windows Command**.
-
-    ![](./imgs/getting_start_imgs_720/5_2_1_1.png)
-
-    ![](./imgs/getting_start_imgs_720/5_2_1_2.png)
-
-    ![](./imgs/getting_start_imgs_720/5_2_5_1.png)
-
-    ![](./imgs/getting_start_imgs_720/5_2_5_2.png)
-
-
 
 ## 6. Create New SDK Application
 
@@ -6080,3 +6615,38 @@ Parameters
 Returns
 	N/A
 ```
+
+## 9. Power management.
+The Power Management chapter provides functions to allow developers control the power states switching. Two functions to handle power management.
+
+### 9.1. kdrv_power_set_wakeup_src
+```
+/**
+ * @brief       set wake-up source
+ *
+ * @param[in]   wakeup_src_
+ * @return      kdrv_status_t   see @ref kdrv_status_t
+ */
+
+kdrv_status_t kdrv_power_set_wakeup_src(uint32_t wakeup_src_);
+```
+There are four wake up source can be configured in project.h as below.
+```
+#define WKUP_SRC_RTC                        1
+#define WKUP_SRC_EXT_BUT                    1
+#define WKUP_SRC_USB_HIGH_SPEED             1
+#define WKUP_SRC_USB_SUPER_SPEED            1
+```
+
+
+### 9.2. kdrv_power_sleep
+```
+/**
+ * @brief       Set power mode into sleep
+ *
+ * @return      kdrv_status_t   see @ref kdrv_status_t
+ */
+kdrv_status_t kdrv_power_sleep(void);
+```
+
+Apply this function if system need to enter low power mode. During low power state, CPU clock stops and waiting for wake up event occur.
