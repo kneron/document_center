@@ -1265,7 +1265,7 @@ sbtenc.exe optional arguments:
     -s SBTKEYFILE, --sbtkeyfile SBTKEYFILE
                         Secure boot key file(sbtkey.bin)
 Example Command:
-Encrypt firmware with user's sbtkey.bin.
+Encrypt firmware with user's sbtkey file(sbtkey.bin).
 ​    sbtenc.exe -e -i fw_scpu_tmp.bin -o fw_scpu_enc.bin -s keys\sbtkey.bin.
 ```
 
@@ -1273,16 +1273,18 @@ Encrypt firmware with user's sbtkey.bin.
 ### 7.3 KL720 SDK Secure Boot Example
 
 The following are the example projects and post_build_enc.bat for secure boot on the KL720 SDK.
+Please reference the post_build_enc.bat for firmware encryption.
 ```
 Example key. 
     .\firmware\utils\sbtenc\keys\sbtkey.bin
         
 Example projects for SPL, SCPU and NCPU.
 ​    SPL 
-​        .\firmware\platform\kl720\scpu\spl\sn720ev_9x9\scpu_keil\spl_enc.uvprojx
+​        .\firmware\platform\kl720\scpu\spl\sn72096_9x9\scpu_keil\spl_enc.uvprojx
 ​    SCPU 
-        .\firmware\build\example_sbt\scpu\sn720ev_9x9\scpu_keil\scpu_enc.uvprojx
+        .\firmware\build\example_sbt\scpu\sn72096_9x9\scpu_keil\scpu_enc.uvprojx
 ​    NCPU 
+        Xtensa workspace and import HelloWorld project
 ​        .\firmware\build\example_sbt\ncpu\
 ```
 After the project is built, please run flash programming to update the flash data.
