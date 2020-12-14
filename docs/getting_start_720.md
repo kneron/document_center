@@ -6652,30 +6652,3 @@ kdrv_status_t kdrv_power_sleep(void);
 ```
 
 Apply this function if system need to enter low power mode. During low power state, CPU clock stops and waiting for wake up event occur.
-
-## 10. Log debugging by Serial port
-
-### 10.1. Console API
-In KL720 SDK, there are 3 categories of console API to print log messages that help you debug your application.
-
-* **Console API** :
-
-    | Category | API | Usage |
-    |-----|-----|-----|
-    | High Level | **kmdw_printf** | formatted string to logger_thread task |
-    | Midium Level | **printf** | formatted string |
-	| Low Level | **kdrv_uart_write** | string or a char to UART driver |
-
-Because the priority of logger_thread task is osPriorityBelowNormal(16), so the log messages wouldn't be print out on console immediately.
-
-However, **kmdw_printf** can guarantee the log messaes order against tasks context-switch, all log messaes in FIFO-order(Fisrt-In-First-Out).
-
-Strongly suggest the user to use **kmdw_printf** to debug your application.
-
-<span style="color:red;font-weight:bold;">
-Note:
-</span>
-
-<span style="color:red;font-weight:bold;">
-If user directly uses printf() to debug your application, logger_thread would be interrupted causing the disordered log messages on console.
-</span>
