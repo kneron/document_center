@@ -5,8 +5,8 @@
 
 # Kneron Linux Toolchain 520 Manual
 
-** 2020 November **
-** Toolchain 520 v0.10.0 **
+** 2020 December **
+** Toolchain 520 v0.11.0 **
 
 [PDF Downloads](manual_520.pdf)
 
@@ -15,7 +15,7 @@
 KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 520. For better
 environment compatibility, we provide a docker which include all the dependencies as well as the toolchain software.
 
-**This document is compatible with `kneron/toolchain:520_v0.10.0`.**
+**This document is compatible with `kneron/toolchain:520_v0.11.0`.**
 
  *Performance simulation result on NPU:*
 
@@ -84,8 +84,8 @@ You can use the following command to pull the latest toolchain docker for 520.
 docker pull kneron/toolchain:520
 ```
 
-Note that this document is compatible with toolchain v0.10.0. You can find the version of the toolchain in
-`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.10.0, you may need to find the
+Note that this document is compatible with toolchain v0.11.0. You can find the version of the toolchain in
+`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.11.0, you may need to find the
 latest document from the [online document center](http://doc.kneron.com/docs).
 
 ## 2. Toolchain Docker Overview
@@ -246,7 +246,7 @@ cd /workspace/libs/ONNX_Convertor/keras-onnx && python rgba2yynn.py input_hdf5_f
 
 #### 3.1.2 Pytorch to ONNX
 
-The `pytorch2onnx.py` script not only takes `pth` file as the input. It also takes Pytorch exported `onnx` as the input.
+Our scripts not only takes `pth` file as the input. It also takes Pytorch exported `onnx` as the input.
 In fact, we recommend using the Pytorch exported `onnx` file instead of the `pth` file, since the Pytorch do not has a
 very good model save and load API. You can check TIPS below on how to export models to onnx.
 
@@ -281,14 +281,14 @@ python /workspace/libs/ONNX_Convertor/optimizer_scripts/pytorch2onnx.py /data1/p
 
 You need to run the command in [section 3.1.6](#316-onnx-to-onnx-onnx-optimization) after this step.
 
-*__Run pytorch2onnx with onnx file__*
+*__Preprocess with Pytorch generated onnx file__*
 
 Suppose the input file is called `/docker_mount/resnet34.onnx` and you want to save the optimized onnx as
 `/docker_mount/resnet34.opt.onnx`. Here is the example
 command:
 
 ```bash
-python /workspace/libs/ONNX_Convertor/optimizer_scripts/pytorch2onnx.py /data1/pytorch/models/resnet34.onnx /data1/resnet34.opt.onnx
+python /workspace/libs/ONNX_Convertor/optimizer_scripts/pytorch_exported_onnx_preprocess.py /data1/pytorch/models/resnet34.onnx /data1/resnet34.opt.onnx
 ```
 
 You need to run the command in [section 3.1.6](#316-onnx-to-onnx-onnx-optimization) after this step.
@@ -347,7 +347,7 @@ After converting models from other frameworks to onnx format, you need to run th
 model for Kneron hardware, suppose your model is `input.onnx` and the output model is called `output.onnx`:
 
 ```bash
-python /workspace/libs/ONNX_Convertor/optimizer_scripts/onnx2onnx.py input.onnx -o output.onnx --split-convtranspose --add-bn -t
+python /workspace/libs/ONNX_Convertor/optimizer_scripts/onnx2onnx.py input.onnx -o output.onnx --add-bn -t
 ```
 
 *__Crash due to name conflict__*
@@ -561,14 +561,9 @@ batch-compile.
 
 #### 3.5.3 Get the result
 
-In Interactive Folder, you’ll find a folder called `batch_compile`, which contains the output files of the fpAnalyer and
-batch compile. If you have questions for the meaning of the output files, please refer to the FAQ question 7.
-
-Also, to compile the `all_model.bin` and `fw_info.bin` files into `ota.bin`, please use the following command:
-
-```bash
-cd /workspace/scripts && ./generate_ota_binary_for_520 -model fw_info.bin all_model.bin ota.bin
-```
+In Interactive Folder, you’ll find a folder called `batch_compile`, which contains the output files of
+batch compile. The main output are `all_model.bin`, `fw_info.bin` and `model_520.nef`. If you have questions for the meaning of the output files, please refer to the
+FAQ question 7.
 
 ### 3.6 Batch-Compile
 
@@ -602,14 +597,8 @@ And a folder called `batch_compile` will be generated in Interactive Folder, whi
 #### 3.6.3 Get the result
 
 In Interactive Folder, you’ll find a folder called `batch_compile`, which contains the output files of
-batch compile. If you have questions for the meaning of the output files, please refer to the
+batch compile. The main output are `all_model.bin`, `fw_info.bin` and `model_520.nef`. If you have questions for the meaning of the output files, please refer to the
 FAQ question 7.
-
-Also, to compile the `all_model.bin` and `fw_info.bin` files into `ota.bin`, please use the following command:
-
-```bash
-cd /workspace/scripts && ./generate_ota_binary_for_520 -model fw_info.bin all_model.bin ota.bin
-```
 ### 3.7 Other utilities
 
 #### 3.7.1 Convert bin file to png
