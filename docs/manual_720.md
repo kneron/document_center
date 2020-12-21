@@ -6,7 +6,7 @@
 # Kneron Linux Toolchain 720 Manual 
 
 ** 2020 November **
-** Toolchain 720 v0.10.0 **
+** Toolchain 720 v0.11.0 **
 
 [PDF Downloads](manual_720.pdf)
 
@@ -15,7 +15,7 @@
 KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 720. For better
 environment compatibility, we provide a docker which include all the dependencies as well as the toolchain software.
 
-**This document is compatible with `kneron/toolchain:720_v0.10.0`.**
+**This document is compatible with `kneron/toolchain:720_v0.11.0`.**
 
 *Performance simulation result on NPU:*
 
@@ -86,8 +86,8 @@ You can use the following command to pull the latest toolchain docker for 720.
 docker pull kneron/toolchain:720
 ```
 
-Note that this document is compatible with toolchain v0.10.0. You can find the version of the toolchain in
-`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.10.0, you may need to find the
+Note that this document is compatible with toolchain v0.11.0. You can find the version of the toolchain in
+`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.11.0, you may need to find the
 latest document from the [online document center](http://doc.kneron.com/docs).
 
 ## 2. Toolchain Docker Overview
@@ -566,14 +566,9 @@ batch-compile.
 
 #### 3.5.3 Get the result
 
-In Interactive Folder, you’ll find a folder called `batch_compile`, which contains the output files of the fpAnalyer and
-batch compile. If you have questions for the meaning of the output files, please refer to the FAQ question 7.
-
-Also, to compile the `all_model.bin` and `fw_info.bin` files into `dfu.bin`, please use the following command:
-
-```bash
-cd /workspace/scripts && ./generate_dfu_binary_for_720 -model fw_info.bin all_model.bin dfu.bin
-```
+In Interactive Folder, you’ll find a folder called `batch_compile`, which contains the output files of
+batch compile. The main output are `all_model.bin`, `fw_info.bin` and `model_720.nef`. If you have questions for the meaning of the output files, please refer to the
+FAQ question 7.
 
 ### 3.6 Batch-Compile
 
@@ -607,8 +602,8 @@ And a folder called `batch_compile` will be generated in Interactive Folder, whi
 #### 3.6.3 Get the result
 
 In Interactive Folder, you’ll find a folder called `batch_compile`, which contains the output files of
-batch compile. If you have questions for the meaning of the output files, please refer to the FAQ question 7.
-
+batch compile. The main output are `all_model.bin`, `fw_info.bin` and `model_720.nef`. If you have questions for the meaning of the output files, please refer to the
+FAQ question 7.
 ### 3.7 Other utilities
 
 #### 3.7.1 Convert bin file to png
