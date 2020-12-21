@@ -5,7 +5,7 @@
 
 # Kneron Linux Toolchain 520 Manual
 
-** 2020 November **
+** 2020 December **
 ** Toolchain 520 v0.11.0 **
 
 [PDF Downloads](manual_520.pdf)
@@ -347,7 +347,7 @@ After converting models from other frameworks to onnx format, you need to run th
 model for Kneron hardware, suppose your model is `input.onnx` and the output model is called `output.onnx`:
 
 ```bash
-python /workspace/libs/ONNX_Convertor/optimizer_scripts/onnx2onnx.py input.onnx -o output.onnx --split-convtranspose --add-bn -t
+python /workspace/libs/ONNX_Convertor/optimizer_scripts/onnx2onnx.py input.onnx -o output.onnx --add-bn -t
 ```
 
 *__Crash due to name conflict__*
