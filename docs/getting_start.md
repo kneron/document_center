@@ -1021,6 +1021,158 @@ To program specific bin file to specific flash address
     <img src="../imgs/getting_start_imgs/10_4_4.png">
     </div>
 
+## 11. DFW (Device Firmware Write) Boot
+### 11.1. Board Overview
+
+Please refer to chapter 10.1
+
+### 11.2. Hardware Setting
+
+Please refer to chapter 10.2
+
+### 11.3. DFW via UART0 Interface
+
+#### 11.3.1. DFW Boot necessaries
+
+1. Open command terminal for flash programmer execution
+
+   Tool path: kl520_sdk\utils\dfw_boot\uart_dfu_boot.py
+
+2. Install Necessary python modules: kl520_sdk\utils\requirements.txt
+
+3. Limitations: Only the listed argument combinations below are allowed.
+
+#### 11.3.2. Edit python verification setting
+
+Please refer to chapter 10.3.2
+
+#### 11.3.3 Chip Initialize and Send/Start Minion FW
+
+`>> python uart_dfu_boot.py -s`
+
+Please press RESET BTN while you are seeing “Please press reset button!!”
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/11_3_2.png">
+</div>
+
+Afterwards, just wait until seeing “Xmodem sends Minion file DONE!!!”
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/11_3_3.png">
+</div>
+
+#### 11.3.4 DFW fw_scpu.bin to memory address 0x10102000
+
+`>> python uart_dfu_boot.py -i 0x10102000 -p fw_scpu.bin`
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/11_3_4.png">
+</div>
+
+#### 11.3.5 DFW fw_ncpu.bin to memory address 0x28000000
+
+`>> python uart_dfu_boot.py -i 0x28000000 -p fw_ncpu.bin`
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/11_3_5.png">
+</div>
+
+#### 11.3.6 Command to boot up KL520 from memory address 0x10102000
+
+`>> python uart_dfu_boot.py -i 0x10102000 -r`
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/11_3_6.png">
+</div>
+
+**Note**:
+To write specific bin file to specific memory address
+“-i" means the memory index/address
+“-p" means the FW code you would like to program
+
+### 11.4. Design Principle
+
+#### 11.4.1	Memory Space Address
+1. Minion FW starts from 0x10100000 and size must < 0x2000 bytes
+2. SCPU FW starts from 0x10102000
+3. NCPU FW starts from 0x28000000
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/11_4_1.png">
+</div>
+
+#### 11.4.2	Workflow
+1. Send Minion FW through UART0/XMODEM and also process the followings sequence through UART0 interface
+2. Minion is the bridge to handle host command, collect bin data and then save it into internal memory space
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/11_4_2.png">
+</div>
+
+#### 11.4.3 Host control principle
+1. Initial UART COM port with baud rate 115200 and send ‘2’ to tell KL520 to enter 2.UART(XMODEM) mode.
+2. Send Minion.bin through UART by XMODEM protocol.
+Reference: https://pythonhosted.org/xmodem/xmodem.html
+3. Switch to baud rate 921600.
+4. Send SCPU FW to address 0x10102000.
+```
+Buf[n] = Msg_header + data_buf[4096]
+- Msg_header:
+  typedef struct {
+     uint16_t preamble;
+     uint16_t crc16;
+     uint32_t cmd;
+     uint32_t addr;
+     uint32_t len;
+} __attribute__((packed)) MsgHdr;
+- data_buf[4096]: transfer bin by unit 4096 bytes(max.) each time
+- Packet TX Preamble: PKTX_PAMB = 0xA583
+- crc16: calculate checksum from buf[4] to buf[n-1] except preamble and crc16
+- cmd for mem_write: 0x1004
+- cmd for mem_read: 0x1003 (read back for verification)
+- addr: 0x10102000
+- len: 4096 or remainder
+```
+
+5. Send NCPU FW to address 0x28000000.
+Buf[n] = Msg_header + data_buf[4096]
+```
+- Msg_header:
+  typedef struct
+     uint16_t preamble;
+     uint16_t crc16;
+     uint32_t cmd;
+     uint32_t addr;
+     uint32_t len;
+} __attribute__((packed)) MsgHdr;
+- data_buf[4096]: transfer bin by unit 4096 bytes(max.) each time
+- Packet TX Preamble: PKTX_PAMB = 0xA583
+- crc16: calculate checksum from buf[4] to buf[n-1] except preamble and crc16
+- cmd for mem_write: 0x1004
+- cmd for mem_read: 0x1003 (read back for verification)
+- addr: 0x28000000
+- len: 4096 or remainder
+```
+
+6. Send CHIP_RUN command with address set as 0x10102000.
+```
+Buf[n] = Msg_header
+typedef struct {
+     uint16_t preamble;
+     uint16_t crc16;
+     uint32_t cmd;
+     uint32_t addr;
+     uint32_t len;
+} __attribute__((packed)) MsgHdr;
+- Packet TX Preamble: PKTX_PAMB = 0xA583
+- crc16: calculate checksum from buf[4] to buf[n-1] except preamble and crc16
+- cmd for scup_run: 0x1005
+- addr: 0x10102000
+- len: 0
+```
+
+You can refer to kl520_sdk\utils\dfw_boot\uart_dfw_boot.py and kl520_sdk\utils\dfw_boot\setup.py as example to develop code for host controls.
 
 
 
