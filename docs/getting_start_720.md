@@ -255,7 +255,7 @@ UART0: Command Port (either CN10 or J8)
 
 #### 3.3.3 Flash Chip Programming (FW + DATA)
 
-`>> python flash_programmer.py -a flash_fdfr_image.bin`
+`>> python flash_programmer.py -a flash_image.bin`
 
 Please press RESET BTN while you are seeing “Please press reset button!!”
 
@@ -270,7 +270,7 @@ Afterwards, just wait until all progresses are finished (erase, program, verify)
 
 #### 3.3.4 Flash Verification (optional)
 
-`>> python flash_programmer.py -v flash_fdfr_image.bin`
+`>> python flash_programmer.py -v flash_image.bin`
 
 #### 3.3.5 Flash Erase (optional)
 
@@ -302,7 +302,7 @@ Connect JTAG/SWD and USB3.0 for 5V power.
     EX: device KL720-WB-NAND //Winbond Nand flash
 
 3. Copy the bin file to kl720_sdk\firmware\utils\JLink_programmer\bin folder
-    EX: flash_fdfr_image.bin, boot_spl.bin, fw_scpu.bin, fw_ncpu.bin, fw_ncpu_dram.bin etc.
+    EX: flash_image.bin, boot_spl.bin, fw_scpu.bin, fw_ncpu.bin, fw_ncpu_dram.bin etc.
 
 
 #### 3.4.3. Double click "flash_prog.bat"
