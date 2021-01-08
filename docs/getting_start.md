@@ -4,11 +4,11 @@
 
 There are several ways to get the Kneron host example:
 
-1. Get the example folder for Linux environment  
+- Get the example folder for **Linux environment**  
     Prerequisite: Cmake, OpenCV  
     Download the code here: **[Link](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/host_lib/&download=297)**
 
-2. Get the VM for the windows and Mac  
+- Get the VM for the windows and Mac  
      Prerequisite: VMware Workstation  
        Download the VM  total five files :**[Part1](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=276)**  **[Part2](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=277)** **[Part3](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=278)** **[Part4](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=279)**  **[Part5](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=280)**
 
@@ -23,50 +23,62 @@ In the Kneron folder, you will see the following file folders:
 ```
 Kneron-|
        |->app_binaries-|        (KL520 app binaries for example)
-                       |-> tiny_yolo_v3
-                       |-> ota/ready_to_load
+                       |-> KL520/tiny_yolo_v3
+                       |-> KL520/ota/ready_to_load
                        |-> ...
        |-> common               (common shared file between host and KL520)
-       |-> dll                  (dll files for Windows MSYS2)
+       |-> dll                  (dll files for Windows MINGW64)
        |-> docs                 (images in README)
-       |-> example              (host program for different C++ examples)
+       |-> example/KL520        (host program for different C++ examples)
        |-> pkgs                 (Python whl files for different platforms)
        |-> python               (host program for different Python examples)
        |-> src                  (source files for host lib, which communicate with KL520)
-       |-> test_images          (test image binary)
+       |-> input_images         (test image binary)
+       |-> input_models/KL520   (models for examples)
        |-> CMakeList.txt        (top level cmake list)
        |-> README_CPP.md        (simple instruction to build for C++ examples)
        |-> README_Python.md     (simple instruction for Python examples)
 ```
 
+
+
 ## 3. Compile and Build
 
-This project use cmake to build the code. There is top level CMakelist.txt, and src folder and example folder have their own CMake List. Src folder cmake list is for building the host lib to communicate with KL520. Users usually do not need to modify files under this folder unless they would like to modify the communication protocol. For the example folder, users can modify the cmake list to add more test or their application.
+This project use cmake to build the code. There is top level ```CMakeLists.txt```, and ```src``` folder and ```example/KL520``` folder have their own ```CMakeLists.txt```. 
+
+- ```src``` folder cmake list is for building the host lib to communicate with KL520. Users usually do not need to modify files under this folder unless they would like to modify the communication protocol. 
+- For ``` example``` folder, users can modify the cmake list to add more test or their application.
 
 Use Cmake to build:
 
 ```bash
+# in linux
 mkdir build
 cd build
-cmake ../ # or 'cmake -DBUILD_OPENCV_EX=on ..' to build with opencv applicaiton
+cmake ../ # or append '-DBUILD_OPENCV_EX=on ..' to build with opencv applicaiton
 make -j
 ```
 
 And then you will see the `bin` directory, and all the example executables are under here.
 
-## 4. Run the Default Application Tiny Yolo v3
-Tiny Yolo v3 is an object detection algorithm, and it can classify 80 different classes. Kneron device come with build-in binaries that can run 608x608 RGB565 image in Tiny Yolo v3 object detection.
 
-Here is the class list: Link
+
+## 4. Run the Default Application Tiny Yolo v3
+Tiny Yolo v3 is an object detection algorithm, and it can classify 80 different classes. 
+
+Kneron device come with build-in binaries that can run 608x608 RGB565 image in Tiny Yolo v3 object detection.
+
+
 
 ### 4.1 C++ Example
 
-Let’s take a look at the C++ example program, isi_async_parallel_yolo.cpp. In this test, we send two different images image_608_1.bin and image_608_2.bin (two RGB565 bianries) into KL520, and get the detection results back.
+Let’s take a look at the C++ example program, ```kl520_isi_async_parallel_yolo.cpp```. 
+In this test, we send two different images ```cars_street_at_night_608x608_rgb565.bin``` and ```car_park_barrier_608x608_rgb565.bin`` (two RGB565 binaries) into KL520, and get the detection results back.
 
 ```cpp
 #define TEST_ISI_DIR        "../../test_images/odty/"
-#define ISI_IMAGE_FILE      (TEST_ISI_DIR "image_608_1.bin")
-#define ISI_IMAGE_FILE_T    (TEST_ISI_DIR "image_608_2.bin")
+#define ISI_IMAGE_FILE      ("../../input_images/cars_street_at_night_608x608_rgb565.bin")
+#define ISI_IMAGE_FILE_T    ("../../input_images/car_park_barrier_608x608_rgb565.bin")
 #define IMG_SOURCE_W        608
 #define IMG_SOURCE_H        608
 #define ISI_IMG_SIZE        (IMG_SOURCE_W * IMG_SOURCE_H * 2)
@@ -121,7 +133,7 @@ if (n_len <= 0) {
 }
 ```
 
-Since the KL520 application design use image buffer to pipeline the image transfer and npu processing, we can fill up the image buffer first. Therefore, we can use kdp_isi_inference to send images to KL520, without getting the result back yet.
+Since the KL520 application design uses image buffer to pipeline the image transfer and npu processing, we can fill up the image buffer first. Therefore, we can use kdp_isi_inference to send images to KL520, without getting the result back yet.
 
 ```cpp
 printf("starting ISI inference ...\n");
@@ -163,6 +175,8 @@ while (loop) {
 Then the program must wait and get back the result then send the next image. It uses kdp_isi_retrieve_res to get the result, then check the result if it matches the expected results. After that, it uses kdp_isi_inference to send another images to KL520 to process. The loop is set to 1000 to estimate the average FPS of 1000 images.
 
 ```cpp
+    ...
+        
     ret = do_get_result(dev_idx, img_id_rx, &error_code, &result_size, inf_res);
     if (ret)
         return ret;
@@ -218,19 +232,37 @@ if (1) {
 
 Run the executable binaries, and we can see initialization messages, and the buffer depth is 3. Image index is keep increasing and the expected 5 and 3 objects are toggling because we ping pong transfer two images, so the results are ping pong as 5 objects and 3 objects as well
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/4_1_1.png">
-</div>
+```bash
+Kneron@Ubuntu$ ./kl520_isi_async_parallel_yolo
+init kdp host lib log....
+adding devices....
+start kdp host lib....
+doing test :0....
+starting ISI mode ...
+ISI mode succeeded (window = 3)...
+starting ISI inference ...
+image 1234 -> 5 object(s)
+image 1235 -> 3 object(s)
+image 1236 -> 5 object(s)
+image 1237 -> 3 object(s)
+```
 
 Lastly, we can see the average FPS for running 1000 images is 12.4, each image take average 81ms to finish.
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/4_1_2.png">
-</div>
+```bash
+image 2232 -> 5 object(s)
+image 2233 -> 5 object(s)
+
+=> Avg 12.42 FPS (80.52 ms = 80508.31/1000)
+
+de init kdp host lib....
+```
+
+
 
 ### 4.2. Python Example
 
-Let’s take a look at the Python example program, cam_isi_async_parallel_yolo.py. In this test, we send frames (RGB565) of camera into KL520, and get the detection results back.
+Let’s take a look at the Python example program (path=```python/examples_kl520```), ```cam_isi_async_parallel_yolo.py```. In this test, we send frames (RGB565) of camera into KL520, and get the detection results back.
 
 Setup video capture device for the image width and height
 
@@ -286,65 +318,129 @@ print("Average FPS is ", fps)
 
 Run the Python example, and we can see initialization messages, and the buffer depth is 3. Image index keeps increasing and the number of detected objects are outputted
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/4_2_1.png">
-</div>
+```bash
+$ python3 main.py -t cam_isi_aync_parallel_yolo
+adding devices....
+
+start kdp host lib....
+
+Task:    cam_isi_aysnc_parallel_yolo
+starting ISI mode...
+
+ISI mode succeeded (window = 3)...
+
+starting ISI inference ...
+
+Companion image buffer depth =  3
+image 1234 -> 1 object(s)
+
+image 1235 -> 1 object(s)
+
+image 1236 -> 1 object(s)
+
+image 1237 -> 2 object(s)
+```
 
 Lastly, we can see the average FPS for running 1000 images is 12.2, each image take average 82ms to finish.
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/4_2_2.png">
-</div>
+```bash
+image 2233 -> 2 object(s)
+
+Parallel inference average estimat runtime is  0.08180183029174805
+Average FPS is  12.224665345915584
+de init kdp host lib....
+```
+
+
+
 
 ## 5. Run OTA to Swap Another Pre-build Application Binary Mask Face Detection
 
 Besides Tiny Yolo v3, Kneron also provides many other applications:
 
-* Age_gender: detect faces and return age and gender estimation of the target face
-* Objection_detection: Kneron 8 class detections
-* Pedestrian_detection: Kneron pedestrian detection
-* Ssd_fd: Mask face detection, detect face with mask and without mask
+* **Age_gender**: detect faces and return age and gender estimation of the target face
+* **Objection_detection**: Kneron 8 class detections
+* **Pedestrian_detection**: Kneron pedestrian detection
+* **ssd_fd**: Mask face detection, detect face with mask and without mask
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/5_1.png">
-</div>
+```shell
+Kneron@ubuntu:~/kneron/app_binaries/KL520$ ls
+age_gender/  fdfr/  object_detection/  ota/  pedestrian_detection/  readme.txt  ssd_fd_lm/  tiny_yolo_v3/
+```
 
-In order to swap the KL520 application, Kneron provides update application feature to update the firmware via USB. Here is an introduction how to do it.
 
-First, user can copy the target application into app_binaries/ota/ready_to_load. Here we will load the mask fd application into KL520. As you can see, there are 3 files, fw_ncpu.bin fw_scpu.bin, and model_ota.bin. Fw_ncpu.bin and Fw_scpu.bin are program binaries that run in the two cpu in KL520. And model_ota.bin is the binary for deep learning models.
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/5_2.png">
-</div>
+In order to swap the KL520 application, Kneron provides update application feature to update the firmware via USB. 
 
-Then we can go to build/bin, and run ./update_app. This will load all 3 binaries into KL520, and program them into the flash so that even without power, the KL520 can still maintain the applications. Since the model are relatively large and flash programming is slow, users need to wait for couple mins to update the application. It takes about 3 minutes here.
+Here is an introduction how to do it.
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/5_3.png">
-</div>
+First, user can copy the target application into ``app_binaries/KL520/ota/ready_to_load``. Here we will load the mask fd application into KL520. 
+As you can see, there are 3 files, 
+
+- ``fw_ncpu.bin`` ``fw_scpu.bin`` from parent folders, are program binaries that run in the two cpu cores in KL520.
+- ``models_520.nef`` from model folder, is the binary for deep learning models
+
+```shell
+Kneron@ubuntu:~/kneron/app_binaries/KL520/ota/ready_to_load$ cp ../../ssd_fd_lm/*.bin .
+Kneron@ubuntu:~/kneron/app_binaries/KL520/ota/ready_to_load$ cp ../../../../input_models/KL520/ssd_fd_lm/models_520.nef .
+Kneron@ubuntu:~/kneron/app_binaries/KL520/ota/ready_to_load$ ls
+fw_ncpu.bin  fw_scpu.bin  models_520.nef
+```
+
+
+
+Then we can go to ``build/bin``, and run ``./update_app``. This will load all 3 binaries into KL520, and program them into the flash so that even without power, the KL520 can still maintain the applications. Since the model are relatively large and flash programming is slow, users need to wait for couple mins to update the application. It takes about 3-5 minutes here.
+
+```shell
+Kneron@ubuntu:~/kneron/build/bin$ ./update_app_nef_model
+init kdp host lib log....
+adding devices....
+start kdp host lib....
+doing test :0....
+starting update fw ...
+update SCPU firmware successed...
+update NCPU firmware successed...
+starting update model :1...
+update model succeeded...
+starting report sys status ...
+report sys status succeeded...
+
+SCPU firmware_id 01040000 build_id 00000000
+SCPU firmware_id 01030001 build_id 00000002
+
+de init kdp host lib....
+```
+
+
 
 As you can see the log, the SCPU and NCPU firmware are updated successfully, and model update successfully. Last, it will print out the SCPU firmware id and NCPU firmware id to ensure it is updated with the correct version of code.
-After KL520 is updated with the mask face detection, we can start to run this corresponding example. We are going to try the interactive with camera example, therefore, we will make sure we build the apps require opencv. Make sure to do “cmake -DBUILD_OPENCV_EX=on ..” and “make -j” again to make the cam application.
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/5_4.png">
-</div>
+After KL520 is updated with the mask face detection, we can start to run this corresponding example. We are going to try the interactive with camera example, therefore, we will make sure we build the apps require **opencv**. Make sure to do ``cmake -DBUILD_OPENCV_EX=on `` and ``make -j`` again to make the cam application.
+
+```shell
+Kneron@ubuntu:~/kneron/build/bin$ ./k520_cam_isi_async_ssd_fd
+```
+
+
 
 A Camera output window will pop out and use light blue box to get the human face.
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/5_5.png">
+<img src="./imgs/getting_start_imgs/5_5.png">
 </div>
 
 And when you put on the mask, there will be a green bounding box around the human face. After 1000 inference, the program will stop.
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/5_6.png">
+<img src="./imgs/getting_start_imgs/5_6.png">
 </div>
 
-## 6. Build new model binary based on MobileNet V2 image classification 
 
-Now, let's try to use Kneron tool chain to build a model binary for a public model. In this example, we pick the MobileNet V2 from Keras application. This is a model that doing Image classification, which is 1000 classes from ImageNet. we can get a public MobileNetV2 keras model by executing Python code on Keras 2.2.4.
+## 6. Build New Model Binary Based on MobileNet V2 Image Classification 
+
+Now, let's try to use **Kneron tool chain** to build a model binary for a public model. 
+
+In this example, we pick the MobileNet V2 from Keras application. This is a model that doing Image classification, which is 1000 classes from ImageNet. we can get a public MobileNetV2 keras model by executing Python code on Keras 2.2.4.
 
 
 ```python
@@ -354,32 +450,51 @@ model = MobileNetV2(include_top=True, weights='imagenet')
 model.save('MobileNetV2.h5')
 ```
 
-### 6.1. Model Convertion
+
+
+### 6.1. Model Conversion
+
 After getting the keras model, copy the model and a folder of jpg/png images which fall into the categories of ImageNet to /data1 of vm. The recommended size of images is more than 100, which the tools will use it for quantization.
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/6_1.png">
-</div>
+```shell
+Kneron@ubuntu:~/data1$ ls
+images/ MobileNetV2.h5
+```
+
+
 
 Run toolchain in vm and map ~/data1 folder of vm into /data1 of toolchain
 
-       sudo docker run -it --rm -v ~/data1:/data1 kneron/toolchain:linux_command_toolchain
+    $ sudo docker run -it --rm -v ~/data1:/data1 kneron/toolchain:linux_command_toolchain
+
+
 
 After that, we will enter toolchain docker container, and it is at workspace/. Check if the /data1 is mapped with the external folder successfully or not.
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/6_2.png">
-</div>
+```shell
+root@6093d5502017:/workspace# ls
+README.md	libs		onnx-keras		requirements.txt		tmp
+examples	onnx-caffe	onnx-tensorflow	scripts
+root@6093d5502017:/workspace# cd /data1
+root@6093d5502017:/data1# ls
+images/ MobileNetV2.h5
+```
+
+
 
  Then we can run toolchain in vm to convert the keras model into onnx model. The command is:
 
-       python /workspace/onnx-keras/generate_onnx.py -o /data1/MobileNetV2.h5.onnx /data1/keras/MobileNetV2.h5 -O --duplicate-shared-weights
+    $ python /workspace/onnx-keras/generate_onnx.py -o /data1/MobileNetV2.h5.onnx /data1/keras/MobileNetV2.h5 -O --duplicate-shared-weights
+
+
 
 Then we can see that a MobileNetV2 ONNX model is created under /data1
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/6_3.png">
-</div>
+```shell
+root@6093d5502017:/data1# ls
+images/ 	MobileNetV2.h5	 MobileNetV2.h5.onnx
+```
+
 
 
 ### 6.2. Model editing (remove softmax at the end)
@@ -387,21 +502,23 @@ Then we can see that a MobileNetV2 ONNX model is created under /data1
 When we check the MobileNetV2 ONNX model with Netron, we can see that the network's final output layer is a softmax layer, which cannot be handled by KL520 NPU. It is very common to see the softmax layer at the end of classification network, but it is not computation extensive layer, and we can move this softmax layer into network's post process.  
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/6_4.png">
+<img src="./imgs/getting_start_imgs/6_4.png">
 </div>
 
 Toolchain provides the Python script (onnx2onnx.py) to optimize the onnx model, and the script (editor.py) to cut layers starting from a specific layer. To remove the softmax layer, we can just simply run the onnx2onnx.py as follow:
 
-       python /workspace/scripts/onnx2onnx2.py /data1/MobileNetV2.h5.onnx -o /data1/MobileNetV2_opt.h5.onnx
+    $ python /workspace/scripts/onnx2onnx2.py /data1/MobileNetV2.h5.onnx -o /data1/MobileNetV2_opt.h5.onnx
 
 After running onnx2onnx.py script, the optimized model MobileNetV2_opt.h5.onnx is saved in /data1. The final layer of the optimized onnx model is Gemm layer now.
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/6_5.png">
-</div>
+```shell
+root@6093d5502017:/data1# ls
+images/ 	MobileNetV2.h5	 MobileNetV2.h5.onnx   MobileNetV2_opt.h5.onnx  
+```
+
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/6_6.png">
+<img src="./imgs/getting_start_imgs/6_6.png">
 </div>
 
 
@@ -409,39 +526,66 @@ After running onnx2onnx.py script, the optimized model MobileNetV2_opt.h5.onnx i
 
 Copy the /workspace/examples/batch_compile_input_params.json into /data1 and modify it before batch-compiling MobileNetV2.
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/6_7.png">
-</div>
+```shell
+root@6093d5502017:/data1# cp /workspace/examples/batch_compile_input_params.json .
 
-The batch_compile_input_params.json is modified as:  
+root@6093d5502017:/data1# ls
+images/ 				 MobileNetV2.h5	 				  MobileNetV2.h5.onnx   
+MobileNetV2_opt.h5.onnx  batch_compile_input_params.json
+```
 
-specify the input_image_folder to be "data1/images", this give the image folder path for the tool to do fixed point analysis.
+
+
+
+The ``batch_compile_input_params.json`` is modified as:  
+
+specify the input_image_folder to be ``data1/images``, this give the image folder path for the tool to do fixed point analysis.
 
 specify the model input width and height to be "224" and "224", user needs to modify this to fit thier models input size.
 
 tensorflow for public MobileNetV2 as img_preprocess_method. this implies using tensorflow default preprocess, which is `X/127. 5 -1` 
 
-specify the model "input_onnx_file" to be "/data1/MobileNetV2_opt.h5.onnx", which is the model we just edited.
+specify the model "input_onnx_file" to be ``/data1/MobileNetV2_opt.h5.onnx``, which is the model we just edited.
 
 Modify the model_id to be 1000 for MobileNetV2.
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/6_8.png">
-</div>
+```json
+{
+    "input_image_folder": ["/data1/images"],
+    "img_channel": ["RGB"],
+    "model_input_width": [224],
+    "model_input_height": [224],
+    "img_preprocess_method": ["tensorflow"],
+    "input_onnx_file": ["/data1/MobileNetV2_opt.h5.onnx"],
+    "keep_aspect_ratio": ["False"],
+    "command_addr": "0x30000000",
+    "weight_addr": "0x40000000",
+    "sram_addr": "0x50000000",
+    "dram_addr": "0x60000000",
+    "whether_encryption": "No",
+    "encryption_key": "0x12345678",
+    "model_id_list": [1000],
+    "model_version_list": [1],
+    "add_norm_list": ["False"],
+    "dedicated_output_buffer": "True"
+}
+```
+
 
 Execute the command to batch-compile MobileNetV2 model. 
 
-       cd /workspace/scripts && ./fpAnalyserBatchCompiler.sh.x       
+    $ cd /workspace/scripts && ./fpAnalyserBatchCompiler.sh.x       
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/6_9.png">
+<img src="./imgs/getting_start_imgs/6_9.png">
 </div>
 
 After batch-compilation, a new batch_compile folder with all_models.bin and fw_info.bin is present in /data1. These two binaries will be used for running the model in KL520 later.  
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/6_10.png">
+<img src="./imgs/getting_start_imgs/6_10.png">
 </div>
+
 
 ### 6.4. Estimated NPU Run Time for Model
 
@@ -449,39 +593,92 @@ We can use Toolchain to get the evaluation result of NPU performance for Kneron 
 Firstly copy the input_params.json under /workspace/examples to /data1. Same as doing batch compile
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/6_11.png">
+<img src="./imgs/getting_start_imgs/6_11.png">
 </div>
-
 Modify the input_params.json as:  tensorflow for public MobileNetV2 as img_preprocess_method, False for add_norm.
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/6_12.png">
-</div>
+```json
+{
+    "input_image_folder": ["/data1/images"],
+    "img_channel": ["RGB"],
+    "model_input_width": [224],
+    "model_input_height": [224],
+    "img_preprocess_method": ["tensorflow"],
+    "input_onnx_file": ["/data1/MobileNetV2_opt.h5.onnx"],
+    "keep_aspect_ratio": ["False"],
+    "command_addr": "0x30000000",
+    "weight_addr": "0x40000000",
+    "sram_addr": "0x50000000",
+    "dram_addr": "0x60000000",
+    "whether_encryption": "No",
+    "encryption_key": "0x12345678",
+    "simulator_img_file": "/data1/images/n01503061_3560_bird.jpg",
+    "emulator_img_folder": "/data1/images",
+    "cmd_bin": "/data1/compiler/command.bin",
+    "weight_bin": "/data1/compiler/weight.bin",
+	"setup.bin": "/data1/compiler/setup.bin",
+    "whether_npu_preprocess": false,
+    "raw_img_fmt": "IMG",
+    "radix": 8,
+    "pad_mode": 1,
+    "roate":0,
+    "pCrop": {
+        "crop_x": 0,
+        "crop_y": 0,
+        "crop_w": 0,
+        "crop_h": 0,
+        "bCropFirstly": false
+    },
+    "imgSize":{
+        "width": 640,
+        "height": 480
+    },
+    "add_norm": "False"
+}
+```
+
+
+
 
 Execute the command to run evaluation for MobileNetV2 model. 
 
-       cd /workspace/scripts && ./fpAnalyserCompilerIpevaluator.sh.x
+```shell
+ $ cd /workspace/scripts && ./fpAnalyserCompilerIpevaluator.sh.x
+```
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/6_13.png">
+<img src="./imgs/getting_start_imgs/6_13.png">
 </div>
-
 After the evaluation process is finished, we can get the evaluation_result.txt under /data1/compiler.
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/6_14.png">
-</div>
+```shell
+root@92ace5540942:/data1# cd complier/
+root@92ace5540942:/data1/complier# ls
+command.bin  evaluation_result.txt  setup.bin  weight.bin
+```
+
+
 
 The evaluation result does not count in the time to do pre/post process and cpu node process. For this MobileNetV2 model, it will take around 15.7ms (total time)
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/6_15.png">
-</div>
+```
+[Evaluation Result]
+estimate FPS float = 63.6315
+total time = 15.7105 ms
+total theoretical covolution time = 3.81611 ms
+average DRAM bandwidth = 0.386193 GB/s
+MAC efficiency to total time = 24.2901 %
+MAC idle time = 2.3849 ms
+MAC running time = 13.3256 ms
+```
+
 
 
 ## 7. Run Model Binaries in DME Mode 
 
-Please refer to the example code in example/dme_async_mobilenet_classification.cpp
+Please refer to the example code in ``example/KL520/kl520_dme_async_mobilenet_classification``
+
+
 
 ### 7.1. DME mode Introduction
 
@@ -491,11 +688,13 @@ In host side, 5 APIs are used for DME.
 
 | API          | Description   | Note         |
 | ------------ | ------------- | ------------ |
-| kdp_start_dme | Send model data of all_models.bin/fw_info.bin to Kneron device | Call once |
+| kdp_start_dme | Send model data of **models_520.nef**  to Kneron device | Call once |
 | kdp_dme_configure	| Send DME configuration to Kneron device	| Call once |
 | kdp_dme_inference	| Send image data to Kneron device and start inference	| Call multiple times to send image for inference |
 | kdp_dme_get_status	 | Poll the completed status from Kneron device	| Call multiple times after kdp_dme_inference |
 | kdp_dme_retrieve_res | Retrieve the inference result (fix-point data) back to host | Call multiple times after kdp_dme_get_status |
+
+
 
 ### 7.2. DME Mode Pre/Post Process 
 
@@ -505,15 +704,17 @@ Kneron provides default pre/post process function in firmware code if it is run 
 
 The default preprocess function finish the tasks: 
 
-Reformat: Transfer original format, such as RGB565 or YUV422, to RGBA8888 
+**Reformat**: Transfer original format, such as RGB565 or YUV422, to RGBA8888 
 
-Resize: Resize image size to model input size 
+**Resize**: Resize image size to model input size 
 
-Subtract: Subtract 128 for all data if configured 
+**Subtract**: Subtract 128 for all data if configured 
 
-Right-shift for 1 bit if configured 
+**Right-shift for 1 bit** if configured 
 
 Because this MobileNetV2 model needs to apply tensorflow preprocess, which is `X/127.5 -1`, it is similar to apply DME default pre process. In section 7.3, we will see how to config the pre process for this MobileNetV2 model.
+
+
 
 ### Post Process
 
@@ -521,63 +722,186 @@ The default postprocess function in DME mode would send back the original output
 
 finish the tasks: 
 1. KL520 send the fix-point data of all output nodes to one with the sequence of total_out_number + (c/h/w/radix/scale) + (c/h/w/radix/scale) + ... + fp_data + fp_data + ...
-With this data format, host needs to converts it back to a shared structure `struct kdp_image_s` that can easily identify each output nodes parameters, such as channel, height, width, radix, and scales.
+    With this data format	, host needs to converts it back to a shared structure `struct kdp_image_s` that can easily identify each output nodes parameters, such as channel, height, width, radix, and scales.
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/7_2_1.png">
-</div>
+  ```c
+      // Prepare for postprocessing
+      int output_num = inf_res[0];
+      struct output_node_params *p_node_info;
+      int r_len, offset;
+      struct imagenet_result_s *det_res = (struct imagenet_result_s *)calloc(IMAGENET_TOP_MAX, sizeof(imagenet_result_s));
+  
+      struct kdp_image_s *image_p = (struct kdp_image_s *)calloc(1, sizeof(struct kdp_image_s));
+      offset = sizeof(int) + output_num * sizeof(output_node_params);
+  
+      // Struct to pass the parameters
+      RAW_INPUT_COL(image_p) = post_par.raw_input_col;
+      RAW_INPUT_ROW(image_p) = post_par.raw_input_row;
+      DIM_INPUT_COL(image_p) = post_par.model_input_row;
+      DIM_INPUT_ROW(image_p) = post_par.model_input_row;
+      RAW_FORMAT(image_p) = post_par.image_format;
+      POSTPROC_RESULT_MEM_ADDR(image_p) = (uint32_t *)det_res;
+      POSTPROC_OUTPUT_NUM(image_p) = output_num;
+  
+      for (int i = 0; i < output_num; i++) {
+          if (check_ctl_break())
+              return;
+          p_node_info = (struct output_node_params *)(inf_res + sizeof(int) + i * sizeof(output_node_params));
+          r_len = p_node_info->channel * p_node_info->height * round_up(p_node_info->width);
+  
+          POSTPROC_OUT_NODE_ADDR(image_p, i) = inf_res + offset;
+          POSTPROC_OUT_NODE_ROW(image_p, i) = p_node_info->height;
+          POSTPROC_OUT_NODE_CH(image_p, i) = p_node_info->channel;
+          POSTPROC_OUT_NODE_COL(image_p, i) = p_node_info->width;
+          POSTPROC_OUT_NODE_RADIX(image_p, i) = p_node_info->radix;
+          POSTPROC_OUT_NODE_SCALE(image_p, i) = p_node_info->scale;
+  
+          offset = offset + r_len;
+      }
+  
+  ```
+
 
 2. Host will call actual model post process function `post_imgnet_classificaiton()` in example/post_processing_ex.c
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/7_2_2.png">
-</div>
+   ```c
+   int post_imgnet_classification(int model_id, struct kdp_image_s *image_p)
+   {
+       struct imagenet_post_globals_s *gp = &u_globals.imgnet;
+       uint8_t *result_p;
+       int i, len, data_size, div;
+       float scale;
+   
+       data_size = (POSTPROC_OUTPUT_FORMAT(image_p) & BIT(0)) + 1;     /* 1 or 2 in bytes */
+   
+       int8_t *src_p = (int8_t *)POSTPROC_OUT_NODE_ADDR(image_p, 0);
+       int grid_w = POSTPROC_OUT_NODE_COL(image_p, 0);
+       len = grid_w * data_size;
+       int grid_w_bytes_aligned = round_up(len);
+       int w_bytes_to_skip = grid_w_bytes_aligned - len;
+       len = grid_w_bytes_aligned;
+   
+       int ch = POSTPROC_OUT_NODE_CH(image_p, 0);
+   
+       /* Convert to float */
+       scale = POSTPROC_OUT_NODE_SCALE(image_p, 0);
+       div = 1 << POSTPROC_OUT_NODE_RADIX(image_p, 0);
+       for (i = 0; i < ch; i++) {
+           gp->temp[i].index = i;
+           gp->temp[i].score = (float)*src_p;
+           gp->temp[i].score = do_div_scale(gp->temp[i].score, div, scale);
+           src_p += data_size + w_bytes_to_skip;
+       }
+   
+       softmax(gp->temp, ch);
+       qsort(gp->temp, ch, sizeof(struct imagenet_result_s), inet_comparator);
+   
+       result_p = (uint8_t *)(POSTPROC_RESULT_MEM_ADDR(image_p));
+       len = sizeof(struct imagenet_result_s) * IMAGENET_TOP_MAX;
+       memcpy(result_p, gp->temp, len);
+       return len;
+   }
+   ```
+
+   
 
 In KL520, the results are in 16-byte aligned format for each row, and these values are in fixed point. As a result, host need to convert these values back to floating by using the radix and scale value for each output node. `do_div_scale()` is for this purpose.
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/7_2_3.png">
-</div>
+```c
+static float do_div_scale(float v, int div, float scale)
+{
+	return ((v / div) / scale);
+}
+```
+
+
 
 After converting all the output values back to float, host post process program need to add back the softmax layer, which was cut in model editor (onnx2onnx.py). Lastly, host use qsort to find the top N probability from the 1000 classes. 
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/7_2_4.png">
-</div>
+```c
+softmax(gp->temp, ch);
+qsort(gp->temp, ch, sizeof(struct imagenet_result_s), inet_comparator);
+```
+
+
+
 
 ### 7.3. How to config DME based on the input images
 
-After getting the parameters of input images and models, we can set DME configuration and postprocessing configuration as shown in the example code of dme_async_mobilenet_classification.cpp. 
+After getting the parameters of input images and models, we can set DME configuration and postprocessing configuration as shown in the example code of kl520_	dme_async_mobilenet_classification.cpp. 
 
 The following settings mean that the host would send 640x480 RGB565 image to KL520, and KL520 will resize it to 224x224 for model input. Then KL520 will send back raw NPU output back to Host, which suggests host side need to perform post process in order to get the results. Please note that when we compile the model in section 6, we assign model id 1000 to this MobileNetV2 model, and we need to pass this model id in the dme config as well.
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/7_3_1.png">
-</div>
+```c
+// parameters for postprocessing
+post_par.raw_input_col   = 640;
+post_par.raw_input_row   = 480;
+post_par.model_input_row = 224;
+post_par.model_input_col = 224;
+post_par.image_format    = IMAGE_FORMAT_SUB128 | NPU_FORMAT_RGB565 | IMAGE_FORMAT_RAW_OUTPUT \
+                           | IMAGE_FORMAT_CHANGE_ASPECT_RATIO;
+
+// dme configuration
+dme_cfg.model_id     = IMAGENET_CLASSIFICATION_MOBILENET_V2_224_224_3;// model id when compiling in toolchain
+dme_cfg.output_num   = 1;                             // number of output node for the model
+dme_cfg.image_col    = post_par.raw_input_col;
+dme_cfg.image_row    = post_par.raw_input_row;
+dme_cfg.image_ch     = 3;
+dme_cfg.image_format = post_par.image_format;
+```
 
 Then we can call API `kdp_dme_configure()` to config DME.
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/7_3_2.png">
-</div>
+```c
+dat_size = sizeof(struct kdp_dme_cfg_s);
+printf("starting DME configure ...\n");
+int ret = kdp_dme_configure(dev_idx, (char *)&dme_cfg, dat_size, &model_id);
+if (ret != 0) {
+    printf("could not set to DME configure mode..\n");
+    return -1;
+}
+printf("DME configure model [%d] succeeded...\n", model_id);
+```
+
+
+
 
 ### 7.4. Run DME App
 
 After building the example code using `make -j`, we can run the MobileNetV2 example in command line.
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/7_4_1.png">
-</div>
+```shell
+Kneron@ubuntu:~/host_lib/build/bin$ ./kl520_dme_async_mobilenet_classificaiton
+```
+
+
 
 The top 5 results for each image is printed out. After finishing the inference for 100 images, the average time of each frame and the fps is calculated and printed out.
 
-<div align="center">
-<img src="../imgs/getting_start_imgs/7_4_2.png">
-</div>
+```shell
+/****************Top 5 Results***************************/
+Index 281: score 0.527815
+Index 282: score 0.207139
+Index 285: score 0.158562
+Index 904: score 0.006419
+Index 896: score 0.003761
+/****************Top 5 Results***************************/
+Index 169: score 0.329291
+Index 247: score 0.288103
+Index 256: score 0.029718
+Index 248: score 0.022748
+Index 188: score 0.011663
+[INFO] average time on 100 frames: 35.703320 ms/frame, fps: 28.008600
+```
+
 
 We can compare the classification index results with the index list on here: [Imagenet Class Index](<https://gist.github.com/yrevar/942d3a0ac09ec9e5eb3a>)
 
+
+
 ## 8. Create New SDK Application
+
+
 
 ### 8.1. KL520 Firmware Architecture
 
@@ -588,10 +912,11 @@ When IPL (Initial Program Loader) in ROM starts to run on SCPU after power-on or
 Both SCPU and NCPU firmware run RTOS with SCPU handling application, media input/output and peripheral drivers and NCPU handling CNN model pre/post processing. Two CPUs use interrupts and shared memory to achieve IPC (Inter Processor Communication).
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/8_1_1.png">
+<img src="./imgs/getting_start_imgs/8_1_1.png">
 </div>
 
 The examples of SDK here are for SCPU RTOS firmware and NCPU RTOS firmware. Both uses ARM Keil RTX.
+
 
 
 ### 8.2. Firmware components
@@ -601,14 +926,14 @@ The examples of SDK here are for SCPU RTOS firmware and NCPU RTOS firmware. Both
         * a. Output: fw_scpu.bin
     * Libs:
         * a. sdk.lib			-- system/middle/peripheral drivers
-        * b. kapp.lib		-- FDR application lib [lib only]
-        * c. kdp-system.lib		-- System lib [lib only]
+        * b. kapp.lib		-- FDR application lib **[lib only]**
+        * c. kdp-system.lib		-- System lib **[lib only]**
         * d. kcomm.lib		-- Communication handler driver
 * NCPU firmware:
     * Project: ncpu
         * a. Output: fw_ncpu.bin
     * Libs:
-        * a. kdpio-lib.lib		-- NPU i/o lib [lib only]
+        * a. kdpio-lib.lib		-- NPU i/o lib **[lib only]**
         * b. sdk-ncpu.lib		-- NCPU supporting drivers
 * Workspace
     * Multiple projects can be organized together
@@ -618,6 +943,8 @@ The examples of SDK here are for SCPU RTOS firmware and NCPU RTOS firmware. Both
         * b. scpu/lib/[LIB]
         * c. ncpu/project/[APP]/
         * d. ncpu/lib/[kdpio, sdk-ncpu]
+
+
 
 ### 8.3. Application Architecture
 
@@ -629,7 +956,7 @@ A host mode application means that camera(s) and maybe display are located on th
 Tiny Yolo is a single model application with streamlined processing. Both companion mode and host mode are supported. Figure below is a companion mode example. 
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/8_3_1.png">
+<img src="./imgs/getting_start_imgs/8_3_1.png">
 </div>
 
 
@@ -679,6 +1006,8 @@ kdp-system.lib
 sdk.lib
 ```
 
+
+
 ### 8.5. Create New NCPU Project
 
 * Use existing application’s Project:ncpu as template
@@ -704,6 +1033,8 @@ kdpio-lib.lib
 sdk-ncpu.lib
 ```
 
+
+
 ### 8.6. Create New Workspace to Include All Projects
 
 * Use existing application’s workspace as template
@@ -728,6 +1059,8 @@ Project:sdk-ncpu
 Project:ncpu
 ```
 
+
+
 ### 8.7. Create ISI Companion Application
 
 Main tasks in main.c
@@ -741,7 +1074,7 @@ Main tasks in main.c
 `kcomm_start()`
 
 Add operations for ISI command handler, e.g. in a shared directory/file (app/tiny_yolo_ops.c):
-```
+```c
 static struct kapp_ops kapp_tiny_yolo_ops = {
     .start          = tiny_yolo_start,
     .run_image      = tiny_yolo_run_image,
@@ -763,7 +1096,7 @@ struct kapp_ops *tiny_yolo_get_ops(void)
 ```
 
 Register new ops with ISI command handler:
-```
+```c
 struct kapp_ops *ops;
 
 ops = tiny_yolo_get_ops();
@@ -784,7 +1117,9 @@ When incoming images could be fed to NPU running model while previous image’s 
 `define IMAGE_FORMAT_PARALLEL_PROC          BIT27`
 
 
+
 ### 8.8. Create Host Mode Application with MIPI Camera
+
 Main tasks in main.c
 
 * Initialize OS
@@ -800,12 +1135,14 @@ scpu/project/tiny_yolo_v3/host/main/kapp_tiny_yolo_inf.c
 scpu/project/tiny_yolo_v3/host/main/kapp_tiny_yolo_inf.h
 ```
 Host mode application can use the common operations as in companion mode with example in kapp_tiny_yolo_inf.c:
-```
+```c
 struct kapp_ops *ops;
 
 ops = tiny_yolo_get_ops();
 kcomm_enable_isi_cmds(ops);
 ```
+
+
 
 ### 8.9. Register New Pre/Post Processing and CPU functions
 
@@ -829,27 +1166,34 @@ Sometime, KL520 NPU cannot handle some layers in the model, and user need to imp
 
 Please note that user needs to define an new cpu function ID for this cpu function.
 
+
+
 ## 9. More SDK example code for SOC peripheral drivers
 
 KL520 also provides some simple examples to show how to use basic peripherals such as, I2C, PWM, DMA, GPIO...
 User can find them from **sdkexamples** folder.
 
 There is also a PDF file to briefly describe the peripheral APIs. Please download it from the following link:
-<div align="center">
+<div align="left">
 <a href="../pdf/KL520_Peripheral_Driver_APIs.pdf">KL520_Peripheral_Driver_APIs.pdf</a>
 </div>
 
+
+
 ## 10. Flash programming
+
+
 
 ### 10.1. Board Overview
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/10_1_1.png">
+<img src="./imgs/getting_start_imgs/10_1_1.png">
 </div>
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/10_1_2.png">
+<img src="./imgs/getting_start_imgs/10_1_2.png">
 </div>
+
 
 ### 10.2. Hardware Setting
 
@@ -858,7 +1202,7 @@ There is also a PDF file to briefly describe the peripheral APIs. Please downloa
 UART0: Command Port
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/10_2_1.png">
+<img src="./imgs/getting_start_imgs/10_2_1.png">
 </div>
 
 #### 10.2.2. Connecting 5V power and trun on power switch
@@ -866,7 +1210,7 @@ UART0: Command Port
 Power from Adapter or from Power Bank (USB PD)
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/10_2_2.png">
+<img src="./imgs/getting_start_imgs/10_2_2.png">
 </div>
 
 #### 10.2.3. Wake up chip from RTC power domain by pressing PTN button
@@ -874,8 +1218,9 @@ Power from Adapter or from Power Bank (USB PD)
 Please do it every time after plugging in the power
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/10_2_3.png">
+<img src="./imgs/getting_start_imgs/10_2_3.png">
 </div>
+
 
 ### 10.3. Program Flash via UART0 Interface
 
@@ -898,7 +1243,7 @@ Please do it every time after plugging in the power
    EX: COM_ID = 3 # COM3
 
    <div align="center">
-   <img src="../imgs/getting_start_imgs/10_3_1.png">
+   <img src="./imgs/getting_start_imgs/10_3_1.png">
    </div>
 
 #### 10.3.3 Firmware Binary Generation (FW + MODELS)
@@ -908,43 +1253,50 @@ The script combines .bin files in "flash_bin" in predefined order.
 
 Morever, the addressing is in 4KB alignment.
 
-Command:
+**Command**
 
-    >> python3 bin_gen.py <options>
+```shell
+$ python3 bin_gen.py
+```
 
     options argument:
 
     -h, --help      Show this help message and exit
-
     -p, --CPU_ONLY  SPL/SCPU/NCPU only
 
-Output:
+**Output**
 
-    flash_image.bin
+``flash_image.bin``
 
-** The following bin files are must **
+**Note**
 
-flash_bin<br>
-├── boot_spl.bin      // bool spl bin file<br>
-├── fw_ncpu.bin       // SCPU FW bin file (generated by Keil)<br>
-├── fw_scpu.bin       // NCPU FW bin file (generated by Keil)<br>
-├── models_520.nef    // model information(copied from host_lib/input_models/KL520)<br>
+>  The following bin files are must 
+
+```shell
+flash_bin/
+├── boot_spl.bin		// bool spl bin file
+├── fw_ncpu.bin       	// SCPU FW bin file (generated by Keil)
+├── fw_scpu.bin			// NCPU FW bin file (generated by Keil)
+├── models_520.nef		// model information(copied from [host_lib]/input_models/KL520/[app]/)
+```
 
 
 #### 10.3.4 Flash Chip Programming (FW + DATA)
 
-`>> python flash_programmer.py -a flash_image.bin`
+```shell
+$ python flash_programmer.py -a flash_image.bin
+```
 
 Please press RESET BTN while you are seeing “Please press reset button!!”
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/10_3_2.png">
+<img src="./imgs/getting_start_imgs/10_3_2.png">
 </div>
 
 Afterwards, just wait until all progresses are finished (erase, program, verify)
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/10_3_3.png">
+<img src="./imgs/getting_start_imgs/10_3_3.png">
 </div>
 
 **Note**:
@@ -952,20 +1304,29 @@ Afterwards, just wait until all progresses are finished (erase, program, verify)
 
 #### 10.3.5 Flash Verification (optional)
 
-`>> python flash_programmer.py -v flash_image.bin`
+```shell
+$ python flash_programmer.py -v flash_image.bin
+```
 
 #### 10.3.6 Flash Erase (optional)
 
-`>> python flash_programmer.py -e`
+```shell
+$ python flash_programmer.py -e
+```
 
 #### 10.3.7 Flash Partial Programming (optional)
 
-`>> python flash_programmer.py -i 0x00002000 -p fw_scpu.bin`
+```shell
+$ python flash_programmer.py -i 0x00002000 -p fw_scpu.bin
+```
 
 **Note**:
-To program specific bin file to specific flash address
-"-i" means the flash index/address you would like to program
-"-p" means the FW code you would like to program
+
+> To program specific bin file to specific flash address
+> "-i" means the flash index/address you would like to program
+> "-p" means the FW code you would like to program
+
+
 
 ### 10.4. Program Flash via JTAG/SWD Interface
 
@@ -974,7 +1335,7 @@ To program specific bin file to specific flash address
 Connect JTAG/SWD.
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/10_4_1.png">
+<img src="./imgs/getting_start_imgs/10_4_1.png">
 </div>
 
 #### 10.4.2. Edit flash_prog.jlink device setting
@@ -985,15 +1346,15 @@ Connect JTAG/SWD.
 
     EX:
 
+    ```
     device KL520-WB	//Winbond
-
     device KL520-MX	//Mxic
-
     device KL520-GD	//GigaDevice
+    ```
 
-3. Copy the bin file to kl520_sdk\utils\JLink_programmer\bin folder
+    Copy the bin file to kl520_sdk\utils\JLink_programmer\bin folder
 
-   EX: flash_image.bin, boot_spl.bin, fw_scpu.bin, fw_ncpu.bin, etc.
+    EX: flash_image.bin, boot_spl.bin, fw_scpu.bin, fw_ncpu.bin, etc.
 
 
 #### 10.4.3. Double click "flash_prog.bat"
@@ -1001,7 +1362,7 @@ Connect JTAG/SWD.
 Afterwards, just wait until all progresses are finished (chip erase, program, verify)
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/10_4_2.png">
+<img src="./imgs/getting_start_imgs/10_4_2.png">
 </div>
 
 #### 10.4.4. Check programming result
@@ -1009,7 +1370,7 @@ Afterwards, just wait until all progresses are finished (chip erase, program, ve
 Please ensure all the results are "O.K.", and enter "qc" to quit and close J-Link commander
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/10_4_3.png">
+<img src="./imgs/getting_start_imgs/10_4_3.png">
 </div>
 
 #### 10.4.5. Edit flash_prog_partial.jlink device setting(optional)
@@ -1022,23 +1383,22 @@ To program specific bin file to specific flash address
 
     EX: 
 
-    device KL520-WB-P	//Winbond
-
+    ```
+device KL520-WB-P	//Winbond
     device KL520-MX-P	//Mxic
-
-    device KL520-GD-P	//GigaDevice
+device KL520-GD-P	//GigaDevice
+    ```
 
 3. Edit loadbin command: Load *.bin file into target memory
 
     **Syntax**:
 
-    `loadbin <filename>, <addr>`
-
-    `loadbin .\bin\boot_spl.bin,0x00000000`
-
-    `loadbin .\bin\fw_scpu.bin,0x00002000`
-
-    `loadbin .\bin\fw_ncpu.bin,0x00018000`
+    ```
+    loadbin <filename>, <addr>
+    loadbin .\bin\boot_spl.bin,0x00000000
+loadbin .\bin\fw_scpu.bin,0x00002000
+    loadbin .\bin\fw_ncpu.bin,0x00018000
+    ```
 
 4. Double click “flash_prog_partial.bat” and wait until all progresses are finished
 
@@ -1047,18 +1407,24 @@ To program specific bin file to specific flash address
     Please ensure the results is “O.K.”, and enter “qc” to quit and close J-Link commander
 
     EX:
-    <div align="center">
-    <img src="../imgs/getting_start_imgs/10_4_4.png">
+    <div align="left">
+    <img src="./imgs/getting_start_imgs/10_4_4.png">
     </div>
 
 ## 11. DFW (Device Firmware Write) Boot
+
+
 ### 11.1. Board Overview
 
 Please refer to chapter 10.1
 
+
+
 ### 11.2. Hardware Setting
 
 Please refer to chapter 10.2
+
+
 
 ### 11.3. DFW via UART0 Interface
 
@@ -1078,50 +1444,67 @@ Please refer to chapter 10.3.2
 
 #### 11.3.3 Chip Initialize and Send/Start Minion FW
 
-`>> python uart_dfu_boot.py -s`
+```shell
+$ python uart_dfu_boot.py -s`
+```
 
 Please press RESET BTN while you are seeing “Please press reset button!!”
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/11_3_2.png">
+<img src="./imgs/getting_start_imgs/11.3.2.png">
 </div>
+
 
 Afterwards, just wait until seeing “Xmodem sends Minion file DONE!!!”
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/11_3_3.png">
+<img src="./imgs/getting_start_imgs/11.3.3.png">
 </div>
+
 
 #### 11.3.4 DFW fw_scpu.bin to memory address 0x10102000
 
-`>> python uart_dfu_boot.py -i 0x10102000 -p fw_scpu.bin`
+```shell
+$ python uart_dfu_boot.py -i 0x10102000 -p fw_scpu.bin
+```
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/11_3_4.png">
+<img src="./imgs/getting_start_imgs/11.3.4.png">
 </div>
+
 
 #### 11.3.5 DFW fw_ncpu.bin to memory address 0x28000000
 
-`>> python uart_dfu_boot.py -i 0x28000000 -p fw_ncpu.bin`
+```shell
+$ python uart_dfu_boot.py -i 0x28000000 -p fw_ncpu.bin
+```
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/11_3_5.png">
+<img src="./imgs/getting_start_imgs/11.3.5.png">
 </div>
+
 
 #### 11.3.6 Command to boot up KL520 from memory address 0x10102000
 
-`>> python uart_dfu_boot.py -i 0x10102000 -r`
+```shell
+$ python uart_dfu_boot.py -i 0x10102000 -r`
+```
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/11_3_6.png">
+<img src="./imgs/getting_start_imgs/11.3.6.png">
 </div>
 
 **Note**:
-To write specific bin file to specific memory address
-“-i" means the memory index/address
-“-p" means the FW code you would like to program
 
-### 11.4. Design Principle
+> To write specific bin file to specific memory address
+> “-i" means the memory index/address
+> “-p" means the FW code you would like to program
+
+
+
+### 11.4. Design Principles
+
+
 
 #### 11.4.1	Memory Space Address
 1. Minion FW starts from 0x10100000 and size must < 0x2000 bytes
@@ -1129,7 +1512,7 @@ To write specific bin file to specific memory address
 3. NCPU FW starts from 0x28000000
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/11_4_1.png">
+<img src="./imgs/getting_start_imgs/11_4_1.png">
 </div>
 
 #### 11.4.2	Workflow
@@ -1137,7 +1520,7 @@ To write specific bin file to specific memory address
 2. Minion is the bridge to handle host command, collect bin data and then save it into internal memory space
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/11_4_2.png">
+<img src="./imgs/getting_start_imgs/11_4_2.png">
 </div>
 
 #### 11.4.3 Host control principle
@@ -1146,65 +1529,71 @@ To write specific bin file to specific memory address
 Reference: https://pythonhosted.org/xmodem/xmodem.html
 3. Switch to baud rate 921600.
 4. Send SCPU FW to address 0x10102000.
-```
-Buf[n] = Msg_header + data_buf[4096]
-- Msg_header:
-  typedef struct {
-     uint16_t preamble;
-     uint16_t crc16;
-     uint32_t cmd;
-     uint32_t addr;
-     uint32_t len;
-} __attribute__((packed)) MsgHdr;
-- data_buf[4096]: transfer bin by unit 4096 bytes(max.) each time
-- Packet TX Preamble: PKTX_PAMB = 0xA583
-- crc16: calculate checksum from buf[4] to buf[n-1] except preamble and crc16
-- cmd for mem_write: 0x1004
-- cmd for mem_read: 0x1003 (read back for verification)
-- addr: 0x10102000
-- len: 4096 or remainder
-```
+	```c
+	Buf[n] = Msg_header + data_buf[4096]
+	```
+	- Msg_header:
 
+	```c
+    	typedef struct {
+		uint16_t preamble;
+		uint16_t crc16;
+		uint32_t cmd;
+		uint32_t addr;
+		uint32_t len;
+	} __attribute__((packed)) MsgHdr;
+	```
+
+	- data_buf[4096]: transfer bin by unit 4096 bytes(max.) each time
+	- Packet TX Preamble: PKTX_PAMB = 0xA583
+	- crc16: calculate checksum from buf[4] to buf[n-1] except preamble and crc16
+	- cmd for mem_write: 0x1004
+	- cmd for mem_read: 0x1003 (read back for verification)
+	- addr: 0x10102000
+	- len: 4096 or remainder
 5. Send NCPU FW to address 0x28000000.
-Buf[n] = Msg_header + data_buf[4096]
-```
-- Msg_header:
-  typedef struct
-     uint16_t preamble;
-     uint16_t crc16;
-     uint32_t cmd;
-     uint32_t addr;
-     uint32_t len;
-} __attribute__((packed)) MsgHdr;
-- data_buf[4096]: transfer bin by unit 4096 bytes(max.) each time
-- Packet TX Preamble: PKTX_PAMB = 0xA583
-- crc16: calculate checksum from buf[4] to buf[n-1] except preamble and crc16
-- cmd for mem_write: 0x1004
-- cmd for mem_read: 0x1003 (read back for verification)
-- addr: 0x28000000
-- len: 4096 or remainder
-```
-
+	```c
+	Buf[n] = Msg_header + data_buf[4096]
+	```
+	- Msg_header:
+	```c
+	typedef struct
+		uint16_t preamble;
+		uint16_t crc16;
+		uint32_t cmd;
+		uint32_t addr;
+		uint32_t len;
+	} __attribute__((packed)) MsgHdr;
+	```
+	- data_buf[4096]: transfer bin by unit 4096 bytes(max.) each time
+	- Packet TX Preamble: PKTX_PAMB = 0xA583
+	- crc16: calculate checksum from buf[4] to buf[n-1] except preamble and crc16
+	- cmd for mem_write: 0x1004
+	- cmd for mem_read: 0x1003 (read back for verification)
+	- addr: 0x28000000
+	- len: 4096 or remainder
 6. Send CHIP_RUN command with address set as 0x10102000.
-```
-Buf[n] = Msg_header
-typedef struct {
-     uint16_t preamble;
-     uint16_t crc16;
-     uint32_t cmd;
-     uint32_t addr;
-     uint32_t len;
-} __attribute__((packed)) MsgHdr;
-- Packet TX Preamble: PKTX_PAMB = 0xA583
-- crc16: calculate checksum from buf[4] to buf[n-1] except preamble and crc16
-- cmd for scup_run: 0x1005
-- addr: 0x10102000
-- len: 0
-```
+	```c
+	Buf[n] = Msg_header
+	typedef struct {
+		uint16_t preamble;
+		uint16_t crc16;
+		uint32_t cmd;
+		uint32_t addr;
+		uint32_t len;
+	} __attribute__((packed)) MsgHdr;
+	```
+	- Packet TX Preamble: PKTX_PAMB = 0xA583
+	
+	- crc16: calculate checksum from buf[4] to buf[n-1] except preamble and crc16
+	
+	- cmd for scup_run: 0x1005
+	
+	- addr: 0x10102000
+	
+	- len: 0
+	
+	  
 
-You can refer to kl520_sdk\utils\dfw_boot\uart_dfw_boot.py and kl520_sdk\utils\dfw_boot\setup.py as example to develop code for host controls.
-
-
-
-
+You can refer to ``kl520_sdk\utils\dfw_boot\uart_dfw_boot.py`` and ``kl520_sdk\utils\dfw_boot\setup.py`` as example to develop code for host controls.
 
