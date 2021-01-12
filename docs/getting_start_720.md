@@ -241,7 +241,7 @@ UART0: Command Port (either CN10 or J8)
 
     Tool path: kl720_sdk\firmware\utils\flash_programmer\nand\flash_programmer.py
 
-2. install Necessary python modules: kl720_sdk\firmware\utils\flash_programmer\requirements.txt
+2. install Necessary python modules: kl720_sdk\firmware\utils\requirements.txt
 
 #### 3.3.2. Edit python verification setting
 
