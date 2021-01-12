@@ -561,8 +561,8 @@ batch-compile.
 
 #### 3.5.3 Get the result
 
-In Interactive Folder, you’ll find a folder called `batch_compile`, which contains the output files of
-batch compile. The main output are `all_model.bin`, `fw_info.bin` and `model_520.nef`. If you have questions for the meaning of the output files, please refer to the
+In Interactive Folder, you’ll find a folder called `batch_compile`, which contains the output file of
+batch compile. The main output is `models_520.nef`. If you have questions for the meaning of the output file, please refer to the
 FAQ question 7.
 
 ### 3.6 Batch-Compile
@@ -596,8 +596,8 @@ And a folder called `batch_compile` will be generated in Interactive Folder, whi
 
 #### 3.6.3 Get the result
 
-In Interactive Folder, you’ll find a folder called `batch_compile`, which contains the output files of
-batch compile. The main output are `all_model.bin`, `fw_info.bin` and `model_520.nef`. If you have questions for the meaning of the output files, please refer to the
+In Interactive Folder, you’ll find a folder called `batch_compile`, which contains the output file of
+batch compile. The main output is `models_520.nef`. If you have questions for the meaning of the output file, please refer to the
 FAQ question 7.
 ### 3.7 Other utilities
 
@@ -825,9 +825,9 @@ The result of 3.7 FpAnalyser and Batch-Compile is generated at a folder called b
 
 In fpAnalyser subfolder, it has the folders with name format as `input_img_txt_X`, which contains the .txt files after image preprocessing. The index X is the related to the order of model file in FAQ question 7 (6), which means the folder `input_img_txt_X` is number X model’s preprocess image text files.
 
-In compiler subfolder, it will have the following files: `all_model.bin`, `fw_info.bin`, `temp_X_ioinfo.csv`. The X is still the order of the models.
+In compiler subfolder, it will have the following files: `models_520.nef`, `temp_X_ioinfo.csv`. The X is still the order of the models.
 
--`all_model.bin` and `fw_info.bin` is for firmware to use.
+-`models_520.nef` is for firmware to use.
 
 -`temp_X_ioinfo.csv` contains the information that cpu node and output node.
 

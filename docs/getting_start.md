@@ -522,7 +522,7 @@ images/ 	MobileNetV2.h5	 MobileNetV2.h5.onnx   MobileNetV2_opt.h5.onnx
 </div>
 
 
-### 6.3. Model Compile Flow (compile to all_model.bin and fw_info.bin)
+### 6.3. Model Compile Flow (compile to .nef file)
 
 Copy the /workspace/examples/batch_compile_input_params.json into /data1 and modify it before batch-compiling MobileNetV2.
 
@@ -580,7 +580,7 @@ Execute the command to batch-compile MobileNetV2 model.
 <img src="../imgs/getting_start_imgs/6_9.png">
 </div>
 
-After batch-compilation, a new batch_compile folder with all_models.bin and fw_info.bin is present in /data1. These two binaries will be used for running the model in KL520 later.  
+After batch-compilation, a new batch_compile folder with .nef file is present in /data1. This file will be used for running the model in KL520 later.  
 
 <div align="center">
 <img src="../imgs/getting_start_imgs/6_10.png">
