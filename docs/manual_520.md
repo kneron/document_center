@@ -201,8 +201,39 @@ The general process for model conversion is as following:
 > ONNX exported by Pytorch **cannot** skip step 1 and directly go into step 2. Please check
 > [section 3.1.2](#312-pytorch-to-onnx) for details.
 
-
 **If you're still confused reading the manual, please try our examples from <https://github.com/kneron/ConvertorExamples>**
+
+Table 1.2 shows supported operators conversion mapping table for every platform.
+
+*Table 1.2 Operators conversion table for every platform*    
+
+| type                   | keras                  | caffe                | tflite            | tensorflow( * ) | pytorch( ** ) | onnx(Opset9)                | kl520( *** )                                                                   |
+|------------------------|------------------------|----------------------|-------------------|-----------------|---------------|-----------------------------|--------------------------------------------------------------------------------|
+| add                    | Add                    | Eltwise              | ADD               | ( * )           | ( ** )        | Add                         | Add (two input node)  /  ( *** )BatchNorm (single input node)                  |
+| average pooling        | AveragePooling2D       | Pooling              | AVERAGE_POOL_2D   | ( * )           | ( ** )        | AveragePool                 | AveragePool (kenel 2x2、3x3) / ( *** )GlobalAveragePool (kernel == input shape) |
+| batchnormalization     | BatchNormalization     | BatchNorm            |                   | ( * )           | ( ** )        | Batchnormalization          | BatchNorm                                                                      |
+| concatenate            | Concatenate            | Concat               | CONCATENATION     | ( * )           | ( ** )        | Concat                      | Concat (channel-base)                                                          |
+| convolution            | Conv2D                 | Convolution          | CONV_2D           | ( * )           | ( ** )        | Conv                        | Conv (kernel: 1x1 ~ 11x11 stride: 1,2,4)                                       |
+| deconvolution          | Conv2DTranspose        | Deconvolution        | TRANSPOSE_CONV    | ( * )           | ( ** )        | ConvTranspose               | ConvTranspose                                                                  |
+| dense                  | Dense                  | InnerProduct         | FULLY_CONNECTED   | ( * )           | ( ** )        | Gemm                        | Gemm                                                                           |
+| depthwise convolution  | DepthwiseConv2D        | DepthwiseConvolution | DEPTHWISE_CONV_2D | ( * )           | ( ** )        | Conv (with group attribute) | ( *** )Conv (kernel: 1x1 ~ 11x11 stride: 1,2,4)                                |
+| flatten                | Flatten                | Flatten              |                   | ( * )           | ( ** )        | Flatten                     | Flatten                                                                        |
+| global average pooling | GlobalAveragePooling2D | Pooling              | MEAN              | ( * )           | ( ** )        | GlobalAveragePool           | GlobalAveragePool                                                              |
+| global max pooling     | GlobalMaxPooling2D     | Pooling              |                   | ( * )           | ( ** )        | GlobalMaxPool               | GlobalMaxPool                                                                  |
+| leaky relu             | LeakyReLU              |                      | LEAKY_RELU        | ( * )           | ( ** )        | LeakyRelu                   | LeakyRelu                                                                      |
+| max pooling            | MaxPooling2D           | Pooling              | MAX_POOL_2D       | ( * )           | ( ** )        | MaxPool                     | MaxPool                                                                        |
+| multiply               | Multiply               | Eltwise              | MUL               | ( * )           | ( ** )        | Mul                         | ( *** )BatchNorm (single input node)                                           |
+| padding                | ZeroPadding2D          |                      | PAD               | ( * )           | ( ** )        | Pad                         | Pad (0 - 15)                                                                   |
+| prelu                  | PReLU                  | PReLU                | PRELU             | ( * )           | ( ** )        | Prelu                       | Prelu                                                                          |
+| relu                   | ReLU                   | ReLU                 | RELU              | ( * )           | ( ** )        | Relu                        | Relu                                                                           |
+| relu6                  | ReLU                   |                      | RELU6             | ( * )           | ( ** )        | Clip                        | Clip                                                                           |
+| separable conv2d       | SeparableConv2D        |                      |                   | ( * )           | ( ** )        | Conv                        | ( *** )Conv (kernel: 1x1 ~ 11x11 stride: 1,2,4)                                |
+| squeeze                |                        |                      | SQUEEZE           | ( * )           | ( ** )        | Squeeze                     | ( *** )Flatten (if available)                                                  |
+
+( * ) our tensorflow conversion tool is based on opensource "tf2onnx", please check "https://github.com/onnx/tensorflow-onnx/blob/r1.6/support_status.md" for the supported op information    
+( ** ) our pytorch conversion tool is based on onnx exporting api in torch.onnx, please check "https://pytorch.org/docs/stable/onnx.html#supported-operators" for the supported op information    
+( *** ) some operators will be replaced by onnx2onnx.py in order to fit the kl520 spec.    
+
 
 #### 3.1.1 Keras to ONNX
 
