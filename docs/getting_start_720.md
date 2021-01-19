@@ -44,7 +44,11 @@ Get [git for windows SDK (MUST BE!)](https://gitforwindows.org/) installed
 > Make sure you are using `/mingw64/bin/cmake`
 
 #### 1.2.5. Install opencv_3.4
-Get [opencv_3.4.1, mingw-w64-x86_64-opencv-3.4.1-1-any.pkg.tar.xz](https://repo.msys2.org/mingw/x86_64/) installed:
+* Get [opencv_3.4.1, mingw-w64-x86_64-opencv-3.4.1-1-any.pkg.tar.xz.zip](https://www.kneron.com/tw/support/developers/?folder=Documentation%20center/&download=457)
+
+* Unzip mingw-w64-x86_64-opencv-3.4.1-1-any.pkg.tar.xz.zip to **mingw-w64-x86_64-opencv-3.4.1-1-any.pkg.tar.xz**.
+
+* Install mingw-w64-x86_64-opencv-3.4.1-1-any.pkg.tar.xz:
 
 `pacman -U mingw-w64-x86_64-opencv-3.4.1-1-any.pkg.tar.xz`
 
