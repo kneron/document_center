@@ -8,6 +8,7 @@ nav:
   - Home: index.md
   - Getting Started:
     - KL520: getting_start.md
+    - KL520 (new arch.): getting_start_520_kdp2.md
     - KL720: getting_start_720.md
   - Host API Reference: 
     - Host API Intro: host_api_reference.md
@@ -15,6 +16,12 @@ nav:
     - DME API reference: host_api/dme_api.md
     - ISI API reference: host_api/isi_api.md
     - System API reference: host_api/system.md
+  - Host KDP2 API Reference: 
+    - v0.9.0:
+      - Data Structure: kdp2_api/v0.9.0/kdp2_struct.h.md
+      - Core API: kdp2_api/v0.9.0/kdp2_core.h.md
+      - APP API: kdp2_api/v0.9.0/kdp2_app.h.md
+      - Post Process API: kdp2_api/v0.9.0/kdp2_postprocess.h.md
   - Toolchain Docker: 
     - Toolchain 520 Manual: manual_520.md
     - Toolchain 720 Manual: manual_720.md
