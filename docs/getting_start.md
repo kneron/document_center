@@ -1221,6 +1221,14 @@ Please do it every time after plugging in the power
 <img src="../imgs/getting_start_imgs/10_2_3.png">
 </div>
 
+#### 10.2.4. Set bootstrap settings to manual boot mode (Program Flash via UART0 Interface)
+
+1. Must set bootstrap settings to manual boot mode
+2. Reset pin or power must be controllable to enter manual boot mode.
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/10_2_4.png">
+</div>
 
 ### 10.3. Program Flash via UART0 Interface
 
@@ -1411,124 +1419,42 @@ device KL520-GD-P	//GigaDevice
     <img src="../imgs/getting_start_imgs/10_4_4.png">
     </div>
 
-## 11. DFW (Device Firmware Write) Boot
+## 11. UART Device Firmware Write (DFW) Boot 
 
 
-### 11.1. Board Overview
-
-Please refer to chapter 10.1
-
-
-
-### 11.2. Hardware Setting
+### 11.1. Hardware Setting
 
 Please refer to chapter 10.2
 
 
 
-### 11.3. DFW via UART0 Interface
+### 11.2. Design Principles
+The purpose of this document is to descript how to develop/apply the DFW (Device Firmware Write) (via UART) Boot feature for KL520.
+You can download firmware bin file to KL520 internal Memory space through UART and then directly boot KL520 up from internal memory, therefore external flash could be optional.
 
-#### 11.3.1. DFW Boot necessaries
-
-1. Open command terminal for flash programmer execution
-
-   Tool path: kl520_sdk\utils\dfw_boot\uart_dfu_boot.py
-
-2. Install Necessary python modules: kl520_sdk\utils\requirements.txt
-
-3. Limitations: Only the listed argument combinations below are allowed.
-
-#### 11.3.2. Edit python verification setting
-
-Please refer to chapter 10.3.2
-
-#### 11.3.3 Chip Initialize and Send/Start Minion FW
-
-```shell
-$ python uart_dfu_boot.py -s`
-```
-
-Please press RESET BTN while you are seeing “Please press reset button!!”
+#### 11.2.1 KL520 internal memory space address
+1.	Minion FW starts from 0x10100000 and size must < 0x2000 bytes
+2.	SCPU FW starts from 0x10102000
+3.	NCPU FW starts from 0x28000000
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/11.3.2.png">
+<img src="../imgs/getting_start_imgs/11.2.1.png">
 </div>
 
-
-Afterwards, just wait until seeing “Xmodem sends Minion file DONE!!!”
+#### 11.2.2 UART_DFW_Boot Workflow
+1.	Send Minion FW through UART0/XMODEM and also process the followings sequence through UART0 interface
+2.	Minion is the bridge to handle host command, collect bin data and then save it into internal memory space
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/11.3.3.png">
+<img src="../imgs/getting_start_imgs/11.2.2.png">
 </div>
 
-
-#### 11.3.4 DFW fw_scpu.bin to memory address 0x10102000
-
-```shell
-$ python uart_dfu_boot.py -i 0x10102000 -p fw_scpu.bin
-```
-
-<div align="center">
-<img src="../imgs/getting_start_imgs/11.3.4.png">
-</div>
-
-
-#### 11.3.5 DFW fw_ncpu.bin to memory address 0x28000000
-
-```shell
-$ python uart_dfu_boot.py -i 0x28000000 -p fw_ncpu.bin
-```
-
-<div align="center">
-<img src="../imgs/getting_start_imgs/11.3.5.png">
-</div>
-
-
-#### 11.3.6 Command to boot up KL520 from memory address 0x10102000
-
-```shell
-$ python uart_dfu_boot.py -i 0x10102000 -r`
-```
-
-<div align="center">
-<img src="../imgs/getting_start_imgs/11.3.6.png">
-</div>
-
-**Note**:
-
-> To write specific bin file to specific memory address
-> “-i" means the memory index/address
-> “-p" means the FW code you would like to program
-
-
-
-### 11.4. Design Principles
-
-
-
-#### 11.4.1	Memory Space Address
-1. Minion FW starts from 0x10100000 and size must < 0x2000 bytes
-2. SCPU FW starts from 0x10102000
-3. NCPU FW starts from 0x28000000
-
-<div align="center">
-<img src="../imgs/getting_start_imgs/11.4.1.png">
-</div>
-
-#### 11.4.2	Workflow
-1. Send Minion FW through UART0/XMODEM and also process the followings sequence through UART0 interface
-2. Minion is the bridge to handle host command, collect bin data and then save it into internal memory space
-
-<div align="center">
-<img src="../imgs/getting_start_imgs/11.4.2.png">
-</div>
-
-#### 11.4.3 Host control principle
+#### 11.2.3 Host control principle
 1. Initial UART COM port with baud rate 115200 and send ‘2’ to tell KL520 to enter 2.UART(XMODEM) mode.
 2. Send Minion.bin through UART by XMODEM protocol.
 Reference: https://pythonhosted.org/xmodem/xmodem.html
 3. Switch to baud rate 921600.
-4. Send SCPU FW to address 0x10102000.    
+4. Send SCPU FW to address 0x10102000.
 	``Buf[n] = Msg_header + data_buf[4096]``  
 	- Msg_header: 
 
@@ -1540,7 +1466,7 @@ Reference: https://pythonhosted.org/xmodem/xmodem.html
 			uint32_t addr;
 			uint32_t len;
 		} __attribute__((packed)) MsgHdr;
-	```
+		```
 	
 	- data_buf[4096]: transfer bin by unit 4096 bytes(max.) each time
 	- Packet TX Preamble: PKTX_PAMB = 0xA583
@@ -1550,7 +1476,7 @@ Reference: https://pythonhosted.org/xmodem/xmodem.html
 	- addr: 0x10102000
 	- len: 4096 or remainder
 
-5. Send NCPU FW to address 0x28000000.  
+5. Send NCPU FW to address 0x28000000.
 	``Buf[n] = Msg_header + data_buf[4096]``
 	- Msg_header:
 
@@ -1572,7 +1498,7 @@ Reference: https://pythonhosted.org/xmodem/xmodem.html
 	- addr: 0x28000000
 	- len: 4096 or remainder
 
-6. Send CHIP_RUN command with address set as 0x10102000.  
+6. Send CHIP_RUN command with address set as 0x10102000.
 	``Buf[n] = Msg_header``
 	- Msg_header:
 
@@ -1592,5 +1518,105 @@ Reference: https://pythonhosted.org/xmodem/xmodem.html
 	- addr: 0x10102000
 	- len: 0
 
-You can refer to ``kl520_sdk\utils\dfw_boot\uart_dfw_boot.py`` and ``kl520_sdk\utils\dfw_boot\setup.py`` as example to develop code for host controls.
+
+### 11.3. Build dfw_companion firmware
+The dfw_companion project in mozart_sw\example_projects\dfw_companion\ is the example for users to develop the firmware without external SPI Flash drivers.
+You can rebuild dfw_companion project then get the updated fw_scpu.bin/fw_ncpu.bin in mozart_sw\utils\bin_gen\flash_bin folder.
+
+### 11.4. DFW via UART0 Interface with Python
+
+#### 11.4.1. DFW Boot necessaries
+
+1. Open command terminal for flash programmer execution
+
+   Tool path: kl520_sdk\utils\dfw_boot\uart_dfu_boot.py
+
+2. Install Necessary python modules: kl520_sdk\utils\requirements.txt
+
+3. Limitations: Only the listed argument combinations below are allowed.
+
+#### 11.4.2. Edit python verification setting
+
+Please refer to chapter 10.3.2
+
+#### 11.4.3 Chip Initialize and Send/Start Minion FW
+
+```shell
+$ python uart_dfu_boot.py -s
+```
+
+Please press RESET BTN while you are seeing “Please press reset button!!”
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/11.3.2.png">
+</div>
+
+
+Afterwards, just wait until seeing “Xmodem sends Minion file DONE!!!”
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/11.3.3.png">
+</div>
+
+
+#### 11.4.4 DFW fw_scpu.bin to memory address 0x10102000
+
+```shell
+$ python uart_dfu_boot.py -i 0x10102000 -p fw_scpu.bin
+```
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/11.3.4.png">
+</div>
+
+
+#### 11.4.5 DFW fw_ncpu.bin to memory address 0x28000000
+
+```shell
+$ python uart_dfu_boot.py -i 0x28000000 -p fw_ncpu.bin
+```
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/11.3.5.png">
+</div>
+
+
+#### 11.4.6 Command to boot up KL520 from memory address 0x10102000
+
+```shell
+$ python uart_dfu_boot.py -i 0x10102000 -r
+```
+
+<div align="center">
+<img src="../imgs/getting_start_imgs/11.3.6.png">
+</div>
+
+**Note**:
+
+> To write specific bin file to specific memory address
+> “-i" means the memory index/address
+> “-p" means the FW code you would like to program
+
+
+
+### 11.5. DFW via UART0 Interface with hostlib
+The kl520_util_uart_dfw_boot example in host_lib\example\KL520\kl520_util_uart_dfw_boot is the reference code for users to develop UART_DFW_Boot feature on their own platform.
+You can do integration test with kl520_util_uart_dfw_boot to write SCPU/NCPU firmware to KL520 internal memory space and boot from specific memory address directly.
+
+#### 11.5.1. Edit kl520_util_uart_dfw_boot.cpp to assign proper com port 
+Search “#define com_port” and modify the ID to match your UART port number listed on device management.
+
+#### 11.5.2. Build host_lib examples
+Refer to host_lib\README_CPP.md for further information.
+
+#### 11.5.3 UART_DFW_Boot integration tests
+1. Copy fw_scpu.bin and fw_ncpu.bin to hostlib host_lib\app_binaries\KL520\dfw folder.
+2. Execute host_lib\build\bin\kl520_util_uart_dfw_boot, and please press reset button when you see "Please press RESET btn!!......"
+3. Please check the message showed after kl520_util_uart_dfw_boot executed, make sure minion bin is transmitted via UART/Xmodem successfully, send fw_scpu.bin/fw_ncpu.bin successfully, and reboot KL520 from specific memory address successfully.
+
+    EX:
+    <div align="center">
+    <img src="../imgs/getting_start_imgs/11.5.1.png">
+    </div>
+
 
