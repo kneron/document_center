@@ -56,6 +56,7 @@ There are three types of APIs:
     - [kdp_isi_config](#kdp_isi_config)
     - [kdp_isi_inference](#kdp_isi_inference)
     - [kdp_isi_retrieve_res](#kdp_isi_retrieve_res)
+    - [kdp_end_isi](#kdp_end_isi)
     - [kdp_jpeg_dec](#kdp_jpeg_dec)
     - [kdp_jpeg_dec_config](#kdp_jpeg_dec_config)
     - [kdp_jpeg_dec_retrieve_res](#kdp_jpeg_dec_retrieve_res)
@@ -478,6 +479,13 @@ int kdp_extract_feature_generic(
 0 on succeed, error code on failure
 
 
+**Notes:**
+
+> bit 0 - FD result: uint16_t for each x/y/w/h
+  bit 1 - LM data: uint16_t for each value
+  bit 2 - FM feature map: float for each value
+
+
 ---
 ### kdp_fm_compare
 > Calculate similarity of two feature points
@@ -870,6 +878,25 @@ int kdp_isi_retrieve_res(
 <em>rsp_code</em>        [out]     response code from device
 <em>r_size</em>          [out]     inference data size
 <em>r_res</em>           [out]     inference result data
+</pre>
+**Returns:**
+
+0 on succeed, error code on failure
+
+
+---
+### kdp_end_isi
+> request for ending isi mode
+
+```c
+int kdp_end_isi(
+	int dev_idx
+)
+```
+**Parameters:**
+
+<pre>
+<em>dev_idx</em>         [in]      connected device ID
 </pre>
 **Returns:**
 
