@@ -73,12 +73,11 @@ Kneron device come with build-in binaries that can run 608x608 RGB565 image in T
 ### 4.1 C++ Example
 
 Let’s take a look at the C++ example program, ```kl520_isi_async_parallel_yolo.cpp```. 
-In this test, we send two different images ```cars_street_at_night_608x608_rgb565.bin``` and ```car_park_barrier_608x608_rgb565.bin`` (two RGB565 binaries) into KL520, and get the detection results back.
+In this test, we send two different images ```cars_street_at_night_608x608_rgb565.bin``` and ```car_park_barrier_608x608_rgb565.bin``` (two RGB565 binaries) into KL520, and get the detection results back.
 
 ```cpp
-#define TEST_ISI_DIR        "../../test_images/odty/"
-#define ISI_IMAGE_FILE      ("../../input_images/cars_street_at_night_608x608_rgb565.bin")
-#define ISI_IMAGE_FILE_T    ("../../input_images/car_park_barrier_608x608_rgb565.bin")
+#define ISI_IMAGE_FILE      (HOST_LIB_DIR "/input_images/cars_street_at_night_608x608_rgb565.bin")
+#define ISI_IMAGE_FILE_T    (HOST_LIB_DIR "/input_images/car_park_barrier_608x608_rgb565.bin")
 #define IMG_SOURCE_W        608
 #define IMG_SOURCE_H        608
 #define ISI_IMG_SIZE        (IMG_SOURCE_W * IMG_SOURCE_H * 2)
@@ -164,7 +163,7 @@ uint32_t loop = 0;
 if (test_loop > 3)
     loop = test_loop - 2;
 
-while (loop) {
+while (loop && !check_ctl_break()) {
     // do inference for each input
     ret = do_inference(dev_idx, img_buf1, buf_len, img_id_tx, &error_code, &img_left);
     if (ret)
@@ -172,11 +171,9 @@ while (loop) {
     img_id_tx++;
 ```
 
-Then the program must wait and get back the result then send the next image. It uses kdp_isi_retrieve_res to get the result, then check the result if it matches the expected results. After that, it uses kdp_isi_inference to send another images to KL520 to process. The loop is set to 1000 to estimate the average FPS of 1000 images.
+Then the program must wait and get back the result then send the next image. It uses kdp_isi_retrieve_res to get the result. After that, it uses kdp_isi_inference to send another images to KL520 to process. The loop is set to 300 to estimate the average FPS of 300 images.
 
 ```cpp
-    ...
-        
     ret = do_get_result(dev_idx, img_id_rx, &error_code, &result_size, inf_res);
     if (ret)
         return ret;
@@ -202,7 +199,7 @@ Then the program must wait and get back the result then send the next image. It 
 }
 ```
 
-Lastly, the program needs to retrieve all the remaining image results, using kdp_isi_retrieve_res.
+Then, the program needs to retrieve all the remaining image results, using kdp_isi_retrieve_res.
 
 ```cpp
 // Get last 2 results
@@ -216,7 +213,7 @@ ret = do_get_result(dev_idx, img_id_rx, &error_code, &result_size, inf_res);
 if (ret)
     return ret;
 img_id_rx++;
-// calculate the FPS based on the time for 1000 frames
+// calculate the FPS
 if (1) {
     double end_time = what_time_is_it_now();
     double elapsed_time, avg_elapsed_time, avg_fps;
@@ -228,6 +225,12 @@ if (1) {
     printf("\n=> Avg %.2f FPS (%.2f ms = %.2f/%d)\n\n",
         avg_fps, avg_elapsed_time, elapsed_time, test_loop);
 }
+```
+
+Lastly, the program calls kdp_end_isi to end isi mode.
+```cpp
+// call kdp_end_isi to end isi mode after finishing the inference for all frames
+kdp_end_isi(dev_idx);
 ```
 
 Run the executable binaries, and we can see initialization messages, and the buffer depth is 3. Image index is keep increasing and the expected 5 and 3 objects are toggling because we ping pong transfer two images, so the results are ping pong as 5 objects and 3 objects as well
@@ -247,13 +250,13 @@ image 1236 -> 5 object(s)
 image 1237 -> 3 object(s)
 ```
 
-Lastly, we can see the average FPS for running 1000 images is 12.4, each image take average 81ms to finish.
+Lastly, we can see the average FPS for running 300 images is 11.7, each image take average 85ms to finish.
 
 ```bash
-image 2232 -> 5 object(s)
-image 2233 -> 5 object(s)
+image 1532 -> 5 object(s)
+image 1533 -> 3 object(s)
 
-=> Avg 12.42 FPS (80.52 ms = 80508.31/1000)
+=> Avg 11.70 FPS (85.46 ms = 25637.14/300)
 
 de init kdp host lib....
 ```
@@ -284,7 +287,7 @@ After we setup the video capture device, the program uses start_isi_parallel to 
 
 ```python
 # Start ISI mode.
-if kdp_wrapper.start_isi_parallel(dev_idx, app_id, image_source_w, image_source_h):
+if kdp_wrapper.start_isi_parallel_ext(dev_idx, app_id, image_source_w, image_source_h):
     return -1
 ```
 
@@ -314,6 +317,11 @@ estimate_runtime = float(diff/test_loop)
 fps = float(1/estimate_runtime)    
 print("Parallel inference average estimate runtime is ", estimate_runtime)
 print("Average FPS is ", fps)
+```
+
+Lastly, the program calls kdp_end_isi to end isi mode.
+```python
+kdp_wrapper.kdp_exit_isi(dev_idx)
 ```
 
 Run the Python example, and we can see initialization messages, and the buffer depth is 3. Image index keeps increasing and the number of detected objects are outputted
@@ -346,8 +354,8 @@ Lastly, we can see the average FPS for running 1000 images is 12.2, each image t
 ```bash
 image 2233 -> 2 object(s)
 
-Parallel inference average estimat runtime is  0.08180183029174805
-Average FPS is  12.224665345915584
+Parallel inference average estimate runtime is  0.08506509852409362
+Average FPS is  11.755702601305547
 de init kdp host lib....
 ```
 
@@ -684,16 +692,16 @@ Please refer to the example code in ``example/KL520/kl520_dme_async_mobilenet_cl
 
 In DME mode, the test images, model binaries, and configuration are dynamically sent from host to Kneron device via USB, and the detection results are dynamically retrieved back from Kneron device to host via USB. 
 
-In host side, 5 APIs are used for DME.
+In host side, 6 APIs are used for DME.
 
 | API          | Description   | Note         |
 | ------------ | ------------- | ------------ |
-| kdp_start_dme | Send model data of **models_520.nef**  to Kneron device | Call once |
+| kdp_start_dme_ext | Send model data of **models_520.nef**  to Kneron device | Call once |
 | kdp_dme_configure	| Send DME configuration to Kneron device	| Call once |
 | kdp_dme_inference	| Send image data to Kneron device and start inference	| Call multiple times to send image for inference |
-| kdp_dme_get_status	 | Poll the completed status from Kneron device	| Call multiple times after kdp_dme_inference |
+| kdp_dme_get_status	 | Poll the completed status from Kneron device	| Call multiple times after kdp_dme_inference (only in DME async mode) |
 | kdp_dme_retrieve_res | Retrieve the inference result (fix-point data) back to host | Call multiple times after kdp_dme_get_status |
-
+| kdp_end_dme | End DME mode by sending command to Kneron device | Call once |
 
 
 ### 7.2. DME Mode Pre/Post Process 
@@ -764,44 +772,44 @@ finish the tasks:
 
 2. Host will call actual model post process function `post_imgnet_classificaiton()` in example/post_processing_ex.c
 
-   ```c
-   int post_imgnet_classification(int model_id, struct kdp_image_s *image_p)
-   {
-       struct imagenet_post_globals_s *gp = &u_globals.imgnet;
-       uint8_t *result_p;
-       int i, len, data_size, div;
-       float scale;
-   
-       data_size = (POSTPROC_OUTPUT_FORMAT(image_p) & BIT(0)) + 1;     /* 1 or 2 in bytes */
-   
-       int8_t *src_p = (int8_t *)POSTPROC_OUT_NODE_ADDR(image_p, 0);
-       int grid_w = POSTPROC_OUT_NODE_COL(image_p, 0);
-       len = grid_w * data_size;
-       int grid_w_bytes_aligned = round_up(len);
-       int w_bytes_to_skip = grid_w_bytes_aligned - len;
-       len = grid_w_bytes_aligned;
-   
-       int ch = POSTPROC_OUT_NODE_CH(image_p, 0);
-   
-       /* Convert to float */
-       scale = POSTPROC_OUT_NODE_SCALE(image_p, 0);
-       div = 1 << POSTPROC_OUT_NODE_RADIX(image_p, 0);
-       for (i = 0; i < ch; i++) {
-           gp->temp[i].index = i;
-           gp->temp[i].score = (float)*src_p;
-           gp->temp[i].score = do_div_scale(gp->temp[i].score, div, scale);
-           src_p += data_size + w_bytes_to_skip;
-       }
-   
-       softmax(gp->temp, ch);
-       qsort(gp->temp, ch, sizeof(struct imagenet_result_s), inet_comparator);
-   
-       result_p = (uint8_t *)(POSTPROC_RESULT_MEM_ADDR(image_p));
-       len = sizeof(struct imagenet_result_s) * IMAGENET_TOP_MAX;
-       memcpy(result_p, gp->temp, len);
-       return len;
+```c
+int post_imgnet_classification(int model_id, struct kdp_image_s *image_p)
+{
+   struct imagenet_post_globals_s *gp = &u_globals.imgnet;
+   uint8_t *result_p;
+   int i, len, data_size, div;
+   float scale;
+
+   data_size = (POSTPROC_OUTPUT_FORMAT(image_p) & BIT(0)) + 1;     /* 1 or 2 in bytes */
+
+   int8_t *src_p = (int8_t *)POSTPROC_OUT_NODE_ADDR(image_p, 0);
+   int grid_w = POSTPROC_OUT_NODE_COL(image_p, 0);
+   len = grid_w * data_size;
+   int grid_w_bytes_aligned = round_up(len);
+   int w_bytes_to_skip = grid_w_bytes_aligned - len;
+   len = grid_w_bytes_aligned;
+
+   int ch = POSTPROC_OUT_NODE_CH(image_p, 0);
+
+   /* Convert to float */
+   scale = POSTPROC_OUT_NODE_SCALE(image_p, 0);
+   div = 1 << POSTPROC_OUT_NODE_RADIX(image_p, 0);
+   for (i = 0; i < ch; i++) {
+       gp->temp[i].index = i;
+       gp->temp[i].score = (float)*src_p;
+       gp->temp[i].score = do_div_scale(gp->temp[i].score, div, scale);
+       src_p += data_size + w_bytes_to_skip;
    }
-   ```
+
+   softmax(gp->temp, ch);
+   qsort(gp->temp, ch, sizeof(struct imagenet_result_s), inet_comparator);
+
+   result_p = (uint8_t *)(POSTPROC_RESULT_MEM_ADDR(image_p));
+   len = sizeof(struct imagenet_result_s) * IMAGENET_TOP_MAX;
+   memcpy(result_p, gp->temp, len);
+   return len;
+}
+```
 
    
 
@@ -879,19 +887,19 @@ Kneron@ubuntu:~/host_lib/build/bin$ ./kl520_dme_async_mobilenet_classificaiton
 The top 5 results for each image is printed out. After finishing the inference for 100 images, the average time of each frame and the fps is calculated and printed out.
 
 ```shell
-/****************Top 5 Results***************************/
-Index 281: score 0.527815
-Index 282: score 0.207139
-Index 285: score 0.158562
-Index 904: score 0.006419
-Index 896: score 0.003761
-/****************Top 5 Results***************************/
-Index 169: score 0.329291
-Index 247: score 0.288103
-Index 256: score 0.029718
-Index 248: score 0.022748
-Index 188: score 0.011663
-[INFO] average time on 100 frames: 35.703320 ms/frame, fps: 28.008600
+/****************Top 5 Results***********************/
+Index 281: score 0.595752
+Index 285: score 0.162995
+Index 282: score 0.146307
+Index 904: score 0.007110
+Index 173: score 0.001945
+/****************Top 5 Results***********************/
+Index 169: score 0.344763
+Index 247: score 0.309466
+Index 256: score 0.044287
+Index 188: score 0.015038
+Index 215: score 0.015038
+[INFO] average time on 100 frames: 48.570648 ms/frame, fps: 20.588566
 ```
 
 
