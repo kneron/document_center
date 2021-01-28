@@ -7,18 +7,30 @@ theme:
 nav:
   - Home: index.md
   - Getting Started:
-    - KL520: getting_start.md
-    - KL720: getting_start_720.md
-  - Host API Reference: 
-    - Host API Intro: host_api_reference.md
-    - Application API reference: host_api/app_api.md
-    - DME API reference: host_api/dme_api.md
-    - ISI API reference: host_api/isi_api.md
-    - System API reference: host_api/system.md
-  - Toolchain Docker: 
-    - Toolchain 520 Manual: manual_520.md
-    - Toolchain 720 Manual: manual_720.md
-    - End to End Simulator: python_app/app_flow_manual.md 
+    - KL520:
+      - v1.3.0.0: 520_1.3.0.0/getting_start.md
+      - v1.4.0.0: 
+        - General: 520_1.4.0.0/getting_start.md
+        - Host Kdp2 API(alpha release): 520_1.4.0.0/getting_start_520_kdp2.md
+    - KL720: 720/getting_start_720.md
+  - Host API Reference:
+    - v0.8.0:
+      - Host API Intro: host_lib_0.8.0/host_api_reference.md
+      - Host API reference: host_lib_0.8.0/host_api/app_api.md
+      - DME API reference: host_lib_0.8.0/host_api/dme_api.md
+      - ISI API reference: host_lib_0.8.0/host_api/isi_api.md
+      - System API reference: host_lib_0.8.0/host_api/system.md
+    - v0.9.0:
+      - Host API reference: host_lib_0.9.0/host_api_reference.md
+      - Host Kdp2 API reference:
+        - Data Structure: host_lib_0.9.0/kdp2_api/kdp2_struct.h.md
+        - Core API: host_lib_0.9.0/kdp2_api/kdp2_core.h.md
+        - APP API: host_lib_0.9.0/kdp2_api/kdp2_app.h.md
+        - Post Process API: host_lib_0.9.0/kdp2_api/kdp2_postprocess.h.md
+  - Toolchain Docker:
+    - Toolchain 520 Manual: toolchain/manual_520.md
+    - Toolchain 720 Manual: toolchain/manual_720.md
+    - End to End Simulator: toolchain/python_app/app_flow_manual.md
 extra:
     logo: 'imgs/logo.png'
 plugins:
