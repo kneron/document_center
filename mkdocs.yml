@@ -31,6 +31,7 @@ nav:
     - Toolchain 520 Manual: toolchain/manual_520.md
     - Toolchain 720 Manual: toolchain/manual_720.md
     - End to End Simulator: toolchain/python_app/app_flow_manual.md
+    - ONNX Converter: toolchain/converters.md
 extra:
     logo: 'imgs/logo.png'
 plugins:
