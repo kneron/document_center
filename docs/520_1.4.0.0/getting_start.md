@@ -1653,7 +1653,7 @@ Kneron KL520 series AI SoC Development Kit
 	
 - Generate the firmware bin image 
 
-	**Reference:** [Firmware Binary Generator](####10.3.3 Firmware Binary Generation (FW + MODELS))  
+	**Reference:** [Firmware Binary Generator](#1033-firmware-binary-generation-fw-models)
 ```
    #in Windows MINGW64 console
    
@@ -1667,7 +1667,7 @@ Kneron KL520 series AI SoC Development Kit
 
 - Program the image  
 
-	**Reference:** [Flash programming](##10. Flash programming)  
+	**Reference:** [Flash programming](#10-flash-programming)
 ```
    cd [SDK]/utils/flash_programmer
    python3 flash_programmer.py -a ..\bin_gen\flash_image.bin 
