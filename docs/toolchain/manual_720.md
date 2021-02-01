@@ -529,7 +529,12 @@ Here is an example JSON with comments. **Please remove all the comments in the r
         "model_inputs": [{
             "model_input_name": "data_out_0" ,
             "input_image_folder": "/data1/100_image/yolov5",
-        }]
+        }],
+        // Special mode for fp-analysis. Currently available mode:
+        // - default: for most of the models.
+        // - post_sigmoid: recommand for yolo models.
+        // If this option is not present, it uses the 'default' mode.
+        "quantize_mode": "default"
     },
     // The preprocess method of the input images.
     "preprocess": {
