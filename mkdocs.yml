@@ -12,7 +12,8 @@ nav:
       - v1.4.0.0: 
         - General: 520_1.4.0.0/getting_start.md
         - Host Kdp2 API(alpha release): 520_1.4.0.0/getting_start_520_kdp2.md
-    - KL720: 720/getting_start_720.md
+    - KL720:
+      - v1.1.0: 720_1.1.0/getting_start_720.md
   - Host API Reference:
     - v0.8.0:
       - Host API Intro: host_lib_0.8.0/host_api_reference.md

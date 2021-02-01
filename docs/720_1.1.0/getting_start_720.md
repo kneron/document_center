@@ -223,7 +223,13 @@ Platform = board + dev + ASIC.
 
 ### 3.1. Board Overview
 
-![](./imgs/getting_start_imgs_720/4_1.png)
+* **Board 96-A**
+
+    ![](./imgs/getting_start_imgs_720/3_1.png)
+
+* **Board 96-B**
+
+    ![](./imgs/getting_start_imgs_720/3_1_B.png)
 
 ### 3.2. Hardware Setting
 
@@ -231,7 +237,13 @@ Platform = board + dev + ASIC.
 
 UART0: Command Port (either CN10 or J8)
 
-![](./imgs/getting_start_imgs_720/4_2_1.png)
+* **Board 96-A**
+
+    ![](./imgs/getting_start_imgs_720/3_2_1.png)
+
+* **Board 96-B**
+
+    ![](./imgs/getting_start_imgs_720/3_2_1_B.png)
 
 #### 3.2.2. Connecting JTAG (Program Flash via JTAG/SWD Interface)
 
@@ -255,7 +267,7 @@ UART0: Command Port (either CN10 or J8)
 
     ex: COM_ID = 3 # COM3
 
-![](./imgs/getting_start_imgs_720/4_3_2.png)
+![](./imgs/getting_start_imgs_720/3_3_2.png)
 
 #### 3.3.3 Firmware Binary Generation (FW + MODELS)
 Generate flash final bin file from other seperate bin files.
@@ -292,11 +304,17 @@ flash_bin<br>
 
 Please press RESET BTN while you are seeing “Please press reset button!!”
 
-![](./imgs/getting_start_imgs_720/4_3_3_1.png)
+* **Board 96-A**
+
+    ![](./imgs/getting_start_imgs_720/3_3_3_1.png)
+
+* **Board 96-B**
+
+    ![](./imgs/getting_start_imgs_720/3_3_3_1_B.png)
 
 Afterwards, just wait until all progresses are finished (erase, program, verify)
 
-![](./imgs/getting_start_imgs_720/4_3_3_2.png)
+![](./imgs/getting_start_imgs_720/3_3_3_2.png)
 
 **Note**:
 "flash_programmer.py -a" means to do flash chip erase + programming + verification
@@ -325,7 +343,7 @@ To program specific bin file to specific flash address
 
 Connect JTAG/SWD and USB3.0 for 5V power.
 
-![](./imgs/getting_start_imgs_720/4_4_1.png)
+![](./imgs/getting_start_imgs_720/3_4_1.png)
 
 #### 3.4.2. Edit flash_prog.jlink device setting
 
@@ -342,13 +360,13 @@ Connect JTAG/SWD and USB3.0 for 5V power.
 
 Afterwards, just wait until all progresses are finished (chip erase, program, verify)
 
-![](./imgs/getting_start_imgs_720/4_4_3.png)
+![](./imgs/getting_start_imgs_720/3_4_3.png)
 
 #### 3.4.4. Check programming result
 
 Please ensure all the results are "O.K.", and enter "qc" to quit and close J-Link commander
 
-![](./imgs/getting_start_imgs_720/4_4_4.png)
+![](./imgs/getting_start_imgs_720/3_4_4.png)
 
 #### 3.4.5. Edit flash_prog_partial.jlink device setting(optional)
 
@@ -369,7 +387,7 @@ To program ncpu fw or update models to specific flash address(sector erase, prog
 3. Check programming result
     Please ensure the results is “O.K.”, and enter “qc” to quit and close J-Link commander
     EX:
-    ![](./imgs/getting_start_imgs_720/4_4_5.png)
+    ![](./imgs/getting_start_imgs_720/3_4_5.png)
 
 4. Same to "flash_models.bat".
 
@@ -1132,7 +1150,7 @@ There are many kinds of applications depending on specific use cases. Some appli
 
 Tiny Yolo is a single model application with streamlined processing. Both companion mode and host mode are supported. Figure below is a companion mode example. 
 
-![](./imgs/getting_start_imgs/8_3_1.png)
+![](./imgs/getting_start_imgs_720/6_3.png)
 
 
 
