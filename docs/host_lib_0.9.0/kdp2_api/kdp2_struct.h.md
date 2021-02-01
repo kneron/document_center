@@ -12,9 +12,9 @@ The data structures defined here could be used in other header files.
 - Defines
     - YOLO_GOOD_BOX_MAX
 - Simple Typedef
-    - [typedef void *kdp2_device_t;](#typedef void *kdp2_device_t;)
+    - [typedef void *kdp2_device_t;](#typedef-void-kdp2_device_t)
 - Enumerations
-    - [ KDP2_API_RETURN_CODE](#KDP2_API_RETURN_CODE)
+    - [ KDP2_API_RETURN_CODE](#kdp2_api_return_code)
     - [ kdp2_image_format_t](#kdp2_image_format_t)
     - [ kdp2_normalize_mode_t](#kdp2_normalize_mode_t)
     - [ kdp2_product_id_t](#kdp2_product_id_t)
