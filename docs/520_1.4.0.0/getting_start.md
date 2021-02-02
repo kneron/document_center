@@ -4,11 +4,11 @@
 
 There are several ways to get the Kneron host example:
 
-- Get the example folder for **Linux environment**  
+- Get the example folder for **Linux** environment  
     Prerequisite: Cmake, OpenCV  
-    Download the code here: **[Link](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/host_lib/&download=297)**
+    Download the code from [Link](https://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/host_lib/&download=472), or  **KNEO Stem (USB Dongle) -> host_lib** in [Kneron Develop Center](https://www.kneron.com/tw/support/developers/) : 
 
-- Get the VM for the windows and Mac  
+- Get the VM for the **windows** and **Mac**  
      Prerequisite: VMware Workstation  
        Download the VM  total five files :**[Part1](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=276)**  **[Part2](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=277)** **[Part3](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=278)** **[Part4](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=279)**  **[Part5](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=280)**
 
@@ -18,26 +18,30 @@ There are several ways to get the Kneron host example:
 
 
 ## 2. File Structure
-In the Kneron folder, you will see the following file folders:
+In the host_lib folder, you will see the following file folders:
 
 ```
-Kneron-|
-       |->app_binaries-|        (KL520 app binaries for example)
-                       |-> KL520/tiny_yolo_v3
-                       |-> KL520/ota/ready_to_load
-                       |-> ...
-       |-> common               (common shared file between host and KL520)
-       |-> dll                  (dll files for Windows MINGW64)
-       |-> docs                 (images in README)
-       |-> example/KL520        (host program for different C++ examples)
-       |-> pkgs                 (Python whl files for different platforms)
-       |-> python               (host program for different Python examples)
-       |-> src                  (source files for host lib, which communicate with KL520)
-       |-> input_images         (test image binary)
-       |-> input_models/KL520   (models for examples)
-       |-> CMakeList.txt        (top level cmake list)
-       |-> README_CPP.md        (simple instruction to build for C++ examples)
-       |-> README_Python.md     (simple instruction for Python examples)
+host_lib-|
+         |->app_binaries-|        (KL520 app binaries for example)
+                         |-> *KL520/tiny_yolo_v3
+                         |-> *KL520/ota/ready_to_load
+                         |-> ...
+         |-> common               (common shared file between host and KL520)
+         |-> dll                  (dll files for Windows MINGW64)
+         |-> docs                 (images in README)
+         |-> example/KL520        (host program for different C++ examples)
+         |-> kdp2                 (source files for new Host KDP2 API)
+         |-> python               (host program for different Python examples)
+         |-> src                  (source files for host lib, which communicate with KL520)
+         |-> input_images         (test image binary)
+         |-> input_models/*KL520  (models for examples)
+         |-> CMakeList.txt        (top level cmake list)
+         |-> README_CPP.md        (simple instruction to build for C++ examples)
+         |-> README_Python.md     (simple instruction for Python examples)
+
+
+*KL520 stands for KL520 examples/models
+ KL720 stands for KL720 examples/models
 ```
 
 
@@ -236,7 +240,7 @@ kdp_end_isi(dev_idx);
 Run the executable binaries, and we can see initialization messages, and the buffer depth is 3. Image index is keep increasing and the expected 5 and 3 objects are toggling because we ping pong transfer two images, so the results are ping pong as 5 objects and 3 objects as well
 
 ```bash
-Kneron@Ubuntu$ ./kl520_isi_async_parallel_yolo
+Kneron@Ubuntu:~/host_lib/build/bin$ ./kl520_isi_async_parallel_yolo
 init kdp host lib log....
 adding devices....
 start kdp host lib....
@@ -328,24 +332,16 @@ Run the Python example, and we can see initialization messages, and the buffer d
 
 ```bash
 $ python3 main.py -t cam_isi_aync_parallel_yolo
-adding devices....
-
+adding devices...
 start kdp host lib....
-
 Task:    cam_isi_aysnc_parallel_yolo
 starting ISI mode...
-
 ISI mode succeeded (window = 3)...
-
 starting ISI inference ...
-
 Companion image buffer depth =  3
 image 1234 -> 1 object(s)
-
 image 1235 -> 1 object(s)
-
 image 1236 -> 1 object(s)
-
 image 1237 -> 2 object(s)
 ```
 
@@ -364,16 +360,13 @@ de init kdp host lib....
 
 ## 5. Run OTA to Swap Another Pre-build Application Binary Mask Face Detection
 
-Besides Tiny Yolo v3, Kneron also provides many other applications:
+Besides Tiny Yolo v3, Kneron also provides the following for OTA usage example
 
-* **Age_gender**: detect faces and return age and gender estimation of the target face
-* **Objection_detection**: Kneron 8 class detections
-* **Pedestrian_detection**: Kneron pedestrian detection
-* **ssd_fd**: Mask face detection, detect face with mask and without mask
+* **ssd_fd_lm**: Mask face detection, detect face with mask and without mask
 
 ```shell
-Kneron@ubuntu:~/kneron/app_binaries/KL520$ ls
-age_gender/  fdfr/  object_detection/  ota/  pedestrian_detection/  readme.txt  ssd_fd_lm/  tiny_yolo_v3/
+Kneron@ubuntu:~/host_lib/app_binaries/KL520$ ls
+ota/  readme.txt  ssd_fd_lm/  tiny_yolo_v3/
 ```
 
 
@@ -389,9 +382,9 @@ As you can see, there are 3 files,
 - ``models_520.nef`` from model folder, is the binary for deep learning models
 
 ```shell
-Kneron@ubuntu:~/kneron/app_binaries/KL520/ota/ready_to_load$ cp ../../ssd_fd_lm/*.bin .
-Kneron@ubuntu:~/kneron/app_binaries/KL520/ota/ready_to_load$ cp ../../../../input_models/KL520/ssd_fd_lm/models_520.nef .
-Kneron@ubuntu:~/kneron/app_binaries/KL520/ota/ready_to_load$ ls
+Kneron@ubuntu:~/host_lib/app_binaries/KL520/ota/ready_to_load$ cp ../../ssd_fd_lm/*.bin .
+Kneron@ubuntu:~/host_lib/app_binaries/KL520/ota/ready_to_load$ cp ../../../../input_models/KL520/ssd_fd_lm/models_520.nef .
+Kneron@ubuntu:~/host_lib/app_binaries/KL520/ota/ready_to_load$ ls
 fw_ncpu.bin  fw_scpu.bin  models_520.nef
 ```
 
@@ -400,7 +393,7 @@ fw_ncpu.bin  fw_scpu.bin  models_520.nef
 Then we can go to ``build/bin``, and run ``./update_app``. This will load all 3 binaries into KL520, and program them into the flash so that even without power, the KL520 can still maintain the applications. Since the model are relatively large and flash programming is slow, users need to wait for couple mins to update the application. It takes about 3-5 minutes here.
 
 ```shell
-Kneron@ubuntu:~/kneron/build/bin$ ./update_app_nef_model
+Kneron@ubuntu:~/host_lib/build/bin$ ./update_app_nef_model
 init kdp host lib log....
 adding devices....
 start kdp host lib....
@@ -426,7 +419,7 @@ As you can see the log, the SCPU and NCPU firmware are updated successfully, and
 After KL520 is updated with the mask face detection, we can start to run this corresponding example. We are going to try the interactive with camera example, therefore, we will make sure we build the apps require **opencv**. Make sure to do ``cmake -DBUILD_OPENCV_EX=on `` and ``make -j`` again to make the cam application.
 
 ```shell
-Kneron@ubuntu:~/kneron/build/bin$ ./k520_cam_isi_async_ssd_fd
+Kneron@ubuntu:~/host_lib/build/bin$ ./k520_cam_isi_async_ssd_fd
 ```
 
 
@@ -846,8 +839,10 @@ post_par.raw_input_col   = 640;
 post_par.raw_input_row   = 480;
 post_par.model_input_row = 224;
 post_par.model_input_col = 224;
-post_par.image_format    = IMAGE_FORMAT_SUB128 | NPU_FORMAT_RGB565 | IMAGE_FORMAT_RAW_OUTPUT \
-                           | IMAGE_FORMAT_CHANGE_ASPECT_RATIO;
+post_par.image_format    = IMAGE_FORMAT_SUB128 	| 
+                           NPU_FORMAT_RGB565 	| 
+                           IMAGE_FORMAT_RAW_OUTPUT  | 
+                           IMAGE_FORMAT_CHANGE_ASPECT_RATIO;
 
 // dme configuration
 dme_cfg.model_id     = IMAGENET_CLASSIFICATION_MOBILENET_V2_224_224_3;// model id when compiling in toolchain
@@ -922,27 +917,26 @@ Both SCPU and NCPU firmware run RTOS with SCPU handling application, media input
 <div align="center">
 <img src="../imgs/getting_start_imgs/8_1_1.png">
 </div>
-
 The examples of SDK here are for SCPU RTOS firmware and NCPU RTOS firmware. Both uses ARM Keil RTX.
 
-
+> download the firmware source code: KL520 SDK section in [Kneron Develop Center](https://www.kneron.com/tw/support/developers/)
 
 ### 8.2. Firmware components
 
 * SCPU firmware:
     * Project: companion or host
-        * a. Output: fw_scpu.bin
+        * Output: fw_scpu.bin
     * Libs:
-        * a. sdk.lib			-- system/middle/peripheral drivers
-        * b. kapp.lib		-- FDR application lib **[lib only]**
-        * c. kdp-system.lib		-- System lib **[lib only]**
-        * d. kcomm.lib		-- Communication handler driver
+        * sdk.lib			-- system/middle/peripheral drivers  
+        * kapp.lib			-- FDR application lib **[lib only]**
+        * kdp-system.lib	-- System lib **[lib only]**
+        * kcomm.lib			-- Communication handler driver
 * NCPU firmware:
     * Project: ncpu
-        * a. Output: fw_ncpu.bin
+        * Output: fw_ncpu.bin
     * Libs:
-        * a. kdpio-lib.lib		-- NPU i/o lib **[lib only]**
-        * b. sdk-ncpu.lib		-- NCPU supporting drivers
+        * kdpio-lib.lib		-- NPU i/o lib **[lib only]**
+        * sdk-ncpu.lib		-- NCPU supporting drivers
 * Workspace
     * Multiple projects can be organized together
         * a. example_projects/*
