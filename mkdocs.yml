@@ -9,9 +9,8 @@ nav:
   - Getting Started:
     - KL520:
       - v1.3.0.0: 520_1.3.0.0/getting_start.md
-      - v1.4.0.0: 
-        - General: 520_1.4.0.0/getting_start.md
-        - Host Kdp2 API(alpha release): 520_1.4.0.0/getting_start_520_kdp2.md
+      - v1.4.0.0: 520_1.4.0.0/getting_start.md
+      - v1.4.0.0 For Kdp2 API(alpha release): 520_1.4.0.0/getting_start_520_kdp2.md
     - KL720:
       - v1.1.0: 720_1.1.0/getting_start_720.md
   - Host API Reference:
