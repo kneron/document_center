@@ -200,6 +200,43 @@ conversion, please check our document `ONNX Converter` from the document center.
 **The example mentioned in the following document may not be in the docker image to reduce the image size. You can
 download them yourself from <https://github.com/kneron/ConvertorExamples>**
 
+Table 1.2 shows supported operators conversion mapping table for every platform.
+
+*Table 1.2 Operators conversion table for every platform*
+
+| type                   | keras                   | caffe                | tflite                                    | tensorflow( * ) | pytorch( ** ) | onnx(Opset9)                | kl720( *** )                                                                       |
+|------------------------|-------------------------|----------------------|-------------------------------------------|-----------------|---------------|-----------------------------|------------------------------------------------------------------------------------|
+| add                    | Add                     | Eltwise              | ADD                                       | ( * )           | ( ** )        | Add                         | Add                                                                                |
+| average pooling        | AveragePooling2D        | Pooling              | AVERAGE_POOL_2D                           | ( * )           | ( ** )        | AveragePool                 | AveragePool (kenel 1x1 2x2、3x3) / ( *** )GlobalAveragePool (kernel == input shape) |
+| batchnormalization     | BatchNormalization      | BatchNorm            |                                           | ( * )           | ( ** )        | Batchnormalization          | BatchNorm                                                                          |
+| concatenate            | Concatenate             | Concat               | CONCATENATION                             | ( * )           | ( ** )        | Concat                      | Concat                                                                             |
+| convolution            | Conv2D                  | Convolution          | CONV_2D                                   | ( * )           | ( ** )        | Conv                        | Conv (strides < [4, 16])                                                           |
+| crop                   | Cropping2D / Cropping1D |                      |                                           | ( * )           | ( ** )        | Slice                       | Slice (input dimension <= 4)                                                       |
+| deconvolution          | Conv2DTranspose         | Deconvolution        | TRANSPOSE_CONV                            | ( * )           | ( ** )        | ConvTranspose               | ConvTranspose (strides = [1, 1], [2, 2])                                           |
+| dense                  | Dense                   | InnerProduct         | FULLY_CONNECTED                           | ( * )           | ( ** )        | Gemm                        | Gemm (2D input)                                                                    |
+| depthwise convolution  | DepthwiseConv2D         | DepthwiseConvolution | DEPTHWISE_CONV_2D                         | ( * )           | ( ** )        | Conv (with group attribute) | ( *** )Conv (strides < [4, 16])                                                    |
+| flatten                | Flatten                 | Flatten              |                                           | ( * )           | ( ** )        | Flatten                     | Flatten (Before Gemm)                                                              |
+| global average pooling | GlobalAveragePooling2D  | Pooling              | MEAN                                      | ( * )           | ( ** )        | GlobalAveragePool           | GlobalAveragePool (4D input)                                                       |
+| global max pooling     | GlobalMaxPooling2D      | Pooling              |                                           | ( * )           | ( ** )        | GlobalMaxPool               | GlobalMaxPool                                                                      |
+| leaky relu             | LeakyReLU               |                      | LEAKY_RELU                                | ( * )           | ( ** )        | LeakyRelu                   | LeakyRelu                                                                          |
+| max pooling            | MaxPooling2D            | Pooling              | MAX_POOL_2D                               | ( * )           | ( ** )        | MaxPool                     | MaxPool (kernel = [1, 1], [2, 2], [3, 3])                                          |
+| multiply               | Multiply                | Eltwise              | MUL                                       | ( * )           | ( ** )        | Mul                         | Mul                                                                                |
+| padding                | ZeroPadding2D           |                      | PAD                                       | ( * )           | ( ** )        | Pad                         | Pad (spacial dimension only)                                                       |
+| prelu                  | PReLU                   | PReLU                | PRELU                                     | ( * )           | ( ** )        | Prelu                       | Prelu                                                                              |
+| relu                   | ReLU                    | ReLU                 | RELU                                      | ( * )           | ( ** )        | Relu                        | Relu                                                                               |
+| relu6                  | ReLU                    |                      | RELU6                                     | ( * )           | ( ** )        | Clip                        | Clip (min = 0)                                                                     |
+| separable conv2d       | SeparableConv2D         |                      |                                           | ( * )           | ( ** )        | Conv                        | ( *** )Conv (strides < [4, 16])                                                    |
+| sigmoid                | Sigmoid                 | Sigmoid              | LOGISTIC                                  | ( * )           | ( ** )        | Sigmoid                     | Sigmoid                                                                            |
+| squeeze                |                         |                      | SQUEEZE                                   | ( * )           | ( ** )        | Squeeze                     | ( *** )Flatten (if available)                                                      |
+| tanh                   | Tanh                    |                      |                                           | ( * )           | ( ** )        | Tanh                        | Tanh                                                                               |
+| resize                 | UpSampling2D            |                      | RESIZE_BILINEAR / RESIZE_NEAREST_NEIGHBOR | ( * )           | ( ** )        | Upsample                    | Upsample                                                                           |
+| roi pooling            |                         | ROIPooling           |                                           | ( * )           | ( ** )        | MaxRoiPool                  | MaxRoiPool                                                                         |
+
+( \* ) our tensorflow conversion tool is based on opensource "tf2onnx", please check "https://github.com/onnx/tensorflow-onnx/blob/r1.6/support_status.md" for the supported op information    
+( \*\* ) our pytorch conversion tool is based on onnx exporting api in torch.onnx, please check "https://pytorch.org/docs/stable/onnx.html#supported-operators" for the supported op information    
+( \*\*\* ) some operators will be replaced by onnx2onnx.py in order to fit the kl720 spec.   
+
+
 #### 3.1.1 Keras to ONNX
 
 For Keras, our converter support models from Keras 2.2.4. **Note that `tf.keras` and Keras 2.3 is not supported.** You may
