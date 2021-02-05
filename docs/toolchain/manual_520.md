@@ -180,6 +180,7 @@ Table 1.1 shows the list of functions KDP520 supports base on ONNX 1.4.1.
 |                  | Add                           |                   | support               |
 |                  | Gemm or Dense/Fully Connected |                   | support               |
 |                  | Flatten                       |                   | support               |
+|                  | Clip                          |                   | min = 0               |
 
 ## 3. Toolchain Scripts Usage
 
