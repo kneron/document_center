@@ -5,8 +5,8 @@
 
 # Kneron Linux Toolchain 520 Manual
 
-** 2021 January **
-** Toolchain 520 v0.12.0 **
+** 2021 Feb **
+** Toolchain 520 v0.12.1 **
 
 [PDF Downloads](manual_520.pdf)
 

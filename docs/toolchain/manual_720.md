@@ -5,8 +5,8 @@
 
 # Kneron Linux Toolchain 720 Manual
 
-** 2021 January **
-** Toolchain 720 v0.12.0 **
+** 2021 Feb **
+** Toolchain 720 v0.12.1 **
 
 [PDF Downloads](manual_720.pdf)
 
