@@ -3,27 +3,42 @@
 <img src="../imgs/manual/kneron_log.png">
 </div>
 
-# Kneron Linux Toolchain 720 Manual
+# Kneron Linux Toolchain Manual
 
-** 2021 Feb **
-** Toolchain 720 v0.12.1 **
+** 2021 Mar **
+** Toolchain v0.12.1 **
 
-[PDF Downloads](manual_720.pdf)
+[PDF Downloads](manual.pdf)
 
 ## 0. Overview
 
-KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 720. For better
+KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 520 and KDP 720. For better
 environment compatibility, we provide a docker which include all the dependencies as well as the toolchain software.
 
-**This document is compatible with `kneron/toolchain:720_v0.12.0`.**
+**This document is compatible with `kneron/toolchain:v0.13.0`.**
 
-*Performance simulation result on NPU:*
+ *Performance simulation result on NPU KDP520:*
 
 | Model                | Size    | FPS (npu only) | Time(npu only) | Has CPU node(s)? |
 | -------------------- | ------- | -------------- | -------------- | ---------------- |
-| Inception v3         | 224x224 |    80.9        | 12.4 ms        |         No       |
-| Inception v4         | 299x299 |    19.9        | 50.2 ms        |        No       | 
-| Mobilenet v1         | 224x224 |    404         | 2.48 ms        |        No       |
+| Inception v3         | 224x224 |    6.3         | 158 ms         |        No        |
+| Inception v4         | 299x299 |    0.48        | 2068 ms        |        No        |
+| Mobilenet v1         | 224x224 |    60.7        | 16.5 ms        |        No        |
+| Mobilenet v2         | 224x224 |    61.3        | 16.3 ms        |        No        |
+| Mobilenet v2 ssdlite | 300x300 |    30.4        | 32.9 ms        |        No        |
+| Resnet50 v1.5        | 224x224 |    7.02        | 142.4 ms       |        No        |
+| OpenPose             | 256x256 |    0.61        | 1639 ms        |        No        |
+| SRCNN                | 384x384 |    7.04        | 142 ms         |        No        |
+| Tiny yolo v3         | 416x416 |    22.8        | 43.8 ms        |        Yes       |
+| Yolo v3              | 416x416 |    1.5         | 666.7 ms       |        Yes       |
+
+*Performance simulation result on NPU KDP720:*
+
+| Model                | Size    | FPS (npu only) | Time(npu only) | Has CPU node(s)? |
+| -------------------- | ------- | -------------- | -------------- | ---------------- |
+| Inception v3         | 224x224 |    80.9        | 12.4 ms        |        No        |
+| Inception v4         | 299x299 |    19.9        | 50.2 ms        |        No        |
+| Mobilenet v1         | 224x224 |    404         | 2.48 ms        |        No        |
 | Mobilenet v2         | 224x224 |    624         | 1.60 ms        |        No        |
 | Mobilenet v2 ssdlite | 300x300 |    283         | 3.54 ms        |        No        |
 | Resnet50 v1.5        | 224x224 |    52.3        | 19.1 ms        |        No        |
@@ -40,15 +55,16 @@ In this document, you'll learn:
 2. What tools are in the toolchain.
 3. How to use scripts to utilize the tools.
 
-**Changes compared to old versions:**
+** Major changes of past versions**
 
-1. Now, in the example, the mount folder `/docker_mount` is separated from the interactive folder `/data1` to avoid
+* [v0.13.0] 520 toolchain and 720 toolchain now is combined into one. But the scripts names and paths are the same as before. You don't need to learn it again.
+* [v0.12.0] Introduce `convert_model.py` which simplify the conversion process.
+* [v0.11.0] Batch compile now generate `.nef` files to simplify the output.
+* [v0.10.0] `input_params.json` and `batch_input_params.json` have been simplified a lot. Please check the document for details.
+* [v0.10.0] `simulator.sh`, `emulator.sh` and draw yolo image scripts are no longer available from `/workspace/scripts`. They have been moved to E2E simulator. Please check its document for details.
+* [v0.9.0] In the example, the mount folder `/docker_mount` is separated from the interactive folder `/data1` to avoid
 unexpected file changes. Users need to copy data between the mount folder and the interactive folder. Of course you can
 still mount on `/data1`. But please be careful that the results folder under `/data1` may be overwritten.
-2. `input_params.json` and `batch_input_params.json` have been changed a lot. Please check the document for details.
-3. `simulator.sh`, `emulator.sh` and draw yolo image scripts are no longer available from `/workspace/scripts`. They
-have been moved to E2E simulator. Please check its document for details.
-4. Introduce `convert_model.py` which simplify the conversion process.
 
 ## 1. Installation
 
@@ -81,25 +97,25 @@ All the following steps are on the command line. Please make sure you have the a
 > You may need `sudo` to run the docker commands, which depends on your system configuration.
 
 
-You can use the following command to pull the latest toolchain docker for 720.
+You can use the following command to pull the latest toolchain docker.
 
 ```bash
-docker pull kneron/toolchain:720
+docker pull kneron/toolchain:latest
 ```
 
-Note that this document is compatible with toolchain v0.12.0. You can find the version of the toolchain in
-`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.12.0, you may need to find the
+Note that this document is compatible with toolchain v0.13.0. You can find the version of the toolchain in
+`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.13.0, you may need to find the
 latest document from the [online document center](http://doc.kneron.com/docs).
 
 ## 2. Toolchain Docker Overview
 
 After pulling the desired toolchain, now we can start walking through the process. In all the following sections, we use
-`kneron/toolchain:720` as the docker image. Before we actually start the docker, we'd better provide a folder
+`kneron/toolchain:latest` as the docker image. Before we actually start the docker, we'd better provide a folder
 which contains the model files you want to test in our docker, for example, `/mnt/docker`. Then, we can use the
-following command to start the docker and work in the docker environment: 
+following command to start the docker and work in the docker environment:
 
 ```bash
-docker run --rm -it -v /mnt/docker:/docker_mount kneron/toolchain:720
+docker run --rm -it -v /mnt/docker:/docker_mount kneron/toolchain:latest
 ```
 
 > TIPS:
@@ -126,13 +142,13 @@ their usage:
 |-- examples            # Example for the workflow, will be used later.
 |-- libs                # The libraries
 |   |-- ONNX_Convertor  # ONNX Converters and optimizer scripts, will be discussed in section 3.
-|   |-- compiler        # Compiler for kdp720 hardware and the IP evaluator to infer the performance.
-|   |-- dynasty         # Simulator which only simulates the kdp720 calculation.
+|   |-- compiler        # Compiler for the hardware and the IP evaluator to infer the performance.
+|   |-- dynasty         # Simulator which only simulates the calculation.
 |   |-- fpAnalyser      # Analyze the model and provide fixed point information.
-|   `-- hw_c_sim        # Hardware simulator which simulate all the kdp720 hardware behaviours.
+|   `-- hw_c_sim        # Hardware simulator which simulate all the hardware behaviours.
 |-- miniconda           # Environment
 |-- scripts             # Scripts to run the tools, will be discussed in section 3.
-`-- version.txt            
+`-- version.txt
 ```
 
 ### 2.2 Work flow
@@ -150,7 +166,7 @@ steps:
 1. Convert and optimize the models. Generate an optimized onnx file. Details are in [section 3.1](#31-converters)
 2. Use the optimized onnx file and a set of images to do the model analysis. Generate an encrypted bie file.
 3. Compile the bie file to generate binaries for hardware simulator. This step also generates the IP evaluation result.
-4. Use the binaries generated in step 3 and an image as input to simulate kdp720. Get the results as txt files.
+4. Use the binaries generated in step 3 and an image as input to simulate the hardware. Get the results as txt files.
 5. Use the bie file and the same image in step 4 as input to simulate the calculation. Get the result as txt files.
 6. Compare the txt files generated in step 4 and step 5 to make sure this model can be taken by the kdp720 hardware.
 
@@ -158,9 +174,35 @@ Step 1 is in section 3.1. Step 2-6 are automated in [section 3.2](#32-fpanalyser
 
 ### 2.3 Supported operators
 
-Table 1.1 shows the list of functions KDP720 supports base on ONNX 1.4.1.
+Table 1.1 shows the list of functions KDP520 supports base on ONNX 1.4.1.
 
-*Table 1.1 The functions KDP720 NPU supports*
+*Table 1.1 The functions KDP520 NPU supports*
+
+| Type             | Operarots                     | Applicable Subset | Spec.                 |
+| ---------------- | ----------------------------- | ----------------- | --------------------- |
+| Convolution      | Conv                          | Kernel dimension  | 1x1 up to 11x11       |
+|                  |                               | Strides           | 1,2,4                 |
+|                  | Pad                           |                   | 0-15                  |
+|                  | Depthwise Conv                |                   | Yes                   |
+|                  | Deconvolution                 |                   | Use Upsampling + Conv |
+| Pooling          | MaxPool                       | 3x3               | stride 1,2,3          |
+|                  | MaxPool                       | 2x2               | stride 1,2            |
+|                  | AveragePool                   | 3x3               | stride 1,2,3          |
+|                  | AveragePool                   | 2x2               | stride 1,2            |
+|                  | GlobalAveragePool             |                   | support               |
+|                  | GlobalMaxPool                 |                   | support               |
+| Activation       | Relu                          |                   | support               |
+|                  | LeakyRelu                     |                   | support               |
+|                  | PRelu                         |                   | support               |
+| Other processing | BatchNormalization            |                   | support               |
+|                  | Add                           |                   | support               |
+|                  | Gemm or Dense/Fully Connected |                   | support               |
+|                  | Flatten                       |                   | support               |
+|                  | Clip                          |                   | min = 0               |
+
+Table 1.2 shows the list of functions KDP720 supports base on ONNX 1.4.1.
+
+*Table 1.2 The functions KDP720 NPU supports*
 
 | Node               | Applicable Subset    | Spec.                           |
 | ------------------ | -------------------- | ------------------------------- |
@@ -191,51 +233,20 @@ Table 1.1 shows the list of functions KDP720 supports base on ONNX 1.4.1.
 
 In this section, we'll go through how to run the tools using scripts.
 
+For section 3.1, both KDP520 and KDP 720 share the same scripts.
+But after section 3.2 (including 3.2), KDP520 and KDP720 are using different scripts.
+**Please run the commands corresponding to your hardware version.**
+
 ### 3.1 Converters
 
 Here we will introduce scripts which help us easily convert the models from different platforms to ONNX. Note that the
 script introduced here is a wrapper of `ONNX_Convertor` for ease of usage. If you want to gain more control of the
 conversion, please check our document `ONNX Converter` from the document center.
 
+You can also find the mapping table for each platfrom under our document `ONNX Converter` from the document center.
+
 **The example mentioned in the following document may not be in the docker image to reduce the image size. You can
 download them yourself from <https://github.com/kneron/ConvertorExamples>**
-
-Table 1.2 shows supported operators conversion mapping table for every platform.
-
-*Table 1.2 Operators conversion table for every platform*
-
-| type                   | keras                   | caffe                | tflite                                    | tensorflow( * ) | pytorch( ** ) | onnx(Opset9)                | kl720( *** )                                                                       |
-|------------------------|-------------------------|----------------------|-------------------------------------------|-----------------|---------------|-----------------------------|------------------------------------------------------------------------------------|
-| add                    | Add                     | Eltwise              | ADD                                       | ( * )           | ( ** )        | Add                         | Add                                                                                |
-| average pooling        | AveragePooling2D        | Pooling              | AVERAGE_POOL_2D                           | ( * )           | ( ** )        | AveragePool                 | AveragePool (kenel 1x1 2x2、3x3) / ( *** )GlobalAveragePool (kernel == input shape) |
-| batchnormalization     | BatchNormalization      | BatchNorm            |                                           | ( * )           | ( ** )        | Batchnormalization          | BatchNorm                                                                          |
-| concatenate            | Concatenate             | Concat               | CONCATENATION                             | ( * )           | ( ** )        | Concat                      | Concat                                                                             |
-| convolution            | Conv2D                  | Convolution          | CONV_2D                                   | ( * )           | ( ** )        | Conv                        | Conv (strides < [4, 16])                                                           |
-| crop                   | Cropping2D / Cropping1D |                      |                                           | ( * )           | ( ** )        | Slice                       | Slice (input dimension <= 4)                                                       |
-| deconvolution          | Conv2DTranspose         | Deconvolution        | TRANSPOSE_CONV                            | ( * )           | ( ** )        | ConvTranspose               | ConvTranspose (strides = [1, 1], [2, 2])                                           |
-| dense                  | Dense                   | InnerProduct         | FULLY_CONNECTED                           | ( * )           | ( ** )        | Gemm                        | Gemm (2D input)                                                                    |
-| depthwise convolution  | DepthwiseConv2D         | DepthwiseConvolution | DEPTHWISE_CONV_2D                         | ( * )           | ( ** )        | Conv (with group attribute) | ( *** )Conv (strides < [4, 16])                                                    |
-| flatten                | Flatten                 | Flatten              |                                           | ( * )           | ( ** )        | Flatten                     | Flatten (Before Gemm)                                                              |
-| global average pooling | GlobalAveragePooling2D  | Pooling              | MEAN                                      | ( * )           | ( ** )        | GlobalAveragePool           | GlobalAveragePool (4D input)                                                       |
-| global max pooling     | GlobalMaxPooling2D      | Pooling              |                                           | ( * )           | ( ** )        | GlobalMaxPool               | GlobalMaxPool                                                                      |
-| leaky relu             | LeakyReLU               |                      | LEAKY_RELU                                | ( * )           | ( ** )        | LeakyRelu                   | LeakyRelu                                                                          |
-| max pooling            | MaxPooling2D            | Pooling              | MAX_POOL_2D                               | ( * )           | ( ** )        | MaxPool                     | MaxPool (kernel = [1, 1], [2, 2], [3, 3])                                          |
-| multiply               | Multiply                | Eltwise              | MUL                                       | ( * )           | ( ** )        | Mul                         | Mul                                                                                |
-| padding                | ZeroPadding2D           |                      | PAD                                       | ( * )           | ( ** )        | Pad                         | Pad (spacial dimension only)                                                       |
-| prelu                  | PReLU                   | PReLU                | PRELU                                     | ( * )           | ( ** )        | Prelu                       | Prelu                                                                              |
-| relu                   | ReLU                    | ReLU                 | RELU                                      | ( * )           | ( ** )        | Relu                        | Relu                                                                               |
-| relu6                  | ReLU                    |                      | RELU6                                     | ( * )           | ( ** )        | Clip                        | Clip (min = 0)                                                                     |
-| separable conv2d       | SeparableConv2D         |                      |                                           | ( * )           | ( ** )        | Conv                        | ( *** )Conv (strides < [4, 16])                                                    |
-| sigmoid                | Sigmoid                 | Sigmoid              | LOGISTIC                                  | ( * )           | ( ** )        | Sigmoid                     | Sigmoid                                                                            |
-| squeeze                |                         |                      | SQUEEZE                                   | ( * )           | ( ** )        | Squeeze                     | ( *** )Flatten (if available)                                                      |
-| tanh                   | Tanh                    |                      |                                           | ( * )           | ( ** )        | Tanh                        | Tanh                                                                               |
-| resize                 | UpSampling2D            |                      | RESIZE_BILINEAR / RESIZE_NEAREST_NEIGHBOR | ( * )           | ( ** )        | Upsample                    | Upsample                                                                           |
-| roi pooling            |                         | ROIPooling           |                                           | ( * )           | ( ** )        | MaxRoiPool                  | MaxRoiPool                                                                         |
-
-( \* ) our tensorflow conversion tool is based on opensource "tf2onnx", please check "https://github.com/onnx/tensorflow-onnx/blob/r1.6/support_status.md" for the supported op information    
-( \*\* ) our pytorch conversion tool is based on onnx exporting api in torch.onnx, please check "https://pytorch.org/docs/stable/onnx.html#supported-operators" for the supported op information    
-( \*\*\* ) some operators will be replaced by onnx2onnx.py in order to fit the kl720 spec.   
-
 
 #### 3.1.1 Keras to ONNX
 
@@ -349,7 +360,7 @@ library. Please try using `--no-bn-fusion` flag.
 
 #### 3.1.7 Model Editor
 
-KL520 NPU supports most of the compute extensive OPs, such as Conv, BatchNormalization, Fully Connect/GEMM, in order to
+KL520/KL720 NPU supports most of the compute extensive OPs, such as Conv, BatchNormalization, Fully Connect/GEMM, in order to
 speed up the model inference run time. On the other hand, there are some OPs that KL520 NPU cannot support well, such as
 `Softmax` or `Sigmod`. However, these OPs usually are not compute extensive and they are better to execute in CPU.
 Therefore, Kneron provides a model editor which is `editor.py` to help user modify the model so that KL520 NPU can run
@@ -372,7 +383,7 @@ cp /data1/LittleNet/input_params.json /data1
 
 Before running the programs, you need to prepare the inputs. In our toolchain all the outputs are placed under `/data1`.
 We call it the Interactivate Folder. So, we recommend you create this folder if it is not already there. Then we need to
-configure the input parameters using `input_params.json` for toolchain 720 in Interactive Folder. As an example,
+configure the input parameters using `input_params.json` for the toolchain in Interactive Folder. As an example,
 `input_params.json` for `LittleNet` model is under `/data1/LittleNet`, if you have already copy the folder as described
 in the beginning of section 3.2. You already has the `input_params.json` ready. You can see the detailed explanation
 for the input parameters in [section FAQ question 1](#1-how-to-configure-the-input_paramsjson).
@@ -385,6 +396,11 @@ for the input parameters in [section FAQ question 1](#1-how-to-configure-the-inp
 After preparing `input_params.json`, you can run the programs by the following command:
 
 ```bash
+# For KDP520
+# python /workspace/scripts/fpAnalyserCompilerIpevaluator_520.py -t thread_number
+python /workspace/scripts/fpAnalyserCompilerIpevaluator_520.py -t 8
+
+# For KDP720
 # python /workspace/scripts/fpAnalyserCompilerIpevaluator_720.py -t thread_number
 python /workspace/scripts/fpAnalyserCompilerIpevaluator_720.py -t 8
 ```
@@ -399,8 +415,8 @@ After running this program, the folders called `compiler` and `fpAnalyser` will 
 Under `/data1/fpAnalyser`, we can find `<model_name>.quan.wqbi.bie` which is the encrypted result of the model analyzer.
 
 Under `/data1/compiler`, we can find three binary files generated by the compiler which are the inputs of the simulator.
-We can also find `ProfileResult.txt` which is the evaluation result of ipEvaluator. You can check the estimate
-performance of your model from it.
+We can also find `ip_eval_prof.txt` for KDP520 or `ProfileResult.txt` for KDP720 which are the evaluation results of IP Evaluator.
+You can check the estimated performance of your model from it.
 
 #### 3.2.4 Hardware validation
 
@@ -408,6 +424,10 @@ This step will make sure whether the mathematical simulator’s result is the sa
 words, this step makes sure the model can run correctly on the hardware.
 
 ```bash
+# For KDP520
+python /workspace/scripts/hardware_validate_520.py
+
+# For KDP720
 python /workspace/scripts/hardware_validate_720.py
 ```
 
@@ -430,13 +450,17 @@ To run the compile and the ip evaluator, you need to have an onnx or a bie file 
 `LittleNet` as the example:
 
 ```bash
+# For KDP520
+cd /workspace/scripts && ./compilerIpevaluator_520.sh /data1/LittleNet/LittleNet.onnx
+
+# For KDP720
 cd /workspace/scripts && ./compilerIpevaluator_720.sh /data1/LittleNet/LittleNet.onnx
 ```
 
 And a folder called `compiler` will be generated in Interactive Folder, which stores the result of the compiler and
-ipEvaluator. The files should be the same name as the result from `fpAnalyserCompilerIpevaluator_720.sh`.
+IP Evaluator. The files should be the same name as the result from `fpAnalyserCompilerIpevaluator_520/720.sh`.
 
-It uses the default configuration for the kdp720 and not available for fine-tuning.
+It uses the default configuration for the hardware and not available for fine-tuning.
 
 ### 3.5 FpAnalyser and Batch-Compile
 
@@ -460,7 +484,12 @@ parameters. We already have this file under `/data1` if we followed the example.
 For running the compiler and ip evaluator:
 
 ```bash
-# python /workspace/scripts/fpAnalyserBatchCompile_720.py-t thread_number
+# For KDP520
+# python /workspace/scripts/fpAnalyserBatchCompile_520.py -t thread_number
+python /workspace/scripts/fpAnalyserBatchCompile_520.py -t 8
+
+# For KDP720
+# python /workspace/scripts/fpAnalyserBatchCompile_720.py -t thread_number
 python /workspace/scripts/fpAnalyserBatchCompile_720.py -t 8
 ```
 
@@ -472,7 +501,7 @@ batch-compile.
 #### 3.5.3 Get the result
 
 In Interactive Folder, you’ll find a folder called `batch_compile`, which contains the output files of
-batch compile. The main output is `models_720.nef`. If you have questions for the meaning of the output file, please refer to the
+batch compile. The main output is `models_520.nef` or `models_720.nef`. If you have questions for the meaning of the output file, please refer to the
 FAQ question 7.
 
 ### 3.6 Batch-Compile
@@ -498,6 +527,11 @@ Please check the FAQ 6 for more details about the new config fields.
 For running the compiler and ip evaluator:
 
 ```bash
+# For KDP520
+# python /workspace/scripts/batchCompile_520.py
+python /workspace/scripts/batchCompile_520.py
+
+# For KDP720
 # python /workspace/scripts/batchCompile_720.py
 python /workspace/scripts/batchCompile_720.py
 ```
@@ -507,7 +541,7 @@ And a folder called `batch_compile` will be generated in Interactive Folder, whi
 #### 3.6.3 Get the result
 
 In Interactive Folder, you’ll find a folder called `batch_compile`, which contains the output files of
-batch compile. The main output is `models_720.nef`. If you have questions for the meaning of the output file, please refer to the
+batch compile. The main output is `models_520/720.nef`. If you have questions for the meaning of the output file, please refer to the
 FAQ question 7.
 ### 3.7 Other utilities
 
@@ -740,9 +774,9 @@ The result of 3.7 FpAnalyser and Batch-Compile is generated at a folder called b
 
 In fpAnalyser subfolder, it has the folders with name format as `input_img_txt_X`, which contains the .txt files after image preprocessing. The index X is the related to the order of model file in FAQ question 7 (6), which means the folder `input_img_txt_X` is number X model’s preprocess image text files.
 
-In compiler subfolder, it will have the following files: `models_720.nef`, `temp_X_ioinfo.csv`. The X is still the order of the models.
+In compiler subfolder, it will have the following files: `models_520/720.nef`, `temp_X_ioinfo.csv`. The X is still the order of the models.
 
--`models_720.nef` is for firmware to use.
+-`models_520/720.nef` is for firmware to use.
 
 -`temp_X_ioinfo.csv` contains the information that cpu node and output node.
 
