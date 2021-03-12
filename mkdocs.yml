@@ -28,9 +28,9 @@ nav:
         - APP API: host_lib_0.9.0/kdp2_api/kdp2_app.h.md
         - Post Process API: host_lib_0.9.0/kdp2_api/kdp2_postprocess.h.md
   - Toolchain Docker:
-    - Toolchain 520 Manual: toolchain/manual_520.md
-    - Toolchain 720 Manual: toolchain/manual_720.md
+    - Toolchain Manual: toolchain/manual.md
     - End to End Simulator: toolchain/python_app/app_flow_manual.md
+    - Yolo Example: toolchain/yolo_example.md
     - ONNX Converter: toolchain/converters.md
 extra:
     logo: 'imgs/logo.png'
