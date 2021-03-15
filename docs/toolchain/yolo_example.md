@@ -1,9 +1,98 @@
-# Yolo v3 example
+# YOLOv3 Step by Step
+
+In this document, we provide a step by step example on how to utilize our tools to compile and test with a newly downloaded YOLOv3 model.
+
+## Step 0: Prepare environment and data
+
+We need to download the latest toolchain docker image which contains all the tools we need. The following command helps you get the latest toolchain image. If you already have it locally, you can also use the same command to update the toolchain. Our toolchain will be updated monthly with new feature and important bug fixes. Note that for linux user, you may need `sudo` before the `docker` commands.
+
+```bash
+docker pull kneron/toolchain:latest
+```
+
+The following command start the docker with a local folder mounted into the docker:
+
+```bash
+docker run --rm -it -v /home/ps/docker_mount:/data1 kneron/toolchain:520
+```
+
+And after that, we go to our mounted folder and download a public keras based YOLOv3 model from Github <https://github.com/qqwweee/keras-yolo3>
+
+```bash
+cd /data1 && git clone https://github.com/qqwweee/keras-yolo3.git
+```
+
+## Step 1: Convert and optimize the downloaded model
+
+First, we follow the model's document to save the model as an `h5` model:
+
+```bash
+cd keras-yolo3
+wget https://pjreddie.com/media/files/yolov3.weights
+python convert.py yolov3.cfg yolov3.weights /data1/yolo.h5
+```
+
+We now have `yolo.h5` under our mounted folder `/data1`.
+
+You can check it with [Netron](https://netron.app/) to see it network structure.
+
+We could find this model has no input shape. Thus, this cannot be done through the simplify `converter.py` mentioned in the toolchain manual. We need to specify the input shape while doing the conversion. This could be achieved using the `keras-onnx` tool under our `ONNX_Converter` with `-I` flag specify the input size (in this example, 1 224 224 3). The onnx file will be generated under the mounted folder.
+
+```bash
+python /workspace/libs/ONNX_Convertor/keras-onnx/generate_onnx.py /data1/yolo.h5 -o /data1/yolo.onnx -I 1 224 224 3
+```
+
+To finish this step, we should optimize it with `onnx2onnx.py` tool to make it compatible and efficient for our hardware.
+
+```bash
+python /workspace/libs/ONNX_Convertor/optimizer_scripts/onnx2onnx.py /data1/yolo.onnx -o /data1/yolo.opt.onnx -t
+```
+
+Now, we have `/data1/yolo.opt.onnx`. This is the model which we would use in the following steps.
+
+## Step 2: Quantize and batch compile
+
+Follow the toolchain manual document (<http://doc.kneron.com/docs/#toolchain/manual_520/>) section 3.2. Kneron Toolchain need `input_params.json`.
+
+For the preprocess method, we can check the original project. From <https://github.com/qqwweee/keras-yolo3/blob/master/yolo.py>, we can find the following code.
+
+<div align="center">
+<img src="../imgs/yolo_example/keras_2_preprocess.png">
+<p><span style="font-weight: bold;">Figure 2.1.</span> Original model preprocess</p>
+</div>
+
+From the manual section FAQ question 1, we know we should use `yolo` as the preprocess method and `7` for the radix. Then, here we have the json file:
+
+```json
+{
+    "model_info": {
+        "input_onnx_file": "/data1/yolov5s_e.onnx",
+        "model_inputs": [{
+            "model_input_name": "input_1_o0" ,
+            "input_image_folder": "/data1/100_image/yolov5",
+        }],
+        "quantize_mode": "default"
+    },
+    "preprocess": {
+        "img_preprocess_method": "yolo",
+        "img_channel": "RGB",
+        "radix": 7
+    }
+}
+```
+
+Then do quantization and compiling with 4 threads.
+
+```bash
+python /workspace/scripts/fpAnalyserCompilerIpevaluator_520.py -c /data1/input_params.json -t 4
+```
+
+## Step 3: Batch compile
 
 https://www.kneron.com/forum/discussion/53/example-keras-kl520-how-to-convert-and-compile-tiny-yolo-v3-from-github-project#latest
 
+## Step 4: Using the E2E Simulator
 
-# Using the E2E Simulator
 Now, we will go over a specific example on how to port a model that you have into the E2E Simulator to be run. Specifically, it is the yolov3 model found here https://github.com/qqwweee/keras-yolo3.
 
 ## 0. Initialization
@@ -201,3 +290,4 @@ python3 simulator.py app/yolo app/test_image_folder/yolo test_yolo -d
 
 ### 6.1 Viewing dumps
 We can now view all of the files dumped as a result of the test. To find them, we just need to follow the same path as our test image directory under the bin/out folder. Thus, we can find our results at bin/out/test_image_folder/yolo/000000350003.jpg/. Here, for your reference, you can find various binary or text files used as input. You will also notice a file called "result.json"; this will have the dictionary you returned in the flow function saved in JSON format.
+
