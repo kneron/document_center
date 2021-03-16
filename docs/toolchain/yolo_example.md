@@ -13,13 +13,13 @@ docker pull kneron/toolchain:latest
 The following command start the docker with a local folder mounted into the docker:
 
 ```bash
-docker run --rm -it -v /home/ps/docker_mount:/data1 kneron/toolchain:520
+docker run --rm -it -v /home/ps/docker_mount:/docker_mount kneron/toolchain:520
 ```
 
 And after that, we go to our mounted folder and download a public keras based YOLOv3 model from Github <https://github.com/qqwweee/keras-yolo3>
 
 ```bash
-cd /data1 && git clone https://github.com/qqwweee/keras-yolo3.git
+cd /docker_mount && git clone https://github.com/qqwweee/keras-yolo3.git
 ```
 
 ## Step 1: Convert and optimize the downloaded model
@@ -29,10 +29,10 @@ First, we follow the model's document to save the model as an `h5` model:
 ```bash
 cd keras-yolo3
 wget https://pjreddie.com/media/files/yolov3.weights
-python convert.py yolov3.cfg yolov3.weights /data1/yolo.h5
+python convert.py yolov3.cfg yolov3.weights /docker_mount/yolo.h5
 ```
 
-We now have `yolo.h5` under our mounted folder `/data1`.
+We now have `yolo.h5` under our mounted folder `/docker_mount`.
 
 You can check it with [Netron](https://netron.app/) to see it network structure.
 
