@@ -149,8 +149,6 @@ If your postprocess functions are defined in Python, integration is simple yet a
 There are also some conversion functions for your convenience under python_flow/utils/utils.py.
 Use convert_binary_to_numpy to get a NumPy array from an input binary image. Use convert_pre_numpy_to_rgba to dump a NumPy array into RGBA binary used for CSIM.
 
-Reminder: For C postprocess, although the inference results are supplied as input in the function, you will still need to call the utility functions csim_to_memory or dynasty_to_memory to load the data before calling your postprocess wrapper.
-
 ## Usage
 
 ```
@@ -257,3 +255,9 @@ Use this command to run the fdr example set up in app/app1:
 ```
 python3 simulator.py app/my_app app/test_image_folder/fd fdr
 ```
+
+## Useful notes/recap/reminder
+* When printing info in Python, by default, the simulator will suppress the output. To enable this printing, use the "-d" option on the command line.
+* When using the display function in our utils, the list of bounding boxes input will need to follow a specific format. Each box in the list must have the following values to display the correct box on the image: (x, y, w, h, score, class).
+* When using C postprocess, although the inference results are supplied as input in the function, you will still need to call the utility functions csim_to_memory or dynasty_to_memory to load the data before calling your postprocess wrapper.
+* C structure wrapper examples can be found under python_flow/common in the kdp_image files; C function wrapper examples can be found under app/src/python in convert.py.
