@@ -57,11 +57,14 @@ In this document, you'll learn:
 
 ** Major changes of past versions**
 
-* [v0.13.0] 520 toolchain and 720 toolchain now is combined into one. But the scripts names and paths are the same as before. You don't need to learn it again.
+* [v0.13.0]
+  * 520 toolchain and 720 toolchain now is combined into one. But the scripts names and paths are the same as before. You don't need to learn it again.
+  * E2E simulator has been updated to a new version. Usage changed. Please check its document.
 * [v0.12.0] Introduce `convert_model.py` which simplify the conversion process.
 * [v0.11.0] Batch compile now generate `.nef` files to simplify the output.
-* [v0.10.0] `input_params.json` and `batch_input_params.json` have been simplified a lot. Please check the document for details.
-* [v0.10.0] `simulator.sh`, `emulator.sh` and draw yolo image scripts are no longer available from `/workspace/scripts`. They have been moved to E2E simulator. Please check its document for details.
+* [v0.10.0]
+  * `input_params.json` and `batch_input_params.json` have been simplified a lot. Please check the document for details.
+  * `simulator.sh`, `emulator.sh` and draw yolo image scripts are no longer available from `/workspace/scripts`. They have been moved to E2E simulator. Please check its document.
 * [v0.9.0] In the example, the mount folder `/docker_mount` is separated from the interactive folder `/data1` to avoid
 unexpected file changes. Users need to copy data between the mount folder and the interactive folder. Of course you can
 still mount on `/data1`. But please be careful that the results folder under `/data1` may be overwritten.
