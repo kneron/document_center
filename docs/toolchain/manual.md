@@ -6,7 +6,7 @@
 # Kneron Linux Toolchain Manual
 
 ** 2021 Mar **
-** Toolchain v0.12.1 **
+** Toolchain v0.13.0 **
 
 [PDF Downloads](manual.pdf)
 
