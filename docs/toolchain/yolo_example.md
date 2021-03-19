@@ -52,9 +52,11 @@ Now, we have `/docker_mount/yolo.opt.onnx`. This is the model which we would use
 
 ## Step 2: Quantize and batch compile
 
-Follow the toolchain manual document (<http://doc.kneron.com/docs/#toolchain/manual_520/>) section 3.2. Kneron Toolchain need `input_params.json`.
+Before we start, we need to preprare some images under the mounted folder. The images are not provided in this tutorial. If you just want to go through the tutorial, you can use the images under `/workspace/examples/LittleNet/pytorch_imgs` for temporary usage. Here, we suppose that there is prepared images under `/docker_mount/yolo_v5_image/`.
 
-For the preprocess method, we can check the original project. From <https://github.com/qqwweee/keras-yolo3/blob/master/yolo.py>, we can find the following code.
+Kneron Toolchain need `input_params.json` to do the quantize.
+
+In this json file, for the preprocess method, we can check the original project. From <https://github.com/qqwweee/keras-yolo3/blob/master/yolo.py>, we can find the following code.
 
 <div align="center">
 <img src="../imgs/yolo_example/keras_2_preprocess.png">
@@ -69,7 +71,7 @@ From the manual section FAQ question 1, we know we should use `yolo` as the prep
         "input_onnx_file": "/docker_mount/yolo.opt.onnx",
         "model_inputs": [{
             "model_input_name": "input_1_o0" ,
-            "input_image_folder": "/data1/100_image/yolov5",
+            "input_image_folder": "/docker_mount/yolo_v5_image/",
         }],
         "quantize_mode": "default"
     },
@@ -86,6 +88,8 @@ Then do quantization and compiling with 4 threads.
 ```bash
 python /workspace/scripts/fpAnalyserCompilerIpevaluator_520.py -c /data1/input_params.json -t 4
 ```
+
+For more details of this step, you may check toolchain manual document (<http://doc.kneron.com/docs/#toolchain/manual_520/>) section 3.2.
 
 ## Step 3: Batch compile
 
