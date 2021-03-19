@@ -36,19 +36,19 @@ We now have `yolo.h5` under our mounted folder `/docker_mount`.
 
 You can check it with [Netron](https://netron.app/) to see it network structure.
 
-We could find this model has no input shape. Thus, this cannot be done through the simplify `converter.py` mentioned in the toolchain manual. We need to specify the input shape while doing the conversion. This could be achieved using the `keras-onnx` tool under our `ONNX_Converter` with `-I` flag specify the input size (in this example, 1 224 224 3). The onnx file will be generated under the mounted folder.
+We could find this model has no input shape. Thus, this cannot be done through the simplify `converter.py` mentioned in the toolchain manual. We need to specify the input shape while doing the conversion. This could be achieved using the `keras-onnx` tool under our `ONNX_Converter` with `-I` flag specify the input size (in this example, 1 416 416 3). The onnx file will be generated under the mounted folder.
 
 ```bash
-python /workspace/libs/ONNX_Convertor/keras-onnx/generate_onnx.py /data1/yolo.h5 -o /data1/yolo.onnx -I 1 224 224 3
+python /workspace/libs/ONNX_Convertor/keras-onnx/generate_onnx.py /docker_mount/yolo.h5 -o /docker_mount/yolo.onnx -O --duplicate-shared-weights -I 1 416 416 3
 ```
 
 To finish this step, we should optimize it with `onnx2onnx.py` tool to make it compatible and efficient for our hardware.
 
 ```bash
-python /workspace/libs/ONNX_Convertor/optimizer_scripts/onnx2onnx.py /data1/yolo.onnx -o /data1/yolo.opt.onnx -t
+python /workspace/libs/ONNX_Convertor/optimizer_scripts/onnx2onnx.py /docker_mount/yolo.onnx -o /docker_mount/yolo.opt.onnx -t
 ```
 
-Now, we have `/data1/yolo.opt.onnx`. This is the model which we would use in the following steps.
+Now, we have `/docker_mount/yolo.opt.onnx`. This is the model which we would use in the following steps.
 
 ## Step 2: Quantize and batch compile
 
@@ -66,7 +66,7 @@ From the manual section FAQ question 1, we know we should use `yolo` as the prep
 ```json
 {
     "model_info": {
-        "input_onnx_file": "/data1/yolov5s_e.onnx",
+        "input_onnx_file": "/docker_mount/yolo.opt.onnx",
         "model_inputs": [{
             "model_input_name": "input_1_o0" ,
             "input_image_folder": "/data1/100_image/yolov5",
@@ -89,7 +89,27 @@ python /workspace/scripts/fpAnalyserCompilerIpevaluator_520.py -c /data1/input_p
 
 ## Step 3: Batch compile
 
-https://www.kneron.com/forum/discussion/53/example-keras-kl520-how-to-convert-and-compile-tiny-yolo-v3-from-github-project#latest
+Here we use the batch-compile to generate the nef for the firmwire. Save the following code under `/data1/batch_input_params.json`.
+
+```json
+{
+    "models": [
+        {
+            "id": 1000,
+            "version": "1",
+            "path": "/data1/fpAnalyser/yolo.opt.quan.wqbi.bie"
+        }
+    ]
+}
+```
+
+Run command:
+
+```bash
+python /workspace/scripts/batchCompile_520.py -c /data1/batch_input_params.json
+```
+
+You can find the `nef` file under `/data1/batch_compile`.
 
 ## Step 4: Using the E2E Simulator
 
