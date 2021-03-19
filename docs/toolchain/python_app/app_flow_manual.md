@@ -107,7 +107,7 @@ If your preprocess functions are defined in Python, integration is simple.
 
 1. Make sure your Python function takes two parameters as input: a TestConfig class and a prev_output variable.
 2. Make sure your return value is a tuple of a list of your preprocessed NumPy arrays in channel last format and a dictionary of values to be passed to the postprocess.
-3. Set the value of the "pre_type" field in the input JSON to the name of your function, as defined [here](#adding-own-flows).
+3. Set the value of the "pre_type" field in the input JSON to the name of your function, as defined [here](#setting-up-json).
 
 #### C defined
 1. Compile the C/C++ functions into a shared library (.so). Be sure to add ```extern "C"``` to any C++ functions you intend to directly call in the Python flow.
@@ -120,7 +120,7 @@ If your preprocess functions are defined in Python, integration is simple.
 5. Define a wrapper to the C/C++ function you wish to call. You need to specify three items: the function name as defined in the C code, the input argument types, and the result argument types.
 6. Create a Python function that takes a TestConfig class and prev_output variable as input that calls your function wrapper. You can get the inputs you need from the TestConfig class and pass it to the wrapper as needed.
 7. Make sure your return value is a tuple of a list of your preprocessed NumPy arrays in channel last format and a dictionary of values to be passed to the postprocess. You will need to translate your C preprocessed data into NumPy arrays for the return value.
-8. Set the value of the "pre_type" field in the input JSON to the name of your function, as defined [here](#adding-own-flows).
+8. Set the value of the "pre_type" field in the input JSON to the name of your function, as defined [here](#setting-up-json).
 
 Note: examples on the structure wrappers can be found under python_flow/common in the kdp_image files; examples on the function wrappers can be found under app/src/python in convert.py.
 
@@ -130,7 +130,7 @@ If your postprocess functions are defined in Python, integration is simple yet a
 
 1. Make sure your Python function takes three parameters as input: a TestConfig class, a dictionary, and a list of NumPy arrays.
 2. Make sure your return value is whatever is convenient for your usage.
-3. Set the value of the "post_type" field in the input JSON to the name of your function, as defined [here](#adding-own-flows).
+3. Set the value of the "post_type" field in the input JSON to the name of your function, as defined [here](setting-up-json).
 
 #### C defined (520)
 1. Like the preprocess, compile the C/C++ functions into a shared library (.so).
@@ -140,7 +140,7 @@ If your postprocess functions are defined in Python, integration is simple yet a
 5. Define any C/C++ structures and function wrappers that are needed as in the preprocess.
 6. Create a Python function that takes a TestConfig class and prev_output variable as input that calls your function wrapper. You must load the output data into memory before calling your function wrapper. To do so, depending on the inferencer mode you set, call either csim_520_to_memory or dynasty_to_memory from python_flow/utils/utils.py. Example usage can be found in app/fdr_external/postprocess/fd.py under the postprocess function.
 7. Make sure your return value is whatever is convenient for your usage.
-8. Set the value of the "post_type" field in the input JSON to the name of your function, as defined [here](#adding-own-flows).
+8. Set the value of the "post_type" field in the input JSON to the name of your function, as defined [here](#setting-up-json).
 
 #### C defined (720)
 1. Follow the same steps as in the 520 version. Except in step 2, the input should be a kdp_image structure from python_flow/common/kdp_image_720.py. Note that this KDPImage is different than the 520 version. The Python class is defined in python_flow/common/kdp_image_720.py, and the C structure is defined in app/src/postprocess/720/kdpio.h. In step 6, you should also call csim_720_to_memory instead if you used CSIM inferencer.
