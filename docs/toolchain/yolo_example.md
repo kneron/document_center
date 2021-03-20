@@ -52,7 +52,15 @@ Now, we have `/docker_mount/yolo.opt.onnx`. This is the model which we would use
 
 ## Step 2: Quantize and batch compile
 
-Before we start, we need to preprare some images under the mounted folder. The images are not provided in this tutorial. If you just want to go through the tutorial, you can use the images under `/workspace/examples/LittleNet/pytorch_imgs` for temporary usage. Here, we suppose that there is prepared images under `/docker_mount/yolo_v5_image/`.
+Before we start, we need to preprare some images under the mounted folder. The images are not provided in this tutorial. We have provided some example input images at <http://doc.kneron.com/docs/#toolchain/res/test_images10.zip>.
+
+Here is how you can get it:
+
+```
+cd /docker_mount
+wget http://doc.kneron.com/docs/#toolchain/res/test_images10.zip
+unzip test_images10.zip
+```
 
 Kneron Toolchain need `input_params.json` to do the quantize.
 
@@ -71,7 +79,7 @@ From the manual section FAQ question 1, we know we should use `yolo` as the prep
         "input_onnx_file": "/docker_mount/yolo.opt.onnx",
         "model_inputs": [{
             "model_input_name": "input_1_o0" ,
-            "input_image_folder": "/docker_mount/yolo_v5_image/",
+            "input_image_folder": "/docker_mount/test_images10.zip/",
         }],
         "quantize_mode": "default"
     },
