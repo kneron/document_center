@@ -13,13 +13,13 @@ docker pull kneron/toolchain:latest
 The following command start the docker with a local folder mounted into the docker:
 
 ```bash
-docker run --rm -it -v /home/ps/docker_mount:/docker_mount kneron/toolchain:latest
+docker run --rm -it -v /home/ps/docker_mount:/data1 kneron/toolchain:latest
 ```
 
 And after that, we go to our mounted folder and download a public keras based YOLOv3 model from Github <https://github.com/qqwweee/keras-yolo3>
 
 ```bash
-cd /docker_mount && git clone https://github.com/qqwweee/keras-yolo3.git
+cd /data1 && git clone https://github.com/qqwweee/keras-yolo3.git
 ```
 
 ## Step 1: Convert and optimize the downloaded model
@@ -29,26 +29,26 @@ First, we follow the model's document to save the model as an `h5` model:
 ```bash
 cd keras-yolo3
 wget https://pjreddie.com/media/files/yolov3.weights
-python convert.py yolov3.cfg yolov3.weights /docker_mount/yolo.h5
+python convert.py yolov3.cfg yolov3.weights /data1/yolo.h5
 ```
 
-We now have `yolo.h5` under our mounted folder `/docker_mount`.
+We now have `yolo.h5` under our mounted folder `/data1`.
 
 You can check it with [Netron](https://netron.app/) to see it network structure.
 
 We could find this model has no input shape. Thus, this cannot be done through the simplify `converter.py` mentioned in the toolchain manual. We need to specify the input shape while doing the conversion. This could be achieved using the `keras-onnx` tool under our `ONNX_Converter` with `-I` flag specify the input size (in this example, 1 416 416 3). The onnx file will be generated under the mounted folder.
 
 ```bash
-python /workspace/libs/ONNX_Convertor/keras-onnx/generate_onnx.py /docker_mount/yolo.h5 -o /docker_mount/yolo.onnx -O --duplicate-shared-weights -I 1 416 416 3
+python /workspace/libs/ONNX_Convertor/keras-onnx/generate_onnx.py /data1/yolo.h5 -o /data1/yolo.onnx -O --duplicate-shared-weights -I 1 416 416 3
 ```
 
 To finish this step, we should optimize it with `onnx2onnx.py` tool to make it compatible and efficient for our hardware.
 
 ```bash
-python /workspace/libs/ONNX_Convertor/optimizer_scripts/onnx2onnx.py /docker_mount/yolo.onnx -o /docker_mount/yolo.opt.onnx -t
+python /workspace/libs/ONNX_Convertor/optimizer_scripts/onnx2onnx.py /data1/yolo.onnx -o /data1/yolo.opt.onnx -t
 ```
 
-Now, we have `/docker_mount/yolo.opt.onnx`. This is the model which we would use in the following steps.
+Now, we have `/data1/yolo.opt.onnx`. This is the model which we would use in the following steps.
 
 ## Step 2: Quantize and batch compile
 
@@ -57,7 +57,7 @@ Before we start, we need to preprare some images under the mounted folder. The i
 Here is how you can get it:
 
 ```
-cd /docker_mount
+cd /data1
 wget http://doc.kneron.com/docs/#toolchain/res/test_images10.zip
 unzip test_images10.zip
 ```
@@ -76,10 +76,10 @@ From the manual section FAQ question 1, we know we should use `yolo` as the prep
 ```json
 {
     "model_info": {
-        "input_onnx_file": "/docker_mount/yolo.opt.onnx",
+        "input_onnx_file": "/data1/yolo.opt.onnx",
         "model_inputs": [{
             "model_input_name": "input_1_o0" ,
-            "input_image_folder": "/docker_mount/test_images10.zip/",
+            "input_image_folder": "/data1/test_images10.zip/",
         }],
         "quantize_mode": "default"
     },
@@ -144,14 +144,14 @@ cp -r /workplace/E2E_Simulator/app/template_app /workplace/E2E_Simulator/app/yol
 Now, we must copy our compiled yolo model from above, into our YOLO application.
 
 ```bash
-cp /docker_mount/yolo.opt.onnx /workplace/E2E_Simulator/app/yolo/.
+cp /data1/yolo.opt.onnx /workplace/E2E_Simulator/app/yolo/.
 ```
 
 ## 2. Process functions
 Now, we need to setup our preprocess and postprocess functions to be called. The preprocess and postprocess code are in the public yolo repository we cloned earlier, but to call it, it must follow the E2E Simulator API.
 
 ### 2.1 Preprocess
-The preprocess code can be found in lines 105-117 in `/docker_mount/keras-yolo3/yolo.py`. Let us copy this into our template preprocess Python file in our preprocess function at `/workspace/E2E_Simulator/app/yolo/preprocess.py`. Additionally, we will need to add some imports to make the code work.
+The preprocess code can be found in lines 105-117 in `/data1/keras-yolo3/yolo.py`. Let us copy this into our template preprocess Python file in our preprocess function at `/workspace/E2E_Simulator/app/yolo/preprocess.py`. Additionally, we will need to add some imports to make the code work.
 
 ```python
 import numpy as np
@@ -184,12 +184,12 @@ def preprocess(config, prev_output):
 </div>
 
 ### 2.2 Postprocess
-The postprocess function we will use can be found in the yolo_eval function in `/docker_mount/keras-yolo3/yolo3/model.py`. We will need to prepare the inputs and call the function in our postprocess function at `/workspace/E2E_Simulator/app/yolo/postprocess.py`.
+The postprocess function we will use can be found in the yolo_eval function in `/data1/keras-yolo3/yolo3/model.py`. We will need to prepare the inputs and call the function in our postprocess function at `/workspace/E2E_Simulator/app/yolo/postprocess.py`.
 
 Since Python doesn't allow imports with `-` in the file name, let us copy the directory into our application.
 
 ```bash
-cp -r /docker_mount/keras-yolo3 /workplace/E2E_Simulator/app/yolo/keras_yolo3
+cp -r /data1/keras-yolo3 /workplace/E2E_Simulator/app/yolo/keras_yolo3
 ```
 
 First, let us set up the imports and the environment. We will need to add the public yolo repository that we cloned into our path for the imports to their function calls to work.
@@ -209,7 +209,7 @@ Next, we modify the postprocess function itself. First, we need to get the model
     new_data = [tf.convert_to_tensor(data, dtype=tf.float32) for data in inf_results]
 ```
 
-Next, let's prepare the anchors. We will load them in the same way as in the get_anchors function in `/docker_mount/keras-yolo3/yolo.py`.
+Next, let's prepare the anchors. We will load them in the same way as in the get_anchors function in `/data1/keras-yolo3/yolo.py`.
 
 ```python
     anchors_path = "app/yolo/keras_yolo3/model_data/yolo_anchors.txt"
