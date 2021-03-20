@@ -632,7 +632,7 @@ python /workspace/scripts/upgrade_input_params.py old_input_params.json new_inpu
 
 E2ESimulator workflow is implemented in C, which will get the exactly same result as the hardware platforms.
 
-The detailed manual of E2ESimulator can be found at http://doc.kneron.com/docs/#python_app/app_flow_manual/.
+The detailed manual of E2ESimulator can be found at <http://doc.kneron.com/docs/#toolchain/python_app/app_flow_manual/>.
 
 ## FAQ
 
