@@ -238,7 +238,7 @@ Now, we can feed it all into the postprocess function and get the results.
 ## 3. Input JSONs
 Next, we will need to prepare the input JSON to configure our testing environment. Navigate to the `app/yolo/input_jsons` folder, and you will notice a JSON file called example.json. You may rename it as you wish, but we will leave it as example.json for this example.
 
-### 4.1 Pre and post
+### 3.1 Pre and post
 First, we will need to fill in the `[pre][pre_type]` and `[post][post_type]` parameters. These should be relative Python imports using the `yolo` folder as the working directory. In our case, the preprocess function was called preprocess at `preprocess.py`, and the postprocess function was called postprocess at `postprocess.py`. Set the `[pre][pre_type]` and `[post][post_type]` to the following:
 
 ```json
@@ -246,7 +246,7 @@ First, we will need to fill in the `[pre][pre_type]` and `[post][post_type]` par
 "post_type": "postprocess.postprocess"
 ```
 
-### 4.2 Emu
+### 3.2 Emu
 The E2E Simulator supports two kinds of inferencers depending on how you compiled the models. The first type is called CSIM - this should be used if the steps you followed in the toolchain compiled your model into multiple binary files. The second type is called Dynasty - this should be used if the steps you followed in the toolchain compiled your model into an ONNX or BIE model. Since our model compiled into an ONNX model, we will use the Dynasty float inferencer, so let's set the emu_mode to `float`. Let's also set the model_type to `yolo` to match the model we are testing.
 
 ```json
