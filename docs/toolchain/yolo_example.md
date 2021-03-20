@@ -52,14 +52,14 @@ Now, we have `/data1/yolo.opt.onnx`. This is the model which we would use in the
 
 ## Step 2: Quantize and batch compile
 
-Before we start, we need to preprare some images under the mounted folder. The images are not provided in this tutorial. We have provided some example input images at <http://doc.kneron.com/docs/#toolchain/res/test_images10.zip>.
+Before we start, we need to preprare some images under the mounted folder. The images are not provided in this tutorial. We have provided some example input images at <http://doc.kneron.com/docs/toolchain/res/test_image10.zip>.
 
 Here is how you can get it:
 
 ```
 cd /data1
-wget http://doc.kneron.com/docs/#toolchain/res/test_images10.zip
-unzip test_images10.zip
+wget http://doc.kneron.com/docs/toolchain/res/test_image10.zip
+unzip test_image10.zip
 ```
 
 Kneron Toolchain need `input_params.json` to do the quantize.
@@ -79,7 +79,7 @@ From the manual section FAQ question 1, we know we should use `yolo` as the prep
         "input_onnx_file": "/data1/yolo.opt.onnx",
         "model_inputs": [{
             "model_input_name": "input_1_o0" ,
-            "input_image_folder": "/data1/test_images10.zip/",
+            "input_image_folder": "/data1/test_image10/"
         }],
         "quantize_mode": "default"
     },
