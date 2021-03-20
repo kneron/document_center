@@ -10,7 +10,7 @@ We need to download the latest toolchain docker image which contains all the too
 docker pull kneron/toolchain:latest
 ```
 
-The following command start the docker with a local folder mounted into the docker:
+The following command start the docker with a local folder mounted into the docker. Do note that the files and folders under the mounted folder might be overwritten by our scripts. Please back up the important data ahead.
 
 ```bash
 docker run --rm -it -v /home/ps/docker_mount:/data1 kneron/toolchain:latest
