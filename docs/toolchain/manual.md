@@ -199,6 +199,7 @@ Table 1.1 shows the list of functions KDP520 supports base on ONNX 1.4.1.
 |                  | PRelu                         |                   | support               |
 | Other processing | BatchNormalization            |                   | support               |
 |                  | Add                           |                   | support               |
+|                  | Concat                        |                   | axis = 1              |
 |                  | Gemm or Dense/Fully Connected |                   | support               |
 |                  | Flatten                       |                   | support               |
 |                  | Clip                          |                   | min = 0               |
@@ -223,7 +224,7 @@ Table 1.2 shows the list of functions KDP720 supports base on ONNX 1.4.1.
 | Gemm               | 2D input             | support                         |
 | Flatten            | Before Gemm          | support                         |
 | Add                |                      | support                         |
-| Concat             |                      | support                         |
+| Concat             |                      | axis = 1                        |
 | Mul                |                      | support                         |
 | MaxPool            |                      | kernel = [1, 1], [2, 2], [3, 3] |
 | AveragePool        | 3x3                  | kernel = [1, 1], [2, 2], [3, 3] |
@@ -799,13 +800,13 @@ Here is an example JSON with comments. **Please remove all the comments in the r
     },
     // [optional]
     // Whether seperate buffers for each model output. Default is true.
-    "dedicated_output_buffer": false,
+    "dedicated_output_buffer": true,
     // Batch compile model list
     "models": [
         {
             // Model ID
             "id": 19,
-            // Model version
+            // Model version. should be an hex code at most 4 digit.
             "version": "1",
             // The path to the model.
             // If you are running fpAnalyserBatchCompile, this field should be an onnx.
