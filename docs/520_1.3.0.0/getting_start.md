@@ -6,7 +6,7 @@ There are several ways to get the Kneron host example:
 
 1. Get the example folder for Linux environment  
     Prerequisite: Cmake, OpenCV  
-    Download the code here: **[host_lib_v0.9.0-early.zip](https://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/host_lib/&download=396)**
+    Download the code here: **[[kl520_sdk_v1.3.zip]](https://www.kneron.com/tw/support/developers/?folder=KL520%20SDK/archives/&download=372)**
 
 2. Get the VM for the windows and Mac  
      Prerequisite: VMware Workstation  
