@@ -256,8 +256,43 @@ Use this command to run the fdr example set up in app/app1:
 python3 simulator.py app/my_app app/test_image_folder/fd fdr
 ```
 
+## FAQ
+
+### 1. How do I enable simulator output?
+
+When printing info in Python, by default, the simulator will suppress the output. To enable this printing, use the ```-d``` option on the command line.
+
+### 2. How can I display bounding box results on my image?
+
+There is a display function in our utils that can be called. When using this function, the list of bounding boxes input will need to follow a specific format. Each box in the list must have the following values to display the correct box on the image: (x, y, w, h, score, class).
+
+### 3. How do I convert the CSIM fixed point inference results into floating point results?
+
+The inference output when using CSIM 520/720 are fixed point values in a text file. By default, the simulator will convert those fixed point values into floating point NumPy arrays. The conversion from fixed to floating point values is as follows:
+
+```
+float_val = fixed_val / scale / (2 ^ radix)
+```
+
+Through CSIM, every output node has a corresponding scale and radix value. For 520, this is stored in a file called ```radix_scale_info.txt``` in the same directory as the output values. For 720, this is stored in a file called ```dma2seq.info``` per output node in the same directory as the output values.
+
+### 4. What are the memory layouts for the inference results of CSIM 520 and 720?
+
+The memory layout for the output node data after CSIM inference is different between 520 and 720. For 520, the data values are in (h, c, w_align) format, where w_align is the width aligned to the nearest 16 bytes. For 720, the data values are in (c, h, w_align) format, where w_align is the width aligned to the nearest 16 bytes.
+
+Let's look at an example where c = 4, h = 12, and w = 12. Indexing starts at 0 for this example.
+
+<div align="center">
+<img src="../../imgs/python_app/memory_layouts.png">
+<p>Memory layouts</p>
+</div>
+
+For both 520 and 720, we can see that the first 12 bytes of data correspond to the width dimension. The next 4 bytes will then be filled with whatever data is in that memory after inference, since the width dimension is aligned to the nearest 16 bytes. The following is where we see the difference in layouts between 520 and 720: for 520, the channel dimension is next but for 720, the height dimension is next.
+
+For 520, the next 16 bytes of data correspond to channel of 1, while for 720, the next 16 bytes of data correspond to height of 1. Let's take the 20th byte of data as an example. For 520, this would correspond to c = 1, w = 4, and h = 0. However, for 720, this would correspond to c = 0, w = 4, and h = 1.
+
+To recap, for 520, width increments first, up to the aligned 16 byte width. Channel increments next, and height increments last. For 720, width increments first, also up to the aligned 16 byte width. Height increments next, and channel increments last.
+
 ## Useful notes/recap/reminder
-* When printing info in Python, by default, the simulator will suppress the output. To enable this printing, use the "-d" option on the command line.
-* When using the display function in our utils, the list of bounding boxes input will need to follow a specific format. Each box in the list must have the following values to display the correct box on the image: (x, y, w, h, score, class).
 * When using C postprocess, although the inference results are supplied as input in the function, you will still need to call the utility functions csim_to_memory or dynasty_to_memory to load the data before calling your postprocess wrapper.
 * C structure wrapper examples can be found under python_flow/common in the kdp_image files; C function wrapper examples can be found under app/src/python in convert.py.

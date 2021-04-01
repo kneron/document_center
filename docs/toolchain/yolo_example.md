@@ -130,21 +130,21 @@ Now, we will go over how to use our newly compiled model with the E2E Simulator.
 First, we need to setup our application. We must be in the E2E_Simulator directory for the rest of this tutorial.
 
 ```bash
-cd /workplace/E2E_Simulator
+cd /workspace/E2E_Simulator
 ```
 
 ### 1.1 Application
 Copy the template app and name it anything you would like. For this example, let's call it yolo.
 
 ```bash
-cp -r /workplace/E2E_Simulator/app/template_app /workplace/E2E_Simulator/app/yolo
+cp -r /workspace/E2E_Simulator/app/template_app /workspace/E2E_Simulator/app/yolo
 ```
 
 ### 1.2 Copy the model
 Now, we must copy our compiled yolo model from above, into our YOLO application.
 
 ```bash
-cp /data1/yolo.opt.onnx /workplace/E2E_Simulator/app/yolo/.
+cp /data1/yolo.opt.onnx /workspace/E2E_Simulator/app/yolo/.
 ```
 
 ## 2. Process functions
@@ -189,7 +189,7 @@ The postprocess function we will use can be found in the yolo_eval function in `
 Since Python doesn't allow imports with `-` in the file name, let us copy the directory into our application.
 
 ```bash
-cp -r /data1/keras-yolo3 /workplace/E2E_Simulator/app/yolo/keras_yolo3
+cp -r /data1/keras-yolo3 /workspace/E2E_Simulator/app/yolo/keras_yolo3
 ```
 
 First, let us set up the imports and the environment. We will need to add the public yolo repository that we cloned into our path for the imports to their function calls to work.
