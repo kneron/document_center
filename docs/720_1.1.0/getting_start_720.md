@@ -465,6 +465,7 @@ Define folder path below:
     | **TINY_YOLOV3_608_MODEL_PATH** | host_lib/input_models/KL720/**yolov3_tiny_608** |
     | **YOLOV5S_MODEL_PATH** | host_lib/input_models/KL720/**kl720_yolov5s** |
     | **FDFR_MODEL_PATH** | host_lib/input_models/KL720/**fdfr** |
+    | **YOLOV5_PD_MODEL_PATH** | host_lib/input_models/KL720/**yolov5_pd** |
 
 #### 5.1.1. <span style="color:blue;font-weight:bold;">isi examples</span>
 
@@ -517,8 +518,9 @@ Define folder path below:
     * The arguments of kl720_cam_isi_center_app are:
     
         <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[video mode]</span> 0: vga (640x480), 1: svga (800x600), 2: wxga (1280x720)
-        <span style="color:cyan;font-weight:bold;">[run_frames]</span>
+        <span style="color:cyan;font-weight:bold;">[run_frames]</span> number of frames (> 0) to run
         <span style="color:cyan;font-weight:bold;">[model_id]</span> 200 = KNERON_OBJECTDETECTION_CENTERNET_512_512_3
+        <span style="color:cyan;font-weight:bold;">[postproc]</span> 0: postprocess at ncpu, 1: postprocess by host
         </div>
 
 * 5.1.1.1.2 **YOLOV3_416_MODEL**
@@ -618,8 +620,10 @@ Define folder path below:
     * The arguments of kl720_isi_center_app are:
     
         <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[parallel_mode]</span> 0: non-parallel, 1: parallel
-        <span style="color:cyan;font-weight:bold;">[run_frames]</span>
+        <span style="color:cyan;font-weight:bold;">[run_frames]</span> number of frames (> 0) to run
         <span style="color:cyan;font-weight:bold;">[model_id]</span> 200 = KNERON_OBJECTDETECTION_CENTERNET_512_512_3
+        <span style="color:cyan;font-weight:bold;">[host_postproc]</span> 0: postprocess at ncpu, 1: postprocess at host
+        <span style="color:cyan;font-weight:bold;">[use_dme_model]</span> 0: use models in flash, 1: use models in memory
         </div>
 
 * 5.1.1.2.2 **YOLOV3_416_MODEL**
@@ -672,108 +676,124 @@ Define folder path below:
     
     * Run `sudo ./kl720_isi_center_app 0 20 211`
 
-#### 5.1.2. <span style="color:blue;font-weight:bold;">dme examples</span>
+* 5.1.1.2.7 **Parallel (Async) Mode**
 
-##### 5.1.2.1 **kl720_dme_async_yolo**
+    Repeat any of above sections with first argument being changed to 1:
 
+    * Model: **YOLOV5S_MODEL_PATH**.
+
+    * Model ID: 211 = KNERON_YOLOV5S_640_640_3
+
+    * Run `sudo ./kl720_isi_center_app 1 20 211`
+
+* 5.1.1.2.8 **Use post processing at host**
+
+    Repeat any of above sections with fourth argument being set to 1:
+
+    * Model: **YOLOV5S_MODEL_PATH**.
+
+    * Model ID: 211 = KNERON_YOLOV5S_640_640_3
+
+    * Run `sudo ./kl720_isi_center_app 0 20 211 1`
+
+* 5.1.1.2.9 **Use model(s) in memory**
+
+    Repeat any of above sections with fifth argument being changed to 1 to use the model in memory.
+
+    Model could be downloaded directly to memory using **kl720_isi_load_model**, or brought to memory from flash in earlier run.
+
+    * Model: **YOLOV5S_MODEL_PATH**.
+
+    * Model ID: 211 = KNERON_YOLOV5S_640_640_3
+
+    * Run `sudo ./kl720_isi_center_app 0 20 211 0 1`
+
+##### 5.1.1.3 **kl720_isi_pdc**
+
+* 5.1.1.3.1 **Serial (Sync)**
+
+    * This example will download **models_720.nef** from **YOLOV5_PD_MODEL_PATH** to KL720 memory automatically
+    * Run `sudo ./kl720_isi_pdc 0 20`, logs will be shown in terminal
+
+        <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
+        adding devices....
+        start kdp host lib....
+        Starting ISI mode and model loading ...
+        starting ISI inference (window = 3)
+        image 1: box_count 6 class_count 1
+        [0] person=1: (424, 152, 491, 373) scores = 0.853638 / 0.998633
+        [1] person=1: (249,  92, 331, 373) scores = 0.845947 / 0.996727
+        [2] person=0: ( 32,  52, 114, 301) scores = 0.838257 / 0.262841
+        [3] person=1: (194, 101, 265, 373) scores = 0.838257 / 0.975013
+        [4] person=1: (311,  95, 425, 375) scores = 0.830566 / 0.993807
+        [5] person=1: ( 98,  68, 199, 372) scores = 0.822876 / 0.562176
+        ..........
+        ..........
+        ..........
+        image 20: box_count 6 class_count 1
+        [0] person=1: (424, 152, 491, 373) scores = 0.853638 / 0.998633
+        [1] person=1: (249,  92, 331, 373) scores = 0.845947 / 0.996727
+        [2] person=0: ( 32,  52, 114, 301) scores = 0.838257 / 0.262841
+        [3] person=1: (194, 101, 265, 373) scores = 0.838257 / 0.975013
+        [4] person=1: (311,  95, 425, 375) scores = 0.830566 / 0.993807
+        [5] person=1: ( 98,  68, 199, 372) scores = 0.822876 / 0.562176
+        => Avg 33.82 FPS (29.57 ms = 591.42/20)
+        </div>
+
+    * The arguments of kl720_isi_pdc are:
+
+        <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[parallel_mode]</span> 0: non-parallel, 1: parallel
+        <span style="color:cyan;font-weight:bold;">[run_frames]</span> number of frames to run
+        </div>
+
+* 5.1.1.3.2 **Parallel (Async)**
+
+    * This example will download **models_720.nef** from **YOLOV5_PD_MODEL_PATH** to KL720 memory automatically
+    * Run `sudo ./kl720_isi_pdc 1 20`, logs will be shown in terminal
+
+        <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
+        adding devices....
+        start kdp host lib....
+        Starting ISI mode and model loading ...
+        starting ISI inference (window = 3)
+        image 1: box_count 6 class_count 1
+        [0] person=1: (424, 152, 491, 373) scores = 0.853638 / 0.998633
+        [1] person=1: (249,  92, 331, 373) scores = 0.845947 / 0.996727
+        [2] person=0: ( 32,  52, 114, 301) scores = 0.838257 / 0.262841
+        [3] person=1: (194, 101, 265, 373) scores = 0.838257 / 0.975013
+        [4] person=1: (311,  95, 425, 375) scores = 0.830566 / 0.993807
+        [5] person=1: ( 98,  68, 199, 372) scores = 0.822876 / 0.562176
+        ..........
+        ..........
+        ..........
+        image 20: box_count 6 class_count 1
+        [0] person=1: (424, 152, 491, 373) scores = 0.853638 / 0.998633
+        [1] person=1: (249,  92, 331, 373) scores = 0.845947 / 0.996727
+        [2] person=0: ( 32,  52, 114, 301) scores = 0.838257 / 0.262841
+        [3] person=1: (194, 101, 265, 373) scores = 0.838257 / 0.975013
+        [4] person=1: (311,  95, 425, 375) scores = 0.830566 / 0.993807
+        [5] person=1: ( 98,  68, 199, 372) scores = 0.822876 / 0.562176
+        => Avg 60.56 FPS (16.51 ms = 330.24/20)
+        </div>
+
+##### 5.1.1.4 **kl720_isi_load_model**
+
+* This example will download a model file to the memory of KL720 directly without using flash
+* Copy **models_720.nef** to **UPDATE_PATH**
 * Open terminal and change path to **EXAMPLE_PATH**
-* Run `sudo ./kl720_dme_async_yolo 1`, logs will be shown in terminal
+* Run `sudo ./kl720_isi_load_model`, logs will be shown in terminal
 
     <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
     adding devices....
     start kdp host lib....
-    doing test :0....
-    starting DME mode ...
-    DME mode succeeded...
-    starting DME configure ...
-    DME configure model [33] succeeded...
-    starting DME inference in [async mode] ...
-    Image 1:
-    Number of class     = 80
-    Number of detection = 1
-    Box[0] (x1, y1, x2, y2, score, class) =  56,  88, 584, 453, 0.841797, 16
-    Image 2:
-    Number of class     = 80
-    Number of detection = 2
-    ..........
-    ..........
-    ..........
-    Image 98:
-    Number of class     = 80
-    Number of detection = 2
-    Box[0] (x1, y1, x2, y2, score, class) = 123,  22, 517, 480, 0.869141, 0
-    Box[1] (x1, y1, x2, y2, score, class) = 458,  13, 610, 115, 0.749023, 62
-    Image 99:
-    Number of class     = 80
-    Number of detection = 1
-    Box[0] (x1, y1, x2, y2, score, class) =  56,  88, 584, 453, 0.841797, 16
-    Image 100:
-    Number of class     = 80
-    Number of detection = 2
-    Box[0] (x1, y1, x2, y2, score, class) = 123,  22, 517, 480, 0.869141, 0
-    Box[1] (x1, y1, x2, y2, score, class) = 458,  13, 610, 115, 0.749023, 62
-    average time on 100 frames: 10.808333 ms/frame, fps: 92.521202
-    DME inference succeeded......
-    de init kdp host lib....
+    starting loading model ...
+      : done
+    => Time = 0.379 seconds
     </div>
 
-* The argument of kl720_dme_async_yolo is:
+#### 5.1.2. <span style="color:blue;font-weight:bold;">fid examples</span>
 
-    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[user_id]</span> 0: post-proc in host, 1: post-proc in dsp
-    </div>
-
-##### 5.1.2.2 **kl720_dme_serial_yolo**
-
-* Open terminal and change path to **EXAMPLE_PATH**
-* Run `sudo ./kl720_dme_serial_yolo 1`, logs will be shown in terminal
-
-    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
-    adding devices....
-    start kdp host lib....
-    doing test :0....
-    starting DME inference in [serial mode] ...
-    DME mode succeeded...
-    starting DME configure ...
-    DME configure model[33] succeeded...
-    starting DME inference for [100] times ...
-    Image 1:
-    Number of class     = 80
-    Number of detection = 1
-    Box[1] (x1, y1, x2, y2, score, class) =  56,  88, 584, 453, 0.841797, 16
-    Image 2:
-    Number of class     = 80
-    Number of detection = 1
-    Box[1] (x1, y1, x2, y2, score, class) =  56,  88, 584, 453, 0.841797, 16
-    Image 3:
-    Number of class     = 80
-    ..........
-    ..........
-    ..........
-    Image 98:
-    Number of class     = 80
-    Number of detection = 1
-    Box[1] (x1, y1, x2, y2, score, class) =  56,  88, 584, 453, 0.841797, 16
-    Image 99:
-    Number of class     = 80
-    Number of detection = 1
-    Box[1] (x1, y1, x2, y2, score, class) =  56,  88, 584, 453, 0.841797, 16
-    Image 100:
-    Number of class     = 80
-    Number of detection = 1
-    Box[1] (x1, y1, x2, y2, score, class) =  56,  88, 584, 453, 0.841797, 16
-    average time on 100 frames: 22.024792 ms/frame, fps: 45.403381
-    DME inference succeeded...
-    de init kdp host lib....
-    </div>
-
-* The argument of kl720_dme_serial_yolo is:
-
-    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[user_id]</span> 0: post-proc in host, 1: post-proc in dsp
-    </div>
-
-#### 5.1.3. <span style="color:blue;font-weight:bold;">fid examples</span>
-
-##### 5.1.3.1 **kl720_fid_start**
+##### 5.1.2.1 **kl720_fid_start**
 
 * Copy **models_720.nef** from **FDFR_MODEL_PATH** to **UPDATE_PATH**
 * Open terminal and change path to **EXAMPLE_PATH**
@@ -823,66 +843,9 @@ Define folder path below:
     de init kdp host lib....
     </div>
 
-##### 5.1.3.2 **kl720_isi_fid**
+#### 5.1.3. <span style="color:blue;font-weight:bold;">jpeg examples</span>
 
-* Copy **models_720.nef** from **FDFR_MODEL_PATH** to **UPDATE_PATH**
-* Open terminal and change path to **EXAMPLE_PATH**
-* Run `sudo ./kl720_update_nef_model` to update **models_720.nef** into device, logs will be shown in terminal
-
-    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
-    adding devices....
-    start kdp host lib....
-    doing test :0....
-    starting update nef model ...
-    update model succeeded...
-    de init kdp host lib....
-    </div>
-
-* Run `sudo ./kl720_isi_fid 0 10 3`, logs will be shown in terminal
-
-    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
-    adding devices....
-    start kdp host lib....
-    starting ISI mode ...
-    Config model 3...
-    ISI model 3 succeeded (window = 3)...
-    starting ISI inference ...
-    image 1 -> 4 object(s)
-        [0] : class 1, score 0.999023: [231.000000 112.000000, 390.000000 276.000000]
-        [1] : class 1, score 0.999023: [238.000000 111.000000, 399.000000 273.000000]
-        [2] : class 1, score 0.997070: [223.000000 90.000000, 408.000000 279.000000]
-        [3] : class 1, score 0.572266: [225.000000 85.000000, 413.000000 275.000000]
-    image 2 -> 4 object(s)
-        [0] : class 1, score 0.999023: [231.000000 112.000000, 390.000000 276.000000]
-        [1] : class 1, score 0.999023: [238.000000 111.000000, 399.000000 273.000000]
-        [2] : class 1, score 0.997070: [223.000000 90.000000, 408.000000 279.000000]
-        [3] : class 1, score 0.572266: [225.000000 85.000000, 413.000000 275.000000]
-    ..........
-    ..........
-    ..........
-    image 9 -> 4 object(s)
-        [0] : class 1, score 0.999023: [231.000000 112.000000, 390.000000 276.000000]
-        [1] : class 1, score 0.999023: [238.000000 111.000000, 399.000000 273.000000]
-        [2] : class 1, score 0.997070: [223.000000 90.000000, 408.000000 279.000000]
-        [3] : class 1, score 0.572266: [225.000000 85.000000, 413.000000 275.000000]
-    image 10 -> 4 object(s)
-        [0] : class 1, score 0.999023: [231.000000 112.000000, 390.000000 276.000000]
-        [1] : class 1, score 0.999023: [238.000000 111.000000, 399.000000 273.000000]
-        [2] : class 1, score 0.997070: [223.000000 90.000000, 408.000000 279.000000]
-        [3] : class 1, score 0.572266: [225.000000 85.000000, 413.000000 275.000000]
-    => Avg 89.82 FPS (11.13 ms = 111.33/10)
-    </div>
-
-* The arguments of kl720_isi_fid are:
-
-    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[parallel_mode]</span> 0: non-parallel, 1: parallel
-    <span style="color:cyan;font-weight:bold;">[run_frames]</span>
-    <span style="color:cyan;font-weight:bold;">[model_id]</span> 3 = FD, 5 = LM, 10 = FR
-    </div>
-
-#### 5.1.4. <span style="color:blue;font-weight:bold;">jpeg examples</span>
-
-##### 5.1.4.1 **kl720_jpeg_dec**
+##### 5.1.3.1 **kl720_jpeg_dec**
 
 * Open terminal and change path to **EXAMPLE_PATH**
 * Run `sudo ./kl720_jpeg_dec 10 1`, logs will be shown in terminal
@@ -925,7 +888,7 @@ Define folder path below:
     <span style="color:cyan;font-weight:bold;">[save result to file]</span> 0: does not save to file, run full speed; 1: save to file for verification
     </div>
 
-##### 5.1.4.2 **kl720_jpeg_enc**
+##### 5.1.3.2 **kl720_jpeg_enc**
 
 * Open terminal and change path to **EXAMPLE_PATH**
 * Run `sudo ./kl720_jpeg_enc 0 75 10 1`, logs will be shown in terminal
@@ -967,9 +930,9 @@ Define folder path below:
     <span style="color:cyan;font-weight:bold;">[save result to file]</span> 0: does not save to file, run full speed; 1: save to file for verification
     </div>
 
-#### 5.1.5. <span style="color:blue;font-weight:bold;">misc examples</span>
+#### 5.1.4. <span style="color:blue;font-weight:bold;">misc examples</span>
 
-##### 5.1.5.1 **kl720_get_kn_num**
+##### 5.1.4.1 **kl720_get_kn_num**
 
 * Open terminal and change path to **EXAMPLE_PATH**
 * Run `sudo ./kl720_get_kn_num`, logs will be shown in terminal
@@ -985,7 +948,7 @@ Define folder path below:
 
 * The **KN number** can be found from logs.
 
-##### 5.1.5.2 **kl720_get_model_info**
+##### 5.1.4.2 **kl720_get_model_info**
 
 * Open terminal and change path to **EXAMPLE_PATH**
 * Run `sudo ./kl720_get_model_info`, logs will be shown in terminal
@@ -1002,7 +965,7 @@ Define folder path below:
     de init kdp host lib....
     </div>
 
-##### 5.1.5.3 **kl720_get_nef_model_metadata**
+##### 5.1.4.3 **kl720_get_nef_model_metadata**
 
 * Copy **models_720.nef** to **UPDATE_PATH**
 * Open terminal and change path to **EXAMPLE_PATH**
@@ -1024,7 +987,7 @@ Define folder path below:
     de init kdp host lib....
     </div>
 
-##### 5.1.5.4 **kl720_set_ckey**
+##### 5.1.4.4 **kl720_set_ckey**
 
 * Open terminal and change path to **EXAMPLE_PATH**
 * Run `sudo ./kl720_set_ckey 1234`, logs will be shown in terminal
@@ -1047,9 +1010,52 @@ Define folder path below:
     <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[user_id]</span> customized key in decimal format
     </div>
 
-#### 5.1.6. <span style="color:blue;font-weight:bold;">update examples</span>
+##### 5.1.4.5 **kl720_reset**
 
-##### 5.1.6.1 **kl720_update_app_nef_model**
+* This example will instruct KL720 to do reset
+* Open terminal and change path to **EXAMPLE_PATH**
+
+* 5.1.4.5.1 **Reset KL720 device**
+
+    * Run `sudo ./kl720_reset 0`, logs will be shown in terminal
+
+        <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
+        adding devices....
+        start kdp host lib....
+        <br>
+        sys reset mode succeeded...
+        </div>
+
+* 5.1.4.5.2 **Reset Log Level**
+
+    * Run `sudo ./kl720_reset 2 6 2`, logs will be shown in terminal
+
+        <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
+        adding devices....
+        start kdp host lib....
+        sys reset mode succeeded...
+        </div>
+
+    * The arguments of kl720_reset are:
+
+        <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[reset mode]</span> 0: reset, 1: shutdown, 2: log level
+        <span style="color:cyan;font-weight:bold;">[scpu log level]</span> 1-6 = log level on SCPU
+        <span style="color:cyan;font-weight:bold;">[ncpu log level]</span> 1-6 = log level on NCPU
+        </div>
+
+    * Log levels are:
+
+        <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;">[1]</span> LOG_CRITICAL
+        <span style="color:cyan;">[2]</span> LOG_ERROR
+        <span style="color:cyan;">[3]</span> LOG_USER
+        <span style="color:cyan;">[4]</span> LOG_INFO
+        <span style="color:cyan;">[5]</span> LOG_TRACE
+        <span style="color:cyan;">[6]</span> LOG_DBG
+        </div>
+
+#### 5.1.5. <span style="color:blue;font-weight:bold;">update examples</span>
+
+##### 5.1.5.1 **kl720_update_app_nef_model**
 
 * Copy **fw_scpu.bin**, **fw_ncpu.bin**, **models_720.nef** to **UPDATE_PATH**
 * Open terminal and change path to **EXAMPLE_PATH**
@@ -1074,7 +1080,7 @@ Define folder path below:
 
 * The example updates scpu first, then ncpu, the last is model.
 
-##### 5.1.6.2 **kl720_update_fw**
+##### 5.1.5.2 **kl720_update_fw**
 
 * Copy **fw_scpu.bin**, **fw_ncpu.bin**, **models_720.nef** to **UPDATE_PATH**
 * Open terminal and change path to **EXAMPLE_PATH**
@@ -1098,7 +1104,7 @@ Define folder path below:
     <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[update_id]</span> 1: SCPU firmware, 2: NCPU firmware
     </div>
 
-##### 5.1.6.3 **kl720_update_nef_model**
+##### 5.1.5.3 **kl720_update_nef_model**
 
 * Copy **models_720.nef** to **UPDATE_PATH**
 * Open terminal and change path to **EXAMPLE_PATH**
