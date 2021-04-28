@@ -634,6 +634,83 @@ E2ESimulator workflow is implemented in C, which will get the exactly same resul
 
 The detailed manual of E2ESimulator can be found at <http://doc.kneron.com/docs/#toolchain/python_app/app_flow_manual/>.
 
+
+## 4. Python API
+
+We also provide a python package in the docker toolchain. The package name is `ktc`. You can simply start by having `import ktc` in your script.
+There is an simple example called `/workspace/examples/test_python_api.py`. Hope this helps you understand the Python API usage.
+
+Note that this package is only available in the docker due to the dependency issue.
+
+### 4.1 Converters
+
+The converter provides the following API. The return value is the result. For detailed usage, please use `help()` function to check:
+
+```python
+# Optimizers
+ktc.onnx_optimizer.onnx1_4to1_6(model)
+ktc.onnx_optimizer.torch_exported_onnx_flow(model)
+ktc.onnx_optimizer.onnx2onnx_flow(model)
+
+# Editors
+ktc.onnx_optimizer.delete_nodes(model, ["name"])
+ktc.onnx_optimizer.delete_inputs(model, ["name"])
+ktc.onnx_optimizer.delete_outputs(model, ["name"])
+ktc.onnx_optimizer.cut_graph_from_nodes(model, ["name"])
+ktc.onnx_optimizer.remove_nodes_with_types(model, ["name"])
+ktc.onnx_optimizer.change_input_output_shapes(model, input_shape_mapping={"iname", (1, 1)}, output_shape_mapping={"oname", (1, 1)})
+ktc.onnx_optimizer.add_conv_after(model, ["name"])
+ktc.onnx_optimizer.add_bn_after(model, ["name"])
+ktc.onnx_optimizer.rename_output(model, "old_name", "new_name")
+```
+
+### 4.2 Analyser
+
+To use the analyzer, the user need to create an ModelConfig object first.
+
+```python
+km = ktc.ModelConfig(model_id, "model_name", "520/720", onnx_model=onnx_model)
+```
+
+Then, one can use the class function to do the analysis. The result path will be returned by the function.
+
+```python
+km.analysis({"input_name": [img_data]})
+```
+
+### 4.3 Evaluation
+
+The evaluation is also a class function of the `ModelConfig` object. The evaluation process do not need the model being analyzed.
+
+```python
+km.evaluate()
+```
+
+### 4.4 Compiler
+
+Here we provide the batch compile api in python. One shall feed the function with the `ModelConfig` objects
+that are initilized with bie files or analyzed. The result nef file path would be returned.
+
+Note that all the model object should belongs to the same platform.
+
+```python
+# Non-encrypted batch compile
+ktc.compile([km])
+
+# Encrypted batch compile
+ktc.encrypt_compile([km], mode=1, key="0x12345678", key_file="file")
+```
+
+### 4.5 Inferencer
+
+Inferencer can be called through `ktc.kneron_inference(...)`. The usage is the same as in the E2E simulator. Please check its document for details.
+
+By the way, for one who wondering what the radix should be, we provide a function to get radix from the input files:
+
+```python
+ktc.get_radix([img_data])
+```
+
 ## FAQ
 
 ### 1. How to configure the `input_params.json`?
