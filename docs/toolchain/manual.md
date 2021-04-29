@@ -4,8 +4,8 @@
 
 # Kneron Linux Toolchain Manual
 
-**2021 Mar**  
-**Toolchain v0.13.1**
+**2021 Apr**
+**Toolchain v0.14.0**
 
 [PDF Downloads](manual.pdf)
 
@@ -14,7 +14,7 @@
 KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 520 and KDP 720. For better
 environment compatibility, we provide a docker which include all the dependencies as well as the toolchain software.
 
-**This document is compatible with `kneron/toolchain:v0.13.1`.**
+**This document is compatible with `kneron/toolchain:v0.14.0`.**
 
  *Performance simulation result on NPU KDP520:*
 
@@ -56,6 +56,10 @@ In this document, you'll learn:
 
 ** Major changes of past versions**
 
+* **[v0.14.0]**
+    * ONNX is updated to 1.6.0
+    * Pytorch is updated to 1.7.1
+    * Introduce toolchain Python API.
 * **[v0.13.0]**
     * 520 toolchain and 720 toolchain now is combined into one. But the scripts names and paths are the same as before. You don't need to learn it again.
     * E2E simulator has been updated to a new version. Usage changed. Please check its document.
@@ -105,8 +109,8 @@ You can use the following command to pull the latest toolchain docker.
 docker pull kneron/toolchain:latest
 ```
 
-Note that this document is compatible with toolchain v0.13.1. You can find the version of the toolchain in
-`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.13.1, you may need to find the
+Note that this document is compatible with toolchain v0.14.0. You can find the version of the toolchain in
+`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.14.0, you may need to find the
 latest document from the [online document center](http://doc.kneron.com/docs).
 
 ## 2. Toolchain Docker Overview
@@ -361,6 +365,10 @@ python /workspace/scripts/convert_model.py onnx input.onnx output.onnx
 If you meet the errors related to `node not found` or `invalid input`, this might be caused by a bug in the onnx
 library. Please try using `--no-bn-fusion` flag.
 
+*__Error due to the opset version__*
+
+If you have met errors which are related to the opset version or the ir version. Please check section 3.1.8 to update your model first.
+
 #### 3.1.7 Model Editor
 
 KL520/KL720 NPU supports most of the compute extensive OPs, such as Conv, BatchNormalization, Fully Connect/GEMM, in order to
@@ -371,6 +379,16 @@ the model more efficiently.
 
 You can find the detailed description of this tool in the `ONNX Converter` document on our kneron document center
 website.
+
+#### 3.1.8 Model Updater
+
+From toolchain version 0.14.0, ONNX in the docker has been updated to 1.6. And the opset that converters support is changed from opset 9 into opset 11.
+Thus, if you have a onnx model with opset 9, you may need to update it with the following command before any other actions:
+
+```bash
+python /workspace/libs/ONNX_Convertor/optimizer_scripts/onnx1_4to1_6.py input.onnx output.onnx
+```
+
 
 ### 3.2 FpAnalyser, Compiler and IpEvaluator
 

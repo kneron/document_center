@@ -111,12 +111,11 @@ file exported by `torch.onnx`. The PyTorch version in the toolchain docker is 1.
 ```python
 import torch.onnx
 dummy_input = torch.randn(1, 3, 224, 224)
-torch.onnx.export(model, dummy_input, 'output.onnx', keep_initializers_as_inputs=True, opset_version=11)
+torch.onnx.export(model, dummy_input, 'output.onnx', opset_version=11)
 ```
 
 > In the example, `(1, 3, 224, 224)` are batch size, input channel, input height and input width. `model` is the model
-> object you want to export. `output.onnx` is the output file. For Pytorch version before 1.3.0, 
-> `keep_initializers_as_inputs=True` is not needed. Otherwise, it is required.
+> object you want to export. `output.onnx` is the output file.
 
 *__Run pytorch2onnx with pth file__*
 
