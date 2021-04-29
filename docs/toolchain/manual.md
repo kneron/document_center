@@ -656,35 +656,50 @@ The detailed manual of E2ESimulator can be found at <http://doc.kneron.com/docs/
 ## 4. Python API
 
 We also provide a python package in the docker toolchain. The package name is `ktc`. You can simply start by having `import ktc` in your script.
-There is an simple example called `/workspace/examples/test_python_api.py`. Hope this helps you understand the Python API usage.
+In the following sections, we'll list the available functions in the API and their function. For detailed usage of each function, please use
+`help()` function to check the in code documents.
+
+There is also an simple example called `/workspace/examples/test_python_api.py`. Hope this helps you understand the Python API usage.
 
 Note that this package is only available in the docker due to the dependency issue.
 
 ### 4.1 Converters
 
-The converter provides the following API. The return value is the result. For detailed usage, please use `help()` function to check:
+The converter provides the following API.
 
 ```python
 # Optimizers
+# onnx version update
 ktc.onnx_optimizer.onnx1_4to1_6(model)
+# Pytorch exported onnx optimization. Note that onnx2onnx_flow is still needed after running this optimizaiton.
 ktc.onnx_optimizer.torch_exported_onnx_flow(model)
+# General onnx optimization
 ktc.onnx_optimizer.onnx2onnx_flow(model)
 
 # Editors
-ktc.onnx_optimizer.delete_nodes(model, ["name"])
-ktc.onnx_optimizer.delete_inputs(model, ["name"])
-ktc.onnx_optimizer.delete_outputs(model, ["name"])
-ktc.onnx_optimizer.cut_graph_from_nodes(model, ["name"])
-ktc.onnx_optimizer.remove_nodes_with_types(model, ["name"])
+# delete specific nodes
+ktc.onnx_optimizer.delete_nodes(model, ["node_name"])
+# delete specific inputs
+ktc.onnx_optimizer.delete_inputs(model, ["value_name"])
+# delete specific outputs
+ktc.onnx_optimizer.delete_outputs(model, ["value_name"])
+# cut the graph from the given node. (All the nodes following are also deleted.)
+ktc.onnx_optimizer.cut_graph_from_nodes(model, ["node_name"])
+# cut the graph from the given operator type. Similar behaviour as cut_graph_from_nodes.
+ktc.onnx_optimizer.remove_nodes_with_types(model, ["operator_type"])
+# change input/output shapes
 ktc.onnx_optimizer.change_input_output_shapes(model, input_shape_mapping={"iname", (1, 1)}, output_shape_mapping={"oname", (1, 1)})
-ktc.onnx_optimizer.add_conv_after(model, ["name"])
-ktc.onnx_optimizer.add_bn_after(model, ["name"])
+# add do-nothing Conv nodes after specific values
+ktc.onnx_optimizer.add_conv_after(model, ["value_name"])
+# add do-nothing BN nodes after specific values
+ktc.onnx_optimizer.add_bn_after(model, ["value_name"])
+# rename an output
 ktc.onnx_optimizer.rename_output(model, "old_name", "new_name")
 ```
 
 ### 4.2 Analyser
 
-To use the analyzer, the user need to create an ModelConfig object first.
+To use the analyzer, the user need to create an `ModelConfig` object first.
 
 ```python
 km = ktc.ModelConfig(model_id, "model_name", "520/720", onnx_model=onnx_model)
