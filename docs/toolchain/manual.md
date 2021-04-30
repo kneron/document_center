@@ -655,94 +655,15 @@ The detailed manual of E2ESimulator can be found at <http://doc.kneron.com/docs/
 
 ## 4. Python API
 
-We also provide a python package in the docker toolchain. The package name is `ktc`. You can simply start by having `import ktc` in your script.
-In the following sections, we'll list the available functions in the API and their function. For detailed usage of each function, please use
-`help()` function to check the in code documents.
+We provide a Python package in the docker toolchain. The package name is `ktc`. You can simply start by having
+`import ktc` in your Python script. We hope this python API could help you simplify the workflow. You may find
+the detailed description in the [Python API document](http://doc.kneron.com/docs/#toolchain/python_api/).
+You can also find the usage using the python `help()` function.
 
-There is also an simple example called `/workspace/examples/test_python_api.py`. Hope this helps you understand the Python API usage.
+There is also an simple example called `/workspace/examples/test_python_api.py` in the docker. This might helps you
+understand the Python API usage.
 
-Note that this package is only available in the docker due to the dependency issue.
-
-### 4.1 Converters
-
-The converter provides the following API.
-
-```python
-# Optimizers
-# onnx version update
-ktc.onnx_optimizer.onnx1_4to1_6(model)
-# Pytorch exported onnx optimization. Note that onnx2onnx_flow is still needed after running this optimizaiton.
-ktc.onnx_optimizer.torch_exported_onnx_flow(model)
-# General onnx optimization
-ktc.onnx_optimizer.onnx2onnx_flow(model)
-
-# Editors
-# delete specific nodes
-ktc.onnx_optimizer.delete_nodes(model, ["node_name"])
-# delete specific inputs
-ktc.onnx_optimizer.delete_inputs(model, ["value_name"])
-# delete specific outputs
-ktc.onnx_optimizer.delete_outputs(model, ["value_name"])
-# cut the graph from the given node. (All the nodes following are also deleted.)
-ktc.onnx_optimizer.cut_graph_from_nodes(model, ["node_name"])
-# cut the graph from the given operator type. Similar behaviour as cut_graph_from_nodes.
-ktc.onnx_optimizer.remove_nodes_with_types(model, ["operator_type"])
-# change input/output shapes
-ktc.onnx_optimizer.change_input_output_shapes(model, input_shape_mapping={"iname", (1, 1)}, output_shape_mapping={"oname", (1, 1)})
-# add do-nothing Conv nodes after specific values
-ktc.onnx_optimizer.add_conv_after(model, ["value_name"])
-# add do-nothing BN nodes after specific values
-ktc.onnx_optimizer.add_bn_after(model, ["value_name"])
-# rename an output
-ktc.onnx_optimizer.rename_output(model, "old_name", "new_name")
-```
-
-### 4.2 Analyser
-
-To use the analyzer, the user need to create an `ModelConfig` object first.
-
-```python
-km = ktc.ModelConfig(model_id, "model_name", "520/720", onnx_model=onnx_model)
-```
-
-Then, one can use the class function to do the analysis. The result path will be returned by the function.
-
-```python
-km.analysis({"input_name": [img_data]})
-```
-
-### 4.3 Evaluation
-
-The evaluation is also a class function of the `ModelConfig` object. The evaluation process do not need the model being analyzed.
-
-```python
-km.evaluate()
-```
-
-### 4.4 Compiler
-
-Here we provide the batch compile api in python. One shall feed the function with the `ModelConfig` objects
-that are initilized with bie files or analyzed. The result nef file path would be returned.
-
-Note that all the model object should belongs to the same platform.
-
-```python
-# Non-encrypted batch compile
-ktc.compile([km])
-
-# Encrypted batch compile
-ktc.encrypt_compile([km], mode=1, key="0x12345678", key_file="file")
-```
-
-### 4.5 Inferencer
-
-Inferencer can be called through `ktc.kneron_inference(...)`. The usage is the same as in the E2E simulator. Please check its document for details.
-
-By the way, for one who wondering what the radix should be, we provide a function to get radix from the input files:
-
-```python
-ktc.get_radix([img_data])
-```
+**Note that this package is only available in the docker due to the dependency issue.**
 
 ## FAQ
 

@@ -32,6 +32,7 @@ nav:
     - End to End Simulator: toolchain/python_app/app_flow_manual.md
     - Yolo Example: toolchain/yolo_example.md
     - ONNX Converter: toolchain/converters.md
+    - Python API: toolchain/python_api.md
     - History Versions: toolchain/history.md
 extra:
     logo: 'imgs/logo.png'
