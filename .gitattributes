@@ -10,3 +10,4 @@ docs/toolchain/history/manual_720_v0.12.1.pdf filter=lfs diff=lfs merge=lfs -tex
 docs/toolchain/history/manual_720_v0.9.0.pdf filter=lfs diff=lfs merge=lfs -text
 docs/toolchain/history/manual_520_v0.10.0.pdf filter=lfs diff=lfs merge=lfs -text
 docs/toolchain/history/manual_520_v0.11.0.pdf filter=lfs diff=lfs merge=lfs -text
+docs/toolchain/history/manual_v0.13.1.pdf filter=lfs diff=lfs merge=lfs -text

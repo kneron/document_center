@@ -21,11 +21,11 @@ Table 1.2 shows supported operators conversion mapping table for every platform.
 
 *Table 1.2 Operators conversion table for every platform*
 
-| type                   | keras                   | caffe                | tflite                                    | tensorflow( * ) | pytorch( ** ) | onnx(Opset9)                | KL520/KL720( *** )                                                                       |
+| type                   | keras                   | caffe                | tflite                                    | tensorflow( * ) | pytorch( ** ) | onnx(Opset 11)                | KL520/KL720( *** )                                                                       |
 |------------------------|-------------------------|----------------------|-------------------------------------------|-----------------|---------------|-----------------------------|------------------------------------------------------------------------------------|
 | add                    | Add                     | Eltwise              | ADD                                       | ( * )           | ( ** )        | Add                         | Add                                                                                |
 | average pooling        | AveragePooling2D        | Pooling              | AVERAGE_POOL_2D                           | ( * )           | ( ** )        | AveragePool                 | AveragePool (kenel 1x1 2x2、3x3) / ( *** )GlobalAveragePool (kernel == input shape) |
-| batchnormalization     | BatchNormalization      | BatchNorm            |                                           | ( * )           | ( ** )        | Batchnormalization          | BatchNorm                                                                          |
+| batchnormalization     | BatchNormalization      | BatchNorm            |                                           | ( * )           | ( ** )        | BatchNormalization          | BatchNorm                                                                          |
 | concatenate            | Concatenate             | Concat               | CONCATENATION                             | ( * )           | ( ** )        | Concat                      | Concat                                                                             |
 | convolution            | Conv2D                  | Convolution          | CONV_2D                                   | ( * )           | ( ** )        | Conv                        | Conv (strides < [4, 16])                                                           |
 | crop                   | Cropping2D / Cropping1D |                      |                                           | ( * )           | ( ** )        | Slice                       | Slice (input dimension <= 4)                                                       |
@@ -46,14 +46,14 @@ Table 1.2 shows supported operators conversion mapping table for every platform.
 | sigmoid                | Sigmoid                 | Sigmoid              | LOGISTIC                                  | ( * )           | ( ** )        | Sigmoid                     | Sigmoid                                                                            |
 | squeeze                |                         |                      | SQUEEZE                                   | ( * )           | ( ** )        | Squeeze                     | ( *** )Flatten (if available)                                                      |
 | tanh                   | Tanh                    |                      |                                           | ( * )           | ( ** )        | Tanh                        | Tanh                                                                               |
-| resize                 | UpSampling2D            |                      | RESIZE_BILINEAR / RESIZE_NEAREST_NEIGHBOR | ( * )           | ( ** )        | Upsample                    | Upsample                                                                           |
+| resize                 | UpSampling2D            |                      | RESIZE_BILINEAR / RESIZE_NEAREST_NEIGHBOR | ( * )           | ( ** )        | Resize                    | Resize                                                                           |
 | roi pooling            |                         | ROIPooling           |                                           | ( * )           | ( ** )        | MaxRoiPool                  | MaxRoiPool                                                                         |
 
 ( \* ) our tensorflow conversion tool is based on opensource "tf2onnx", please check "https://github.com/onnx/tensorflow-onnx/blob/r1.6/support_status.md" for the supported op information    
 ( \*\* ) our pytorch conversion tool is based on onnx exporting api in torch.onnx, please check "https://pytorch.org/docs/stable/onnx.html#supported-operators" for the supported op information    
 ( \*\*\* ) some operators will be replaced by onnx2onnx.py in order to fit the KL520/KL720 spec.   
 
-#### 1 Keras to ONNX
+## 1 Keras to ONNX
 
 For Keras, our converter support models from Keras 2.2.4. **Note that `tf.keras` and Keras 2.3 is not supported.** You may
 need to export the model as tflite model and see [section 5](#5-tf-lite-to-onnx) for TF Lite model conversion.
@@ -93,30 +93,29 @@ extra layer to let the model take RGB input.
 cd /workspace/libs/ONNX_Convertor/keras-onnx && python rgba2yynn.py input_hdf5_file output_hdf5_file
 ```
 
-#### 2 Pytorch to ONNX
+## 2 Pytorch to ONNX
 
 The `pytorch2onnx.py` script not only takes `pth` file as the input. It also takes Pytorch exported `onnx` as the input.
 In fact, we recommend using the Pytorch exported `onnx` file instead of the `pth` file, since the Pytorch do not has a
 very good model save and load API. You can check TIPS below on how to export models to onnx.
 
-We currently only support models exported by Pytorch version >=1.0.0, <1.6.0, no matter it is a `pth` file or an `onnx`
-file exported by `torch.onnx`.
+We currently only support models exported by Pytorch version >=1.0.0, <=1.7.1, no matter it is a `pth` file or an `onnx`
+file exported by `torch.onnx`. The PyTorch version in the toolchain docker is 1.7.1.
 
 > TIPS
 >
 > You can use `torch.onnx` to export your model into onnx format. Here is the
-> [Pytorch 1.3.0 version document](https://pytorch.org/docs/1.3.1/onnx.html) for `onnx.torch`. An example code for
+> [Pytorch 1.7.1 version document](https://pytorch.org/docs/1.7.1/onnx.html) for `onnx.torch`. An example code for
 > exporting the model is:
 
 ```python
 import torch.onnx
 dummy_input = torch.randn(1, 3, 224, 224)
-torch.onnx.export(model, dummy_input, 'output.onnx', keep_initializers_as_inputs=True, opset_version=9)
+torch.onnx.export(model, dummy_input, 'output.onnx', opset_version=11)
 ```
 
 > In the example, `(1, 3, 224, 224)` are batch size, input channel, input height and input width. `model` is the model
-> object you want to export. `output.onnx` is the output file. For Pytorch version before 1.3.0, 
-> `keep_initializers_as_inputs=True` is not needed. Otherwise, it is required.
+> object you want to export. `output.onnx` is the output file.
 
 *__Run pytorch2onnx with pth file__*
 
@@ -130,14 +129,14 @@ python /workspace/libs/ONNX_Convertor/optimizer_scripts/pytorch2onnx.py /docker_
 
 You need to run the command in [section 6](#6-onnx-to-onnx-onnx-optimization) after this step.
 
-*__Run pytorch2onnx with onnx file__*
+*__Run pytorch_exported_onnx_preprocess with onnx file__*
 
 Suppose the input file is called `/docker_mount/resnet34.onnx` and you want to save the optimized onnx as
 `/docker_mount/resnet34.opt.onnx`. Here is the example
 command:
 
 ```bash
-python /workspace/libs/ONNX_Convertor/optimizer_scripts/pytorch2onnx.py /docker_mount/resnet34.onnx /docker_mount/resnet34.opt.onnx
+python /workspace/libs/ONNX_Convertor/optimizer_scripts/pytorch_exported_onnx_preprocess.py /docker_mount/resnet34.onnx /docker_mount/resnet34.opt.onnx
 ```
 
 You need to run the command in [section 6](#6-onnx-to-onnx-onnx-optimization) after this step.
@@ -148,7 +147,7 @@ If you meet the errors related to `node not found` or `invalid input`, this migh
 library. Please try using `--no-bn-fusion` flag.
 
 
-#### 3 Caffe to ONNX
+## 3 Caffe to ONNX
 
 For caffe, we only support model which can be loaded by [Intel Caffe 1.0](https://github.com/intel/caffe).
 
@@ -162,7 +161,7 @@ python /workspace/libs/ONNX_Convertor/caffe-onnx/generate_onnx.py -o /docker_mou
 
 You need to run the command in [section 6](#6-onnx-to-onnx-onnx-optimization) after this step.
 
-#### 4 Tensorflow to ONNX
+## 4 Tensorflow to ONNX
 
 Tensorflow to onnx script only support Tensorflow 1.x and the operator support is very limited. If it cannot work on
 your model, please try to export the model as tflite and convert it using [section 5](#5-tf-lite-to-onnx).
@@ -176,7 +175,7 @@ python /workspace/libs/ONNX_Convertor/optimizer_scripts/tensorflow2onnx.py /dock
 
 You need to run the command in [section 6](#6-onnx-to-onnx-onnx-optimization) after this step.
 
-#### 5 TF Lite to ONNX
+## 5 TF Lite to ONNX
 
 ```bash
 python /workspace/libs/ONNX_Convertor/tflite-onnx/onnx_tflite/tflite2onnx.py -tflite path_of_input_tflite_model -save_path path_of_output_onnx_file -release_mode True
@@ -190,7 +189,7 @@ python /workspace/libs/ONNX_Convertor/tflite-onnx/onnx_tflite/tflite2onnx.py -tf
 
 Then need to run the command in [section 6](#6-onnx-to-onnx-onnx-optimization).
 
-#### 6 ONNX to ONNX (ONNX optimization)
+## 6 ONNX to ONNX (ONNX optimization)
 
 After converting models from other frameworks to onnx format, you need to run the following command to optimize the 
 model for Kneron hardware, suppose your model is `input.onnx` and the output model is called `output.onnx`:
@@ -204,7 +203,7 @@ python /workspace/libs/ONNX_Convertor/optimizer_scripts/onnx2onnx.py input.onnx 
 If you meet the errors related to `node not found` or `invalid input`, this might be caused by a bug in the onnx
 library. Please try using `--no-bn-fusion` flag.
 
-#### 7 Model Editor
+## 7 Model Editor
 
 KL720 NPU supports most of the compute extensive OPs, such as Conv, BatchNormalization, Fully Connect/GEMM, in order to
 speed up the model inference run time. On the other hand, there are some OPs that KL720 NPU cannot support well, such as
@@ -295,4 +294,17 @@ optional arguments:
 
         --add-bn ADD_BN [ADD_BN ...]
         add nop bn using specific input
+```
+
+## 8 ONNX Updater
+
+For existed onnx models with the previous version of the opset, we provide the following scripts to update your model.
+Note that after running any of the following scripts, you may still need to run `onnx2onnx.py`.
+
+```bash
+# For ONNX 1.3 to 1.4 (opset 7/8 to opset 9):
+python /workspace/libs/ONNX_Convertor/optimizer_scripts/onnx1_3to1_4.py input.onnx output.onnx
+
+# For ONNX 1.4 to 1.6 (opset 9 to opset 11):
+python /workspace/libs/ONNX_Convertor/optimizer_scripts/onnx1_4to1_6.py input.onnx output.onnx
 ```
