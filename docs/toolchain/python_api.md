@@ -226,6 +226,7 @@ Args:
 * output_bie (str, optional): path to the output bie file. Defaults to "/data1/output.bie".
 * threads (int, optional): multithread setting. Defaults to 4.
 * quantize_mode (str, optional): quantize_mode setting. Currently support default and post_sigmoid. Defaults to "default".
+* outlier (float, optional): remove outliers when calculating max & min. It should be between 0 and 1.0. Defaults to 0.999.
 
 ### 2.3 Model Evaluation
 

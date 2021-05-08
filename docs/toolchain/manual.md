@@ -4,8 +4,8 @@
 
 # Kneron Linux Toolchain Manual
 
-**2021 Apr**
-**Toolchain v0.14.0**
+**2021 May**
+**Toolchain v0.14.1**
 
 [PDF Downloads](manual.pdf)
 
@@ -14,7 +14,7 @@
 KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 520 and KDP 720. For better
 environment compatibility, we provide a docker which include all the dependencies as well as the toolchain software.
 
-**This document is compatible with `kneron/toolchain:v0.14.0`.**
+**This document is compatible with `kneron/toolchain:v0.14.1`.**
 
  *Performance simulation result on NPU KDP520:*
 
@@ -109,8 +109,8 @@ You can use the following command to pull the latest toolchain docker.
 docker pull kneron/toolchain:latest
 ```
 
-Note that this document is compatible with toolchain v0.14.0. You can find the version of the toolchain in
-`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.14.0, you may need to find the
+Note that this document is compatible with toolchain v0.14.1. You can find the version of the toolchain in
+`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.14.1, you may need to find the
 latest document from the [online document center](http://doc.kneron.com/docs).
 
 ## 2. Toolchain Docker Overview
@@ -693,7 +693,10 @@ Here is an example JSON with comments. **Please remove all the comments in the r
         // - default: for most of the models.
         // - post_sigmoid: recommand for yolo models.
         // If this option is not present, it uses the 'default' mode.
-        "quantize_mode": "default"
+        "quantize_mode": "default",
+        // For fp-analysis, remove outliers when calculating max & min. It should be between 0.0 and 1.0.
+        // If not given, default value is 0.999.
+        "outlier": 0.999
     },
     // The preprocess method of the input images.
     "preprocess": {
