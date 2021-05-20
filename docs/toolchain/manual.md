@@ -180,7 +180,7 @@ Step 1 is in section 3.1. Step 2-6 are automated in [section 3.2](#32-fpanalyser
 
 ### 2.3 Supported operators
 
-Table 1.1 shows the list of functions KDP520 supports base on ONNX 1.4.1.
+Table 1.1 shows the list of functions KDP520 supports base on ONNX 1.6.1.
 
 *Table 1.1 The functions KDP520 NPU supports*
 
@@ -207,7 +207,7 @@ Table 1.1 shows the list of functions KDP520 supports base on ONNX 1.4.1.
 |                  | Flatten                       |                   | support               |
 |                  | Clip                          |                   | min = 0               |
 
-Table 1.2 shows the list of functions KDP720 supports base on ONNX 1.4.1.
+Table 1.2 shows the list of functions KDP720 supports base on ONNX 1.6.1.
 
 *Table 1.2 The functions KDP720 NPU supports*
 
@@ -219,7 +219,7 @@ Table 1.2 shows the list of functions KDP720 supports base on ONNX 1.4.1.
 | Sigmoid            |                      | support                         |
 | Clip               |                      | min = 0                         |
 | Tanh               |                      | support                         |
-| BatchNormalization | 4D input             | support                         |
+| BatchNormalization | up to 4D input       | support                         |
 | Conv               |                      | strides < [4, 16]               |
 | Pad                |                      | spacial dimension only          |
 | ConvTranspose      |                      | strides = [1, 1], [2, 2]        |
