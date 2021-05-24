@@ -10,15 +10,9 @@ In order to run the inference of models on Kneron AI dongles, there are three pa
 
 Below diagram depicts three parts of development in a big picture.
 
-<div align="center">
-<img src="../imgs/getting_start_imgs_520_PLUS/KL520_develop_flow.png">
-</div>
-
-&nbsp;
+![](./imgs/getting_start_imgs_520_PLUS/KL520_develop_flow.png)
 
 However, this document only focuses on the **software development** and the **firmware development**. For the **model development**, please refer to the **Toolchain Docker** part.
-
-&nbsp;
 
 In this document, we will introduce the **PLUS** architecture comprising new software(SW) and firmware(FW) design for KL520 (and alpha for KL720).
 
@@ -34,7 +28,6 @@ Below gives some definitions regarding the Kneron PLUS:
 
 - **Firmware** is the code responsible for driving Kneron SoC and make it work with the software library. The KDP2 firmware can work with the PLUS and it has prebuilt images included in the PLUS.
 
-&nbsp;
 
 The features which PLUS Supported are listed below:
 
@@ -70,7 +63,6 @@ Index   | Category          | Supported Item
 28      |                   | Customized Inference with Single Model (Tiny Yolo v3)
 29      |                   | Customized Inference with Multiple Models (Face Detect + Landmark)
 
-&nbsp;
 
 The following components are contained in Kneron PLUS:
 
@@ -80,7 +72,6 @@ The following components are contained in Kneron PLUS:
 - Pre-build firmware binary files
 - Some demonstrative NEF files
 
-&nbsp;
 
 Here we will demonstrate below diagram scenario with followings:
 
@@ -88,22 +79,17 @@ Here we will demonstrate below diagram scenario with followings:
 
 2. Write a software example and a corresponding firmeware for the customized models (Chapter 5).
 
-    <div align="center">
-    <img src="../imgs/getting_start_imgs_520_PLUS/KL520_develop_flow_sw.png">
-    </div>
+    ![](./imgs/getting_start_imgs_520_PLUS/KL520_develop_flow_sw.png)
 
-&nbsp;
-&nbsp;
+
 
 ## 2. Install Dependancy
-
-&nbsp;
 
 ### 2.1 Ubuntu 18.04 / Raspberry Pi 4
 
 1. Install **CMake**, **libusb-1.0.0-dev** and **build-essential**.
 
-    ```
+    ```bash
     $ sudo apt install cmake
     $ sudo apt install libusb-1.0-0-dev
     $ sudo apt install build-essential
@@ -119,9 +105,7 @@ Here we will demonstrate below diagram scenario with followings:
     - The application should detect Kneron KL520 device as "Kneron KL520" with USB ID
 "3231/0100" as shown below:
 
-        <div align="center">
-        <img src="../imgs/introduction_PLUS/zadig_install_driver.png">
-        </div>
+        ![](./imgs/introduction_PLUS/zadig_install_driver.png)
 
         (USB ID will be 3231/0200 if KL720 is used.)
 
@@ -133,6 +117,7 @@ Here we will demonstrate below diagram scenario with followings:
     - Download and install the latest **MSYS2** into Windows from <https://www.msys2.org/>.
 
     - Execute **MSYS2 MinGW 64-bit** to install dependancy.
+
         ```
         $ pacman -Syu
         $ pacman -Sy
@@ -146,12 +131,9 @@ Here we will demonstrate below diagram scenario with followings:
 
     - This is used for building the firmware.
 
-&nbsp;
-&nbsp;
+
 
 ## 3. Upgrade Kneron AI Dongle to KDP2 Firmware
-
-&nbsp;
 
 **KDP2 Firmware** is the firmware designed for KP APIs in PLUS. Using KDP2 Firmware allows Kneron AI dongle performing corresponding operation requested by PLUS.
 
@@ -186,25 +168,19 @@ There are two kinds of KDP2 firmware are provided:
 
 2. Use GUI to Update AI Dongle
 
-    ```
+    ```bash
     $ sudo ./KneronDFUT
     ```
 
-    Select **Choose Fimware**.
+    - Select **Choose Fimware**.  
+    - Manually choose **SCPU firmware file** and **NCPU firmware file**.
+    - Select the AI dongles to be updated. and push **Run** button.
 
-    Manually choose **SCPU firmware file** and **NCPU firmware file**.
-
-    Select the AI dongles to be updated. and push **Run** button.
-
-    <div align="center">
-    <img src="../imgs/introduction_PLUS/dfut_upgrade_firmware_flash.png">
-    </div>
-
-&nbsp;
+    ![](./imgs/introduction_PLUS/dfut_upgrade_firmware_flash.png)
 
 3. Use Command Line to Update AI Dongle
 
-    ```
+    ```bash 
     $ sudo ./KneronDFUT --help
 
         [Display help message]
@@ -223,7 +199,7 @@ There are two kinds of KDP2 firmware are provided:
             --gui               : display GUI
     ```
 
-    ```
+    ```bash
     $ sudo ./KneronDFUT --list
 
         ===========================================
@@ -235,7 +211,7 @@ There are two kinds of KDP2 firmware are provided:
         ===========================================
     ```
 
-    ```
+    ```bash
     $ sudo ./KneronDFUT --port 517 --scpu ${SCPU_FILE} --ncpu {NCPU_FILE}
 
         flash target is 'Flash-boot FW'
@@ -256,28 +232,25 @@ There are two kinds of KDP2 firmware are provided:
 
 1. Download the KneronDFUT_ubuntu.zip into Ubuntu from https://www.kneron.com/tw/support/developers/.
 
-    ```
+    ```bash
     $ unzip KneronDFUT_ubuntu.zip
     $ cd Kneron_DFUT/bin/
     ```
 
 2. Use GUI to Update AI Dongle
 
-    ```
+    ```bash
     $ sudo ./KneronDFUT
     ```
 
     Select the AI dongle to be update to KDP2 firmware, and push **Run** button.
 
-    <div align="center">
-    <img src="../imgs/getting_start_imgs_520_PLUS/KneronDFUT.png">
-    </div>
+    ![](./imgs/getting_start_imgs_520_PLUS/KneronDFUT.png)
 
-&nbsp;
 
 3. Use Command Line to Update AI Dongle
 
-    ```
+    ```bash
     $ sudo ./KneronDFUT --help
 
         [Display help message]
@@ -296,7 +269,7 @@ There are two kinds of KDP2 firmware are provided:
             --gui               : display GUI
     ```
 
-    ```
+    ```bash
     $ sudo ./KneronDFUT --list
 
         ===========================================
@@ -308,7 +281,7 @@ There are two kinds of KDP2 firmware are provided:
         ===========================================
     ```
 
-    ```
+    ```bash
     $ sudo ./KneronDFUT --port 517
 
         flash target is 'KDP2 FW Loader'
@@ -322,30 +295,24 @@ There are two kinds of KDP2 firmware are provided:
         ==== Upgrading of Port Id: 517 Succeeded ====
     ```
 
-&nbsp;
-&nbsp;
+
 
 ## 4. Run Inference Example
 
-&nbsp;
-
 *Note: **Ubuntu 18.04** is used in this chapter.
-
-&nbsp;
-
 ### 4.1 Build PLUS
 
-&nbsp;
+Download the latest **kneron_plus_vXXX.zip** into Ubuntu from <https://www.kneron.com/tw/support/developers/>, it is located at **KNEO Stem (USB Dongle)/kneron_plus/**
 
-Download the latest **kneron_plus_vXXX.zip** into Ubuntu from <https://www.kneron.com/tw/support/developers/>, it is located at **KNEO Stem (USB Dongle)/kneron_plus/**.
+Decompress the **kneron_plus_v1.0.0.zip** 
 
-Decompress the **kneron_plus_v1.0.0.zip**.
-```
+```bash
 $ unzip kneron_plus_v1.0.0.zip
 ```
 
 Build code
-```
+
+```bash
 $ cd kneron_plus/
 $ mkdir build ; cd build/
 $ cmake ..
@@ -353,11 +320,12 @@ $ make -j
 ```
 
 Once build is done, the **libkplus.so** will be in **build/src/**
-
 Example executables will be in **build/bin/**
 
-Check if PLUS examples are built successuflly.
-```
+
+Check if PLUS examples are built successfully.
+
+```bash
 $ ls bin/
 
 demo_customize_inf_multiple_models
@@ -369,11 +337,9 @@ scan_device
 
 ### 4.2 List Device Info
 
-&nbsp;
-
 While one or multiple AI dongles are plugged into the host, they can be scanned to get some basic device information.
 
-```
+```bash
 $ sudo ./scan_devices
 
 scanning kneron devices ...
@@ -412,11 +378,7 @@ Above shows that it founds two KL520 devices, a brief descript listed below.
 - **Connectable** : It tells if this device is connectable; one device can only be connected by one program at the same time.
 - **Firmware** : This shows which firmware the AI dongle is using, KDP or KDP2 Loader.
 
-&nbsp;
-
 ### 4.3 Run Inference Examples
-
-&nbsp;
 
 The PLUS provides three categories of API set for model inference.
 
@@ -428,17 +390,13 @@ The PLUS provides three categories of API set for model inference.
 
 Below will demonstrate only usage in two examples for **APP inference** and **Generic inference**.
 
-&nbsp;
-
 #### 4.3.1 App Inference Example
-
-&nbsp;
 
 The **'app_yolo_inference'** example utilizes the **APP inference API** and the **Tiny Yolo V3 model** to perform object detection.
 
 When no parameters, it takes **res/models/KL520/tiny_yolo_v3/models_520.nef** as the inference model, **res/images/bike_cars_street_224x224.bmp** as the input image in BMP format and repeats 20 loops to calculate performance then prints inference results.
 
-```
+```bash
 $ sudo ./app_yolo_inference
 
 -h     : help
@@ -495,30 +453,21 @@ disconnecting device ...
 
 ```
 
-&nbsp;
-
 Besides output results in the screen console, it also draws detected objects in a new-created **output_bike_cars_street_224x224.bmp**.
 
-<div align="center">
-<img src="../imgs/getting_start_imgs_520_PLUS/ex_kdp2_tiny_yolo_v3.bmp">
-</div>
+![](./imgs/getting_start_imgs_520_PLUS/ex_kdp2_tiny_yolo_v3.bmp)
 
 The key features of APP inference are listed below:
 - Specified model NEF.
 - Normally post-process is done in SoC.
 - Simplfied function parameters.
 
-&nbsp;
-
 #### 4.3.2 Generic Inference Example
-
-&nbsp;
 
 **Generic inference** API is intended for users who have their own models and applications.
 
 It needs more complex input parameters and normally the post-process is implemented by users in host side.
 
-&nbsp;
 
 The **'generic_inference'** is an example for showing how it work.
 
@@ -533,7 +482,7 @@ Below shortly explains the key input parameters:
 - **normalize mode** : Normalize mode depends how data is normalized when training the model.
 - **post process** : In PLUS we provide a few post-processing functions, if choosing 'yolo_v3' it use an internal post-processing function for processing yolo_v3 and outputs bounding boxes. For other models, users can use 'none' to diretly get floating point values of each output node.
 
-    ```
+    ```bash
     $ sudo ./generic_inference
 
     -h     : help
@@ -572,20 +521,21 @@ Below shortly explains the key input parameters:
     [1] model input channel = 3
     [1] model raw image format = RGBA8888
     [1] model raw output size = 85752
+    ```
 
 
     image resolution 224x224
     target inference model ID : 19
     allocate memory 85752 bytes for RAW output
-
+    
     starting doing inference, loop = 50
     ..................................................
-
+    
     total inference 50 images
     time spent: 1.04 secs, FPS = 47.9
-
+    
     ================== [Post Process] 'yolo_v3' =========================
-
+    
     class count : 80
     box count : 6
     Box 0 (x1, y1, x2, y2, score, class) = 104.0, 78.0, 141.0, 217.0, 0.949131, 0
@@ -594,32 +544,26 @@ Below shortly explains the key input parameters:
     Box 3 (x1, y1, x2, y2, score, class) = 199.0, 48.0, 221.0, 131.0, 0.916225, 2
     Box 4 (x1, y1, x2, y2, score, class) = 129.0, 46.0, 197.0, 95.0, 0.887819, 2
     Box 5 (x1, y1, x2, y2, score, class) = 12.0, 30.0, 64.0, 79.0, 0.618796, 2
-
+    
     output bounding boxes on 'output_one_bike_many_cars_224x224.bmp'
     ===========================================================================
-
+    
     disconnecting device ...
     ```
-
-&nbsp;
 
 From the console output, it can be observed that the information of models in the NEF is printed, including model ID, raw resolution, intput channel, raw image format and raw output size.
 
 **Raw output** size indicates that a buffer of the size should be prepared to receive the output directly from the AI dongle, and it cannot be used until converting the raw output to well-structed floating point values.
 
-&nbsp;
 
 If [post process] is set to 'yolo_v3', it draws detected objects in a new-created **output_one_bike_many_cars_224x224.bmp**.
 
-<div align="center">
-<img src="../imgs/getting_start_imgs_520_PLUS/ex_kdp2_generic_inference_raw.bmp">
-</div>
+![](./imgs/getting_start_imgs_520_PLUS/ex_kdp2_generic_inference_raw.bmp)
 
-&nbsp;
 
 Otherwise if **post process** is set to 'none', the example dumps floating point values into **.txt** files for each output node.
 
-```
+```bash
 $ sudo ./generic_inference -post none
 
 -h     : help
@@ -698,21 +642,18 @@ first 20 data:
 
 dumped node 0 output to 'output_one_bike_many_cars_224x224_node0_7x7x255.txt'
 dumped node 1 output to 'output_one_bike_many_cars_224x224_node1_14x14x255.txt'
+
 ===========================================================================
 
 ```
 
-&nbsp;
-
 For example, **'node0_7x7x255.txt'** represents node 0, width x height x channel = 7x7x255, and its content looks like below.
 
-```
+```bash
 1.699, 0.340, -0.170, -0.340, -0.340, -0.340, -1.019, 1.189, 1.189, 0.679, 0.510, 0.340, 0.340, 0.510, -0.170, 0.000, 0.170, 0.170, 0.170, 0.000, -0.340, -0.340, -0.679, -0.679, -0.849, -0.679, -0.510, 0.000, -7.984, -4.586, -4.247, -4.586, -5.266, -5.266, -8.153, -2.718, -4.416, -4.416, -4.077, -3.397, -3.737, -3.058, -6.115, -7.984, -8.833, -8.663, -9.003, -9.682, -8.323, -1.019, -1.019, -1.529, -1.529, -1.869, -3.227, -4.077, -5.096, -6.115, -7.304, -6.964, -7.304, -8.323, -8.153, -7.304, -10.192, -10.701, -10.022, -9.512, -8.153, -6.285, -1.529, -1.359, -1.189, -1.019, -0.510, 0.170, 0.679, -0.679
 ....
 ```
 
-&nbsp;
-&nbsp;
 
 ## 5. Run Costomized Models
 
@@ -738,27 +679,21 @@ In order to run customized models on Kneron AI dongle, there are four stages are
 
 The diagram below demostrates the inference flow for every models runnig on Kneron AI dongle, and how the PLUS, SCPU, and NCPU interact with each other.
 
-<div align="center">
-<img src="../imgs/customize_api_520_PLUS/customized_api_develop_flow.png">
-</div>
+![](./imgs/customize_api_520_PLUS/customized_api_develop_flow.png)
 
-&nbsp;
-&nbsp;
 
 ### 5.1 PLUS Development for Face Detect + Landmark
 
-&nbsp;
-
 1. Create my_example folder
 
-    ```
+    ```bash
     $ cd {PLUS_FOLDER_PATH}/examples/
     $ mkdir my_example
     ```
 
 2. Add CMakelists.txt
 
-    ```
+    ```bash
     # build with current *.c/*.cpp plus common source files in parent folder
     # executable name is current folder name.
 
@@ -794,7 +729,7 @@ The diagram below demostrates the inference flow for every models runnig on Kner
     - The **JOB_ID** describes the unique id of the task you want to execute in firmware, and it must be unique and above 1000.
 
     - This file should be synchronized with the .h file in SCPU firmware.
-    ```
+    ```c
     #pragma once
 
     #define MY_EXAMPLE_JOB_ID           1003
@@ -844,7 +779,7 @@ The diagram below demostrates the inference flow for every models runnig on Kner
     - In this example, the **image** is transcoded into RGB565, and the width and height of the image is carried by the header.
 
     - Sending header and receiving result can be executed sequentially or on two different threads.
-    ```
+    ```c
     #include <stdio.h>
     #include <stdlib.h>
     #include <string.h>
@@ -982,18 +917,15 @@ The diagram below demostrates the inference flow for every models runnig on Kner
     }
     ```
 
-&nbsp;
 
 ### 5.2 SCPU Firmware Development for Face Detect + Landmark
-
-&nbsp;
 
 1. Go to SCPU App Folder {PLUS_FOLDER_PATH}/firmware_development/KL520/scpu_kdp2/app
 
 2. Add my_example_inf.h
 
     - The content of this file should be synchronized with **my_example.h** in PLUS.
-    ```
+    ```c
     #pragma once
 
     #define MY_EXAMPLE_JOB_ID           1003
@@ -1050,7 +982,7 @@ The diagram below demostrates the inference flow for every models runnig on Kner
 
     - For the detail of **kdp2_inference_config_t**, please refer to section **6.4 Firmware Configuration**
 
-    ```
+    ```c
     #include <stdint.h>
     #include <stdlib.h>
     #include <string.h>
@@ -1242,7 +1174,7 @@ The diagram below demostrates the inference flow for every models runnig on Kner
 
     - You need to establish a switch case for **MY_EXAMPLE_JOB_ID** and corespond the switch case to **my_example_inf()**.
 
-    ```
+    ```c
     #include <stdint.h>
     #include <stdlib.h>
     #include <string.h>
@@ -1340,11 +1272,8 @@ The diagram below demostrates the inference flow for every models runnig on Kner
     }
     ```
 
-&nbsp;
-
 ### 5.3 NCPU Firmware Development for The Pre-process and Post-process
 
-&nbsp;
 
 If the customized models need a customized pre-process or post-process on Kneron AI dongle, you can add the pre-process and post-process in the following files.
 
@@ -1364,11 +1293,8 @@ If the customized models need a customized pre-process or post-process on Kneron
 
     - The pre-process and post-process for certain model are specified by the model Id.
 
-&nbsp;
 
 ### 5.4 Firmware Configuration
-
-&nbsp;
 
 When SCPU activates NCPU to run models, **kdp2_inference_config_t**, which contains configurations of NCPU, is required to pass to NCPU.
 
@@ -1434,16 +1360,10 @@ When SCPU activates NCPU to run models, **kdp2_inference_config_t**, which conta
 - void* **user_define_data**
     - The user define data for the pre-processing in NCPU.
 
-&nbsp;
 
 ### 5.5 Build and Execute My Example
 
-&nbsp;
-
 *Note: **Windows 10** is used in this chapter.
-
-&nbsp;
-
 #### 5.5.1 Build Firmware
 
 1. Execute Keil uVision5
@@ -1462,17 +1382,13 @@ When SCPU activates NCPU to run models, **kdp2_inference_config_t**, which conta
 
 *If build succeeded, **kdp2_fw_scpu.bin** and **kdp2_fw_ncpu.bin** will be put into {PLUS_FOLDER_PATH}/res/firmware/KL520/
 
-<div align="center">
-<img src="../imgs/customize_api_520_PLUS/keil_build_firmware.png">
-</div>
-
-&nbsp;
+![](./imgs/customize_api_520_PLUS/keil_build_firmware.png)
 
 #### 5.5.2 Build PLUS and Execute My Example
 
 Build and Execute my_example of PLUS in **MSYS2 MinGW 64-bit**
 
-```
+```bash
 $ cd {PLUS_FOLDER_PATH}
 $ mkdir build
 $ cd build
@@ -1510,6 +1426,3 @@ $ ./my_example.exe
 
     ...
 ```
-
-&nbsp;
-&nbsp;

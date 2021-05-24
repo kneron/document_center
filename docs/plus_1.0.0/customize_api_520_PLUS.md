@@ -1,7 +1,5 @@
 ## 1. Introduction
 
-&nbsp;
-
 In order to run customized models on Kneron AI dongle, there are four stages are involved:
 
 - **Model development**
@@ -11,39 +9,23 @@ In order to run customized models on Kneron AI dongle, there are four stages are
 
 However, this document only provides illustration for **PLUS development**, **SCPU firmware development**, and **NCPU firmware development**.
 
-&nbsp;
+The diagram below demonstrates the inference flow for every models running on Kneron AI dongle, and how the PLUS, SCPU, and NCPU interact with each other.
 
-The diagram below demostrates the inference flow for every models runnig on Kneron AI dongle, and how the PLUS, SCPU, and NCPU interact with each other.
-
-<div align="center">
-<img src="../imgs/customize_api_520_PLUS/customized_api_develop_flow.png">
-</div>
-
-&nbsp;
-&nbsp;
+![](./imgs/customize_api_520_PLUS/customized_api_develop_flow.png)
 
 ## 2. Download Source Code
-
-&nbsp;
 
 1. Download the latest **kneron_plus_vXXX.zip** into Windows from <https://www.kneron.com/tw/support/developers/>, it is located at **KNEO Stem (USB Dongle)/kneron_plus/**.
 
 2. Unzip kneron_plus_vXXX.zip
 
-&nbsp;
+   
 
 **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped folder path of PLUS.
 
-&nbsp;
-&nbsp;
-
 ## 3. Develop an Example using Customized API to Run YOLO Model
 
-&nbsp;
-
 ### 3.1 PLUS (Software) Development
-
-&nbsp;
 
 1. Create my_example folder
 
@@ -118,7 +100,7 @@ The diagram below demostrates the inference flow for every models runnig on Kner
     } __attribute__((aligned(4))) my_example_result_t;
     ```
 
-4. Add my_example.c
+4. Add *my_example.c*
 
     - There are 6 steps for inferencing in Kneron AI dongle:
 
@@ -265,14 +247,9 @@ The diagram below demostrates the inference flow for every models runnig on Kner
     }
     ```
 
-&nbsp;
-
 ### 3.2 SCPU Firmware Development
 
-&nbsp;
-
 1. Go to SCPU App Folder {PLUS_FOLDER_PATH}/firmware_development/KL520/scpu_kdp2/app
-
 
 2. Add my_example_inf.h
 
@@ -341,14 +318,13 @@ The diagram below demostrates the inference flow for every models runnig on Kner
         void *inf_result_buf = kmdw_inference_request_result_buffer(NULL);
         my_example_result_t *output_result = (my_example_result_t *)inf_result_buf;
 
-
         /******* Prepare the configuration *******/
-
+    
         kmdw_inference_config_t inf_config;
-
+    
         // Set the initial value of config to 0, false and NULL
         memset(&inf_config, 0, sizeof(kmdw_inference_config_t));
-
+    
         // image buffer address should be just after the header
         inf_config.image_buf = (void *)((uint32_t)input_header + sizeof(my_example_header_t));
         inf_config.image_width = input_header->img_width;
@@ -361,20 +337,18 @@ The diagram below demostrates the inference flow for every models runnig on Kner
         inf_config.inf_result_buf = inf_result_buf;                         // for callback
         inf_config.ncpu_result_buf = (void *)&(output_result->yolo_result); // give result buffer for ncpu/npu, callback will carry it
 
-
         /******* Activate inferencing in NCPU *******/
-
+    
         int inf_status = kmdw_inference_start(&inf_config);
 
-
         /******* Send the result to PLUS *******/
-
+    
         // header_stamp is a must to correctly transfer result data back to host SW
         output_result->header_stamp.magic_type = KDP2_MAGIC_TYPE_INFERENCE;
         output_result->header_stamp.total_size = sizeof(my_example_result_t);
         output_result->header_stamp.job_id = MY_EXAMPLE_JOB_ID;
         output_result->header_stamp.status_code = inf_status;
-
+    
         // send output result buffer back to host SW
         kmdw_inference_send_result((void *)output_result);
     }
@@ -382,7 +356,7 @@ The diagram below demostrates the inference flow for every models runnig on Kner
 
 4. Go to SCPU Project Main Folder {PLUS_FOLDER_PATH}/firmware_development/KL520/scpu_kdp2/project/scpu_companion_user_ex/main
 
-4. Edit main.c
+4. Edit *main.c*
 
     - **_app_entry_func** is the entry interface for all inference request.
 
@@ -488,15 +462,9 @@ The diagram below demostrates the inference flow for every models runnig on Kner
     }
     ```
 
-&nbsp;
-
 ### 3.3 NCPU Firmware Development
 
-&nbsp;
-
 If the customized model need a customized pre-process or post-process, you can add the pre-process and post-process in the following files.
-
-&nbsp;
 
 1. Go to NCPU Project Main Folder {PLUS_FOLDER_PATH}/firmware_development/KL520/ncpu_kdp2/project/ncpu_companion_user_ex/main/
 
@@ -507,23 +475,15 @@ If the customized model need a customized pre-process or post-process, you can a
 3. Edit **main.c**
 
     - Register your customized pre-process by **kdpio_pre_processing_register()**.
-
-    - Register your customized post-process by **kdpio_post_processing_register()**.
-
+- Register your customized post-process by **kdpio_post_processing_register()**.
     - Once pre-process and post-process are registered, they will automatically execute before and after the inference of model.
+- The pre-process and post-process for certain model are specified by the model Id.
 
-    - The pre-process and post-process for certain model are specified by the model Id.
 
-&nbsp;
-&nbsp;
 
 ## 4. Build and Execute My Example
 
-&nbsp;
-
 ### Notice: The building example below are operated in **Windows 10**.
-
-&nbsp;
 
 ### 4.1 Build Firmware
 
@@ -545,17 +505,13 @@ If the customized model need a customized pre-process or post-process, you can a
 
 *If build succeeded, **kdp2_fw_scpu.bin** and **kdp2_fw_ncpu.bin** will be put into {PLUS_FOLDER_PATH}/res/firmware/KL520/
 
-<div align="center">
-<img src="../imgs/customize_api_520_PLUS/keil_build_firmware.png">
-</div>
-
-&nbsp;
+![](./imgs/customize_api_520_PLUS/keil_build_firmware.png)
 
 ### 4.2 Build PLUS and Execute My Example
 
 1. Download and install the latest **MSYS2** into Windows from <https://www.msys2.org/>.
 
-2. Execute **MSYS2 MinGW 64-bit** to install dependancy.
+2. Execute **MSYS2 MinGW 64-bit** to install dependency.
     ```
     $ pacman -Syu
     $ pacman -Sy

@@ -1,7 +1,5 @@
 ## 1. Introduction
 
-&nbsp;
-
 In this document, we will introduce the **PLUS** architecture comprising new software(SW) and firmware(FW) design for KL520 (and alpha for KL720).
 
 In comparison with the previous SW/FW architecture, this aims to simplify the design flow for AI applications development.
@@ -12,15 +10,9 @@ When referring to a complete AI application development, actually three parts ar
 - **software development**
 - **firmware development**
 
-&nbsp;
-
 Below diagram depicts three parts of development in a big picture.
 
-<div align="center">
-<img src="../imgs/getting_start_imgs_520_PLUS/KL520_develop_flow.png">
-</div>
-
-&nbsp;
+![](./imgs/getting_start_imgs_520_PLUS/KL520_develop_flow.png)
 
 This **Getting Started** document only focuses on host software usage with the AI dongle to perform following functionality.
 
@@ -30,25 +22,23 @@ This **Getting Started** document only focuses on host software usage with the A
 - **How to run the APP inference example.**
 - **How to run the generic inference example.**
 
-&nbsp;
+
 
 For **model development**, please refer to the **Toolchain Docker** part.
 
 For **firmware development**, it is more advanced, please contact Kneron.
 
-&nbsp;
+
+
 
 Below gives some definitions regarding the Kneron PLUS:
 
 - **PLUS** is a software library developed by Kneron and it allows users to manipulate the AI dongle through sophisticated C/C++/Python API.
-
 - **KP** API is part of the PLUS written in C and it provides simplied functions and examples to help users develop their software applications.
-
 - **NEF** represents for **NPU Executable Format** which may comprise one or multiple models and it can only work on Kneron's SoC. The host_lib comes with some NEFs for demonstration purposes. We will use the **Tiny Yolo v3** NEF as the model input in our inference examples.
-
 - **Firmware** is the code responsible for driving Kneron SoC and make it work with the PLUS. The KDP2 firmware can work with the PLUS and it has prebuilt images included in the PLUS.
 
-&nbsp;
+
 
 PLUS contains KP API software code and examples, prebuilt KDP2 firmware and some demonstrative NEF files; and with the AI dongle it can give some edge AI examples.
 
@@ -58,25 +48,17 @@ Here we will demonstrate below diagram scenario with followings:
 - One Kneron AI dongle.
 - The PLUS package.
 
+![](./imgs/getting_start_imgs_520_PLUS/KL520_develop_flow_sw.png)
 
-<div align="center">
-<img src="../imgs/getting_start_imgs_520_PLUS/KL520_develop_flow_sw.png">
-</div>
 
-&nbsp;
-&nbsp;
 
 ## 2. Build PLUS
 
-&nbsp;
-
-*Note: here we use Linux-based OS Ubuntu.
+***Note**: here we use Linux-based OS Ubuntu.
 
 Download the latest **kneron_plus_vXXX.zip** into Ubuntu from <https://www.kneron.com/tw/support/developers/>, it is located at **KNEO Stem (USB Dongle)/kneron_plus/**.
 
 Before building code, some build tools and packages must be set up for the first time.
-
-&nbsp;
 
 Install **CMake**, **libusb-1.0.0-dev** and **build-essential**.
 ```
@@ -85,14 +67,10 @@ $ sudo apt install libusb-1.0-0-dev
 $ sudo apt install build-essential
 ```
 
-&nbsp;
-
-Decompress the **kneron_plus_v1.0.0.zip**.
+Decompress the **kneron_plus_vXXX.zip**.
 ```
 $ unzip kneron_plus_v1.0.0.zip
 ```
-
-&nbsp;
 
 Build code.
 ```
@@ -102,13 +80,11 @@ $ cmake ..
 $ make -j
 ```
 
-&nbsp;
-
 Once build is done, the **libkplus.so** will be in **build/src/**
 
 Example executables will be in **build/bin/**
 
-Check if PLUS examples are built successuflly.
+Check if PLUS examples are built successfully.
 ```
 $ ls bin/
 
@@ -119,12 +95,9 @@ scan_device
 ...
 ```
 
-&nbsp;
-&nbsp;
+
 
 ## 3. Update AI Dongle to KDP2 Firmware Loader
-
-&nbsp;
 
 Before running PLUS examples, users need to make the AI dongle running with the KDP2 firmware loader.
 
@@ -138,11 +111,10 @@ Bus 001 Device 002: ID 3231:0100
 
 ```
 
-If not seeing "3231:0100" (represents KL520 device), it may have a connectivity problem or some device failures.
+If not seeing "3231:0100" (represents KL520 device); "3231:0200"|"3231"0720"(represents KL720 device), it may have a connectivity problem or some device failures.
 
-&nbsp;
 
-Download the KneronDFUT_ubuntu.zip into Ubuntu from https://www.kneron.com/tw/support/developers/.
+Download the *KneronDFUT_ubuntu.zip* into Ubuntu from https://www.kneron.com/tw/support/developers/.
 
 ```
 $ unzip KneronDFUT_ubuntu.zip
@@ -156,11 +128,7 @@ $ cd Kneron_DFUT/bin/
     ```
     Select the AI dongle to be update to KDP2 firmware, and push **Run** button.
 
-    <div align="center">
-    <img src="../imgs/getting_start_imgs_520_PLUS/KneronDFUT.png">
-    </div>
-
-&nbsp;
+    ![](./imgs/getting_start_imgs_520_PLUS/KneronDFUT.png)
 
 2. Use Command Line to Update AI Dongle
 
@@ -206,12 +174,9 @@ $ cd Kneron_DFUT/bin/
 
     ```
 
-&nbsp;
-&nbsp;
+
 
 ## 4. List Device Info
-
-&nbsp;
 
 While one or multiple AI dongles are plugged into the host, they can be scanned to get some basic device information.
 
@@ -254,12 +219,9 @@ Above shows that it founds two KL520 devices, a brief descript listed below.
 - **Connectable** : It tells if this device is connectable; one device can only be connected by one program at the same time.
 - **Firmware** : This shows which firmware the AI dongle is using, KDP or KDP2 Loader.
 
-&nbsp;
-&nbsp;
+
 
 ## 5. Run Inference Examples
-
-&nbsp;
 
 The PLUS provides three categories of API set for model inference.
 
@@ -271,11 +233,7 @@ The PLUS provides three categories of API set for model inference.
 
 Below will demonstrate only usage in two examples for **APP inference** and **Generic inference**.
 
-&nbsp;
-
-### App Inference Example
-
-&nbsp;
+### 5.1  App Inference Example
 
 The **'app_yolo_inference'** example utilizes the **APP inference API** and the **Tiny Yolo V3 model** to perform object detection.
 
@@ -338,30 +296,20 @@ disconnecting device ...
 
 ```
 
-&nbsp;
-
 Besides output results in the screen console, it also draws detected objects in a new-created **output_bike_cars_street_224x224.bmp**.
 
-<div align="center">
-<img src="../imgs/getting_start_imgs_520_PLUS/ex_kdp2_tiny_yolo_v3.bmp">
-</div>
+![](./imgs/getting_start_imgs_520_PLUS/ex_kdp2_tiny_yolo_v3.bmp)
 
 The key features of APP inference are listed below:
 - Specified model NEF.
 - Normally post-process is done in SoC.
 - Simplfied function parameters.
 
-&nbsp;
-
-### Generic Inference Example
-
-&nbsp;
+### 5.2  Generic Inference Example
 
 **Generic inference** API is intended for users who have their own models and applications.
 
 It needs more complex input parameters and normally the post-process is implemented by users in host side.
-
-&nbsp;
 
 The **'generic_inference'** is an example for showing how it work.
 
@@ -439,28 +387,22 @@ Box 3 (x1, y1, x2, y2, score, class) = 199.0, 48.0, 221.0, 131.0, 0.916225, 2
 Box 4 (x1, y1, x2, y2, score, class) = 129.0, 46.0, 197.0, 95.0, 0.887819, 2
 Box 5 (x1, y1, x2, y2, score, class) = 12.0, 30.0, 64.0, 79.0, 0.618796, 2
 
-output bounding boxes on 'output_one_bike_many_cars_224x224.bmp'
-===========================================================================
+ouptut bouning boxes on 'output_one_bike_many_cars_224x224.bmp'
+
+===============================================================
 
 disconnecting device ...
 
 ```
 
-&nbsp;
-
 From the console output, it can be observed that the information of models in the NEF is printed, including model ID, raw resolution, intput channel, raw image format and raw output size.
 
 **Raw output** size indicates that a buffer of the size should be prepared to receive the output directly from the AI dongle, and it cannot be used until converting the raw output to well-structed floating point values.
 
-&nbsp;
-
 If [post process] is set to 'yolo_v3', it draws detected objects in a new-created **output_one_bike_many_cars_224x224.bmp**.
 
-<div align="center">
-<img src="../imgs/getting_start_imgs_520_PLUS/ex_kdp2_generic_inference_raw.bmp">
-</div>
+![](./imgs/getting_start_imgs_520_PLUS/ex_kdp2_generic_inference_raw.bmp)
 
-&nbsp;
 
 Otherwise if [post process] is set to 'none', the example dumps floating point values into **.txt** files for each output node.
 
@@ -543,11 +485,10 @@ first 20 data:
 
 dumped node 0 output to 'output_one_bike_many_cars_224x224_node0_7x7x255.txt'
 dumped node 1 output to 'output_one_bike_many_cars_224x224_node1_14x14x255.txt'
+
 ===========================================================================
 
 ```
-
-&nbsp;
 
 For example, **'node0_7x7x255.txt'** represents node 0, width x height x channel = 7x7x255, and its content looks like below.
 
