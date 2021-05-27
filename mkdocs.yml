@@ -1,9 +1,18 @@
 site_name: Document Center
 #repo_url: http://192.168.200.1:8088/jiyuan/toolchain_manual
 #repo_name: GitLab
+
 theme:
     name: 'windmill'
     custom_dir: 'custom_theme/'
+
+markdown_extensions:
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.magiclink
+  - pymdownx.superfences
+  - pymdownx.tilde
+
 nav:
   - Home: index.md
   - Getting Started:
