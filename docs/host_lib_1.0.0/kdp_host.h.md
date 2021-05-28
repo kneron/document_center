@@ -1,4 +1,4 @@
-# Kneron NPU Host API
+#Kneron NPU Host API
 
 
 Host API is the API to setup communication channels between host (such as PC, Embedded Chips)
@@ -27,15 +27,18 @@ There are three types of APIs:
     - DEF_FR_THRESH
     - DEF_RGB_FR_THRESH
     - DEF_NIR_FR_THRESH
+    - DEFAULT_CONFIG
+    - DOWNLOAD_MODEL
+    - CONFIG_USE_FLASH_MODEL
+    - FLAGS_RETRIEVE_NPU_INPUT_MEM
+    - FLAGS_RETRIEVE_NPU_OUPUT_MEM
+    - FLAGS_RETRIEVE_WORKING_BUFFER
     - FLAGS_PARAMS_HAS_CROP
     - FLAGS_PARAMS_HAS_PAD
     - FLAGS_PARAMS_HAS_POST_PROC_PARAMS
     - FLAGS_POST_PROC_PARAMS_BIT_POS
     - FLAGS_PARAMS_HAS_EXT_LEN
     - FLAGS_EXT_LEN_BIT_POS
-    - CONFIG_USE_FLASH_MODEL
-    - DEFAULT_CONFIG
-    - DOWNLOAD_MODEL
     - HICO_RESULTS_SEL_IMG
     - HICO_FLAGS_LOOP_BACK
     - HICO_FLAGS_MODEL_IN_FLASH
@@ -143,7 +146,7 @@ There are three types of APIs:
 
 
 
-## Defines
+##**Defines**
 | Define | Value | Description |
 |:---|:---|:---|
 |KDP_UART_DEV|0        			| identification of using UART I/F |
@@ -151,23 +154,26 @@ There are three types of APIs:
 |IMG_FORMAT_RGBA8888|0x80000000  | image format: RGBA8888 |
 |IMG_FORMAT_RAW8|0x80000020  | image format: RAW8 |
 |IMG_FORMAT_YCbCr422|0x80000037  | image format: YCbCr422 [low byte]Y0CbY1CrY2CbY3Cr...[high byte] |
-|IMG_FORMAT_RGB565|0x80000060  | image format: RGB565 |
+|IMG_FORMAT_RGB565|0x80000060  | image foramt: RGB565 |
 |DEF_FR_THRESH|FID_THRESHOLD  | FDR app only, default face recognition threshold |
 |DEF_RGB_FR_THRESH|DEF_FR_THRESH  | FDR app only, default face recognition threshold for RGB source |
 |DEF_NIR_FR_THRESH|DEF_FR_THRESH  | FDR app only, default face recognition threshold for NIR soruce |
+|DEFAULT_CONFIG|BIT0        | ISI Start cmd flags: use default configuration |
+|DOWNLOAD_MODEL|BIT1        | ISI Start cmd flags: download model |
+|CONFIG_USE_FLASH_MODEL|BIT0        | ISI Config parameters: 1: use flash model, 0: use model in memory |
+|FLAGS_RETRIEVE_NPU_INPUT_MEM|BIT0  | ISI Retrieve cmd flags: debug use only, dump model input memory |
+|FLAGS_RETRIEVE_NPU_OUPUT_MEM|BIT1  | ISI Retrieve cmd flags: debug use only, dump model output memory |
+|FLAGS_RETRIEVE_WORKING_BUFFER|BIT2  | ISI Retrieve cmd flags: debug use only, dump model working buffer |
 |FLAGS_PARAMS_HAS_CROP|BIT0    | image_params[0/1/2/3]: cropping top/bottom/left/right |
 |FLAGS_PARAMS_HAS_PAD|BIT1    | image_params[n..n+3]: padding top/bottom/left/right |
 |FLAGS_PARAMS_HAS_POST_PROC_PARAMS|(BIT2 \| BIT3 \| BIT4 \| BIT5 \| BIT6 \| BIT7)   | Length of post processing parameters |
 |FLAGS_POST_PROC_PARAMS_BIT_POS|(2)     | Post proc parameter length position. image_params[n..n+len-1] is for post-proc |
 |FLAGS_PARAMS_HAS_EXT_LEN|(BIT16 \| BIT17 \| BIT18 \| BIT19 \| BIT20 \| BIT21 \| BIT22 \| BIT23) | Length of extended parameters |
 |FLAGS_EXT_LEN_BIT_POS|(16)    | Extended parameter length position. image_params[n..n+ext_len-1] is model specific |
-|CONFIG_USE_FLASH_MODEL|BIT0        | 1: use flash model, 0: use model in memory |
-|DEFAULT_CONFIG|BIT0        | |
-|DOWNLOAD_MODEL|BIT1        | |
-|HICO_RESULTS_SEL_IMG|BIT0    | |
-|HICO_FLAGS_LOOP_BACK|BIT0    | |
-|HICO_FLAGS_MODEL_IN_FLASH|BIT1    | |
-|HICO_FLAGS_FAKE_INFERENCE|BIT2    | |
+|HICO_RESULTS_SEL_IMG|BIT0    | HICO results select: image |
+|HICO_FLAGS_LOOP_BACK|BIT0    | HICO flags: camera loopback |
+|HICO_FLAGS_MODEL_IN_FLASH|BIT1    | HICO flags: use model in flash |
+|HICO_FLAGS_FAKE_INFERENCE|BIT2    | HICO flags: use fake inference |
 
 
 ---
@@ -175,8 +181,8 @@ There are three types of APIs:
 
 
 
-## Enumerations
-### **kdp_product_id_e**
+##**Enumerations**
+###**kdp_product_id_e**
 enum **kdp_product_id_e** {...}
 > enum for USD PID(Product ID)
 
@@ -187,7 +193,7 @@ enum **kdp_product_id_e** {...}
 
 
 ---
-### **kdp_usb_speed_e**
+###**kdp_usb_speed_e**
 enum **kdp_usb_speed_e** {...}
 > enum for USB speed mode
 
@@ -205,59 +211,59 @@ enum **kdp_usb_speed_e** {...}
 
 
 
-## Structs
-### hico_results_t
+##**Structs**
+###**hico_results_t**
 typedef struct **hico_results_t** {...}
 > HICO result structure element
 
 |Members| |
 |:---|:--- |
-|bounding_box_t bounding_box;| |
-|motion_vector_t vectors;| |
+|bounding_box_t bounding_box;| Object bounding box |
+|motion_vector_t vectors;| Object motion vector |
 
 
 ---
-### kapp_hico_results_s
+###**kapp_hico_results_s**
 struct **kapp_hico_results_s** {...}
 > HICO result structure
 
 |Members| |
 |:---|:--- |
-|uint32_t seq_num;| |
-|uint32_t image_size;| |
-|uint16_t flags;| |
-|uint16_t results_count;| |
-|hico_results_t results[1];| |
+|uint32_t seq_num;| Image sequence number |
+|uint32_t image_size;| Image size |
+|uint16_t flags;| Result flags |
+|uint16_t results_count;| Result count |
+|hico_results_t results[1];| Results |
 
 
 ---
-### kapp_isi_data_s
+###**kapp_isi_data_s**
 struct **kapp_isi_data_s** {...}
 > ISI data
 
 |Members| |
 |:---|:--- |
-|uint32_t size;| |
-|uint32_t version;| |
+|uint32_t size;| Size of this struct and m[] |
+|uint32_t version;| Version |
 |uint32_t output_size;| result buffer size allocated |
 |uint32_t config_block;| # of config blocks (max = 4) |
 |struct kapp_isi_model_cfg_s m[];|  model specific config data |
 
 
 ---
-### kapp_isi_model_cfg_s
+###**kapp_isi_model_cfg_s**
 struct **kapp_isi_model_cfg_s** {...}
 > ISI START configuration data structure
 
 |Members| |
 |:---|:--- |
-|uint32_t model_id;| |
-|struct kdp_img_desc img;| |
-|uint32_t ext_param[MAX_PARAMS_LEN];| |
+|uint32_t model_id;| Model ID |
+|struct kdp_img_desc img;| Image descriptor |
+|uint32_t ext_param[MAX_PARAMS_LEN];| Extended parameters |
 
 
 ---
-### kdp_db_config_s
+###**kdp_db_config_s**
 struct **kdp_db_config_s** {...}
 > FDR App only, DB configuration structure
 
@@ -269,7 +275,7 @@ struct **kdp_db_config_s** {...}
 
 
 ---
-### kdp_device_info_list_s
+###**kdp_device_info_list_s**
 struct **kdp_device_info_list_s** {...}
 > Information structure of connected devices
 
@@ -280,7 +286,7 @@ struct **kdp_device_info_list_s** {...}
 
 
 ---
-### kdp_device_info_s
+###**kdp_device_info_s**
 struct **kdp_device_info_s** {...}
 > Device information structure
 
@@ -296,7 +302,7 @@ struct **kdp_device_info_s** {...}
 
 
 ---
-### kdp_dme_cfg_s
+###**kdp_dme_cfg_s**
 struct **kdp_dme_cfg_s** {...}
 > DME image configuration structure
 
@@ -314,52 +320,52 @@ struct **kdp_dme_cfg_s** {...}
 
 
 ---
-### kdp_fid_fd_s
+###**kdp_fid_fd_s**
 struct **kdp_fid_fd_s** {...}
 > FID FD result structure
 
 |Members| |
 |:---|:--- |
-|uint16_t x;| |
-|uint16_t y;| |
-|uint16_t w;| |
-|uint16_t h;| |
-|uint16_t class_num;| |
+|uint16_t x;| X-coordinate |
+|uint16_t y;| Y-coordinate |
+|uint16_t w;| Width |
+|uint16_t h;| Height |
+|uint16_t class_num;| Class number |
 
 
 ---
-### kdp_fid_fr_s
+###**kdp_fid_fr_s**
 struct **kdp_fid_fr_s** {...}
 > FID FR result structure
 
 |Members| |
 |:---|:--- |
-|float fm[FR_FEAT_SIZE];| |
+|float fm[FR_FEAT_SIZE];| Feature map |
 
 
 ---
-### kdp_fid_lm_s
+###**kdp_fid_lm_s**
 struct **kdp_fid_lm_s** {...}
 > FID LM 5-point result structure
 
 |Members| |
 |:---|:--- |
-|kdp_fid_point_t marks[LAND_MARK_POINTS];| |
+|kdp_fid_point_t marks[LAND_MARK_POINTS];| Landmarks |
 
 
 ---
-### kdp_fid_point_t
+###**kdp_fid_point_t**
 typedef struct **kdp_fid_point_t** {...}
 > FID point structure
 
 |Members| |
 |:---|:--- |
-|uint16_t x;| |
-|uint16_t y;| |
+|uint16_t x;| X-coordinate |
+|uint16_t y;| Y-coordinate |
 
 
 ---
-### kdp_hico_cfg_s
+###**kdp_hico_cfg_s**
 struct **kdp_hico_cfg_s** {...}
 > HICO configuration structure
 
@@ -378,7 +384,7 @@ struct **kdp_hico_cfg_s** {...}
 
 
 ---
-### kdp_isi_cfg_s
+###**kdp_isi_cfg_s**
 struct **kdp_isi_cfg_s** {...}
 > ISI image configuration structure
 
@@ -393,7 +399,7 @@ struct **kdp_isi_cfg_s** {...}
 
 
 ---
-### kdp_isi_image_header_s
+###**kdp_isi_image_header_s**
 struct **kdp_isi_image_header_s** {...}
 > ISI image header structure
 
@@ -410,20 +416,20 @@ struct **kdp_isi_image_header_s** {...}
 
 
 ---
-### kdp_isi_start_s
+###**kdp_isi_start_s**
 struct **kdp_isi_start_s** {...}
 > ISI START Command API structure
 
 |Members| |
 |:---|:--- |
-|uint32_t app_id;| |
-|uint32_t compatible_cfg;| |
-|uint32_t start_flag;| |
-|struct kapp_isi_data_s config;| |
+|uint32_t app_id;| Application ID |
+|uint32_t compatible_cfg;| =0 (non 0 for old usage) |
+|uint32_t start_flag;| Control flags |
+|struct kapp_isi_data_s config;| Configuration data |
 
 
 ---
-### kdp_metadata_s
+###**kdp_metadata_s**
 struct **kdp_metadata_s** {...}
 > Metadata for nef model data: metadata / fw_info / all_models
 
@@ -439,7 +445,7 @@ struct **kdp_metadata_s** {...}
 
 
 ---
-### kdp_nef_info_s
+###**kdp_nef_info_s**
 struct **kdp_nef_info_s** {...}
 > NEF info for nef model data: metadata / fw_info / all_models
 
@@ -452,45 +458,45 @@ struct **kdp_nef_info_s** {...}
 
 
 ---
-### ld_post_params_t
+###**ld_post_params_t**
 typedef struct **ld_post_params_t** {...}
 > Car license detection post-proc parameter structure
 
 |Members| |
 |:---|:--- |
-|float prob_thresh;| |
-|float nms_thresh;| |
+|float prob_thresh;| Probability threshold |
+|float nms_thresh;| NMS threshold |
 
 
 ---
-### od_post_params_t
+###**od_post_params_t**
 typedef struct **od_post_params_t** {...}
-> od post params
+> Object Detection class post process params
 
 |Members| |
 |:---|:--- |
-|float prob_thresh;| |
-|float nms_thresh;| |
-|uint32_t max_detection_per_class;| |
-|uint16_t anchor_row;| |
-|uint16_t anchor_col;| |
-|uint16_t stride_size;| |
-|uint16_t reserved_size;| |
-|uint32_t data[];| |
+|float prob_thresh;| Probability threshold |
+|float nms_thresh;| NMS threshold |
+|uint32_t max_detection_per_class;| Max objects to detect per class |
+|uint16_t anchor_row;| Row number of anchors |
+|uint16_t anchor_col;| Colomn number of anchors |
+|uint16_t stride_size;| Stride size |
+|uint16_t reserved_size;| Reserved |
+|uint32_t data[MAX_PARAMS_LEN - 5];| Data to hold optional anchors/stride/etc |
 
 
 ---
-### pd_post_params_t
+###**pd_post_params_t**
 typedef struct **pd_post_params_t** {...}
 > Car plate detection post-proc parameter structure
 
 |Members| |
 |:---|:--- |
-|float lp_thresh;| |
-|float crop_top_left_x;| |
-|float crop_top_left_y;| |
-|float dratio_w;| |
-|float dratio_h;| |
+|float lp_thresh;| Plate detection threshold |
+|float crop_top_left_x;| Top-left crop X-coordinate |
+|float crop_top_left_y;| Top-left crop Y-coordinate |
+|float dratio_w;| Dratio width |
+|float dratio_h;| Dratio height |
 
 
 ---
@@ -498,8 +504,8 @@ typedef struct **pd_post_params_t** {...}
 
 
 
-## Unions
-### kapp_db_config_parameter_u
+##**Unions**
+###**kapp_db_config_parameter_u**
 union **kapp_db_config_parameter_u** {...}
 > FDR App only, DB config parameter union #total [8 Bytes] (32-bits auto align)
 
@@ -514,8 +520,8 @@ union **kapp_db_config_parameter_u** {...}
 
 
 
-## Functions
-### kdp_add_dev
+##**Functions**
+###**kdp_add_dev**
 > To add com device to the host lib
 
 ```c
@@ -536,7 +542,7 @@ int kdp_add_dev(
 
 
 ---
-### kdp_connect_usb_device
+###**kdp_connect_usb_device**
 > To connect to a Kneron device via the 'scan_index'
 
 ```c
@@ -557,7 +563,7 @@ int kdp_connect_usb_device(
 
 
 ---
-### kdp_dme_configure
+###**kdp_dme_configure**
 > To request for configuring dme
 
 ```c
@@ -582,7 +588,7 @@ int kdp_dme_configure(
 
 
 ---
-### kdp_dme_get_status
+###**kdp_dme_get_status**
 > To request for getting DME inference status
 
 ```c
@@ -609,7 +615,7 @@ int kdp_dme_get_status(
 
 
 ---
-### kdp_dme_inference
+###**kdp_dme_inference**
 > To do inference with provided model
 
 ```c
@@ -648,7 +654,7 @@ int kdp_dme_inference(
 
 
 ---
-### kdp_dme_retrieve_res
+###**kdp_dme_retrieve_res**
 > To request for retrieving DME result
 
 ```c
@@ -673,7 +679,7 @@ int kdp_dme_retrieve_res(
 
 
 ---
-### kdp_end_dme
+###**kdp_end_dme**
 > request for ending dme mode
 
 ```c
@@ -692,7 +698,7 @@ int kdp_end_dme(
 
 
 ---
-### kdp_end_hico
+###**kdp_end_hico**
 > request for ending HICO mode
 
 ```c
@@ -713,7 +719,7 @@ int kdp_end_hico(
 
 
 ---
-### kdp_end_isi
+###**kdp_end_isi**
 > request for ending isi mode
 
 ```c
@@ -732,7 +738,7 @@ int kdp_end_isi(
 
 
 ---
-### kdp_export_db
+###**kdp_export_db**
 > To export from DB image from device
 
 ```c
@@ -762,7 +768,7 @@ int kdp_export_db(
 
 
 ---
-### kdp_extract_feature_generic
+###**kdp_extract_feature_generic**
 > To extract face feature from image with specified output mask
 
 ```c
@@ -796,7 +802,7 @@ int kdp_extract_feature_generic(
 
 
 ---
-### kdp_fm_compare
+###**kdp_fm_compare**
 > Calculate similarity of two feature points
 
 ```c
@@ -825,7 +831,7 @@ errcode -1:parameter error
 
 
 ---
-### kdp_get_crc
+###**kdp_get_crc**
 > To request for CRC info of models in DDR or Flash
 
 ```c
@@ -848,7 +854,7 @@ int kdp_get_crc(
 
 
 ---
-### kdp_get_db_config
+###**kdp_get_db_config**
 > Get DB structure configuration
 
 ```c
@@ -875,7 +881,7 @@ int kdp_get_db_config(
 
 
 ---
-### kdp_get_db_index
+###**kdp_get_db_index**
 > Get current DB index
 
 ```c
@@ -902,7 +908,7 @@ current DB index
 
 
 ---
-### kdp_get_db_meta_data_version
+###**kdp_get_db_meta_data_version**
 > get DB meta data version number for DB schema confirmation
 
 ```c
@@ -929,7 +935,7 @@ int kdp_get_db_meta_data_version(
 
 
 ---
-### kdp_get_db_version
+###**kdp_get_db_version**
 > Get DB version number
 
 ```c
@@ -956,7 +962,7 @@ int kdp_get_db_version(
 
 
 ---
-### kdp_get_kn_number
+###**kdp_get_kn_number**
 > To request for device KN number
 
 ```c
@@ -977,7 +983,7 @@ int kdp_get_kn_number(
 
 
 ---
-### kdp_get_model_info
+###**kdp_get_model_info**
 > To request model IDs information for models in DDR or Flash
 
 ```c
@@ -1006,7 +1012,7 @@ int kdp_get_model_info(
 
 
 ---
-### kdp_get_nef_model_metadata
+###**kdp_get_nef_model_metadata**
 > To request for metadata of NEF model file
 
 ```c
@@ -1029,7 +1035,7 @@ int kdp_get_nef_model_metadata(
 
 
 ---
-### kdp_get_res_mask
+###**kdp_get_res_mask**
 > Get result mask with bit flags
 
 ```c
@@ -1062,7 +1068,7 @@ mask of bit flags
 
 
 ---
-### kdp_get_res_size
+###**kdp_get_res_size**
 > Get result size for memory allocation
 
 ```c
@@ -1095,7 +1101,7 @@ result size in bytes
 
 
 ---
-### kdp_hico_retrieve_res
+###**kdp_hico_retrieve_res**
 > request to get image inference results
 
 ```c
@@ -1122,7 +1128,7 @@ int kdp_hico_retrieve_res(
 
 
 ---
-### kdp_hico_send_image
+###**kdp_hico_send_image**
 > Send an image
 
 ```c
@@ -1154,7 +1160,7 @@ int kdp_hico_send_image(
 
 
 ---
-### kdp_import_db
+###**kdp_import_db**
 > To import customer DB image to device
 
 ```c
@@ -1184,7 +1190,7 @@ int kdp_import_db(
 
 
 ---
-### kdp_init_log
+###**kdp_init_log**
 > Init the host lib internal log
 
 ```c
@@ -1205,7 +1211,7 @@ int kdp_init_log(
 
 
 ---
-### kdp_isi_config
+###**kdp_isi_config**
 > To configure the model for the supported app id
 
 ```c
@@ -1230,7 +1236,7 @@ int kdp_isi_config(
 
 
 ---
-### kdp_isi_inference
+###**kdp_isi_inference**
 > Start an inference with an image
 
 ```c
@@ -1264,7 +1270,7 @@ int kdp_isi_inference(
 
 
 ---
-### kdp_isi_inference_ext
+###**kdp_isi_inference_ext**
 > Start an inference with an image and image header
 
 ```c
@@ -1298,7 +1304,7 @@ int kdp_isi_inference_ext(
 
 
 ---
-### kdp_isi_retrieve_data
+###**kdp_isi_retrieve_data**
 > To request for dump memory
 
 ```c
@@ -1316,7 +1322,7 @@ int kdp_isi_retrieve_data(
 <pre>
 <em>dev_idx</em>         [in]      connected device ID
 <em>img_id</em>          [in]      sequence id / model id
-<em>flags</em>           [in]      -
+<em>flags:</em>          [in]      0 retrieve results, others  use to dump model's input/output memory
 <em>rsp_code</em>        [out]     response code from device
 <em>r_size</em>          [out]     inference data size
 <em>r_res</em>           [out]     inference result data
@@ -1327,7 +1333,7 @@ int kdp_isi_retrieve_data(
 
 
 ---
-### kdp_isi_retrieve_res
+###**kdp_isi_retrieve_res**
 > To request for getting an inference results
 
 ```c
@@ -1354,7 +1360,7 @@ int kdp_isi_retrieve_res(
 
 
 ---
-### kdp_jpeg_dec
+###**kdp_jpeg_dec**
 > start jpeg decoding
 
 ```c
@@ -1389,7 +1395,7 @@ int kdp_jpeg_dec(
 
 
 ---
-### kdp_jpeg_dec_config
+###**kdp_jpeg_dec_config**
 > Configure for jpeg decoding
 
 ```c
@@ -1423,7 +1429,7 @@ int kdp_jpeg_dec_config(
 
 
 ---
-### kdp_jpeg_dec_retrieve_res
+###**kdp_jpeg_dec_retrieve_res**
 > To retrieve jpeg decoding output
 
 ```c
@@ -1455,7 +1461,7 @@ int kdp_jpeg_dec_retrieve_res(
 
 
 ---
-### kdp_jpeg_enc
+###**kdp_jpeg_enc**
 > Start jpeg encoding
 
 ```c
@@ -1489,7 +1495,7 @@ int kdp_jpeg_enc(
 
 
 ---
-### kdp_jpeg_enc_config
+###**kdp_jpeg_enc_config**
 > To configure for jpeg enc
 
 ```c
@@ -1523,7 +1529,7 @@ int kdp_jpeg_enc_config(
 
 
 ---
-### kdp_jpeg_enc_retrieve_res
+###**kdp_jpeg_enc_retrieve_res**
 > Retrieve jpeg encoding output
 
 ```c
@@ -1555,7 +1561,7 @@ int kdp_jpeg_enc_retrieve_res(
 
 
 ---
-### kdp_lib_de_init
+###**kdp_lib_de_init**
 > Free the resources used by host lib
 
 ```c
@@ -1567,7 +1573,7 @@ int kdp_lib_de_init()
 
 
 ---
-### kdp_lib_init
+###**kdp_lib_init**
 > To init the host library
 
 ```c
@@ -1579,7 +1585,7 @@ int kdp_lib_init()
 
 
 ---
-### kdp_lib_start
+###**kdp_lib_start**
 > To start the host library to wait for messages
 
 ```c
@@ -1591,7 +1597,7 @@ int kdp_lib_start()
 
 
 ---
-### kdp_list_users
+###**kdp_list_users**
 > To test if user in device DB
 
 ```c
@@ -1619,7 +1625,7 @@ int kdp_list_users(
 
 
 ---
-### kdp_mp_gpio_set
+###**kdp_mp_gpio_set**
 > To set gpio
 
 ```c
@@ -1647,7 +1653,7 @@ int kdp_mp_gpio_set(
 
 
 ---
-### kdp_query_fm_by_user
+###**kdp_query_fm_by_user**
 > To query user's feature map from device DB
 
 ```c
@@ -1678,7 +1684,7 @@ int kdp_query_fm_by_user(
 
 
 ---
-### kdp_register_user
+###**kdp_register_user**
 > To register the extracted face features to DB in device Flash
 
 ```c
@@ -1707,7 +1713,7 @@ int kdp_register_user(
 
 
 ---
-### kdp_register_user_by_fm
+###**kdp_register_user_by_fm**
 > To register user by feature map to device DB
 
 ```c
@@ -1738,7 +1744,7 @@ fm index on succeed, -1 on failure
 
 
 ---
-### kdp_remove_user
+###**kdp_remove_user**
 > To remove user from device DB
 
 ```c
@@ -1766,7 +1772,7 @@ int kdp_remove_user(
 
 
 ---
-### kdp_report_sys_status
+###**kdp_report_sys_status**
 > To request for system status
 
 ```c
@@ -1797,7 +1803,7 @@ int kdp_report_sys_status(
 
 
 ---
-### kdp_reset_sys
+###**kdp_reset_sys**
 > To request for doing system reset
 
 ```c
@@ -1825,7 +1831,7 @@ int kdp_reset_sys(
 
 
 ---
-### kdp_scan_usb_devices
+###**kdp_scan_usb_devices**
 > To scan all Kneron devices and report a list
 
 ```c
@@ -1844,7 +1850,7 @@ always 0
 
 
 ---
-### kdp_set_ckey
+###**kdp_set_ckey**
 > To set a customized key
 
 ```c
@@ -1877,7 +1883,7 @@ int kdp_set_ckey(
 
 
 ---
-### kdp_set_db_config
+###**kdp_set_db_config**
 > Configurate DB structure
 
 ```c
@@ -1906,7 +1912,7 @@ int kdp_set_db_config(
 
 
 ---
-### kdp_set_db_version
+###**kdp_set_db_version**
 > Set DB version number
 
 ```c
@@ -1933,7 +1939,7 @@ int kdp_set_db_version(
 
 
 ---
-### kdp_set_sbt_key
+###**kdp_set_sbt_key**
 > To set security boot key
 
 ```c
@@ -1963,7 +1969,7 @@ int kdp_set_sbt_key(
 
 
 ---
-### kdp_sfid_set_float_value
+###**kdp_sfid_set_float_value**
 > Set sfid float configuration value by value type
 
 ```c
@@ -1999,7 +2005,7 @@ int kdp_sfid_set_float_value(
 
 
 ---
-### kdp_start_dme
+###**kdp_start_dme**
 > To request for starting dynamic model execution (Deprecated)
 
 ```c
@@ -2030,7 +2036,7 @@ int kdp_start_dme(
 
 
 ---
-### kdp_start_dme_ext
+###**kdp_start_dme_ext**
 > To request for starting dynamic model execution
 
 ```c
@@ -2062,7 +2068,7 @@ int kdp_start_dme_ext(
 
 
 ---
-### kdp_start_hico_mode
+###**kdp_start_hico_mode**
 > start HICO (Host/camera IN Companion OUT) mode with configuration
 
 ```c
@@ -2089,7 +2095,7 @@ int kdp_start_hico_mode(
 
 
 ---
-### kdp_start_isi_mode
+###**kdp_start_isi_mode**
 > start the user isi mode with specified app id and return data size
 
 ```c
@@ -2128,7 +2134,7 @@ int kdp_start_isi_mode(
 
 
 ---
-### kdp_start_isi_mode_ext
+###**kdp_start_isi_mode_ext**
 > start the user isi mode with isi configuration
 
 ```c
@@ -2155,7 +2161,7 @@ int kdp_start_isi_mode_ext(
 
 
 ---
-### kdp_start_isi_mode_ext2
+###**kdp_start_isi_mode_ext2**
 > start the user isi mode & configuration for ISI START command
 
 ```c
@@ -2186,7 +2192,7 @@ int kdp_start_isi_mode_ext2(
 
 
 ---
-### kdp_start_reg_user_mode
+###**kdp_start_reg_user_mode**
 > Start the user register mode
 
 ```c
@@ -2217,7 +2223,7 @@ int kdp_start_reg_user_mode(
 
 
 ---
-### kdp_start_sfid_mode
+###**kdp_start_sfid_mode**
 > Start the user sfid mode with specified threshold, image format
 
 ```c
@@ -2259,7 +2265,7 @@ int kdp_start_sfid_mode(
 
 
 ---
-### kdp_switch_db_index
+###**kdp_switch_db_index**
 > Switch current DB index
 
 ```c
@@ -2286,7 +2292,7 @@ int kdp_switch_db_index(
 
 
 ---
-### kdp_update_fw
+###**kdp_update_fw**
 > To request for update firmware
 
 ```c
@@ -2314,7 +2320,7 @@ int kdp_update_fw(
 
 
 ---
-### kdp_update_model
+###**kdp_update_model**
 > To request for update model (Deprecated)
 
 ```c
@@ -2341,7 +2347,7 @@ int kdp_update_model(
 
 
 ---
-### kdp_update_nef_model
+###**kdp_update_nef_model**
 > To request for update nef model
 
 ```c
@@ -2364,7 +2370,7 @@ int kdp_update_nef_model(
 
 
 ---
-### kdp_update_spl
+###**kdp_update_spl**
 > To request for update spl
 
 ```c
@@ -2405,7 +2411,7 @@ int kdp_update_spl(
 
 
 ---
-### kdp_verify_user_id_generic
+###**kdp_verify_user_id_generic**
 > Perform the face recognition by input image with specified output
 
 ```c
