@@ -558,11 +558,7 @@ This part is the instructions for FP-analysis and batch-compile. The script intr
 
 We recommend doing FP-analysis (section 3.2) and batch-compile (section 3.5) separately. The fP-Analysis is very time-consuming. Thus, saving the `bie` file of each model for the future usage is more convinient.
 
-Back to this section, again, we'll use the `LittleNet` as an example. Just like in the section 3.5, we need `batch_input_params.json`. But this time, **the fields we need to prepare are different**. We have one under the example folder. You can just copy it.
-
-```bash
-cp /data1/LittleNet/batch_input_params.json /data1
-```
+Back to this section, again, we'll use the `LittleNet` as an example. Just like in the section 3.5, we need `batch_input_params.json`. But this time, **the fields we need to prepare are different**. Please check the next section.
 
 #### 3.6.1 Fill the input parameters
 
