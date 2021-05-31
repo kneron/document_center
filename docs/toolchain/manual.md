@@ -562,7 +562,7 @@ Back to this section, again, we'll use the `LittleNet` as an example. Just like 
 
 #### 3.6.1 Fill the input parameters
 
-As said in section 3.5, the details of the config can be found in the [FAQ question 6](#6-how-to-configure-the-batch_input_paramsjson). Because we already have the example, we can take a look on what are the differences.
+As said in section 3.5, the details of the config can be found in the [FAQ question 6](#6-how-to-configure-the-batch_input_paramsjson). You can use the following code to create the `batch_input_params.json` for a walk through.
 
 ```json
 {
@@ -584,7 +584,7 @@ As said in section 3.5, the details of the config can be found in the [FAQ quest
 }
 ```
 
-Ignore the encryption section which is set to false. The real differences here are that we are giving `onnx` instead of `bie` in the model's `path`, and giving an extra `input_params.json` in a field called `input_params`. This `input_params.json` is the one that we use in section 3.2. With the onnx and the json, it could run the FP-analysis just like what we do in secion 3.2, uses the generated `bie` to do batch-compile right after all the FP-analysis is finished.
+ We can take a look on what are the differences. Ignore the encryption section which is set to false. The real differences here are that we are giving `onnx` instead of `bie` in the model's `path`, and giving an extra `input_params.json` in a field called `input_params`. This `input_params.json` is the one that we use in section 3.2. With the onnx and the json, it could run the FP-analysis just like what we do in secion 3.2, uses the generated `bie` to do batch-compile right after all the FP-analysis is finished.
 
 #### 3.6.2 Running the programs
 
