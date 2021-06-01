@@ -25,7 +25,7 @@ nav:
     - KL720:
       - Archive:
         - v1.1.0: 720_1.1.0/getting_start_720.md
-      - v1.3.0: 720_1.1.0/getting_start_720.md
+      - v1.3.0: 720_1.3.0/getting_start_720.md
   - Host API Reference:
     - Archive:
       - v0.8.0:
