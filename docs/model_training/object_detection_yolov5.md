@@ -40,12 +40,12 @@ After using a tool like [CVAT](https://github.com/openvinotoolkit/cvat), [makese
 - Class numbers are zero-indexed (start from 0).
 
 <div align="center">
-<img src="./imgs/readme_img.jpg" width="50%" /> 
+<img src="../imgs/readme_img.jpg" width="50%" /> 
 </div>
 
 The label file corresponding to the above image contains 2 persons (class 0) and a tie (class 27):
 <div align="center">
-<img src="./imgs/readme_img2.png" width="40%" /> 
+<img src="../imgs/readme_img2.png" width="40%" /> 
 </div>
 
 ###  Directory Organization
