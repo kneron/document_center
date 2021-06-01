@@ -38,7 +38,7 @@ You can train the model on a custom dataset. Your own datasets are expected to h
 ## Example
 Let's go through a toy example for preparing a custom dataset. Suppose we are going to classify bees and ants. 
 <div align="center">
-<img src="./image_data/train/ants/0013035.jpg" width="33%" /> <img src="./image_data/train/bees/1092977343_cb42b38d62.jpg" width="33%" />
+<img src="./imgs/0013035.jpg" width="33%" /> <img src="./imgs/1092977343_cb42b38d62.jpg" width="33%" />
 </div>
 First of all, we have to split the images for bees and ants into train and validation set respectively (recommend 8:2). Then, we can move the images into difference folders with their class names. The dataset folder will have the following structure.
 
