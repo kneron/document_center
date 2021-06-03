@@ -4,18 +4,17 @@
 
 There are several ways to get the Kneron host example:
 
-- OS requirements:
+- OS requirements  
     - Linux, Ubuntu 18.04 with gcc version later than 7.5
-    - Windows 10 version later than 1909
-- Get the example folder for **Linux** environment  
-    Prerequisite: Cmake, OpenCV  
-    Download the code from **KNEO Stem (USB Dongle) -> host_lib** in **[Kneron Develop Center](https://www.kneron.com/tw/support/developers/) :** 
 
-- Get the VM for the **windows** and **Mac**  
-     Prerequisite: VMware Workstation  
-       Download the VM  total five files :**[Part1](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=276)**  **[Part2](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=277)** **[Part3](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=278)** **[Part4](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=279)**  **[Part5](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=280)**
+- Get the example folder for Linux environment from **host_lib**   
+    - Prerequisite: Cmake, OpenCV  
+    - Download **host_lib** from **KNEO Stem (USB Dongle) -> host_lib** in **[Kneron Develop Center](https://www.kneron.com/tw/support/developers/)** 
 
-       Map USB port and share drive into VM: **[Link](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=251)**
+- Get the toolchain VM for the **windows** and **Mac**   
+    - Prerequisite: VMware Workstation  
+    - Download the VM  total five files :**[Part1](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=276)**  **[Part2](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=277)** **[Part3](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=278)** **[Part4](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=279)**  **[Part5](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=280)**  
+    - Map USB port and share drive into VM: **[Link](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=251)**
 
 
 
@@ -23,21 +22,20 @@ There are several ways to get the Kneron host example:
 **host_lib** supports Kneron Chips, including both KL520 and KL720.  
 In this document file, KL520 examples are shown.  
 
-In the **host_lib** folder, you will see the following file folders:
 
 ```txt
 host_lib-|
          |->app_binaries-|        (KL520 app binaries for example)
-                         |-> *KL520/tiny_yolo_v3
-                         |-> *KL520/ssd_fd_lm
-                         |-> *KL520/ota/ready_to_load
-                         |-> *KL520/dfw/minions.bin  (bin file for UART boot)
+                         |-> *KL520/tiny_yolo_v3      (FW for object detection)
+                         |-> *KL520/ssd_fd_lm         (FW for mask detection)
+                         |-> *KL520/ota/ready_to_load (default path for ota)
+                         |-> *KL520/dfw/minions.bin   (bin file for UART boot)
                          |-> ...
          |-> common               (common shared file between host and KL520)
          |-> dll                  (dll files for Windows MINGW64)
          |-> docs                 (images in README)
-         |-> example/*KL520       (host program for different C++ examples)
-         |-> python               (host program for different Python examples)
+         |-> example/*KL520       (host side C++ examples)
+         |-> python               (host side Python examples)
          |-> src                  (source files for host lib, which communicate with KL520)
          |-> input_images         (test image binary)
          |-> input_models/*KL520  (models for examples)
@@ -398,7 +396,7 @@ fw_ncpu.bin  fw_scpu.bin  models_520.nef
 ```
 
 
-Then we can go to `build/bin`, and run `./update_app`. This will load all 3 binaries into KL520, and program them into the flash so that even without power, the KL520 can still maintain the applications. Since the model are relatively large and flash programming is slow, users need to wait for couple mins to update the application. It takes about 3-5 minutes here.
+Then we can go to `build/bin`, and run `./kl520_update_app_nef_model`. This will load all 3 binaries into KL520, and program them into the flash so that even without power, the KL520 can still maintain the applications. Since the model are relatively large and flash programming is slow, users need to wait for couple mins to update the application. It takes about 3-5 minutes here.
 
 ```bash
 Kneron@ubuntu:~/host_lib/build/bin$ ./update_app_nef_model
@@ -414,9 +412,7 @@ update model succeeded...
 starting report sys status ...
 report sys status succeeded...
 
-SCPU firmware_id 01040000 build_id 00000000
-SCPU firmware_id 01030001 build_id 00000002
-
+FW firmware_id 01040000 build_id 00000000
 de init kdp host lib....
 ```
 
@@ -687,7 +683,7 @@ In host side, 6 APIs are used for DME.
 
 | API          | Description   | Note         |
 | ------------ | ------------- | ------------ |
-| kdp_start_dme_ext | Send model data of **models_520.nef**  to Kneron device | Call once |
+| kdp_start_dme_ext | Send model, models_520.nef, to Kneron device | Call once |
 | kdp_dme_configure	| Send DME configuration to Kneron device	| Call once |
 | kdp_dme_inference	| Send image data to Kneron device and start inference	| Call multiple times to send image for inference |
 | kdp_dme_get_status	 | Poll the completed status from Kneron device	| Call multiple times after kdp_dme_inference (only in DME async mode) |
@@ -717,13 +713,15 @@ Because this MobileNetV2 model needs to apply tensorflow preprocess, which is `X
 
 ### Post Process
 
-The default postprocess function in DME mode would send back the original output from KL520 NPU, and user needs to implement post process functions in order to get the correct result. 
+The default postprocess function in DME mode would send back the original output from KL520 NPU, and user needs to implement post process functions in order to get the correct result.  
 
-finish the tasks: 
-1. KL520 send the fix-point data of all output nodes to one with the sequence of total_out_number + (c/h/w/radix/scale) + (c/h/w/radix/scale) + ... + fp_data + fp_data + ...
-    With this data format	, host needs to converts it back to a shared structure `struct kdp_image_s` that can easily identify each output nodes parameters, such as channel, height, width, radix, and scales.
+finish the tasks:  
 
-    ```cpp
+1.  KL520 sends the fix-point data of all output nodes to one with the sequence of *total_out_number + (c/h/w/radix/scale) + (c/h/w/radix/scale) + ... + fp_data + fp_data + ...*   
+
+    With this data format, host needs to converts it back to a shared structure, struct kdp_image_s, that can easily identify each output nodes parameters, such as channel, height, width, radix, and scales.  
+
+    ```cpp 
     // Prepare for postprocessing
     int output_num = inf_res[0];
     struct output_node_params *p_node_info;
@@ -757,11 +755,11 @@ finish the tasks:
   
         offset = offset + r_len;
     }
-  
     ```
 
 
-2. Host will call actual model post process function `post_imgnet_classificaiton()` in example/post_processing_ex.c
+
+2.  Host will call actual model post process function `post_imgnet_classificaiton()` in example/post_processing_ex.c
 
     ```cpp
     int post_imgnet_classification(int model_id, struct kdp_image_s *image_p)
@@ -1219,19 +1217,15 @@ Please do it every time after plugging in the power
 
 #### 10.3.1. Flash programmer necessaries
 
-1. Open command terminal for flash programmer execution
-
-   Tool path: `kl520_sdk\utils\flash_programmer\flash_programmer.py`
-
-2. Install Necessary python modules: `kl520_sdk\utils\requirements.txt`
-
-3. Limitations: Only the listed argument combinations below are allowed.
+1.  Open command terminal for flash programmer execution  
+    Tool path: `kl520_sdk\utils\flash_programmer\flash_programmer.py`  
+2.  Install Necessary python modules: `kl520_sdk\utils\requirements.txt`  
+3.  Limitations: Only the listed argument combinations below are allowed.  
 
 #### 10.3.2. Edit python verification setting
 
-1. Check UART port number from device manager
-
-2. Edit setup.py, search “**COM_ID**” and modify the ID to match your UART port number
+1.  Check UART port number from device manager  
+2.  Edit setup.py, search “**COM_ID**” and modify the ID to match your UART port number
 
     EX: COM_ID = 3 # COM3
 
@@ -1239,11 +1233,9 @@ Please do it every time after plugging in the power
 
 
 #### 10.3.3 Firmware Binary Generation (FW + MODELS)
-Generate flash final bin file from other seperate bin files.
-
-The script combines .bin files in "flash_bin" in predefined order.
-
-Morever, the addressing is in 4KB alignment.
+Generate flash final bin file from other seperate bin files.  
+The script combines .bin files in "flash_bin" in predefined order.  
+Morever, the addressing is in **4KB alignment**  
 
 **Command**
 ```bash
@@ -1255,12 +1247,11 @@ $ python3 bin_gen.py
     -p, --CPU_ONLY  SPL/SCPU/NCPU only
 ```
 
-**Output**
+**Output**    
 `flash_image.bin`
 
-**Note**
-
->  The following bin files are must 
+**Note**  
+The following bin files are must 
 
 ```bash
 flash_bin/
@@ -1287,8 +1278,8 @@ Afterwards, just wait until all progresses are finished (erase, program, verify)
 ![](./imgs/getting_start_imgs/10_3_3.png)
 
 
-**Note**:
-`flash_programmer.py -a` means to do flash chip erase + programming + verification
+**Note**:  
+> `flash_programmer.py -a` means to do flash chip erase + programming + verification
 
 #### 10.3.5 Flash Verification (optional)
 
@@ -1306,15 +1297,10 @@ $ python flash_programmer.py -e
 
 ```bash
 $ python flash_programmer.py -i 0x00002000 -p fw_scpu.bin
+
+# "**-i**" means the flash index/address to program  
+# "**-p**" means the FW binary to program   
 ```
-
-**Note**:
-
-> To program specific bin file to specific flash address
-> "-i" means the flash index/address you would like to program
-> "-p" means the FW code you would like to program
-
-
 
 ### 10.4. Program Flash via JTAG/SWD Interface
 
@@ -1327,20 +1313,18 @@ Connect JTAG/SWD.
 
 #### 10.4.2. Edit flash_prog.jlink device setting
 
-1. Check your flash manufacturer: Winbond or Mxic or GigaDevice 
-
-2. Select a specific device based on flash manufacturer
+1.  Check your flash manufacturer: Winbond or Mxic or GigaDevice  
+2.  Select a specific device based on flash manufacturer
 
     EX:
 
-    ```
+    ```txt
     device KL520-WB	//Winbond
     device KL520-MX	//Mxic
     device KL520-GD	//GigaDevice
     ```
 
-    Copy the bin file to `kl520_sdk\utils\JLink_programmer\bin` folder
-
+    Copy the bin file to `kl520_sdk\utils\JLink_programmer\bin` folder  
     EX: flash_image.bin, boot_spl.bin, fw_scpu.bin, fw_ncpu.bin, etc.
 
 
@@ -1362,9 +1346,8 @@ Please ensure all the results are "O.K.", and enter "qc" to quit and close J-Lin
 
 To program specific bin file to specific flash address
 
-1. Copy the bin file to `kl520_sdk\utils\JLink_programmer\bin\`
-
-2. Select a specific device+’-P’ based on flash manufacturer
+1.  Copy the bin file to `kl520_sdk\utils\JLink_programmer\bin\` 
+2.  Select a specific device+’-P’ based on flash manufacturer  
 
     EX: 
 
@@ -1374,22 +1357,22 @@ To program specific bin file to specific flash address
     device KL520-GD-P	//GigaDevice
     ```
 
-3. Edit loadbin command: Load *.bin file into target memory
+3.  Edit loadbin command: Load *.bin file into target memory
 
 	**Syntax**:
 
-	```
+	```bash
 	loadbin <filename>, <addr>  
 	loadbin .\bin\boot_spl.bin,0x00000000
 	loadbin .\bin\fw_scpu.bin,0x00002000
 	loadbin .\bin\fw_ncpu.bin,0x00018000
 	```
 
-4. Double click “flash_prog_partial.bat” and wait until all progresses are finished
+4.  Double click “flash_prog_partial.bat” and wait until all progresses are finished
 
-5. Check programming result
+5.  Check programming result
 
-    Please ensure the results is “O.K.”, and enter “qc” to quit and close J-Link commander
+    Please ensure the results is “O.K.”, and enter “qc” to quit and close J-Link commander  
 
     ![](./imgs/getting_start_imgs/10_4_4.png)
 
@@ -1404,11 +1387,12 @@ Please refer to chapter 10.2
 
 
 ### 11.2. Design Principles
-The purpose of this document is to descript how to develop/apply the DFW (Device Firmware Write) (via UART) Boot feature for KL520.
-You can download firmware bin file to KL520 internal Memory space through UART and then directly boot KL520 up from internal memory, therefore external flash could be optional.
+The purpose of this document is to descript how to develop/apply the DFW (Device Firmware Write) (via UART) Boot feature for KL520. 
+
+You can download firmware bin file to KL520 internal Memory space through UART and then directly boot KL520 up from internal memory, therefore external flash could be optional.  
 
 #### 11.2.1 KL520 internal memory space address
-1.	Minion FW starts from 0x10100000 and size must < 0x2000 bytes
+1.  Minion FW starts from 0x10100000 and size must < 0x2000 bytes
 2.	SCPU FW starts from 0x10102000
 3.	NCPU FW starts from 0x28000000
 
@@ -1423,23 +1407,23 @@ You can download firmware bin file to KL520 internal Memory space through UART a
 
 
 #### 11.2.3 Host control principle
-1. Initial UART COM port with baud rate 115200 and send ‘2’ to tell KL520 to enter 2.UART(XMODEM) mode.
-2. Send Minion.bin through UART by XMODEM protocol.
+1.  Initial UART COM port with baud rate 115200 and send ‘2’ to tell KL520 to enter 2.UART(XMODEM) mode.
+2.  Send Minion.bin through UART by XMODEM protocol.
 Reference: https://pythonhosted.org/xmodem/xmodem.html
-3. Switch to baud rate 921600.
-4. Send SCPU FW to address 0x10102000.
+3.  Switch to baud rate 921600.
+4.  Send SCPU FW to address 0x10102000.
 	`Buf[n] = Msg_header + data_buf[4096]`
 	- Msg_header: 
 
-		```cpp
-		typedef struct {
-			uint16_t preamble;
-			uint16_t crc16;
-			uint32_t cmd;
-			uint32_t addr;
-			uint32_t len;
-		} __attribute__((packed)) MsgHdr;
-		```
+        ```cpp
+        typedef struct {
+        	uint16_t preamble;
+        	uint16_t crc16;
+        	uint32_t cmd;
+        	uint32_t addr;
+        	uint32_t len;
+        } __attribute__((packed)) MsgHdr;
+        ```
 	
 	- data_buf[4096]: transfer bin by unit 4096 bytes(max.) each time
 	- Packet TX Preamble: PKTX_PAMB = 0xA583
@@ -1453,15 +1437,15 @@ Reference: https://pythonhosted.org/xmodem/xmodem.html
 	``Buf[n] = Msg_header + data_buf[4096]``
 	- Msg_header:
 
-		```cpp
-		typedef struct {
-			uint16_t preamble;
-			uint16_t crc16;
-			uint32_t cmd;
-			uint32_t addr;
-			uint32_t len;
-		} __attribute__((packed)) MsgHdr; 
-		```
+        ```cpp
+        typedef struct {
+        	uint16_t preamble;
+        	uint16_t crc16;
+        	uint32_t cmd;
+        	uint32_t addr;
+        	uint32_t len;
+        } __attribute__((packed)) MsgHdr; 
+        ```
 
 	- data_buf[4096]: transfer bin by unit 4096 bytes(max.) each time
 	- Packet TX Preamble: PKTX_PAMB = 0xA583
@@ -1493,20 +1477,18 @@ Reference: https://pythonhosted.org/xmodem/xmodem.html
 
 
 ### 11.3. Build dfw_companion firmware
-The dfw_companion project in mozart_sw\example_projects\dfw_companion\ is the example for users to develop the firmware without external SPI Flash drivers.
+The dfw_companion project in mozart_sw\example_projects\dfw_companion\ is the example for users to develop the firmware without external SPI Flash drivers.  
+
 You can rebuild dfw_companion project then get the updated fw_scpu.bin/fw_ncpu.bin in mozart_sw\utils\bin_gen\flash_bin folder.
 
 ### 11.4. DFW via UART0 Interface with Python
 
 #### 11.4.1. DFW Boot necessaries
 
-1. Open command terminal for flash programmer execution
-
-   Tool path: `kl520_sdk\utils\dfw_boot\uart_dfu_boot.py`
-
-2. Install Necessary python modules: `kl520_sdk\utils\requirements.txt`
-
-3. Limitations: Only the listed argument combinations below are allowed.
+1.  Open command terminal for flash programmer execution
+    Tool path: `kl520_sdk\utils\dfw_boot\uart_dfu_boot.py`
+2.  Install Necessary python modules: `kl520_sdk\utils\requirements.txt`
+3.  Limitations: Only the listed argument combinations below are allowed.
 
 #### 11.4.2. Edit python verification setting
 
@@ -1559,16 +1541,16 @@ $ python uart_dfu_boot.py -i 0x10102000 -r
 ![](./imgs/getting_start_imgs/11.3.6.png)
 
 
-**Note**:
-
-> To write specific bin file to specific memory address
-> “-i" means the memory index/address
-> “-p" means the FW code you would like to program
+**Note**:  
+> To write specific bin file to specific memory address  
+> “**-i**" means the memory index/address to program  
+> “**-p**" means the FW binary to program  
 
 
 
 ### 11.5. DFW via UART0 Interface with hostlib
-The kl520_util_uart_dfw_boot example in host_lib\example\KL520\kl520_util_uart_dfw_boot is the reference code for users to develop UART_DFW_Boot feature on their own platform.
+The kl520_util_uart_dfw_boot example in host_lib\example\KL520\kl520_util_uart_dfw_boot is the reference code for users to develop UART_DFW_Boot feature on their own platform.  
+
 You can do integration test with kl520_util_uart_dfw_boot to write SCPU/NCPU firmware to KL520 internal memory space and boot from specific memory address directly.
 
 #### 11.5.1. Edit kl520_util_uart_dfw_boot.cpp to assign proper com port 
@@ -1578,9 +1560,9 @@ Search “#define com_port” and modify the ID to match your UART port number l
 Refer to host_lib\README_CPP.md for further information.
 
 #### 11.5.3 UART_DFW_Boot integration tests
-1. Copy `fw_scpu.bin` and `fw_ncpu.bin` to hostlib `host_lib\app_binaries\KL520\dfw` folder.
-2. Execute `host_lib\build\bin\kl520_util_uart_dfw_boot`, and please press reset button when you see "Please press RESET btn!!......"
-3. Please check the message showed after kl520_util_uart_dfw_boot executed, make sure minion bin is transmitted via UART/Xmodem successfully, send fw_scpu.bin/fw_ncpu.bin successfully, and reboot KL520 from specific memory address successfully.
+1.  Copy `fw_scpu.bin` and `fw_ncpu.bin` to hostlib `host_lib\app_binaries\KL520\dfw` folder.
+2.  Execute `host_lib\build\bin\kl520_util_uart_dfw_boot`, and please press reset button when you see "Please press RESET btn!!......"
+3.  Please check the message showed after kl520_util_uart_dfw_boot executed, make sure minion bin is transmitted via UART/Xmodem successfully, send fw_scpu.bin/fw_ncpu.bin successfully, and reboot KL520 from specific memory address successfully.
 
     EX:
     ![](./imgs/getting_start_imgs/11.5.1.png)
@@ -1592,8 +1574,8 @@ Refer to host_lib\README_CPP.md for further information.
 ###　Host Mode Example  
 This sample code is an application which KL520 chip plays as a host chip with connected display and cameras for Object detection. You will need to program the flash image to device first. The flash image includes SCPU/NCPU firmware and model. Then, you can Start/Stop object detection by simple command via UART. 
 
-**WARNING:** 
-**DO NOT** program this FW to Kneron Dongle.
+> **WARNING:**  
+> **DO NOT** program this FW to Kneron Dongle.
 
 ---
 #### Hardware Requirements
@@ -1638,22 +1620,24 @@ Kneron KL520 series AI SoC Development Kit
 ---
 #### Run example 
 
-1. Turn on KL520 
-2. Press PTN button 
-3. Select “1” to boot from SPI to boot from the programmed FW
-4. Once it’s started, RGB camera and LCD will be turned on, and image will be continuously captured by camera and displayed on LCD panel. 
-5. Also, see command menu and type command (1) - (4) for functions in UART console window(ex. Putty)
+1.  Turn on KL520 
+2.  Press PTN button 
+3.   Select “1” to boot from SPI to boot from the programmed FW
+4.  Once it’s started, RGB camera and LCD will be turned on, and image will be continuously captured by camera and displayed on LCD panel. 
+5.  Also, see command menu and type command (1) - (4) for functions in UART console window(ex. Putty)
    
 ---
 #### Commands
-1. type "1" in UART console window to **Start Tiny Yolo**
-   When a person is detected, **yellow box** is drawn around the person. 
-   Other detected objects are drawn around by **blue boxes**.  
+1.  Type "1" in UART console window to **Start Tiny Yolo**
+
+    When a person is detected, **yellow box** is drawn around the person. 
+
+    Other detected objects are drawn around by **blue boxes**.  
    
 	Console window shows detected objects with FPS info. 
 
-2. Type "2" to Stop Object detection
-3. Type "3" to turn off Pipeline mode, or toggle the mode, at runtime.  
+2.  Type "2" to Stop Object detection
+3.  Type "3" to turn off Pipeline mode, or toggle the mode, at runtime.  
 	- This pipeline mode can be toggled on/off (1/0) to demonstrate performance improvement. 
 	- Note that there may be delay to see first good inference due to opening camera/sensor. 
 
