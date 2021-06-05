@@ -21,38 +21,39 @@ Table 1.2 shows supported operators conversion mapping table for every platform.
 
 *Table 1.2 Operators conversion table for every platform*
 
-| type                   | keras                   | caffe                | tflite                                    | onnx(Opset 11)              | KL520 Support | KL720 Support |
-|------------------------|-------------------------|----------------------|-------------------------------------------|-----------------------------|---------|---------|
-| add                    | Add                     | Eltwise              | ADD                                       | Add                         | Yes | Yes |
-| average pooling        | AveragePooling2D        | Pooling              | AVERAGE_POOL_2D                           | AveragePool                 | Yes | Yes |
-| batchnormalization     | BatchNormalization      | BatchNorm            |                                           | BatchNormalization          | Yes | Yes |
-| concatenate            | Concatenate             | Concat               | CONCATENATION                             | Concat                      | Yes | Yes |
-| convolution            | Conv2D                  | Convolution          | CONV_2D                                   | Conv                        | Yes | Yes |
-| crop                   | Cropping2D / Cropping1D |                      |                                           | Slice                       | Yes | Yes |
-| deconvolution          | Conv2DTranspose         | Deconvolution        | TRANSPOSE_CONV                            | ConvTranspose               | Yes | Yes |
-| dense                  | Dense                   | InnerProduct         | FULLY_CONNECTED                           | Gemm                        | Yes | Yes |
-| depthwise convolution  | DepthwiseConv2D         | DepthwiseConvolution | DEPTHWISE_CONV_2D                         | Conv (with group attribute) | Yes | Yes |
-| flatten                | Flatten                 | Flatten              |                                           | Flatten                     | Yes | Yes |
-| global average pooling | GlobalAveragePooling2D  | Pooling              | MEAN                                      | GlobalAveragePool           | Yes | Yes |
-| global max pooling     | GlobalMaxPooling2D      | Pooling              |                                           | GlobalMaxPool               | Yes | Yes |
-| leaky relu             | LeakyReLU               |                      | LEAKY_RELU                                | LeakyRelu                   | Yes | Yes |
-| max pooling            | MaxPooling2D            | Pooling              | MAX_POOL_2D                               | MaxPool                     | Yes | Yes |
-| multiply               | Multiply                | Eltwise              | MUL                                       | Mul                         | Yes | Yes |
-| padding                | ZeroPadding2D           |                      | PAD                                       | Pad                         | Yes | Yes |
-| prelu                  | PReLU                   | PReLU                | PRELU                                     | Prelu                       | Yes | Yes |
-| relu                   | ReLU                    | ReLU                 | RELU                                      | Relu                        | Yes | Yes |
-| relu6                  | ReLU                    |                      | RELU6                                     | Clip                        | Yes | Yes |
-| separable conv2d       | SeparableConv2D         |                      |                                           | Conv                        | Yes | Yes |
-| sigmoid                | Sigmoid                 | Sigmoid              | LOGISTIC                                  | Sigmoid                     | No  | Yes |
-| squeeze                |                         |                      | SQUEEZE                                   | Squeeze                     | Yes | Yes |
-| tanh                   | Tanh                    |                      |                                           | Tanh                        | No  | Yes |
-| resize                 | UpSampling2D            |                      | RESIZE_BILINEAR / RESIZE_NEAREST_NEIGHBOR | Resize                      | Yes | Yes |
-| roi pooling            |                         | ROIPooling           |                                           | MaxRoiPool                  | No  | Yes |
+| type                   | keras                   | caffe                | tflite                                    | onnx(Opset 11)              |
+|------------------------|-------------------------|----------------------|-------------------------------------------|-----------------------------|
+| add                    | Add                     | Eltwise              | ADD                                       | Add                         |
+| average pooling        | AveragePooling2D        | Pooling              | AVERAGE_POOL_2D                           | AveragePool                 |
+| batchnormalization     | BatchNormalization      | BatchNorm            |                                           | BatchNormalization          |
+| concatenate            | Concatenate             | Concat               | CONCATENATION                             | Concat                      |
+| convolution            | Conv2D                  | Convolution          | CONV_2D                                   | Conv                        |
+| crop                   | Cropping2D / Cropping1D |                      |                                           | Slice                       |
+| deconvolution          | Conv2DTranspose         | Deconvolution        | TRANSPOSE_CONV                            | ConvTranspose               |
+| dense                  | Dense                   | InnerProduct         | FULLY_CONNECTED                           | Gemm                        |
+| depthwise convolution  | DepthwiseConv2D         | DepthwiseConvolution | DEPTHWISE_CONV_2D                         | Conv (with group attribute) |
+| flatten                | Flatten                 | Flatten              |                                           | Flatten                     |
+| global average pooling | GlobalAveragePooling2D  | Pooling              | MEAN                                      | GlobalAveragePool           |
+| global max pooling     | GlobalMaxPooling2D      | Pooling              |                                           | GlobalMaxPool               |
+| leaky relu             | LeakyReLU               |                      | LEAKY_RELU                                | LeakyRelu                   |
+| max pooling            | MaxPooling2D            | Pooling              | MAX_POOL_2D                               | MaxPool                     |
+| multiply               | Multiply                | Eltwise              | MUL                                       | Mul                         |
+| padding                | ZeroPadding2D           |                      | PAD                                       | Pad                         |
+| prelu                  | PReLU                   | PReLU                | PRELU                                     | Prelu                       |
+| relu                   | ReLU                    | ReLU                 | RELU                                      | Relu                        |
+| relu6                  | ReLU                    |                      | RELU6                                     | Clip                        |
+| separable conv2d       | SeparableConv2D         |                      |                                           | Conv                        |
+| sigmoid                | Sigmoid                 | Sigmoid              | LOGISTIC                                  | Sigmoid                     |
+| squeeze                |                         |                      | SQUEEZE                                   | Squeeze                     |
+| tanh                   | Tanh                    |                      |                                           | Tanh                        |
+| resize                 | UpSampling2D            |                      | RESIZE_BILINEAR / RESIZE_NEAREST_NEIGHBOR | Resize                      |
+| roi pooling            |                         | ROIPooling           |                                           | MaxRoiPool                  |
+ 
+1.  our tensorflow conversion tool is based on opensource "tf2onnx", please check "https://github.com/onnx/tensorflow-onnx/blob/r1.6/support_status.md" for the supported op information  
+2. our pytorch conversion tool is based on onnx exporting api in torch.onnx, please check "https://pytorch.org/docs/stable/onnx.html#supported-operators" for the supported op information  
+3. some operators could be replaced by onnx2onnx.py in order to fit the KL520/KL720 spec.   
 
-1.  our tensorflow conversion tool is based on opensource "tf2onnx", please check "https://github.com/onnx/tensorflow-onnx/blob/r1.6/support_status.md" for the supported op information    
-2. our pytorch conversion tool is based on onnx exporting api in torch.onnx, please check "https://pytorch.org/docs/stable/onnx.html#supported-operators" for the supported op information    
-3. some operators will be replaced by onnx2onnx.py in order to fit the KL520/KL720 spec.   
-4. some operators are partially supported with limitations on input shapes or attributes. Please check toolchain manual for details,
+
 
 ## 1 Keras to ONNX
 
