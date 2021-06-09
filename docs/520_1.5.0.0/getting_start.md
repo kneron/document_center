@@ -1166,7 +1166,7 @@ KL520 also provides some simple examples to show how to use basic peripherals su
 User can find them from **sdkexamples** folder.
 
 There is also a PDF file to briefly describe the peripheral APIs. Please download it from the following link:
-[KL520_Peripheral_Driver_APIs.pdf](../../pdf/KL520_Peripheral_Driver_APIs.pdf)
+[KL520_Peripheral_Driver_APIs.pdf](./pdf/KL520_Peripheral_Driver_APIs.pdf)
 
 
 
