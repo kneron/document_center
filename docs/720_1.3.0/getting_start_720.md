@@ -2,9 +2,15 @@
 
 ## 1. Environment Setup
 ### 1.1. Linux
-#### Install libusb
 
-`sudo apt install libusb-1.0-0-dev`
+Before building code, some build tools and packages must be set up for the first time.
+
+* Install **libusb-1.0.0-dev**, **cmake**, and **build-essential**.
+```
+sudo apt install libusb-1.0-0-dev
+sudo apt install cmake
+sudo apt install build-essential
+```
 
 ### 1.2. Windows(MINGW64\MSYS)
 #### 1.2.1. WinUSB installation
@@ -31,29 +37,38 @@ The instruction is valid for Windows 10 version only.
 When installation process is finished, "**Unknown Device #1**" can be found in Windows Device Manager under **Universal Serial Bus Devices** tree node.
 
 #### 1.2.2. Environment, gcc, etc.
-Get [git for windows SDK (MUST BE!)](https://gitforwindows.org/) installed
 
-#### 1.2.3. Install libusb
+* Install git for windows SDK (MUST BE!)
 
-`pacman -S mingw-w64-x86_64-libusb`
+    Get [git for windows SDK (MUST BE!)](https://github.com/git-for-windows/build-extra/releases/latest) installed.
 
-#### 1.2.4. Install cmake
+* Install **libusb**, **cmake**.
 
-`pacman --needed -S mingw-w64-x86_64-cmake`
+    ```
+    pacman -S mingw-w64-x86_64-libusb
+    pacman --needed -S mingw-w64-x86_64-cmake
+    ```
 
-> Make sure you are using `/mingw64/bin/cmake`
+* Install opencv_3.4
 
-#### 1.2.5. Install opencv_3.4
-* Get [opencv_3.4.1, mingw-w64-x86_64-opencv-3.4.1-1-any.pkg.tar.xz.zip](https://www.kneron.com/tw/support/developers/?folder=Documentation%20center/&download=457)
+    * Get [opencv_3.4.1, mingw-w64-x86_64-opencv-3.4.1-1-any.pkg.tar.xz.zip](https://www.kneron.com/tw/support/developers/?folder=Documentation%20center/&download=457)
 
-* Unzip mingw-w64-x86_64-opencv-3.4.1-1-any.pkg.tar.xz.zip to **mingw-w64-x86_64-opencv-3.4.1-1-any.pkg.tar.xz**.
+    * Unzip mingw-w64-x86_64-opencv-3.4.1-1-any.pkg.tar.xz.zip to **mingw-w64-x86_64-opencv-3.4.1-1-any.pkg.tar.xz**.
 
-* Install mingw-w64-x86_64-opencv-3.4.1-1-any.pkg.tar.xz:
+    * Install mingw-w64-x86_64-opencv-3.4.1-1-any.pkg.tar.xz:
 
-`pacman -U mingw-w64-x86_64-opencv-3.4.1-1-any.pkg.tar.xz`
+        `pacman -U mingw-w64-x86_64-opencv-3.4.1-1-any.pkg.tar.xz`
 
-> Make sure you enter the directory of opencv xz file in msys command line
+        > Make sure you enter the directory of opencv xz file in msys command line
 
+* Add **mingw64\bin** to PATH variable in Environment Variable
+
+    * Right-clicking This PC and going to Properties.
+    * Clicking on the Advanced system settings in the menu on the left.
+    * Clicking on the Environment Variables button o​n the bottom right.
+    * In the System variables section, selecting the Path variable and clicking on Edit. The next screen will show all the directories that are currently a part of the PATH variable.
+    * Assume **git for windows SDK** is installed in **C:\git-sdk-64\mingw64**
+    * Clicking on New and entering **C:\git-sdk-64\mingw64\bin** directory.
 
 ## 2. File Structure
 
@@ -397,10 +412,11 @@ To program ncpu fw or update models to specific flash address(sector erase, prog
 #### 4.1.1. Build
 ```bash
 mkdir build && cd build
- # to build opencv_3.4 example: cmake -DBUILD_OPENCV_EX=on ..
 cmake ..
 make -j4
 ```
+
+* **[Optional]** To build opencv_3.4 examples, replace `cmake ..` by `cmake -DBUILD_OPENCV_EX=on ..`
 
 #### 4.1.2. USB Device Permissions
 Add the following to /etc/udev/rules.d/10-local.rules
@@ -413,21 +429,22 @@ SUBSYSTEM=="usb",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0200",MODE="0666"
 ### 4.2. Windows(MINGW64\MSYS)
 #### 4.2.1. Build
 ```bash
- # to build opencv_3.4 example: cmake -DBUILD_OPENCV_EX=on .. -G"MSYS Makefiles"
 mkdir build && cd build
 cmake .. -G"MSYS Makefiles"
 make -j4
 ```
 
+* **[Optional]** To build opencv_3.4 examples, replace `cmake .. -G"MSYS Makefiles"` by `cmake -DBUILD_OPENCV_EX=on .. -G"MSYS Makefiles"`
+
 #### 4.2.2. Runtime DLL Environment
 - Set PATH to add CV DLL location in Windows10
-    - Command line example: assume MSYS2 is installed in C:\git-sdk-64\mingw64
+    - Command line example: assume MSYS2 is installed in **C:\git-sdk-64\mingw64**
 
     ```
     set PATH=%PATH%;C:\git-sdk-64\mingw64\bin
     ```
 
-- Copy additional DLLs to C:\git-sdk-64\mingw64 directory
+- Copy additional DLLs to **C:\git-sdk-64\mingw64\bin** directory
 
     ```
     cp dll\*.dll C:\git-sdk-64\mingw64\bin\
@@ -438,7 +455,7 @@ make -j4
 |  | host_lib library | Example executable file |
 |------------------|------------------|-------------------------|
 | **Linux** | ./build/src/libhostkdp.so | ./build/bin/* |
-| **Windows** | .\build\bin\libhostkdp.dll | .\build\bin\*.exe |
+| **Windows** | .\build\bin\libhostkdp.dll | .\build\bin\\*.exe |
 
 ## 5. host_lib Examples
 
@@ -463,15 +480,30 @@ Define folder path below:
 
 #### 5.1.1. <span style="color:blue;font-weight:bold;">isi examples</span>
 
-##### 5.1.1.1 **kl720_cam_isi_center_app**
+##### 5.1.1.1 **kl720_isi_load_model**
+
+* This example will download a model file to the memory of KL720 directly without using flash
+* Copy **models_720.nef** to **UPDATE_PATH**
+* Open terminal and change path to **EXAMPLE_PATH**
+* Run `sudo ./kl720_isi_load_model`, logs will be shown in terminal
+
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
+    adding devices....
+    start kdp host lib....
+    starting loading model ...
+      : done
+    => Time = 0.379 seconds
+    </div>
+
+##### 5.1.1.2 **kl720_cam_isi_center_app**
 
 * This example needs to have camera plug-in on computer, or it will show the error `Unable to connect to camera.`
 
-* 5.1.1.1.1 **YOLOV5S_MODEL**
+* Run with **YOLOV5S_MODEL**
 
     * Copy **models_720.nef** from **YOLOV5S_MODEL_PATH** to **UPDATE_PATH**
     * Open terminal and change path to **EXAMPLE_PATH**
-    * Run `sudo ./kl720_isi_update_model` to update **models_720.nef** into device memory, logs will be shown in terminal
+    * Run `sudo ./kl720_isi_load_model` to update **models_720.nef** into device memory, logs will be shown in terminal
     
         <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">...
         usage: kl720_isi_load_model.exe [nef path]
@@ -515,13 +547,13 @@ Define folder path below:
     
         <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[video mode]</span> 0: vga (640x480), 1: svga (800x600), 2: wxga (1280x720)
         <span style="color:cyan;font-weight:bold;">[run_frames]</span> number of frames (> 0) to run
-        <span style="color:cyan;font-weight:bold;">[model_id]</span> 200 = KNERON_OBJECTDETECTION_CENTERNET_512_512_3
+        <span style="color:cyan;font-weight:bold;">[model_id]</span> model ID (optional. Default is 200 for CenterNet.)
         <span style="color:cyan;font-weight:bold;">[postproc]</span> 0: postprocess at ncpu, 1: postprocess by host
         </div>
 
-##### 5.1.1.2 **kl720_isi_center_app**
+##### 5.1.1.3 **kl720_isi_center_app**
     
-* 5.1.1.2.1 **YOLOV5S_MODEL**
+* Run with **YOLOV5S_MODEL**
     
     * Copy **models_720.nef** from **YOLOV5S_MODEL_PATH** to **UPDATE_PATH**
     * Open terminal and change path to **EXAMPLE_PATH**
@@ -587,14 +619,14 @@ Define folder path below:
     
     * The arguments of kl720_isi_center_app are:
     
-        <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[parallel_mode]</span> 0: non-parallel, 1: parallel
+        <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[parallel_mode]</span> 0: non parallel mode, 1: parallel mode, 3: parallel mode + skip content errors
         <span style="color:cyan;font-weight:bold;">[run_frames]</span> number of frames (> 0) to run
-        <span style="color:cyan;font-weight:bold;">[model_id]</span> 200 = KNERON_OBJECTDETECTION_CENTERNET_512_512_3
+        <span style="color:cyan;font-weight:bold;">[model_id]</span> model ID (optional. Default is 200 for CenterNet.)
         <span style="color:cyan;font-weight:bold;">[host_postproc]</span> 0: postprocess at ncpu, 1: postprocess at host
         <span style="color:cyan;font-weight:bold;">[use_dme_model]</span> 0: use models in flash, 1: use models in memory
         </div>
 
-* 5.1.1.2.2 **Parallel (Async) Mode**
+* Run by **Parallel (Async) Mode**
 
     Repeat any of above sections with first argument being changed to 1:
 
@@ -604,7 +636,7 @@ Define folder path below:
 
     * Run `sudo ./kl720_isi_center_app 1 20 211`
 
-* 5.1.1.2.3 **Use post processing at host**
+* Run by **Use post processing at host**
 
     Repeat any of above sections with fourth argument being set to 1:
 
@@ -614,7 +646,7 @@ Define folder path below:
 
     * Run `sudo ./kl720_isi_center_app 0 20 211 1`
 
-* 5.1.1.2.4 **Use model in memory**
+* Run by **Use model in memory**
 
     Repeat any of above sections with fifth argument being changed to 1 to use the model in memory.
 
@@ -626,9 +658,9 @@ Define folder path below:
 
     * Run `sudo ./kl720_isi_center_app 0 20 211 0 1`
 
-##### 5.1.1.3 **kl720_isi_pdc**
+##### 5.1.1.4 **kl720_isi_pdc**
 
-* 5.1.1.3.1 **Video mode**
+* Run by **Video mode**
 
     * This example will download **models_720.nef** from **YOLOV5_PD_MODEL_PATH** to KL720 memory automatically
     * Run `sudo ./kl720_isi_pdc 1 1000000`, logs will be shown in terminal and a image window will pop up
@@ -651,7 +683,7 @@ Define folder path below:
         <span style="color:cyan;font-weight:bold;">[test img | batch_test_dir]</span> image name or img dir
         </div>
 
-* 5.1.1.3.1 **Image mode**
+* Run by **Image mode**
 
     * This example will download **models_720.nef** from **YOLOV5_PD_MODEL_PATH** to KL720 memory automatically
     * Run `sudo ./kl720_isi_pdc 0 20`, logs will be shown in terminal
@@ -682,36 +714,14 @@ Define folder path below:
         </div>
 
 
-* 5.1.1.3.3 **Image mode with customer images**
+* Run by **Image mode with customer images**
 
     * This example will download **models_720.nef** from **YOLOV5_PD_MODEL_PATH** to KL720 memory automatically
     * Run `sudo ./kl720_isi_pdc 0 20 [640_480_image_dir]`, logs will be shown in terminal
 
-##### 5.1.1.4 **kl720_isi_load_model**
+#### 5.1.2. <span style="color:blue;font-weight:bold;">misc examples</span>
 
-* This example will download a model file to the memory of KL720 directly without using flash
-* Copy **models_720.nef** to **UPDATE_PATH**
-* Open terminal and change path to **EXAMPLE_PATH**
-* Run `sudo ./kl720_isi_load_model`, logs will be shown in terminal
-
-    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
-    adding devices....
-    start kdp host lib....
-    starting loading model ...
-      : done
-    => Time = 0.379 seconds
-    </div>
-
-#### 5.1.2. <span style="color:blue;font-weight:bold;">Unused</span>
-
-#### 5.1.3. <span style="color:blue;font-weight:bold;">Unused</span>
-
-
-
-
-#### 5.1.4. <span style="color:blue;font-weight:bold;">misc examples</span>
-
-##### 5.1.4.1 **kl720_get_kn_num**
+##### 5.1.2.1 **kl720_get_kn_num**
 
 * Open terminal and change path to **EXAMPLE_PATH**
 * Run `sudo ./kl720_get_kn_num`, logs will be shown in terminal
@@ -727,7 +737,7 @@ Define folder path below:
 
 * The **KN number** can be found from logs.
 
-##### 5.1.4.2 **kl720_get_model_info**
+##### 5.1.2.2 **kl720_get_model_info**
 
 * Open terminal and change path to **EXAMPLE_PATH**
 * Run `sudo ./kl720_get_model_info`, logs will be shown in terminal
@@ -744,7 +754,7 @@ Define folder path below:
     de init kdp host lib....
     </div>
 
-##### 5.1.4.3 **kl720_get_nef_model_metadata**
+##### 5.1.2.3 **kl720_get_nef_model_metadata**
 
 * Copy **models_720.nef** to **UPDATE_PATH**
 * Open terminal and change path to **EXAMPLE_PATH**
@@ -766,7 +776,7 @@ Define folder path below:
     de init kdp host lib....
     </div>
 
-##### 5.1.4.4 **kl720_set_ckey**
+##### 5.1.2.4 **kl720_set_ckey**
 
 * Open terminal and change path to **EXAMPLE_PATH**
 * Run `sudo ./kl720_set_ckey 1234`, logs will be shown in terminal
@@ -789,12 +799,12 @@ Define folder path below:
     <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[user_id]</span> customized key in decimal format
     </div>
 
-##### 5.1.4.5 **kl720_reset**
+##### 5.1.2.5 **kl720_reset**
 
 * This example will instruct KL720 to do reset
 * Open terminal and change path to **EXAMPLE_PATH**
 
-* 5.1.4.5.1 **Reset KL720 device**
+* 5.1.2.5.1 **Reset KL720 device**
 
     * Run `sudo ./kl720_reset 0`, logs will be shown in terminal
 
@@ -805,7 +815,7 @@ Define folder path below:
         sys reset mode succeeded...
         </div>
 
-* 5.1.4.5.2 **Reset Log Level**
+* 5.1.2.5.2 **Reset Log Level**
 
     * Run `sudo ./kl720_reset 2 6 2`, logs will be shown in terminal
 
@@ -832,9 +842,9 @@ Define folder path below:
         <span style="color:cyan;">[6]</span> LOG_DBG
         </div>
 
-#### 5.1.5. <span style="color:blue;font-weight:bold;">update examples</span>
+#### 5.1.3. <span style="color:blue;font-weight:bold;">update examples</span>
 
-##### 5.1.5.1 **kl720_update_app_nef_model**
+##### 5.1.3.1 **kl720_update_app_nef_model**
 
 * Copy **fw_scpu.bin**, **fw_ncpu.bin**, **models_720.nef** to **UPDATE_PATH**
 * Open terminal and change path to **EXAMPLE_PATH**
@@ -859,7 +869,7 @@ Define folder path below:
 
 * The example updates scpu first, then ncpu, the last is model.
 
-##### 5.1.5.2 **kl720_update_fw**
+##### 5.1.3.2 **kl720_update_fw**
 
 * Copy **fw_scpu.bin**, **fw_ncpu.bin**, **models_720.nef** to **UPDATE_PATH**
 * Open terminal and change path to **EXAMPLE_PATH**
@@ -883,7 +893,7 @@ Define folder path below:
     <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[update_id]</span> 1: SCPU firmware, 2: NCPU firmware
     </div>
 
-##### 5.1.5.3 **kl720_update_nef_model**
+##### 5.1.3.3 **kl720_update_nef_model**
 
 * Copy **models_720.nef** to **UPDATE_PATH**
 * Open terminal and change path to **EXAMPLE_PATH**
