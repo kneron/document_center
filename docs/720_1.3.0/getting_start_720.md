@@ -145,22 +145,14 @@ Here is the example folder design for Kneron SDK.  The <font color="#000066">**d
 │       │       └───Kneron<br>
 │       │           └───Winbond<br>
 │       └───spl_aes<br>
-└───<font color="#000066">**models**</font><br>
-    ├───yolov3_416<br>
-    ├───yolov3_608<br>
-    ├───yolov3_tiny_416<br>
-    └───yolov3_tiny_608<br>
-
 
 
 ### 2.2. Detailed explanation
 
-├───<font color="#0000dd">**firmware**</font><br>
-└───<font color="#0000dd">**models**</font>
+└───<font color="#0000dd">**firmware**</font><br>
 
 <font color="#0000dd">**firmware:**</font> Contains all device FW source/lib code, utilities, build environment
 
-<font color="#0000dd">**models:**</font> Contains all Kneron compiled models which is used by firmware examples. Models will also be called by Khost, so, it must be located at same level as firmware and Khost.
 
 ├───firmware<br>
 │   ├───<font color="#0000dd">**app**</font><br>
