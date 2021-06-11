@@ -4,11 +4,9 @@
 
 There are several ways to get the Kneron host example:
 
-- OS requirements  
-    - Linux, Ubuntu 18.04 with gcc version later than 7.5
-
 - Get the example folder for Linux environment from **host_lib**   
-    - Prerequisite: Cmake, OpenCV  
+    - Linux, Ubuntu 18.04 with gcc version later than 7.5
+    - Prerequisite: Cmake, OpenCV 3.4.x, Kneron Host_lib v1.0.0
     - Download **host_lib** from **KNEO Stem (USB Dongle) -> host_lib** in **[Kneron Develop Center](https://www.kneron.com/tw/support/developers/)** 
 
 - Get the toolchain VM for the **windows** and **Mac**   
@@ -16,16 +14,19 @@ There are several ways to get the Kneron host example:
     - Download the VM  total five files :**[Part1](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=276)**  **[Part2](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=277)** **[Part3](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=278)** **[Part4](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=279)**  **[Part5](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=280)**  
     - Map USB port and share drive into VM: **[Link](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=251)**
 
+> **Note:**  
+> Kneron Host_lib also supproted in Windows 10, Mingw64 environment  
+> See **README_*.md** in host_lib for details
 
 
 ## 2. File Structure
 **host_lib** supports Kneron Chips, including both KL520 and KL720.  
-In this document file, KL520 examples are shown.  
+In this document file, KL520 examples in Linux are shown.  
 
 
-```txt
+```
 host_lib-|
-         |->app_binaries-|        (KL520 app binaries for example)
+         |->app_binaries-|        (*KL520 app binaries for example)
                          |-> *KL520/tiny_yolo_v3      (FW for object detection)
                          |-> *KL520/ssd_fd_lm         (FW for mask detection)
                          |-> *KL520/ota/ready_to_load (default path for ota)
@@ -275,7 +276,7 @@ de init kdp host lib....
 
 ### 4.2. Python Example
 
-> note:  
+> **Note:**    
 > visit [Kneron Github](https://github.com/kneron/host_lib) for more python materials 
 
 Let’s take a look at the Python example program (path=`python/examples_kl520`), `cam_isi_async_parallel_yolo.py`. In this test, we send frames (RGB565) of camera into KL520, and get the detection results back.
@@ -1278,7 +1279,7 @@ Afterwards, just wait until all progresses are finished (erase, program, verify)
 ![](./imgs/getting_start_imgs/10_3_3.png)
 
 
-**Note**:  
+> **Note**  
 > `flash_programmer.py -a` means to do flash chip erase + programming + verification
 
 #### 10.3.5 Flash Verification (optional)
@@ -1541,7 +1542,7 @@ $ python uart_dfu_boot.py -i 0x10102000 -r
 ![](./imgs/getting_start_imgs/11.3.6.png)
 
 
-**Note**:  
+> **Note**  
 > To write specific bin file to specific memory address  
 > “**-i**" means the memory index/address to program  
 > “**-p**" means the FW binary to program  
@@ -1574,9 +1575,6 @@ Refer to host_lib\README_CPP.md for further information.
 ###　Host Mode Example  
 This sample code is an application which KL520 chip plays as a host chip with connected display and cameras for Object detection. You will need to program the flash image to device first. The flash image includes SCPU/NCPU firmware and model. Then, you can Start/Stop object detection by simple command via UART. 
 
-> **WARNING:**  
-> **DO NOT** program this FW to Kneron Dongle.
-
 ---
 #### Hardware Requirements
 
@@ -1584,6 +1582,9 @@ Kneron KL520 series AI SoC Development Kit
 
 ---
 #### Firmware Preparation and Installation
+
+> **WARNING:**  
+> **DO NOT** program host mode FW to **Kneron Dongle**
 
 - Run Keil MDK and compile reference design 
     Open workspace file `[KL520_SDK]\example_projects\tiny_yolo_v3_host\workspace.uvmpw`
@@ -1597,8 +1598,6 @@ Kneron KL520 series AI SoC Development Kit
 	**Reference:** [Firmware Binary Generator](#1033-firmware-binary-generation-fw-models)
 
     ```bash
-    #in Windows MINGW64 console
-    
     cd [SDK]/utils/bin_gen/flash_bin
     cp -f [KL520_SDK]/models/tiny_yolo_v3/models_520.nef .
     cd ..
@@ -1642,3 +1641,41 @@ Kneron KL520 series AI SoC Development Kit
 	- Note that there may be delay to see first good inference due to opening camera/sensor. 
 
     ![](./imgs/getting_start_imgs/appendix.PNG)
+
+---
+### Supported/Unsupported Peripheral Table
+
+**Image Input**
+
+| Peripherals  | Companion   | Host Mode  |
+| ------------ | ----------- | ---------- |
+| MIPI CSI RX  | x | O |
+| DVP          | x | driver/example |
+| UVC Host     | x | specified cameras | 
+| USB(proprietary) | V | x |
+| SPI Master, non-DMA| x | driver/example | 
+| SPI Slave, non-DMA | x | driver/example |
+| SPI Master, DMA | x | x | 
+| SPI Slave, DMA  | x | x |
+| UART         | x | x |
+
+
+**Image/Result Output**
+
+| Peripherals  | Companion   | Host Mode  |
+| ------------ | ----------- | ---------- |
+| MIPI DSI TX  | x | x |
+| MIPI CSI TX  | x | x |
+| DVP          | x | O |
+| UVC device   | x | x |
+| USB bulk     | x | O |
+| USB(proprietary)| O | x |
+| SPI Master, non-DMA| x | driver/example |
+| SPI Slave, non-DMA | x | driver/example |
+| SPI Master, DMA | x | x | 
+| SPI Slave, DMA  | x | x |
+| UART         | x | O |
+| I2C | x | driver/example |
+| I2S | x | x |
+| INTEL 8080 | x | x |
+
