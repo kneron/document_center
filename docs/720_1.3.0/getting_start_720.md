@@ -472,6 +472,8 @@ Define folder path below:
 
 #### 5.1.1. <span style="color:blue;font-weight:bold;">isi examples</span>
 
+* ISI (Image Streaming Inference) is a framework to communicate with KL720/KL520 devices and do image inference in streamline mode.
+
 ##### 5.1.1.1 **kl720_isi_load_model**
 
 * This example will download a model file to the memory of KL720 directly without using flash
@@ -490,6 +492,14 @@ Define folder path below:
 ##### 5.1.1.2 **kl720_cam_isi_center_app**
 
 * This example needs to have camera plug-in on computer, or it will show the error `Unable to connect to camera.`
+
+* The arguments of kl720_cam_isi_center_app are:
+
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[video mode]</span> 0: vga (640x480), 1: svga (800x600), 2: wxga (1280x720)
+    <span style="color:cyan;font-weight:bold;">[run_frames]</span> number of frames (> 0) to run
+    <span style="color:cyan;font-weight:bold;">[model_id]</span> model ID
+    <span style="color:cyan;font-weight:bold;">[postproc]</span> 0: postprocess at ncpu, 1: postprocess by host
+    </div>
 
 * Run with **YOLOV5S_MODEL**
 
@@ -535,16 +545,17 @@ Define folder path below:
         => Avg 12.89 FPS (77.59 ms = 1551.73/20)
         </div>
     
-    * The arguments of kl720_cam_isi_center_app are:
-    
-        <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[video mode]</span> 0: vga (640x480), 1: svga (800x600), 2: wxga (1280x720)
-        <span style="color:cyan;font-weight:bold;">[run_frames]</span> number of frames (> 0) to run
-        <span style="color:cyan;font-weight:bold;">[model_id]</span> model ID (optional. Default is 200 for CenterNet.)
-        <span style="color:cyan;font-weight:bold;">[postproc]</span> 0: postprocess at ncpu, 1: postprocess by host
-        </div>
-
 ##### 5.1.1.3 **kl720_isi_center_app**
+
+* The arguments of kl720_isi_center_app are:
     
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[parallel_mode]</span> 0: non-parallel, 1: parallel
+    <span style="color:cyan;font-weight:bold;">[run_frames]</span> number of frames (> 0) to run
+    <span style="color:cyan;font-weight:bold;">[model_id]</span> model ID
+    <span style="color:cyan;font-weight:bold;">[host_postproc]</span> 0: postprocess at ncpu, 1: postprocess at host
+    <span style="color:cyan;font-weight:bold;">[use_dme_model]</span> 0: use models in flash, 1: use models in memory
+    </div>
+
 * Run with **YOLOV5S_MODEL**
     
     * Copy **models_720.nef** from **YOLOV5S_MODEL_PATH** to **UPDATE_PATH**
@@ -609,18 +620,9 @@ Define folder path below:
 		=> Avg 14.93 FPS (66.99 ms = 1339.85/20)
         </div>
     
-    * The arguments of kl720_isi_center_app are:
-    
-        <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[parallel_mode]</span> 0: non parallel mode, 1: parallel mode, 3: parallel mode + skip content errors
-        <span style="color:cyan;font-weight:bold;">[run_frames]</span> number of frames (> 0) to run
-        <span style="color:cyan;font-weight:bold;">[model_id]</span> model ID (optional. Default is 200 for CenterNet.)
-        <span style="color:cyan;font-weight:bold;">[host_postproc]</span> 0: postprocess at ncpu, 1: postprocess at host
-        <span style="color:cyan;font-weight:bold;">[use_dme_model]</span> 0: use models in flash, 1: use models in memory
-        </div>
-
 * Run by **Parallel (Async) Mode**
 
-    Repeat any of above sections with first argument being changed to 1:
+    Repeat above section with first argument being changed to 1:
 
     * Model: **YOLOV5S_MODEL_PATH**.
 
@@ -650,11 +652,74 @@ Define folder path below:
 
     * Run `sudo ./kl720_isi_center_app 0 20 211 0 1`
 
-##### 5.1.1.4 **kl720_isi_pdc**
+* **Image Pre Processing Parameters**
+
+    * Most pre processing is done by KL720 automatically based on image info and model info, such as resizing/scaling/padding.
+	* Controllable pre processing parameters for a model are through image format field:
+```
+#define IMAGE_FORMAT_SUB128                 BIT31
+#define IMAGE_FORMAT_ROT_MASK               (BIT30 | BIT29)
+#define IMAGE_FORMAT_SYMMETRIC_PADDING      BIT21
+#define IMAGE_FORMAT_CHANGE_ASPECT_RATIO    BIT20
+
+#define IMAGE_FORMAT_NPU                    0x00FF
+```
+	* Pre processing parameters per image like cropping box or variable sizes of images can be specified in the `struct kdp_isi_image_header_s` and pass to API `kdp_isi_inference_ext`.
+
+* **Image Post Processing Parameters**
+
+    * Post processing parameters for a typical OD (object detection) model (like YOLO v3 or v5) can be 
+	  modified in host_lib application file. 
+```
+struct od_post_params_s {
+    float       prob_thresh;                /**< Probability threshold */
+    float       nms_thresh;                 /**< NMS threshold */
+    uint32_t    max_detection_per_class;    /**< Max objects to detect per class */
+    uint16_t    anchor_row;                 /**< Row number of anchors */
+    uint16_t    anchor_col;                 /**< Colomn number of anchors */
+    uint16_t    stride_size;                /**< Stride size */
+    uint16_t    reserved_size;              /**< Reserved */
+    uint32_t    data[MAX_PARAMS_LEN - 5];   /**< Data to hold anchors/stride/etc */
+}
+```
+
+* **Parallel Image Processing and Other Settings** 
+
+    * Parallel processing mode (IMAGE_FORMAT_PARALLEL_PROC) allows one image being processed at
+	  post processing stage and another image to be processed by NPU.
+	* Instead of sending one image and getting one inference result, parallel mode allows sending
+	  up to three images and getting first inference result, and then repeat send-one-get-one until
+	  getting last result.
+    * When IMAGE_FORMAT_RAW_OUTPUT is set, it allows raw NPU output data to be sent to host
+	  for host side post processing.
+	* BYPASS flags are for test purposes to bypass certain stage in flow chain.
+```
+#define IMAGE_FORMAT_RAW_OUTPUT             BIT28
+#define IMAGE_FORMAT_PARALLEL_PROC          BIT27
+
+#define IMAGE_FORMAT_BYPASS_PRE             BIT19
+#define IMAGE_FORMAT_BYPASS_NPU_OP          BIT18
+#define IMAGE_FORMAT_BYPASS_CPU_OP          BIT17
+#define IMAGE_FORMAT_BYPASS_POST            BIT16
+```
+
+#### 5.1.2. <span style="color:blue;font-weight:bold;">kl720_isi_pdc</span>
+
+* PDC (Person Detection and Classification) is a two model application example.
+* This example will download **models_720.nef** from **YOLOV5_PD_MODEL_PATH** to KL720 memory automatically
+* This example will send images (still or video) to KL720 in streaming inference mode.
+* Firmware in KL720 will run first model to detect persons, and if found, will run second model for classification.
+
+* The arguments of kl720_isi_pdc are:
+
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[video_mode]</span> 0: image mode, 1: video mode
+    <span style="color:cyan;font-weight:bold;">[run_frames]</span> number of frames to run
+    <span style="color:cyan;font-weight:bold;">[test img | batch_test_dir]</span> image name or img dir
+    </div>
 
 * Run by **Video mode**
 
-    * This example will download **models_720.nef** from **YOLOV5_PD_MODEL_PATH** to KL720 memory automatically
+    * This mode will open a camera on PC in VGA mode, capture and run images one by one.
     * Run `sudo ./kl720_isi_pdc 1 1000000`, logs will be shown in terminal and a image window will pop up
 
         <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
@@ -662,22 +727,16 @@ Define folder path below:
         start kdp host lib....
         Starting ISI mode and model loading ...
         starting ISI inference (window = 3)
+        image 1: box_count 1 class_count 1
+        [0] person=0: (114, 155, 629, 480) scores = 0.669067 / 0.218667
+        image 2: box_count 1 class_count 1
+        [0] person=0: (114, 155, 629, 480) scores = 0.622925 / 0.173288
         ..........
-        ..........
-        ..........
-        </div>
-
-
-    * The arguments of kl720_isi_pdc are:
-
-        <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[video_mode]</span> 0: image mode, 1: video mode
-        <span style="color:cyan;font-weight:bold;">[run_frames]</span> number of frames to run
-        <span style="color:cyan;font-weight:bold;">[test img | batch_test_dir]</span> image name or img dir
         </div>
 
 * Run by **Image mode**
 
-    * This example will download **models_720.nef** from **YOLOV5_PD_MODEL_PATH** to KL720 memory automatically
+    * This mode will take still image, specified in example code or command line argument [test img].
     * Run `sudo ./kl720_isi_pdc 0 20`, logs will be shown in terminal
 
         <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
@@ -706,14 +765,15 @@ Define folder path below:
         </div>
 
 
-* Run by **Image mode with customer images**
+* Run by **Image mode with multiple images**
 
-    * This example will download **models_720.nef** from **YOLOV5_PD_MODEL_PATH** to KL720 memory automatically
-    * Run `sudo ./kl720_isi_pdc 0 20 [640_480_image_dir]`, logs will be shown in terminal
+    * This mode can take multiple images when [batch_test_dir] is specified in command line argument.
+    * Supported format is RGB565 with VGA (640W x 480H) dimension.
+    * Run `sudo ./kl720_isi_pdc 0 10 [batch_test_dir]`, logs will be shown in terminal for each image to run 10 times.
 
-#### 5.1.2. <span style="color:blue;font-weight:bold;">misc examples</span>
+#### 5.1.3. <span style="color:blue;font-weight:bold;">misc examples</span>
 
-##### 5.1.2.1 **kl720_get_kn_num**
+##### 5.1.3.1 **kl720_get_kn_num**
 
 * Open terminal and change path to **EXAMPLE_PATH**
 * Run `sudo ./kl720_get_kn_num`, logs will be shown in terminal
@@ -729,7 +789,7 @@ Define folder path below:
 
 * The **KN number** can be found from logs.
 
-##### 5.1.2.2 **kl720_get_model_info**
+##### 5.1.3.2 **kl720_get_model_info**
 
 * Open terminal and change path to **EXAMPLE_PATH**
 * Run `sudo ./kl720_get_model_info`, logs will be shown in terminal
@@ -746,7 +806,7 @@ Define folder path below:
     de init kdp host lib....
     </div>
 
-##### 5.1.2.3 **kl720_get_nef_model_metadata**
+##### 5.1.3.3 **kl720_get_nef_model_metadata**
 
 * Copy **models_720.nef** to **UPDATE_PATH**
 * Open terminal and change path to **EXAMPLE_PATH**
@@ -768,9 +828,14 @@ Define folder path below:
     de init kdp host lib....
     </div>
 
-##### 5.1.2.4 **kl720_set_ckey**
+##### 5.1.3.4 **kl720_set_ckey**
 
 * Open terminal and change path to **EXAMPLE_PATH**
+* The argument of kl720_set_ckey is:
+
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[user_id]</span> customized key in decimal format
+    </div>
+
 * Run `sudo ./kl720_set_ckey 1234`, logs will be shown in terminal
 
     <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
@@ -786,17 +851,25 @@ Define folder path below:
 * Generally user should get KL720 (96board, EVB or dongle) without efuse jumper enabled, so it should show the log **"Cannot burn eFuse!!!"**, it means PASS.
 * If user has KL720 with efuse jumper enabled, it should show the log **"set ckey OK!!!"**
 
-* The argument of kl720_set_ckey is:
-
-    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[user_id]</span> customized key in decimal format
-    </div>
-
-##### 5.1.2.5 **kl720_reset**
+##### 5.1.3.5 **kl720_reset**
 
 * This example will instruct KL720 to do reset
 * Open terminal and change path to **EXAMPLE_PATH**
+* The arguments of kl720_reset are:
 
-* 5.1.2.5.1 **Reset KL720 device**
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[reset mode]</span> 0: reset, 1: shutdown, 2: log level
+    <span style="color:cyan;font-weight:bold;">[scpu log level]</span> 1-6 = log level on SCPU
+    <span style="color:cyan;font-weight:bold;">[ncpu log level]</span> 1-6 = log level on NCPU
+    </div>
+    * Log levels are:
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;">[1]</span> LOG_CRITICAL
+    <span style="color:cyan;">[2]</span> LOG_ERROR
+    <span style="color:cyan;">[3]</span> LOG_USER
+    <span style="color:cyan;">[4]</span> LOG_INFO
+    <span style="color:cyan;">[5]</span> LOG_TRACE
+    <span style="color:cyan;">[6]</span> LOG_DBG</div>
+
+* 5.1.3.5.1 **Reset KL720 device**
 
     * Run `sudo ./kl720_reset 0`, logs will be shown in terminal
 
@@ -807,7 +880,7 @@ Define folder path below:
         sys reset mode succeeded...
         </div>
 
-* 5.1.2.5.2 **Reset Log Level**
+* 5.1.3.5.2 **Reset Log Level**
 
     * Run `sudo ./kl720_reset 2 6 2`, logs will be shown in terminal
 
@@ -817,26 +890,9 @@ Define folder path below:
         sys reset mode succeeded...
         </div>
 
-    * The arguments of kl720_reset are:
+#### 5.1.4. <span style="color:blue;font-weight:bold;">update examples</span>
 
-        <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[reset mode]</span> 0: reset, 1: shutdown, 2: log level
-        <span style="color:cyan;font-weight:bold;">[scpu log level]</span> 1-6 = log level on SCPU
-        <span style="color:cyan;font-weight:bold;">[ncpu log level]</span> 1-6 = log level on NCPU
-        </div>
-
-    * Log levels are:
-
-        <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;">[1]</span> LOG_CRITICAL
-        <span style="color:cyan;">[2]</span> LOG_ERROR
-        <span style="color:cyan;">[3]</span> LOG_USER
-        <span style="color:cyan;">[4]</span> LOG_INFO
-        <span style="color:cyan;">[5]</span> LOG_TRACE
-        <span style="color:cyan;">[6]</span> LOG_DBG
-        </div>
-
-#### 5.1.3. <span style="color:blue;font-weight:bold;">update examples</span>
-
-##### 5.1.3.1 **kl720_update_app_nef_model**
+##### 5.1.4.1 **kl720_update_app_nef_model**
 
 * Copy **fw_scpu.bin**, **fw_ncpu.bin**, **models_720.nef** to **UPDATE_PATH**
 * Open terminal and change path to **EXAMPLE_PATH**
@@ -861,10 +917,15 @@ Define folder path below:
 
 * The example updates scpu first, then ncpu, the last is model.
 
-##### 5.1.3.2 **kl720_update_fw**
+##### 5.1.4.2 **kl720_update_fw**
 
 * Copy **fw_scpu.bin**, **fw_ncpu.bin**, **models_720.nef** to **UPDATE_PATH**
 * Open terminal and change path to **EXAMPLE_PATH**
+* The argument of kl720_update_fw is:
+
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[update_id]</span> 1: SCPU firmware, 2: NCPU firmware
+    </div>
+
 * Run `sudo ./kl720_update_fw 1` for scpu, logs will be shown in terminal
 
     <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
@@ -880,12 +941,7 @@ Define folder path below:
 
 * Run `sudo ./kl720_update_fw 2` for ncpu, logs are the same as scpu.
 
-* The argument of kl720_update_fw is:
-
-    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[update_id]</span> 1: SCPU firmware, 2: NCPU firmware
-    </div>
-
-##### 5.1.3.3 **kl720_update_nef_model**
+##### 5.1.4.3 **kl720_update_nef_model**
 
 * Copy **models_720.nef** to **UPDATE_PATH**
 * Open terminal and change path to **EXAMPLE_PATH**
@@ -977,88 +1033,98 @@ Project:solution_companion
 
 ### 6.7. Create ISI Companion Application
 
-Main tasks in main.c
+#### 6.7.1 Main and Ops of Application
 
-* Initialize OS
-* Initialize SDK with companion mode
-`main_init(0)`
-* Load ncpu firmware
-`main_load_ncpu(0)`
-* Initialize communication module
-`kcomm_start()`
+* Main tasks in main.c
 
-Add operations for ISI command handler, e.g. in a shared directory\file (firmware\app\tiny_yolo_ops.c):
+    * Initialize OS
+    * Initialize SDK with companion mode `sdk_main()`
+        * Load ncpu firmware `load_ncpu_fw()`
+    * Initialize communication module `kcomm_start()`
+
+* Add application operations for ISI command handler, e.g. PDC application code in shared app directory (firmware\app\kapp_pdc_ops.c):
 ```
-static struct kapp_ops kapp_tiny_yolo_ops = {
-    .start          = tiny_yolo_start,
-    .run_image      = tiny_yolo_run_image,
-    .get_result_len = tiny_yolo_get_result_len,
+static struct kapp_ops kapp_pdc_ops = {
+    .start          = pdc_start,
+    .run_image      = pdc_run_image,
+    .get_result_len = pdc_get_result_len,
+    .config         = pdc_config,
 };
 
 /**
   .start: check application id at init time
-  .run_image: pass image and parameters to middleware driver to
-              run with the model(s) (model id TINY_YOLO_V3 here) 
-              of the application
-  .get_result_len: tell the length in bytes of a result buffer
+  .run_image: handle image for this application, pass image and parameters to 
+              middleware driver to run with the model(s) of the application
+  .get_result_len: get the length in bytes of a result buffer for ISI framework
+  .config: application specific configuration
 **/
 
-struct kapp_ops *tiny_yolo_get_ops(void)
+struct kapp_ops *kapp_pdc_get_ops(void)
 {
-    return &kapp_tiny_yolo_ops;
+    return &kapp_pdc_ops;
 }
 ```
 
-Register new ops with ISI command handler:
+* Register new ops by adding entry to kapp list:
 ```
-struct kapp_ops *ops;
-
-ops = tiny_yolo_get_ops();
-kcomm_enable_isi_cmds(ops);
+kapp_ops_add_entry(APP_PDC, kapp_pdc_get_ops);
 ```
 
-#### Support multiple models:
+#### 6.7.2 Support Multiple Models 
 
-When an application includes multiple models, each model needs a separate result memory, and all result memory buffers must be allocated in DDR using kmdw_ddr_reserve() because they are filled up by NCPU.
-
-For companion mode this can be all done in .run_image callback function like age_gender ISI example where two models (KNERON_FDSSD and KNERON_AGE_GENDER) are run one after another.
-`firmware\app\kapp_center_app_ops.c`
-
-#### Parallel image processing for NPU and NCPU:
-
-When incoming images could be fed to NPU running model while previous image’s postposing to run on NCPU in parallel, a parallel bit can be set in image format to enable this feature.
-
+* When an application includes multiple models, each model needs a separate result memory, and all result memory buffers must be allocated in DDR using kmdw_ddr_reserve() because they are filled up by NCPU.
+* For companion mode this can be all done in .run_image operation like that in PDC ISI example where two models (for detection and classification) are run one after another.
+* A simplified example code:
 ```
-typedef enum {
-...
- IMAGE_FORMAT_PARALLEL_PROC =         BIT27,
-...
-} dsp_img_fmt_t;
+static int pdc_run_image(uint32_t app_id, struct kapp_img_run_s *img_run_p)
+{
+    // Run PD model first
+    pdc_run_person_detection(app_id, img_run_p);
+
+    // Run PC model next
+    if (out->box_count) {
+        pdc_run_person_classifier(app_id, img_run_p);
+    }
+}
 ```
+* Need to remove IMAGE_FORMAT_PARALLEL_PROC flag in `image_format` if the second model can't be
+  parallelized with first model because of dependency on first model's post processing result.
+* But if multiple runs of second model could be parallelized, IMAGE_FORMAT_PARALLEL_PROC flag can
+  be added back for better performance.
+* Remember to handle event notification correct when changing parallel mode. 
+
 
 
 ### 6.8. Register New Pre/Post Processing and CPU functions
 
-For application that using new model, users need to register the corresponding pre and post process functions. User can refer to tiny_yolo_v3_companion project's main function in ncpu. 
+* For application that using new model, users need to register the corresponding pre and post process functions.
 
-First, user need to define an new model ID for the model. For example, `TINY_YOLO_V3` is defined model ID for tiny yolo v3 model.
+* First, user need to define an new model ID for the model. For example, `TINY_YOLO_V3_416_416_3` is defined model ID for tiny yolo v3 model.
 
-There is a default pre-processing function to handle scaling, cropping, rotation, 0-normalization with hardware acceleration. 
+* There is a default pre-processing function to handle scaling, cropping, rotation, 0-normalization with hardware acceleration. 
 
-If a special processing is needed for incoming raw image, this API can be called to register in `void pre_processing_add(void)` function.
+* If a new pre processing is needed for incoming raw image, a new entry can be added in the list of `ncpu_ftr_table.c`.
+```
+cnn_pre_post_node_t  preproc_node_list[TOTAL_CNN_MODEL_NUM] = {
+    { Your_TINY_YOLO_V3_416_416_3,   new_pre_proc_tiny_yolo_v3 };
+}
+```
 
-`kdpio_pre_processing_register(TINY_YOLO_V3, new_pre_yolo_v3);`
+* Same procedure can be applied to post process as well. A new entry can be added in the list of `ncpu_ftr_table.c`.
+```
+cnn_pre_post_node_t  postproc_node_list[TOTAL_CNN_MODEL_NUM] = {
+    { Your_YOLO_V3_416_416_3,   new_post_proc_tiny_yolo_v3 },
+}
+```
 
-Same procedure can be applied to post process as well. We need to add the following into the `void post_processing_add(void)` function.
-
-`kdpio_post_processing_register(TINY_YOLO_V3, new_post_yolo_v3);`
-
-Sometime, KL720 NPU cannot handle some layers in the model, and user need to implement a CPU function to complete the model. The user will require to register the cpu function so that the runtime library knows what to do during the cpu node. Users can do it in `void cpu_processing_add(void)` function, add the cpu funcitons:
-
-`kdpio_cpu_op_register(ZERO_UPSAMPLE, new_zero_upsample_op);`
-
-Please note that user needs to define an new cpu function ID for this cpu function.
-
+* When a node of a model is not handled by NPU but needs to be handled by CPU (or DSP), user needs to implement a CPU function
+  to perform needed operations for the model.
+* User needs to define an new cpu function ID for this cpu function, and an entry can be added in the list of `ncpu_ftr_table.c`
+```
+cpu_op_node_t  cpu_op_node_list[TOTAL_CPU_OPER_NUM] = {
+    { Your_CPU_OP_SOFTMAX,    new_softmax_func },
+}
+```
 
 ### 6.9. Build Keil MDK to compile reference design
 
