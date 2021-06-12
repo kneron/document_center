@@ -828,30 +828,7 @@ struct od_post_params_s {
     de init kdp host lib....
     </div>
 
-##### 5.1.3.4 **kl720_set_ckey**
-
-* Open terminal and change path to **EXAMPLE_PATH**
-* The argument of kl720_set_ckey is:
-
-    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[user_id]</span> customized key in decimal format
-    </div>
-
-* Run `sudo ./kl720_set_ckey 1234`, logs will be shown in terminal
-
-    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
-    adding devices....
-    start kdp host lib....
-    doing test :0....
-    starting set ckey: 0, 0x000004D2
-    set_status: 0, 0x00000001
-    Cannot burn eFuse!!!
-    de init kdp host lib....
-    </div>
-
-* Generally user should get KL720 (96board, EVB or dongle) without efuse jumper enabled, so it should show the log **"Cannot burn eFuse!!!"**, it means PASS.
-* If user has KL720 with efuse jumper enabled, it should show the log **"set ckey OK!!!"**
-
-##### 5.1.3.5 **kl720_reset**
+##### 5.1.3.4 **kl720_reset**
 
 * This example will instruct KL720 to do reset
 * Open terminal and change path to **EXAMPLE_PATH**
@@ -869,7 +846,7 @@ struct od_post_params_s {
     <span style="color:cyan;">[5]</span> LOG_TRACE
     <span style="color:cyan;">[6]</span> LOG_DBG</div>
 
-* 5.1.3.5.1 **Reset KL720 device**
+* 5.1.3.4.1 **Reset KL720 device**
 
     * Run `sudo ./kl720_reset 0`, logs will be shown in terminal
 
@@ -880,7 +857,7 @@ struct od_post_params_s {
         sys reset mode succeeded...
         </div>
 
-* 5.1.3.5.2 **Reset Log Level**
+* 5.1.3.4.2 **Reset Log Level**
 
     * Run `sudo ./kl720_reset 2 6 2`, logs will be shown in terminal
 
