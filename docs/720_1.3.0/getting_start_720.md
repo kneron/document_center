@@ -571,6 +571,19 @@ Define folder path below:
         de init kdp host lib....
         </div>
     
+    * Run `sudo ./kl720_isi_load_model` to update **models_720.nef** into device memory, logs will be shown in terminal
+
+        <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">...
+        usage: kl720_isi_load_model.exe [nef path]
+		[nef path] default: NEF_FILE, nef path: specified nef path
+		Use the model file in app_binaries/KL720/dfu/ready_to_load by default
+		adding devices....
+        start kdp host lib....
+        starting loading model ...
+          : done
+        => Time = 0.141 seconds
+        </div>
+
     * Run `sudo ./kl720_isi_center_app 0 20 211`, logs will be shown in terminal
     * Model ID: 211 = KNERON_YOLOV5S_640_640_3
     
@@ -703,7 +716,92 @@ struct od_post_params_s {
 #define IMAGE_FORMAT_BYPASS_POST            BIT16
 ```
 
-#### 5.1.2. <span style="color:blue;font-weight:bold;">kl720_isi_pdc</span>
+##### 5.1.1.4 **kl720_isi_ppl_counting**
+
+* The arguments of kl720_isi_ppl_counting are:
+
+    <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre"><span style="color:cyan;font-weight:bold;">[parallel_mode]</span> number of frames to run, 0 = forever
+    <span style="color:cyan;font-weight:bold;">[run_frames]</span> number of frames to run, 0 = forever
+    <span style="color:cyan;font-weight:bold;">[model_id]</span> model ID (optional. Default is 211 for YOLOv5s)
+    </div>
+
+* Run with **YOLOV5S_MODEL**
+
+    * Copy **models_720.nef** from **YOLOV5S_MODEL_PATH** to **UPDATE_PATH**
+    * Open terminal and change path to **EXAMPLE_PATH**
+    * Run `sudo ./kl720_isi_load_model` to update **models_720.nef** into device memory, logs will be shown in terminal
+
+        <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">...
+        usage: kl720_isi_load_model.exe [nef path]
+		[nef path] default: NEF_FILE, nef path: specified nef path
+		Use the model file in app_binaries/KL720/dfu/ready_to_load by default
+		adding devices....
+        start kdp host lib....
+        starting loading model ...
+          : done
+        => Time = 0.141 seconds
+        </div>
+
+    * Run `sudo ./kl720_isi_ppl_counting 0 20 211`, logs will be shown in terminal
+    * Model ID: 211 = KNERON_YOLOV5S_640_640_3
+
+        <div style="background-color:rgba(0, 0, 0, 0.7);color:white;padding:5px;white-space:pre">init kdp host lib log....
+        adding devices....
+        start kdp host lib....
+        starting ISI mode ...
+        Config model 211 (param 0x1)
+        ISI model 211 succeeded (window = 3)...
+        starting ISI inference ...
+		image 1 result details:
+		- class count: 80
+		- object count: 11
+		- box 0 : (138, 416) (210, 491) score 0.801 classnum 2
+		- box 1 : (246, 416) (418, 549) score 0.794 classnum 2
+		- box 2 : (353, 392) (485, 489) score 0.792 classnum 2
+		- box 3 : (481, 408) (578, 456) score 0.727 classnum 2
+		- box 4 : (114, 416) (148, 472) score 0.605 classnum 2
+		- box 5 : (566, 410) (607, 439) score 0.547 classnum 2
+		- box 6 : (231, 403) (279, 444) score 0.486 classnum 2
+		- box 7 : (78, 414) (104, 449) score 0.432 classnum 2
+		- box 8 : (60, 418) (82, 450) score 0.270 classnum 2
+		- box 9 : (356, 392) (481, 489) score 0.174 classnum 7
+		- box 10 : (318, 317) (333, 339) score 0.207 classnum 9
+		image 2 result details:
+		- class count: 80
+		- object count: 12
+		- box 0 : (303, 258) (475, 437) score 0.679 classnum 2
+		- box 1 : (159, 257) (199, 331) score 0.512 classnum 2
+		- box 2 : (0, 274) (12, 300) score 0.418 classnum 2
+		- box 3 : (23, 264) (133, 391) score 0.401 classnum 2
+		- box 4 : (4, 263) (37, 298) score 0.395 classnum 2
+		- box 5 : (103, 268) (133, 316) score 0.208 classnum 2
+		- box 6 : (19, 258) (133, 396) score 0.540 classnum 7
+		- box 7 : (302, 259) (474, 438) score 0.324 classnum 7
+		- box 8 : (159, 256) (196, 331) score 0.174 classnum 7
+		- box 9 : (120, 162) (156, 219) score 0.577 classnum 11
+		- box 10 : (319, 169) (351, 223) score 0.380 classnum 11
+		- box 11 : (204, 60) (250, 143) score 0.172 classnum 11
+        ..........
+        ..........
+        ..........
+		image 17 -> 11 object(s) ... size correct, content correct
+		image 18 -> 12 object(s) ... size correct, content correct
+		image 19 -> 11 object(s) ... size correct, content correct
+		image 20 -> 12 object(s) ... size correct, content correct
+		=> Avg 14.93 FPS (66.99 ms = 1339.85/20)
+        </div>
+
+* Run by **Parallel (Async) Mode**
+
+    Repeat above section with first argument being changed to 1:
+
+    * Model: **YOLOV5S_MODEL_PATH**.
+
+    * Model ID: 211 = KNERON_YOLOV5S_640_640_3
+
+    * Run `sudo ./kl720_isi_ppl_counting 1 20 211`
+
+##### 5.1.1.5. <span style="color:blue;font-weight:bold;">kl720_isi_pdc</span>
 
 * PDC (Person Detection and Classification) is a two model application example.
 * This example will download **models_720.nef** from **YOLOV5_PD_MODEL_PATH** to KL720 memory automatically
@@ -771,9 +869,9 @@ struct od_post_params_s {
     * Supported format is RGB565 with VGA (640W x 480H) dimension.
     * Run `sudo ./kl720_isi_pdc 0 10 [batch_test_dir]`, logs will be shown in terminal for each image to run 10 times.
 
-#### 5.1.3. <span style="color:blue;font-weight:bold;">misc examples</span>
+#### 5.1.2. <span style="color:blue;font-weight:bold;">misc examples</span>
 
-##### 5.1.3.1 **kl720_get_kn_num**
+##### 5.1.2.1 **kl720_get_kn_num**
 
 * Open terminal and change path to **EXAMPLE_PATH**
 * Run `sudo ./kl720_get_kn_num`, logs will be shown in terminal
@@ -789,7 +887,7 @@ struct od_post_params_s {
 
 * The **KN number** can be found from logs.
 
-##### 5.1.3.2 **kl720_get_model_info**
+##### 5.1.2.2 **kl720_get_model_info**
 
 * Open terminal and change path to **EXAMPLE_PATH**
 * Run `sudo ./kl720_get_model_info`, logs will be shown in terminal
@@ -806,7 +904,7 @@ struct od_post_params_s {
     de init kdp host lib....
     </div>
 
-##### 5.1.3.3 **kl720_get_nef_model_metadata**
+##### 5.1.2.3 **kl720_get_nef_model_metadata**
 
 * Copy **models_720.nef** to **UPDATE_PATH**
 * Open terminal and change path to **EXAMPLE_PATH**
@@ -828,7 +926,7 @@ struct od_post_params_s {
     de init kdp host lib....
     </div>
 
-##### 5.1.3.4 **kl720_reset**
+##### 5.1.2.4 **kl720_reset**
 
 * This example will instruct KL720 to do reset
 * Open terminal and change path to **EXAMPLE_PATH**
@@ -846,7 +944,7 @@ struct od_post_params_s {
     <span style="color:cyan;">[5]</span> LOG_TRACE
     <span style="color:cyan;">[6]</span> LOG_DBG</div>
 
-* 5.1.3.4.1 **Reset KL720 device**
+* 5.1.2.4.1 **Reset KL720 device**
 
     * Run `sudo ./kl720_reset 0`, logs will be shown in terminal
 
@@ -857,7 +955,7 @@ struct od_post_params_s {
         sys reset mode succeeded...
         </div>
 
-* 5.1.3.4.2 **Reset Log Level**
+* 5.1.2.4.2 **Reset Log Level**
 
     * Run `sudo ./kl720_reset 2 6 2`, logs will be shown in terminal
 
@@ -867,9 +965,9 @@ struct od_post_params_s {
         sys reset mode succeeded...
         </div>
 
-#### 5.1.4. <span style="color:blue;font-weight:bold;">update examples</span>
+#### 5.1.3. <span style="color:blue;font-weight:bold;">update examples</span>
 
-##### 5.1.4.1 **kl720_update_app_nef_model**
+##### 5.1.3.1 **kl720_update_app_nef_model**
 
 * Copy **fw_scpu.bin**, **fw_ncpu.bin**, **models_720.nef** to **UPDATE_PATH**
 * Open terminal and change path to **EXAMPLE_PATH**
@@ -894,7 +992,7 @@ struct od_post_params_s {
 
 * The example updates scpu first, then ncpu, the last is model.
 
-##### 5.1.4.2 **kl720_update_fw**
+##### 5.1.3.2 **kl720_update_fw**
 
 * Copy **fw_scpu.bin**, **fw_ncpu.bin**, **models_720.nef** to **UPDATE_PATH**
 * Open terminal and change path to **EXAMPLE_PATH**
@@ -918,7 +1016,7 @@ struct od_post_params_s {
 
 * Run `sudo ./kl720_update_fw 2` for ncpu, logs are the same as scpu.
 
-##### 5.1.4.3 **kl720_update_nef_model**
+##### 5.1.3.3 **kl720_update_nef_model**
 
 * Copy **models_720.nef** to **UPDATE_PATH**
 * Open terminal and change path to **EXAMPLE_PATH**
