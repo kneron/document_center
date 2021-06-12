@@ -749,46 +749,33 @@ struct od_post_params_s {
         adding devices....
         start kdp host lib....
         starting ISI mode ...
-        Config model 211 (param 0x1)
+        Config model 211...
         ISI model 211 succeeded (window = 3)...
+        Open 2 image files: 
+        [1] ../../input_images/a_man_640x480_rgb565.bin
+        [2] ../../input_images/a_dog_640x480_rgb565.bin
         starting ISI inference ...
-		image 1 result details:
-		- class count: 80
-		- object count: 11
-		- box 0 : (138, 416) (210, 491) score 0.801 classnum 2
-		- box 1 : (246, 416) (418, 549) score 0.794 classnum 2
-		- box 2 : (353, 392) (485, 489) score 0.792 classnum 2
-		- box 3 : (481, 408) (578, 456) score 0.727 classnum 2
-		- box 4 : (114, 416) (148, 472) score 0.605 classnum 2
-		- box 5 : (566, 410) (607, 439) score 0.547 classnum 2
-		- box 6 : (231, 403) (279, 444) score 0.486 classnum 2
-		- box 7 : (78, 414) (104, 449) score 0.432 classnum 2
-		- box 8 : (60, 418) (82, 450) score 0.270 classnum 2
-		- box 9 : (356, 392) (481, 489) score 0.174 classnum 7
-		- box 10 : (318, 317) (333, 339) score 0.207 classnum 9
-		image 2 result details:
-		- class count: 80
-		- object count: 12
-		- box 0 : (303, 258) (475, 437) score 0.679 classnum 2
-		- box 1 : (159, 257) (199, 331) score 0.512 classnum 2
-		- box 2 : (0, 274) (12, 300) score 0.418 classnum 2
-		- box 3 : (23, 264) (133, 391) score 0.401 classnum 2
-		- box 4 : (4, 263) (37, 298) score 0.395 classnum 2
-		- box 5 : (103, 268) (133, 316) score 0.208 classnum 2
-		- box 6 : (19, 258) (133, 396) score 0.540 classnum 7
-		- box 7 : (302, 259) (474, 438) score 0.324 classnum 7
-		- box 8 : (159, 256) (196, 331) score 0.174 classnum 7
-		- box 9 : (120, 162) (156, 219) score 0.577 classnum 11
-		- box 10 : (319, 169) (351, 223) score 0.380 classnum 11
-		- box 11 : (204, 60) (250, 143) score 0.172 classnum 11
-        ..........
-        ..........
-        ..........
-		image 17 -> 11 object(s) ... size correct, content correct
-		image 18 -> 12 object(s) ... size correct, content correct
-		image 19 -> 11 object(s) ... size correct, content correct
-		image 20 -> 12 object(s) ... size correct, content correct
-		=> Avg 14.93 FPS (66.99 ms = 1339.85/20)
+        [idx 1] 1 person(s)  (7 objects)
+        [idx 2] 0 person(s)  (1 objects)
+        [idx 3] 1 person(s)  (7 objects)
+        [idx 4] 0 person(s)  (1 objects)
+        [idx 5] 1 person(s)  (7 objects)
+        [idx 6] 0 person(s)  (1 objects)
+        [idx 7] 1 person(s)  (7 objects)
+        [idx 8] 0 person(s)  (1 objects)
+        [idx 9] 1 person(s)  (7 objects)
+        [idx 10] 0 person(s)  (1 objects)
+        [idx 11] 1 person(s)  (7 objects)
+        [idx 12] 0 person(s)  (1 objects)
+        [idx 13] 1 person(s)  (7 objects)
+        [idx 14] 0 person(s)  (1 objects)
+        [idx 15] 1 person(s)  (7 objects)
+        [idx 16] 0 person(s)  (1 objects)
+        [idx 17] 1 person(s)  (7 objects)
+        [idx 18] 0 person(s)  (1 objects)
+        [idx 19] 1 person(s)  (7 objects)
+        [idx 20] 0 person(s)  (1 objects)
+        => Avg 19.75 FPS (50.63 ms = 1012.57/20)
         </div>
 
 * Run by **Parallel (Async) Mode**
