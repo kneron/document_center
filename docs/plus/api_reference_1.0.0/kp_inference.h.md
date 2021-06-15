@@ -25,8 +25,8 @@ Differnt set of inference APIs would need different models to make it work.
 
 
 
-## Functions
-### kp_customized_inference_receive
+## **Functions**
+### **kp_customized_inference_receive**
 > receive inference result of age gender
 
 ```c
@@ -51,7 +51,7 @@ refer to KP_API_RETURN_CODE in kp_struct.h
 
 
 ---
-### kp_customized_inference_send
+### **kp_customized_inference_send**
 > send image for age gender inference
 
 ```c
@@ -78,7 +78,7 @@ refer to KP_API_RETURN_CODE in kp_struct.h
 
 
 ---
-### kp_generic_inference_retrieve_fixed_node
+### **kp_generic_inference_retrieve_fixed_node**
 > Retrieve single node output data from raw output buffer.
 
 ```c
@@ -105,13 +105,14 @@ refer to kp_inf_fixed_node_output_t. It describe 'width (aligned to 16 byte) x h
 
 
 ---
-### kp_generic_inference_retrieve_float_node
+### **kp_generic_inference_retrieve_float_node**
 > Retrieve single node output data from raw output buffer.
 
 ```c
 kp_inf_float_node_output_t *kp_generic_inference_retrieve_float_node(
 	uint32_t node_idx
 	uint8_t *raw_out_buffer
+	kp_channel_ordering_t ordering
 )
 ```
 This function retrieves and converts RAW format data to floating-point data on the per-node basis.
@@ -123,6 +124,7 @@ This function retrieves and converts RAW format data to floating-point data on t
 <pre>
 <em>node_idx</em>        [in]      wanted output node index, starts from 0. Number of total output nodes can be known from 'kp_generic_raw_result_header_t'
 <em>raw_out_buffer</em>  [in]      the RAW output buffer, it should come from kp_generic_raw_inference_receive().
+<em>ordering</em>        [in]      the RAW output channel ordering
 </pre>
 **Returns:**
 
@@ -130,7 +132,7 @@ refer to kp_inf_float_node_output_t. It describe 'width x height x channel' in c
 
 
 ---
-### kp_generic_raw_inference_receive
+### **kp_generic_raw_inference_receive**
 > Generic raw inference receive.
 
 ```c
@@ -161,7 +163,7 @@ refer to KP_API_RETURN_CODE in kp_struct.h
 
 
 ---
-### kp_generic_raw_inference_send
+### **kp_generic_raw_inference_send**
 > Generic raw inference send.
 
 ```c

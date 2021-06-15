@@ -10,11 +10,13 @@
     - KDP2_MAGIC_TYPE_COMMAND
     - KDP2_MAGIC_TYPE_INFERENCE
     - MAX_CROP_BOX
+    - YOLO_GOOD_BOX_MAX
     - LAND_MARK_POINTS
 - Simple Typedef
     - [typedef void *kp_device_group_t;](#typedef-void-kp_device_group_t)
 - Enumerations
     - [ KP_API_RETURN_CODE](#kp_api_return_code)
+    - [ kp_channel_ordering_t](#kp_channel_ordering_t)
     - [ kp_image_format_t](#kp_image_format_t)
     - [ kp_normalize_mode_t](#kp_normalize_mode_t)
     - [ kp_preprocess_mode_t](#kp_preprocess_mode_t)
@@ -38,6 +40,7 @@
     - [kp_point_t](#kp_point_t)
     - [kp_single_model_descriptor_t](#kp_single_model_descriptor_t)
     - [kp_system_info_t](#kp_system_info_t)
+    - [kp_yolo_result_t](#kp_yolo_result_t)
 
 
 ---
@@ -45,13 +48,14 @@
 
 
 
-## Defines
+## **Defines**
 | Define | Value | Description |
 |:---|:---|:---|
-|APP_PADDING_BYTES|20                  | Default padding size |
-|KDP2_MAGIC_TYPE_COMMAND|0xAB67CD13    | Magic number for data check |
-|KDP2_MAGIC_TYPE_INFERENCE|0x11FF22AA  | Magic number for data check |
+|APP_PADDING_BYTES|20                    | Default padding size |
+|KDP2_MAGIC_TYPE_COMMAND|0xAB67CD13      | Magic number for data check |
+|KDP2_MAGIC_TYPE_INFERENCE|0x11FF22AA    | Magic number for data check |
 |MAX_CROP_BOX|4 | MAX crop count |
+|YOLO_GOOD_BOX_MAX|100 | maximum number of bounding boxes for Yolo models |
 |LAND_MARK_POINTS|5 | the number of land marks points |
 
 
@@ -60,7 +64,7 @@
 
 
 
-## Simple Typedefs
+## **Simple Typedefs**
 ### **typedef void *kp_device_group_t;**
 > a pointer handle represent connected Kneron device.
 
@@ -70,7 +74,7 @@
 
 
 
-## Enumerations
+## **Enumerations**
 ### **KP_API_RETURN_CODE**
 enum **KP_API_RETURN_CODE** {...}
 > return code of most APIs.
@@ -115,10 +119,22 @@ enum **KP_API_RETURN_CODE** {...}
 |KP_ERROR_RECEIVE_SIZE_MISMATCH_31 = 31,| |
 |KP_ERROR_RECEIVE_JOB_ID_MISMATCH_32 = 32,| |
 |KP_ERROR_INVALID_CUSTOMIZED_JOB_ID_33 = 33,| |
+|KP_ERROR_FW_LOAD_FAILED_34 = 34,| |
 |KP_ERROR_OTHER_99 = 99,| |
 |KP_FW_ERROR_UNKNOWN_APP = 100,| |
 |KP_FW_INFERENCE_ERROR_101 = 101,| |
 |KP_FW_DDR_MALLOC_FAILED_102 = 102,| |
+
+
+---
+### **kp_channel_ordering_t**
+typedef enum **kp_channel_ordering_t** {...}
+> enum for generic raw data channel ordering
+
+| Enumerator | |
+|:---|:--- |
+|KP_CHANNEL_ORDERING_HCW = 0,            | KL520 default, height/channel/width in order |
+|KP_CHANNEL_ORDERING_CHW = 1,            | KL720 default, channel/height/width in order |
 
 
 ---
@@ -129,10 +145,10 @@ typedef enum **kp_image_format_t** {...}
 | Enumerator | |
 |:---|:--- |
 |KP_IMAGE_FORMAT_UNKNOWN = 0x0,| |
-|KP_IMAGE_FORMAT_RGB565 = 0x1,   | RGB565 16bits |
-|KP_IMAGE_FORMAT_RGBA8888 = 0x2, | RGBA8888 32bits |
-|KP_IMAGE_FORMAT_YUYV = 0x3,     | YUYV 16bits |
-|KP_IMAGE_FORMAT_RAW8 = 0x4,     | RAW 8bits |
+|KP_IMAGE_FORMAT_RGB565 = 0x1,           | RGB565 16bits |
+|KP_IMAGE_FORMAT_RGBA8888 = 0x2,         | RGBA8888 32bits |
+|KP_IMAGE_FORMAT_YUYV = 0x3,             | YUYV 16bits |
+|KP_IMAGE_FORMAT_RAW8 = 0x4,             | RAW 8bits |
 
 
 ---
@@ -142,10 +158,10 @@ typedef enum **kp_normalize_mode_t** {...}
 
 | Enumerator | |
 |:---|:--- |
-|KP_NORMALIZE_KNERON = 0x1, | RGB/256 - 0.5, refer to the toolchain manual |
-|KP_NORMALIZE_TENSOR_FLOW,  | RGB/127.5 - 1.0, refer to the toolchain manual |
-|KP_NORMALIZE_YOLO,         | RGB/255.0, refer to the toolchain manual |
-|KP_NORMALIZE_CUSTOMIZED,   | customized, refer to the toolchain manual |
+|KP_NORMALIZE_KNERON = 0x1,              | RGB/256 - 0.5, refer to the toolchain manual |
+|KP_NORMALIZE_TENSOR_FLOW,               | RGB/127.5 - 1.0, refer to the toolchain manual |
+|KP_NORMALIZE_YOLO,                      | RGB/255.0, refer to the toolchain manual |
+|KP_NORMALIZE_CUSTOMIZED,                | customized, refer to the toolchain manual |
 
 
 ---
@@ -166,8 +182,8 @@ typedef enum **kp_product_id_t** {...}
 
 | Enumerator | |
 |:---|:--- |
-|KP_DEVICE_KL520 = 0x100,| |
-|KP_DEVICE_KL720 = 0x200,| |
+|KP_DEVICE_KL520 = 0x100,                | KL520 USB PID |
+|KP_DEVICE_KL720 = 0x720,                | KL720 USB PID |
 
 
 ---
@@ -201,8 +217,8 @@ typedef enum **kp_usb_speed_t** {...}
 
 
 
-## Structs
-### kp_bounding_box_t
+## **Structs**
+### **kp_bounding_box_t**
 typedef struct **kp_bounding_box_t** {...}
 > describe a bounding box
 
@@ -217,7 +233,7 @@ typedef struct **kp_bounding_box_t** {...}
 
 
 ---
-### kp_device_descriptor_t
+### **kp_device_descriptor_t**
 typedef struct **kp_device_descriptor_t** {...}
 > information of device (USB)
 
@@ -234,7 +250,7 @@ typedef struct **kp_device_descriptor_t** {...}
 
 
 ---
-### kp_devices_list_t
+### **kp_devices_list_t**
 typedef struct **kp_devices_list_t** {...}
 > information of connected devices from USB perspectives.
 
@@ -245,7 +261,7 @@ typedef struct **kp_devices_list_t** {...}
 
 
 ---
-### kp_firmware_version_t
+### **kp_firmware_version_t**
 typedef struct **kp_firmware_version_t** {...}
 > describe version string
 
@@ -259,7 +275,7 @@ typedef struct **kp_firmware_version_t** {...}
 
 
 ---
-### kp_generic_raw_image_header_t
+### **kp_generic_raw_image_header_t**
 typedef struct **kp_generic_raw_image_header_t** {...}
 > inference descriptor for images
 
@@ -277,7 +293,7 @@ typedef struct **kp_generic_raw_image_header_t** {...}
 
 
 ---
-### kp_generic_raw_result_header_t
+### **kp_generic_raw_result_header_t**
 typedef struct **kp_generic_raw_result_header_t** {...}
 > inference RAW output descriptor
 
@@ -289,7 +305,7 @@ typedef struct **kp_generic_raw_result_header_t** {...}
 
 
 ---
-### kp_inf_crop_box_t
+### **kp_inf_crop_box_t**
 typedef struct **kp_inf_crop_box_t** {...}
 > data structure for a crop
 
@@ -303,7 +319,7 @@ typedef struct **kp_inf_crop_box_t** {...}
 
 
 ---
-### kp_inf_fixed_node_metadata_t
+### **kp_inf_fixed_node_metadata_t**
 typedef struct **kp_inf_fixed_node_metadata_t** {...}
 > Metadata of RAW node output in fixed-point format
 
@@ -317,19 +333,19 @@ typedef struct **kp_inf_fixed_node_metadata_t** {...}
 
 
 ---
-### kp_inf_fixed_node_output_t
+### **kp_inf_fixed_node_output_t**
 typedef struct **kp_inf_fixed_node_output_t** {...}
 > RAW node output in fixed-point format
 
 |Members| |
 |:---|:--- |
-|kp_inf_fixed_node_metadata_t *metadata;| metadata of RAW node output in fixed-point format |
+|kp_inf_fixed_node_metadata_t metadata;| metadata of RAW node output in fixed-point format |
 |uint32_t num_data;| total number of fixed-poiont values, should be<br />metadata->width (aligned to 16 byte) * metadata->height * metadata->channel |
 |int8_t *data;| array of fixed-point values|
 
 
 ---
-### kp_inf_float_node_output_t
+### **kp_inf_float_node_output_t**
 typedef struct **kp_inf_float_node_output_t** {...}
 > RAW node output in floating-point format
 
@@ -343,7 +359,7 @@ typedef struct **kp_inf_float_node_output_t** {...}
 
 
 ---
-### kp_inference_header_stamp_t
+### **kp_inference_header_stamp_t**
 typedef struct **kp_inference_header_stamp_t** {...}
 > header stamp for user-defined data transfer
 
@@ -356,7 +372,7 @@ typedef struct **kp_inference_header_stamp_t** {...}
 
 
 ---
-### kp_landmark_result_t
+### **kp_landmark_result_t**
 typedef struct **kp_landmark_result_t** {...}
 > describe a landmark
 
@@ -369,7 +385,7 @@ typedef struct **kp_landmark_result_t** {...}
 
 
 ---
-### kp_model_nef_descriptor_t
+### **kp_model_nef_descriptor_t**
 typedef struct **kp_model_nef_descriptor_t** {...}
 > a basic descriptor for a NEF
 
@@ -381,9 +397,9 @@ typedef struct **kp_model_nef_descriptor_t** {...}
 
 
 ---
-### kp_point_t
+### **kp_point_t**
 typedef struct **kp_point_t** {...}
-> decrribe a point
+> decribe a point
 
 |Members| |
 |:---|:--- |
@@ -392,7 +408,7 @@ typedef struct **kp_point_t** {...}
 
 
 ---
-### kp_single_model_descriptor_t
+### **kp_single_model_descriptor_t**
 typedef struct **kp_single_model_descriptor_t** {...}
 > a basic descriptor for a model
 
@@ -407,7 +423,7 @@ typedef struct **kp_single_model_descriptor_t** {...}
 
 
 ---
-### kp_system_info_t
+### **kp_system_info_t**
 typedef struct **kp_system_info_t** {...}
 > describe system information
 
@@ -415,6 +431,18 @@ typedef struct **kp_system_info_t** {...}
 |:---|:--- |
 |uint32_t kn_number;| Chip K/N number |
 |kp_firmware_version_t firmware_version;| FW version |
+
+
+---
+### **kp_yolo_result_t**
+typedef struct **kp_yolo_result_t** {...}
+> describe a yolo output result after post-processing
+
+|Members| |
+|:---|:--- |
+|uint32_t class_count;| total class count |
+|uint32_t box_count;| boxes of all classes |
+|kp_bounding_box_t boxes[YOLO_GOOD_BOX_MAX];| box information |
 
 
 ---

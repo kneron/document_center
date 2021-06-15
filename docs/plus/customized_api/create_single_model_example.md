@@ -1,43 +1,31 @@
-## 1. Introduction
+# Create Single Model Example
 
-In order to run customized models on Kneron AI dongle, there are four stages are involved:
 
-- **Model development**
-- **PLUS (software) development**
-- **SCPU firmware development**
-- **NCPU firmware development**
+## 1. Download Source Code
 
-However, this document only provides illustration for **PLUS development**, **SCPU firmware development**, and **NCPU firmware development**.
-
-The diagram below demonstrates the inference flow for every models running on Kneron AI dongle, and how the PLUS, SCPU, and NCPU interact with each other.
-
-![](./imgs/customize_api_520_PLUS/customized_api_develop_flow.png)
-
-## 2. Download Source Code
-
-1. Download the latest **kneron_plus_vXXX.zip** into Windows from <https://www.kneron.com/tw/support/developers/>, it is located at **KNEO Stem (USB Dongle)/kneron_plus/**.
+1. Download the latest **kneron_plus_vXXX.zip** into Windows from <https://www.kneron.com/tw/support/developers/>. It is located at **Kneron PLUS** section.
 
 2. Unzip kneron_plus_vXXX.zip
 
-   
+Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped folder path of PLUS.
 
-**{PLUS_FOLDER_PATH}** will be used below for representing the unzipped folder path of PLUS.
 
-## 3. Develop an Example using Customized API to Run YOLO Model
+## 2. PLUS (Software) Development
 
-### 3.1 PLUS (Software) Development
+1. Create my_sin_example folder
 
-1. Create my_example folder
-
-    ```
+    ```bash
     $ cd {PLUS_FOLDER_PATH}/examples/
-    $ mkdir my_example
+    $ mkdir my_sin_example
     ```
 
-2. Add CMakelists.txt
 
-    ```
-    # build with current *.c/*.cpp plus common source files in parent folder
+2. Add *CMakelists.txt*
+
+    ```bash
+    # build with current *.c/*.cpp plus common
+
+    source files in parent folder
     # executable name is current folder name.
 
     get_filename_component(app_name ${CMAKE_CURRENT_SOURCE_DIR} NAME)
@@ -59,30 +47,31 @@ The diagram below demonstrates the inference flow for every models running on Kn
     target_link_libraries(${app_name} ${KPLUS_LIB_NAME} ${USB_LIB} ${MATH_LIB} pthread)
     ```
 
-3. Add my_example.h
+3. Add *my_sin_example.h*
 
     - Please define the customized **header** structure and customized **result** structure in this file.
 
-    - Header (my_example_header_t) is used for **sending** data to SCPU firmware. What kind of data should be contained can be customized based on the your requirement.
+    - Header (my_sin_example_header_t) is used for **sending** data to SCPU firmware. What kind of data should be contained can be customized based on the your requirement.
 
-    - Result (my_example_result_t) is used for **receiving** data from SCPU firmware. What kind of data should be contained can be customized based on the output of model inference.
+    - Result (my_sin_example_result_t) is used for **receiving** data from SCPU firmware. What kind of data should be contained can be customized based on the output of model inference.
 
     - **kp_inference_header_stamp_t** must be contained in both header and result structures.
 
     - The **JOB_ID** describes the unique id of the task you want to execute in firmware, and it must be unique and above 1000.
 
     - This file should be synchronized with the .h file in SCPU firmware.
-    ```
+
+    ```cpp
     #pragma once
 
-    #define MY_EXAMPLE_JOB_ID               1002
+    #define MY_SIN_EXAMPLE_JOB_ID           1002
     #define YOLO_BOX_MAX                    100
 
     typedef struct {
         uint32_t class_count;
         uint32_t box_count;
         kp_bounding_box_t boxes[YOLO_BOX_MAX];
-    } __attribute__((aligned(4))) my_example_yolo_result_t;
+    } __attribute__((aligned(4))) my_sin_example_yolo_result_t;
 
     typedef struct {
         /* header stamp is necessary */
@@ -90,17 +79,17 @@ The diagram below demonstrates the inference flow for every models running on Kn
 
         uint32_t img_width;
         uint32_t img_height;
-    } __attribute__((aligned(4))) my_example_header_t;
+    } __attribute__((aligned(4))) my_sin_example_header_t;
 
     typedef struct {
         /* header stamp is necessary */
         kp_inference_header_stamp_t header_stamp;
 
-        my_example_yolo_result_t yolo_result;
-    } __attribute__((aligned(4))) my_example_result_t;
+        my_sin_example_yolo_result_t yolo_result;
+    } __attribute__((aligned(4))) my_sin_example_result_t;
     ```
 
-4. Add *my_example.c*
+4. Add *my_sin_example.c*
 
     - There are 6 steps for inferencing in Kneron AI dongle:
 
@@ -119,7 +108,8 @@ The diagram below demonstrates the inference flow for every models running on Kn
     - In this example, the **image** is transcoded into RGB565, and the width and height of the image is carried by the header.
 
     - Sending header and receiving result can be executed sequentially or on two different threads.
-    ```
+
+    ```cpp
     #include <stdio.h>
     #include <stdlib.h>
     #include <string.h>
@@ -129,7 +119,7 @@ The diagram below demonstrates the inference flow for every models running on Kn
     #include "kp_inference.h"
     #include "helper_functions.h"
 
-    #include "my_example.h"
+    #include "my_sin_example.h"
 
     static char _scpu_fw_path[128] = "../../res/firmware/KL520/kdp2_fw_scpu.bin";
     static char _ncpu_fw_path[128] = "../../res/firmware/KL520/kdp2_fw_ncpu.bin";
@@ -201,16 +191,16 @@ The diagram below demonstrates the inference flow for every models running on Kn
         printf("\nstarting inference loop %d times:\n", _loop);
 
         /******* prepare input and output header/buffers *******/
-        my_example_header_t input_header;
-        my_example_result_t output_result;
+        my_sin_example_header_t input_header;
+        my_sin_example_result_t output_result;
 
-        input_header.header_stamp.job_id = MY_EXAMPLE_JOB_ID;
+        input_header.header_stamp.job_id = MY_SIN_EXAMPLE_JOB_ID;
         input_header.img_width = img_width;
         input_header.img_height = img_height;
 
-        int header_size = sizeof(my_example_header_t);
+        int header_size = sizeof(my_sin_example_header_t);
         int image_size = img_width * img_height * 2; // RGB565
-        int result_size = sizeof(my_example_result_t);
+        int result_size = sizeof(my_sin_example_result_t);
         int recv_size = 0;
 
         /******* starting inference work *******/
@@ -247,24 +237,26 @@ The diagram below demonstrates the inference flow for every models running on Kn
     }
     ```
 
-### 3.2 SCPU Firmware Development
+
+## 3. SCPU Firmware Development
 
 1. Go to SCPU App Folder {PLUS_FOLDER_PATH}/firmware_development/KL520/scpu_kdp2/app
 
-2. Add my_example_inf.h
+2. Add *my_sin_example_inf.h*
 
-    - The content of this file should be synchronized with **my_example.h** in PLUS.
-    ```
+    - The content of this file should be synchronized with **my_sin_example.h** in PLUS.
+
+    ```cpp
     #pragma once
 
-    #define MY_EXAMPLE_JOB_ID               1002
+    #define MY_SIN_EXAMPLE_JOB_ID           1002
     #define YOLO_BOX_MAX                    100
 
     typedef struct {
         uint32_t class_count;
         uint32_t box_count;
         kp_bounding_box_t boxes[YOLO_BOX_MAX];
-    } __attribute__((aligned(4))) my_example_yolo_result_t;
+    } __attribute__((aligned(4))) my_sin_example_yolo_result_t;
 
     typedef struct {
         /* header stamp is necessary */
@@ -272,17 +264,17 @@ The diagram below demonstrates the inference flow for every models running on Kn
 
         uint32_t img_width;
         uint32_t img_height;
-    } __attribute__((aligned(4))) my_example_header_t;
+    } __attribute__((aligned(4))) my_sin_example_header_t;
 
     typedef struct {
         /* header stamp is necessary */
         kp_inference_header_stamp_t header_stamp;
 
-        my_example_yolo_result_t yolo_result;
-    } __attribute__((aligned(4))) my_example_result_t;
+        my_sin_example_yolo_result_t yolo_result;
+    } __attribute__((aligned(4))) my_sin_example_result_t;
     ```
 
-3. Add my_example_inf.c
+3. Add *my_sin_example_inf.c*
 
     - There are four steps for inferencing in one model:
 
@@ -298,7 +290,7 @@ The diagram below demonstrates the inference flow for every models running on Kn
 
     - The inference result of NCPU will be written to **ncpu_result_buf** of **kdp2_inference_config_t**. Therefore, you must provide a memory space for it (In this example, **ncpu_result_buf** is pointed to **yolo_result** in **output_result**.)
 
-    ```
+    ```cpp
     #include <stdint.h>
     #include <stdlib.h>
     #include <string.h>
@@ -307,26 +299,26 @@ The diagram below demonstrates the inference flow for every models running on Kn
     #include "kmdw_console.h"
 
     #include "kmdw_inference.h"
-    #include "my_example_inf.h"
+    #include "my_sin_example_inf.h"
 
-    void my_example_inf(void *inf_input_buf)
+    void my_sin_example_inf(void *inf_input_buf)
     {
-        my_example_header_t *input_header = (my_example_header_t *)inf_input_buf;
+        my_sin_example_header_t *input_header = (my_sin_example_header_t *)inf_input_buf;
 
         /******* Prepare the memory space of result *******/
 
         void *inf_result_buf = kmdw_inference_request_result_buffer(NULL);
-        my_example_result_t *output_result = (my_example_result_t *)inf_result_buf;
+        my_sin_example_result_t *output_result = (my_sin_example_result_t *)inf_result_buf;
 
         /******* Prepare the configuration *******/
-    
+
         kmdw_inference_config_t inf_config;
-    
+
         // Set the initial value of config to 0, false and NULL
         memset(&inf_config, 0, sizeof(kmdw_inference_config_t));
-    
+
         // image buffer address should be just after the header
-        inf_config.image_buf = (void *)((uint32_t)input_header + sizeof(my_example_header_t));
+        inf_config.image_buf = (void *)((uint32_t)input_header + sizeof(my_sin_example_header_t));
         inf_config.image_width = input_header->img_width;
         inf_config.image_height = input_header->img_height;
         inf_config.image_channel = 3;                                       // assume RGB565
@@ -338,17 +330,17 @@ The diagram below demonstrates the inference flow for every models running on Kn
         inf_config.ncpu_result_buf = (void *)&(output_result->yolo_result); // give result buffer for ncpu/npu, callback will carry it
 
         /******* Activate inferencing in NCPU *******/
-    
+
         int inf_status = kmdw_inference_start(&inf_config);
 
         /******* Send the result to PLUS *******/
-    
+
         // header_stamp is a must to correctly transfer result data back to host SW
         output_result->header_stamp.magic_type = KDP2_MAGIC_TYPE_INFERENCE;
-        output_result->header_stamp.total_size = sizeof(my_example_result_t);
-        output_result->header_stamp.job_id = MY_EXAMPLE_JOB_ID;
+        output_result->header_stamp.total_size = sizeof(my_sin_example_result_t);
+        output_result->header_stamp.job_id = MY_SIN_EXAMPLE_JOB_ID;
         output_result->header_stamp.status_code = inf_status;
-    
+
         // send output result buffer back to host SW
         kmdw_inference_send_result((void *)output_result);
     }
@@ -356,15 +348,15 @@ The diagram below demonstrates the inference flow for every models running on Kn
 
 4. Go to SCPU Project Main Folder {PLUS_FOLDER_PATH}/firmware_development/KL520/scpu_kdp2/project/scpu_companion_user_ex/main
 
-4. Edit *main.c*
+5. Edit *main.c*
 
     - **_app_entry_func** is the entry interface for all inference request.
 
     - Inference jobs will be dispatched to the coresponding function based on the **job_id** in **kp_inference_header_stamp_t** in the header.
 
-    - You need to establish a switch case for **MY_EXAMPLE_JOB_ID** and corespond the switch case to **my_example_inf()**.
+    - You need to establish a switch case for **MY_SIN_EXAMPLE_JOB_ID** and corespond the switch case to **my_sin_example_inf()**.
 
-    ```
+    ```cpp
     #include <stdint.h>
     #include <stdlib.h>
     #include <string.h>
@@ -378,7 +370,7 @@ The diagram below demonstrates the inference flow for every models running on Kn
     /* ======================================== */
     /*              Add Line Begin              */
     /* ======================================== */
-    #include "my_example_inf.h"
+    #include "my_sin_example_inf.h"
     /* ======================================== */
     /*               Add Line End               */
     /* ======================================== */
@@ -396,7 +388,7 @@ The diagram below demonstrates the inference flow for every models running on Kn
     /* ======================================== */
     /*              Add Line Begin              */
     /* ======================================== */
-    extern void my_example_inf(void *inf_input_buf);
+    extern void my_sin_example_inf(void *inf_input_buf);
     /* ======================================== */
     /*               Add Line End               */
     /* ======================================== */
@@ -420,8 +412,8 @@ The diagram below demonstrates the inference flow for every models running on Kn
         /* ======================================== */
         /*              Add Line Begin              */
         /* ======================================== */
-        case MY_EXAMPLE_JOB_ID:
-            my_example_inf(inf_input_buf);
+        case MY_SIN_EXAMPLE_JOB_ID:
+            my_sin_example_inf(inf_input_buf);
             break;
         /* ======================================== */
         /*               Add Line End               */
@@ -462,7 +454,8 @@ The diagram below demonstrates the inference flow for every models running on Kn
     }
     ```
 
-### 3.3 NCPU Firmware Development
+
+## 4. NCPU Firmware Development
 
 If the customized model need a customized pre-process or post-process, you can add the pre-process and post-process in the following files.
 
@@ -475,57 +468,9 @@ If the customized model need a customized pre-process or post-process, you can a
 3. Edit **main.c**
 
     - Register your customized pre-process by **kdpio_pre_processing_register()**.
-- Register your customized post-process by **kdpio_post_processing_register()**.
+
+    - Register your customized post-process by **kdpio_post_processing_register()**.
+
     - Once pre-process and post-process are registered, they will automatically execute before and after the inference of model.
-- The pre-process and post-process for certain model are specified by the model Id.
 
-
-
-## 4. Build and Execute My Example
-
-### Notice: The building example below are operated in **Windows 10**.
-
-### 4.1 Build Firmware
-
-1. Download and install Keil MDK version 5 (at least MDK-Essential) from <https://www2.keil.com/mdk5>
-
-2. Execute Keil uVision5
-
-3. Select **Project** > **Open Project...**
-
-4. Choose {PLUS_FOLDER_PATH}/firmware_development/KL520/example_projects/kdp2_companion_user_ex/workspace.uvmpw
-
-5. Expand **Project: kdp2_scpu** in left panel
-
-6. Right click on **app** and choose **Add Existing Files to Group 'kdp2_inference'...**
-
-7. Select {PLUS_FOLDER_PATH}/firmware_development/KL520/scpu_kdp2/app/my_example_inf.c
-
-8. Select **Project** > **Batch Build**
-
-*If build succeeded, **kdp2_fw_scpu.bin** and **kdp2_fw_ncpu.bin** will be put into {PLUS_FOLDER_PATH}/res/firmware/KL520/
-
-![](./imgs/customize_api_520_PLUS/keil_build_firmware.png)
-
-### 4.2 Build PLUS and Execute My Example
-
-1. Download and install the latest **MSYS2** into Windows from <https://www.msys2.org/>.
-
-2. Execute **MSYS2 MinGW 64-bit** to install dependency.
-    ```
-    $ pacman -Syu
-    $ pacman -Sy
-    $ pacman -S base-devel gcc vim cmake
-    $ pacman -S mingw-w64-x86_64-libusb
-    ```
-
-3. Build and Execute my_example of PLUS in **MSYS2 MinGW 64-bit**
-    ```
-    $ cd {PLUS_FOLDER_PATH}
-    $ mkdir build
-    $ cd build
-    $ cmake .. -G "MSYS Makefiles"
-    $ make -j
-    $ cd bin
-    $ ./my_example.exe
-    ```
+    - The pre-process and post-process for certain model are specified by the model Id.
