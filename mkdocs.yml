@@ -33,6 +33,7 @@ nav:
     - Yolo Example: toolchain/yolo_example.md
     - ONNX Converter: toolchain/converters.md
     - Python API: toolchain/python_api.md
+    - Toolchain Common Errors: toolchain/errors.md
     - History Versions: toolchain/history.md
   - Model Training:
     - Image Classification: model_training/classification.md
