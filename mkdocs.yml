@@ -1,32 +1,57 @@
 site_name: Document Center
 #repo_url: http://192.168.200.1:8088/jiyuan/toolchain_manual
 #repo_name: GitLab
+
 theme:
     name: 'windmill'
     custom_dir: 'custom_theme/'
+
+markdown_extensions:
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.magiclink
+  - pymdownx.superfences
+  - pymdownx.tilde
+
 nav:
   - Home: index.md
   - Getting Started:
     - KL520:
-      - v1.3.0.0: 520_1.3.0.0/getting_start.md
-      - v1.4.0.0: 520_1.4.0.0/getting_start.md
-      - v1.4.0.0 For Kdp2 API(alpha release): 520_1.4.0.0/getting_start_520_kdp2.md
+      - Archive:
+        - v1.3.0.0: 520_1.3.0.0/getting_start.md
+        - v1.4.0.0: 520_1.4.0.0/getting_start.md
+        - v1.4.0.0 For Kdp2 API(alpha release): 520_1.4.0.0/getting_start_520_kdp2.md
+      - v1.5.0.0: 520_1.5.0.0/getting_start.md
     - KL720:
-      - v1.1.0: 720_1.1.0/getting_start_720.md
+      - Archive:
+        - v1.1.0: 720_1.1.0/getting_start_720.md
+      - v1.3.0: 720_1.3.0/getting_start_720.md
   - Host API Reference:
-    - v0.8.0:
-      - Host API Intro: host_lib_0.8.0/host_api_reference.md
-      - Host API reference: host_lib_0.8.0/host_api/app_api.md
-      - DME API reference: host_lib_0.8.0/host_api/dme_api.md
-      - ISI API reference: host_lib_0.8.0/host_api/isi_api.md
-      - System API reference: host_lib_0.8.0/host_api/system.md
-    - v0.9.0:
-      - Host API reference: host_lib_0.9.0/host_api_reference.md
-      - Host Kdp2 API reference:
-        - Data Structure: host_lib_0.9.0/kdp2_api/kdp2_struct.h.md
-        - Core API: host_lib_0.9.0/kdp2_api/kdp2_core.h.md
-        - APP API: host_lib_0.9.0/kdp2_api/kdp2_app.h.md
-        - Post Process API: host_lib_0.9.0/kdp2_api/kdp2_postprocess.h.md
+    - Archive:
+      - v0.8.0:
+        - Host API Intro: host_lib_0.8.0/host_api_reference.md
+        - Host API reference: host_lib_0.8.0/host_api/app_api.md
+        - DME API reference: host_lib_0.8.0/host_api/dme_api.md
+        - ISI API reference: host_lib_0.8.0/host_api/isi_api.md
+        - System API reference: host_lib_0.8.0/host_api/system.md
+      - v0.9.0:
+        - Host API reference: host_lib_0.9.0/host_api_reference.md
+        - Host Kdp2 API reference:
+          - Data Structure: host_lib_0.9.0/kdp2_api/kdp2_struct.h.md
+          - Core API: host_lib_0.9.0/kdp2_api/kdp2_core.h.md
+          - APP API: host_lib_0.9.0/kdp2_api/kdp2_app.h.md
+          - Post Process API: host_lib_0.9.0/kdp2_api/kdp2_postprocess.h.md
+    - v1.0.0:
+      - Host API Reference: host_lib_1.0.0/kdp_host.h.md
+  - Kneron PLUS(was Kdp2)-Alpha Release:
+    - Getting Started: plus_1.0.0/getting_start_520_PLUS.md
+    - Introduction: plus_1.0.0/introduction_PLUS.md
+    - Customized APP guide: plus_1.0.0/customize_api_520_PLUS.md
+    - API Reference v1.0.0:
+      - Data Structure: plus_1.0.0/api_reference/kp_struct.h.md
+      - Core API: plus_1.0.0/api_reference/kp_core.h.md
+      - Inference API: plus_1.0.0/api_reference/kp_inference.h.md
+      - Post Process API: plus_1.0.0/api_reference/kp_postprocess.h.md
   - Toolchain Docker:
     - Toolchain Manual: toolchain/manual.md
     - End to End Simulator: toolchain/python_app/app_flow_manual.md
@@ -34,10 +59,6 @@ nav:
     - ONNX Converter: toolchain/converters.md
     - Python API: toolchain/python_api.md
     - History Versions: toolchain/history.md
-  - Model Training:
-    - Image Classification: model_training/classification.md
-    - Object Detection (fcos): model_training/object_detection_fcos.md
-    - Object Detection (YOLOv5): model_training/object_detection_yolov5.md
 extra:
     logo: 'imgs/logo.png'
 plugins:
