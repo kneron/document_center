@@ -1487,7 +1487,7 @@ You can rebuild dfw_companion project then get the updated fw_scpu.bin/fw_ncpu.b
 #### 11.4.1. DFW Boot necessaries
 
 1.  Open command terminal for flash programmer execution
-    Tool path: `kl520_sdk\utils\dfw_boot\uart_dfu_boot.py`
+    Tool path: `kl520_sdk\utils\dfw_boot\uart_dfw_boot.py`
 2.  Install Necessary python modules: `kl520_sdk\utils\requirements.txt`
 3.  Limitations: Only the listed argument combinations below are allowed.
 
@@ -1498,7 +1498,7 @@ Please refer to chapter 10.3.2
 #### 11.4.3 Chip Initialize and Send/Start Minion FW
 
 ```bash
-$ python uart_dfu_boot.py -s
+$ python uart_dfw_boot.py -s
 ```
 
 Please press RESET BTN while you are seeing “Please press reset button!!”
@@ -1516,7 +1516,7 @@ Afterwards, just wait until seeing “Xmodem sends Minion file DONE!!!”
 #### 11.4.4 DFW fw_scpu.bin to memory address 0x10102000
 
 ```bash
-$ python uart_dfu_boot.py -i 0x10102000 -p fw_scpu.bin
+$ python uart_dfw_boot.py -i 0x10102000 -p fw_scpu.bin
 ```
 
 ![](./imgs/getting_start_imgs/11.3.4.png)
@@ -1526,7 +1526,7 @@ $ python uart_dfu_boot.py -i 0x10102000 -p fw_scpu.bin
 #### 11.4.5 DFW fw_ncpu.bin to memory address 0x28000000
 
 ```bash
-$ python uart_dfu_boot.py -i 0x28000000 -p fw_ncpu.bin
+$ python uart_dfw_boot.py -i 0x28000000 -p fw_ncpu.bin
 ```
 
 ![](./imgs/getting_start_imgs/11.3.5.png)
@@ -1536,7 +1536,7 @@ $ python uart_dfu_boot.py -i 0x28000000 -p fw_ncpu.bin
 #### 11.4.6 Command to boot up KL520 from memory address 0x10102000
 
 ```bash
-$ python uart_dfu_boot.py -i 0x10102000 -r
+$ python uart_dfw_boot.py -i 0x10102000 -r
 ```
 
 ![](./imgs/getting_start_imgs/11.3.6.png)
