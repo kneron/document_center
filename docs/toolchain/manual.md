@@ -4,8 +4,8 @@
 
 # Kneron Linux Toolchain Manual
 
-**2021 May**
-**Toolchain v0.14.2**
+**2021 Apr**
+**Toolchain v0.14.0**
 
 [PDF Downloads](manual.pdf)
 
@@ -14,7 +14,7 @@
 KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 520 and KDP 720. For better
 environment compatibility, we provide a docker which include all the dependencies as well as the toolchain software.
 
-**This document is compatible with `kneron/toolchain:v0.14.2`.**
+**This document is compatible with `kneron/toolchain:v0.14.0`.**
 
  *Performance simulation result on NPU KDP520:*
 
@@ -109,8 +109,8 @@ You can use the following command to pull the latest toolchain docker.
 docker pull kneron/toolchain:latest
 ```
 
-Note that this document is compatible with toolchain v0.14.2. You can find the version of the toolchain in
-`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.14.2, you may need to find the
+Note that this document is compatible with toolchain v0.14.0. You can find the version of the toolchain in
+`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.14.0, you may need to find the
 latest document from the [online document center](http://doc.kneron.com/docs).
 
 ## 2. Toolchain Docker Overview
@@ -180,7 +180,7 @@ Step 1 is in section 3.1. Step 2-6 are automated in [section 3.2](#32-fpanalyser
 
 ### 2.3 Supported operators
 
-Table 1.1 shows the list of functions KDP520 supports base on ONNX 1.6.1.
+Table 1.1 shows the list of functions KDP520 supports base on ONNX 1.4.1.
 
 *Table 1.1 The functions KDP520 NPU supports*
 
@@ -207,7 +207,7 @@ Table 1.1 shows the list of functions KDP520 supports base on ONNX 1.6.1.
 |                  | Flatten                       |                   | support               |
 |                  | Clip                          |                   | min = 0               |
 
-Table 1.2 shows the list of functions KDP720 supports base on ONNX 1.6.1.
+Table 1.2 shows the list of functions KDP720 supports base on ONNX 1.4.1.
 
 *Table 1.2 The functions KDP720 NPU supports*
 
@@ -219,7 +219,7 @@ Table 1.2 shows the list of functions KDP720 supports base on ONNX 1.6.1.
 | Sigmoid            |                      | support                         |
 | Clip               |                      | min = 0                         |
 | Tanh               |                      | support                         |
-| BatchNormalization | up to 4D input       | support                         |
+| BatchNormalization | 4D input             | support                         |
 | Conv               |                      | strides < [4, 16]               |
 | Pad                |                      | spacial dimension only          |
 | ConvTranspose      |                      | strides = [1, 1], [2, 2]        |
@@ -558,11 +558,15 @@ This part is the instructions for FP-analysis and batch-compile. The script intr
 
 We recommend doing FP-analysis (section 3.2) and batch-compile (section 3.5) separately. The fP-Analysis is very time-consuming. Thus, saving the `bie` file of each model for the future usage is more convinient.
 
-Back to this section, again, we'll use the `LittleNet` as an example. Just like in the section 3.5, we need `batch_input_params.json`. But this time, **the fields we need to prepare are different**. Please check the next section.
+Back to this section, again, we'll use the `LittleNet` as an example. Just like in the section 3.5, we need `batch_input_params.json`. But this time, **the fields we need to prepare are different**. We have one under the example folder. You can just copy it.
+
+```bash
+cp /data1/LittleNet/batch_input_params.json /data1
+```
 
 #### 3.6.1 Fill the input parameters
 
-As said in section 3.5, the details of the config can be found in the [FAQ question 6](#6-how-to-configure-the-batch_input_paramsjson). You can use the following code to create the `batch_input_params.json` for a walk through.
+As said in section 3.5, the details of the config can be found in the [FAQ question 6](#6-how-to-configure-the-batch_input_paramsjson). Because we already have the example, we can take a look on what are the differences.
 
 ```json
 {
@@ -584,7 +588,7 @@ As said in section 3.5, the details of the config can be found in the [FAQ quest
 }
 ```
 
- We can take a look on what are the differences. Ignore the encryption section which is set to false. The real differences here are that we are giving `onnx` instead of `bie` in the model's `path`, and giving an extra `input_params.json` in a field called `input_params`. This `input_params.json` is the one that we use in section 3.2. With the onnx and the json, it could run the FP-analysis just like what we do in secion 3.2, uses the generated `bie` to do batch-compile right after all the FP-analysis is finished.
+Ignore the encryption section which is set to false. The real differences here are that we are giving `onnx` instead of `bie` in the model's `path`, and giving an extra `input_params.json` in a field called `input_params`. This `input_params.json` is the one that we use in section 3.2. With the onnx and the json, it could run the FP-analysis just like what we do in secion 3.2, uses the generated `bie` to do batch-compile right after all the FP-analysis is finished.
 
 #### 3.6.2 Running the programs
 
@@ -689,10 +693,7 @@ Here is an example JSON with comments. **Please remove all the comments in the r
         // - default: for most of the models.
         // - post_sigmoid: recommand for yolo models.
         // If this option is not present, it uses the 'default' mode.
-        "quantize_mode": "default",
-        // For fp-analysis, remove outliers when calculating max & min. It should be between 0.0 and 1.0.
-        // If not given, default value is 0.999.
-        "outlier": 0.999
+        "quantize_mode": "default"
     },
     // The preprocess method of the input images.
     "preprocess": {
