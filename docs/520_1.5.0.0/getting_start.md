@@ -12,7 +12,7 @@ There are several ways to get the Kneron host example:
 - Get the toolchain VM for the **windows** and **Mac**   
     - Prerequisite: VMware Workstation  
     - Download the VM  total five files :**[Part1](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=276)**  **[Part2](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=277)** **[Part3](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=278)** **[Part4](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=279)**  **[Part5](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=280)**  
-    - Map USB port and share drive into VM: **[Link](http://www.kneron.com/tw/support/developers/?folder=KNEO%20Stem%20(USB%20Dongle)/VM%20ubuntu/&download=251)**
+    - Map USB port and share drive into VM: [KL520 Host Lib on Virtual Ubuntu Tutorial_v0p6.pdf](./pdf/KL520 Host Lib on Virtual Ubuntu Tutorial_v0p6.pdf)
 
 > **Note:**  
 > Kneron Host_lib also supproted in Windows 10, Mingw64 environment  
