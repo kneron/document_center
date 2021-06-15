@@ -16,7 +16,50 @@ understand the Python API usage.
 
 The ONNX optimizer and editor provide the following API.
 
-### 1.1 Optimizers
+### 1.1 Converters
+
+#### Keras to ONNX
+
+```python
+ktc.onnx_optimizer.keras2onnx_flow(keras_model_path, optimize, input_shape)
+```
+
+Return the converted onnx object. Convert keras model to onnx object.
+
+Args:
+
+* keras_model_path (str): the input hdf5/h5 model path.
+* optimize (int, optional): optimization level. Defaults to 0.
+* input_shape (List, optional): change the input shape if set. Only single input model is supported. Defaults to None.
+
+#### Caffe to ONNX
+
+```python
+ktc.onnx_optimizer.caffe2onnx_flow(caffe_model_path, caffe_weight_path)
+```
+
+Return the converted onnx object. Convert caffe model to onnx object.
+
+Args:
+
+* caffe_model_path (str): the input model definition (.prototxt).
+* caffe_weight_path (str): the input weight file (.caffemodel).
+
+#### TFLite to ONNX
+
+```python
+ktc.onnx_optimizer.tflite2onnx_flow(tflite_path, release_mode, bottom_nodes)
+```
+
+Return the converted onnx object. Convert tflite model to onnx object.
+
+Args:
+
+* tflite_path (str): the input tflite model path.
+* release_mode (bool, optional): whether eliminate the transpose for channel first. Defaults to True.
+* bottom_nodes (List, optional): nodes name in tflite model which is the bottom node of sub-graph. Defaults to [].
+
+### 1.2 Optimizers
 
 #### onnx version update
 
@@ -63,7 +106,7 @@ Args:
 * rgba2yynn (bool, optional): add an Conv layer to convert rgb input to yynn . Defaults to False.
 * eliminate_tail (bool, optional): remove the trailing NPU unsupported nodes. Defaults to False.
 
-### 1.2 Editors
+### 1.3 Editors
 
 #### Delete specific nodes
 
@@ -226,6 +269,7 @@ Args:
 * output_bie (str, optional): path to the output bie file. Defaults to "/data1/output.bie".
 * threads (int, optional): multithread setting. Defaults to 4.
 * quantize_mode (str, optional): quantize_mode setting. Currently support default and post_sigmoid. Defaults to "default".
+* outlier (float, optional): remove outliers when calculating max & min. It should be between 0 and 1.0. Defaults to 0.999.
 
 ### 2.3 Model Evaluation
 

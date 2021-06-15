@@ -21,37 +21,39 @@ Table 1.2 shows supported operators conversion mapping table for every platform.
 
 *Table 1.2 Operators conversion table for every platform*
 
-| type                   | keras                   | caffe                | tflite                                    | tensorflow( * ) | pytorch( ** ) | onnx(Opset 11)                | KL520/KL720( *** )                                                                       |
-|------------------------|-------------------------|----------------------|-------------------------------------------|-----------------|---------------|-----------------------------|------------------------------------------------------------------------------------|
-| add                    | Add                     | Eltwise              | ADD                                       | ( * )           | ( ** )        | Add                         | Add                                                                                |
-| average pooling        | AveragePooling2D        | Pooling              | AVERAGE_POOL_2D                           | ( * )           | ( ** )        | AveragePool                 | AveragePool (kenel 1x1 2x2、3x3) / ( *** )GlobalAveragePool (kernel == input shape) |
-| batchnormalization     | BatchNormalization      | BatchNorm            |                                           | ( * )           | ( ** )        | BatchNormalization          | BatchNorm                                                                          |
-| concatenate            | Concatenate             | Concat               | CONCATENATION                             | ( * )           | ( ** )        | Concat                      | Concat                                                                             |
-| convolution            | Conv2D                  | Convolution          | CONV_2D                                   | ( * )           | ( ** )        | Conv                        | Conv (strides < [4, 16])                                                           |
-| crop                   | Cropping2D / Cropping1D |                      |                                           | ( * )           | ( ** )        | Slice                       | Slice (input dimension <= 4)                                                       |
-| deconvolution          | Conv2DTranspose         | Deconvolution        | TRANSPOSE_CONV                            | ( * )           | ( ** )        | ConvTranspose               | ConvTranspose (strides = [1, 1], [2, 2])                                           |
-| dense                  | Dense                   | InnerProduct         | FULLY_CONNECTED                           | ( * )           | ( ** )        | Gemm                        | Gemm (2D input)                                                                    |
-| depthwise convolution  | DepthwiseConv2D         | DepthwiseConvolution | DEPTHWISE_CONV_2D                         | ( * )           | ( ** )        | Conv (with group attribute) | ( *** )Conv (strides < [4, 16])                                                    |
-| flatten                | Flatten                 | Flatten              |                                           | ( * )           | ( ** )        | Flatten                     | Flatten (Before Gemm)                                                              |
-| global average pooling | GlobalAveragePooling2D  | Pooling              | MEAN                                      | ( * )           | ( ** )        | GlobalAveragePool           | GlobalAveragePool (4D input)                                                       |
-| global max pooling     | GlobalMaxPooling2D      | Pooling              |                                           | ( * )           | ( ** )        | GlobalMaxPool               | GlobalMaxPool                                                                      |
-| leaky relu             | LeakyReLU               |                      | LEAKY_RELU                                | ( * )           | ( ** )        | LeakyRelu                   | LeakyRelu                                                                          |
-| max pooling            | MaxPooling2D            | Pooling              | MAX_POOL_2D                               | ( * )           | ( ** )        | MaxPool                     | MaxPool (kernel = [1, 1], [2, 2], [3, 3])                                          |
-| multiply               | Multiply                | Eltwise              | MUL                                       | ( * )           | ( ** )        | Mul                         | Mul                                                                                |
-| padding                | ZeroPadding2D           |                      | PAD                                       | ( * )           | ( ** )        | Pad                         | Pad (spacial dimension only)                                                       |
-| prelu                  | PReLU                   | PReLU                | PRELU                                     | ( * )           | ( ** )        | Prelu                       | Prelu                                                                              |
-| relu                   | ReLU                    | ReLU                 | RELU                                      | ( * )           | ( ** )        | Relu                        | Relu                                                                               |
-| relu6                  | ReLU                    |                      | RELU6                                     | ( * )           | ( ** )        | Clip                        | Clip (min = 0)                                                                     |
-| separable conv2d       | SeparableConv2D         |                      |                                           | ( * )           | ( ** )        | Conv                        | ( *** )Conv (strides < [4, 16])                                                    |
-| sigmoid                | Sigmoid                 | Sigmoid              | LOGISTIC                                  | ( * )           | ( ** )        | Sigmoid                     | Sigmoid                                                                            |
-| squeeze                |                         |                      | SQUEEZE                                   | ( * )           | ( ** )        | Squeeze                     | ( *** )Flatten (if available)                                                      |
-| tanh                   | Tanh                    |                      |                                           | ( * )           | ( ** )        | Tanh                        | Tanh                                                                               |
-| resize                 | UpSampling2D            |                      | RESIZE_BILINEAR / RESIZE_NEAREST_NEIGHBOR | ( * )           | ( ** )        | Resize                    | Resize                                                                           |
-| roi pooling            |                         | ROIPooling           |                                           | ( * )           | ( ** )        | MaxRoiPool                  | MaxRoiPool                                                                         |
+| type                   | keras                   | caffe                | tflite                                    | onnx(Opset 11)              |
+|------------------------|-------------------------|----------------------|-------------------------------------------|-----------------------------|
+| add                    | Add                     | Eltwise              | ADD                                       | Add                         |
+| average pooling        | AveragePooling2D        | Pooling              | AVERAGE_POOL_2D                           | AveragePool                 |
+| batchnormalization     | BatchNormalization      | BatchNorm            |                                           | BatchNormalization          |
+| concatenate            | Concatenate             | Concat               | CONCATENATION                             | Concat                      |
+| convolution            | Conv2D                  | Convolution          | CONV_2D                                   | Conv                        |
+| crop                   | Cropping2D / Cropping1D |                      |                                           | Slice                       |
+| deconvolution          | Conv2DTranspose         | Deconvolution        | TRANSPOSE_CONV                            | ConvTranspose               |
+| dense                  | Dense                   | InnerProduct         | FULLY_CONNECTED                           | Gemm                        |
+| depthwise convolution  | DepthwiseConv2D         | DepthwiseConvolution | DEPTHWISE_CONV_2D                         | Conv (with group attribute) |
+| flatten                | Flatten                 | Flatten              |                                           | Flatten                     |
+| global average pooling | GlobalAveragePooling2D  | Pooling              | MEAN                                      | GlobalAveragePool           |
+| global max pooling     | GlobalMaxPooling2D      | Pooling              |                                           | GlobalMaxPool               |
+| leaky relu             | LeakyReLU               |                      | LEAKY_RELU                                | LeakyRelu                   |
+| max pooling            | MaxPooling2D            | Pooling              | MAX_POOL_2D                               | MaxPool                     |
+| multiply               | Multiply                | Eltwise              | MUL                                       | Mul                         |
+| padding                | ZeroPadding2D           |                      | PAD                                       | Pad                         |
+| prelu                  | PReLU                   | PReLU                | PRELU                                     | Prelu                       |
+| relu                   | ReLU                    | ReLU                 | RELU                                      | Relu                        |
+| relu6                  | ReLU                    |                      | RELU6                                     | Clip                        |
+| separable conv2d       | SeparableConv2D         |                      |                                           | Conv                        |
+| sigmoid                | Sigmoid                 | Sigmoid              | LOGISTIC                                  | Sigmoid                     |
+| squeeze                |                         |                      | SQUEEZE                                   | Squeeze                     |
+| tanh                   | Tanh                    |                      |                                           | Tanh                        |
+| resize                 | UpSampling2D            |                      | RESIZE_BILINEAR / RESIZE_NEAREST_NEIGHBOR | Resize                      |
+| roi pooling            |                         | ROIPooling           |                                           | MaxRoiPool                  |
+ 
+1.  our tensorflow conversion tool is based on opensource "tf2onnx", please check "https://github.com/onnx/tensorflow-onnx/blob/r1.6/support_status.md" for the supported op information  
+2. our pytorch conversion tool is based on onnx exporting api in torch.onnx, please check "https://pytorch.org/docs/stable/onnx.html#supported-operators" for the supported op information  
+3. some operators could be replaced by onnx2onnx.py in order to fit the KL520/KL720 spec.   
 
-( \* ) our tensorflow conversion tool is based on opensource "tf2onnx", please check "https://github.com/onnx/tensorflow-onnx/blob/r1.6/support_status.md" for the supported op information    
-( \*\* ) our pytorch conversion tool is based on onnx exporting api in torch.onnx, please check "https://pytorch.org/docs/stable/onnx.html#supported-operators" for the supported op information    
-( \*\*\* ) some operators will be replaced by onnx2onnx.py in order to fit the KL520/KL720 spec.   
+
 
 ## 1 Keras to ONNX
 

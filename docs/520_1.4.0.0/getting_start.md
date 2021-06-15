@@ -1605,15 +1605,15 @@ $ python uart_dfu_boot.py -i 0x10102000 -r
 The kl520_util_uart_dfw_boot example in host_lib\example\KL520\kl520_util_uart_dfw_boot is the reference code for users to develop UART_DFW_Boot feature on their own platform.
 You can do integration test with kl520_util_uart_dfw_boot to write SCPU/NCPU firmware to KL520 internal memory space and boot from specific memory address directly.
 
-#### 11.5.1. Check UART port
-Check device management to know the UART port number.
+#### 11.5.1. Edit kl520_util_uart_dfw_boot.cpp to assign proper com port 
+Search “#define com_port” and modify the ID to match your UART port number listed on device management.
 
 #### 11.5.2. Build host_lib examples
 Refer to host_lib\README_CPP.md for further information.
 
 #### 11.5.3 UART_DFW_Boot integration tests
 1. Copy fw_scpu.bin and fw_ncpu.bin to hostlib host_lib\app_binaries\KL520\dfw folder.
-2. Execute "host_lib\build\bin\kl520_util_uart_dfw_boot 5" if UART port is COM5, and please press reset button when you see "Please press RESET btn!!......"
+2. Execute host_lib\build\bin\kl520_util_uart_dfw_boot, and please press reset button when you see "Please press RESET btn!!......"
 3. Please check the message showed after kl520_util_uart_dfw_boot executed, make sure minion bin is transmitted via UART/Xmodem successfully, send fw_scpu.bin/fw_ncpu.bin successfully, and reboot KL520 from specific memory address successfully.
 
     EX:
