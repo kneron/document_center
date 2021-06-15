@@ -24,6 +24,8 @@ Core functions provide fundamental functionality like connection and firmware up
     - [kp_reset_device](#kp_reset_device)
     - [kp_scan_devices](#kp_scan_devices)
     - [kp_set_timeout](#kp_set_timeout)
+    - [kp_update_firmware](#kp_update_firmware)
+    - [kp_update_firmware_from_files](#kp_update_firmware_from_files)
 
 
 ---
@@ -31,8 +33,8 @@ Core functions provide fundamental functionality like connection and firmware up
 
 
 
-## Functions
-### kp_connect_devices
+## **Functions**
+### **kp_connect_devices**
 > To connect multiple (including one) Kneron devices.
 
 ```c
@@ -55,7 +57,7 @@ kp_device_group_t represents a set of devices handle, if NULL means failed.
 
 
 ---
-### kp_disable_firmware_log
+### **kp_disable_firmware_log**
 > Disable firmware log of all devices with firmware log enabled.
 
 ```c
@@ -74,7 +76,7 @@ refer to KP_API_RETURN_CODE in kp_struct.h
 
 
 ---
-### kp_disconnect_devices
+### **kp_disconnect_devices**
 > To disconnect a Kneron device.
 
 ```c
@@ -93,7 +95,7 @@ refer to KP_API_RETURN_CODE in kp_struct.h
 
 
 ---
-### kp_enable_firmware_log
+### **kp_enable_firmware_log**
 > Enable firmware log from certain device.
 
 ```c
@@ -121,7 +123,7 @@ refer to KP_API_RETURN_CODE in kp_struct.h
 
 
 ---
-### kp_get_model_info
+### **kp_get_model_info**
 > Get model info (crc, model id, etc.).
 
 ```c
@@ -144,7 +146,7 @@ refer to KP_API_RETURN_CODE in kp_struct.h
 
 
 ---
-### kp_get_system_info
+### **kp_get_system_info**
 > Get system info (kn number and firmware version).
 
 ```c
@@ -167,7 +169,7 @@ refer to KP_API_RETURN_CODE in kp_struct.h
 
 
 ---
-### kp_load_firmware
+### **kp_load_firmware**
 > upload firmware from buffers
 
 ```c
@@ -194,7 +196,7 @@ refer to KP_API_RETURN_CODE in kp_struct.h
 
 
 ---
-### kp_load_firmware_from_file
+### **kp_load_firmware_from_file**
 > upload firmware from file
 
 ```c
@@ -217,7 +219,7 @@ refer to KP_API_RETURN_CODE in kp_struct.h
 
 
 ---
-### kp_load_model
+### **kp_load_model**
 > upload models to device through USB
 
 ```c
@@ -242,7 +244,7 @@ refer to KP_API_RETURN_CODE in kp_struct.h
 
 
 ---
-### kp_load_model_from_file
+### **kp_load_model_from_file**
 > Similar to kp_load_model(), and it accepts file path instead of a buffer.
 
 ```c
@@ -265,7 +267,7 @@ refer to KP_API_RETURN_CODE in kp_struct.h
 
 
 ---
-### kp_reset_device
+### **kp_reset_device**
 > reset the device in hardware mode or software mode.
 
 ```c
@@ -286,7 +288,7 @@ refer to KP_API_RETURN_CODE in kp_struct.h
 
 
 ---
-### kp_scan_devices
+### **kp_scan_devices**
 > Scan all Kneron devices and report a list.
 
 ```c
@@ -302,7 +304,7 @@ refer to kp_devices_list_t.
 
 
 ---
-### kp_set_timeout
+### **kp_set_timeout**
 > To set a global timeout value for all USB communications with the device.
 
 ```c
@@ -317,4 +319,58 @@ void kp_set_timeout(
 <em>devices</em>         [in]      a set of devices handle.
 <em>milliseconds</em>    [in]      pre-set timeout value in milliseconds.
 </pre>
+---
+### **kp_update_firmware**
+> Update firmware to device flash
+
+```c
+int kp_update_firmware(
+	kp_device_group_t devices
+	void *scpu_fw_buf
+	int scpu_fw_size
+	void *ncpu_fw_buf
+	int ncpu_fw_size
+	bool auto_reboot
+)
+```
+**Parameters:**
+
+<pre>
+<em>devices</em>         [in]      a set of devices handle.
+<em>scpu_fw_buf</em>     [in]      scpu firmware buffer.
+<em>scpu_fw_size</em>    [in]      scpu firmware size.
+<em>ncpu_fw_buf</em>     [in]      ncpu firmware buffer.
+<em>ncpu_fw_size</em>    [in]      ncpu firmware size.
+<em>auto_reboot</em>     [in]      auto reboot or not after update.
+</pre>
+**Returns:**
+
+refer to KP_API_RETURN_CODE in kp_struct.h
+
+
+---
+### **kp_update_firmware_from_files**
+> Similar to kdp2_update_firmware(), and it accepts file path instead of a buffer.
+
+```c
+int kp_update_firmware_from_files(
+	kp_device_group_t devices
+	const char *scpu_fw_file
+	const char *ncpu_fw_file
+	bool auto_reboot
+)
+```
+**Parameters:**
+
+<pre>
+<em>devices</em>         [in]      a set of devices handle.
+<em>scpu_fw_file</em>    [in]      scpu firmware file path.
+<em>ncpu_fw_file</em>    [in]      ncpu firmware file path.
+<em>auto_reboot</em>     [in]      auto reboot or not after update.
+</pre>
+**Returns:**
+
+refer to KP_API_RETURN_CODE in kp_struct.h
+
+
 ---

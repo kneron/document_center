@@ -43,15 +43,24 @@ nav:
           - Post Process API: host_lib_0.9.0/kdp2_api/kdp2_postprocess.h.md
     - v1.0.0:
       - Host API Reference: host_lib_1.0.0/kdp_host.h.md
-  - Kneron PLUS(was Kdp2)-Alpha Release:
-    - Getting Started: plus_1.0.0/getting_start_520_PLUS.md
-    - Introduction: plus_1.0.0/introduction_PLUS.md
-    - Customized APP guide: plus_1.0.0/customize_api_520_PLUS.md
+  - Kneron PLUS (alpha site only):
+    - Getting Start: plus/getting_start.md
+    - Introduction:
+      - Introduction: plus/introduction/introduction.md
+      - Upgrade AI Dongle To KDP2: plus/introduction/upgrade_ai_dongle_to_kdp2.md
+      - Install Dependency: plus/introduction/install_dependency.md
+      - Run Inference Example: plus/introduction/run_inference_example.md
+    - Customized API:
+      - Introduction: plus/customized_api/introduction.md
+      - Install Dependency: plus/customized_api/install_dependency.md
+      - Create Single Model Example: plus/customized_api/create_single_model_example.md
+      - Create Multiple Models Example: plus/customized_api/create_multiple_models_example.md
+      - NCPU Firmware Configuration: plus/customized_api/ncpu_firmware_configuration.md
+      - Run Customized Examples: plus/customized_api/run_customized_examples.md
     - API Reference v1.0.0:
-      - Data Structure: plus_1.0.0/api_reference/kp_struct.h.md
-      - Core API: plus_1.0.0/api_reference/kp_core.h.md
-      - Inference API: plus_1.0.0/api_reference/kp_inference.h.md
-      - Post Process API: plus_1.0.0/api_reference/kp_postprocess.h.md
+      - Data Structure: plus/api_reference_1.0.0/kp_struct.h.md
+      - Core API: plus/api_reference_1.0.0/kp_core.h.md
+      - Inference API: plus/api_reference_1.0.0/kp_inference.h.md
   - Toolchain Docker:
     - Toolchain Manual: toolchain/manual.md
     - End to End Simulator: toolchain/python_app/app_flow_manual.md
