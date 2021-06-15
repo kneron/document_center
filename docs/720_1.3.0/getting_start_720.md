@@ -377,7 +377,7 @@ Please ensure all the results are "O.K.", and enter "qc" to quit and close J-Lin
 
 #### 3.4.5. Edit flash_prog_partial.jlink device setting(optional)
 
-To program ncpu fw or update models to specific flash address(sector erase, program, verify)
+To program ncpu fw partially to specific flash address(sector erase, program, verify)
 
 1. "flash_ncpu.jlink" loadbin command: Load *.bin file into target memory
 
@@ -396,7 +396,6 @@ To program ncpu fw or update models to specific flash address(sector erase, prog
     EX:
     ![](./imgs/getting_start_imgs_720/3_4_5.png)
 
-4. Same to "flash_models.bat".
 
 ## 4. host_lib Compile and Build
 
