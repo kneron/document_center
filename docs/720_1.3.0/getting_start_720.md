@@ -84,11 +84,11 @@ Here is the example folder design for Kneron SDK.  The <font color="#000066">**d
 ├───<font color="#000066">**firmware**</font><br>
 │   ├───<font color="#000066">**app**</font><br>
 │   ├───<font color="#000066">**build**</font><br>
-│   │   └───<font color="#000066">**solution_**</font>companion<br>
-│   │       ├───<font color="#000066">**main_scpu**</font><br>
-│   │       │   └───include<br>
-│   │       └───sn72096_9x9<br>
-│   │           └───scpu_keil<br>
+│   │   ├───<font color="#000066">**solution_**</font>companion<br>
+│   │   │   ├───<font color="#000066">**main_scpu**</font><br>
+│   │   │   │   └───include<br>
+│   │   │   ├───sn72096_9x9<br>
+│   │   │   │   └───scpu_keil<br>
 │   ├───<font color="#000066">**include**</font><br>
 │   ├───<font color="#000066">**mdw**</font><br>
 │   │   ├───console<br>
@@ -117,34 +117,34 @@ Here is the example folder design for Kneron SDK.  The <font color="#000066">**d
 │   │   │   │   ├───gigadevice<br>
 │   │   │   │   └───winbond<br>
 │   │   │   ├───nor<br>
-│   │   │   └───wifi<br>
-│   │   │       ├───BufList<br>
-│   │   │       └───ESP8266<br>
-│   │   │           ├───CMSIS_DV_Results<br>
-│   │   │           └───Config<br>
-│   │   └───<font color="#000066">**kl720**</font><br>
-│   │       ├───<font color="#000066">**common**</font><br>
-│   │       └───<font color="#000066">**scpu**</font><br>
-│   │           ├───<font color="#000066">**drv**</font><br>
-│   │           │   └───include<br>
-│   │           ├───<font color="#000066">**rtos**</font><br>
-│   │           │   └───rtx<br>
-│   │           │       └───include<br>
-│   │           └───<font color="#000066">**startup**</font><br>
-│   └───<font color="#000066">**utils**</font><br>
-│       ├───bin_gen<br>
-│       │   └───flash_bin<br>
-│       ├───<font color="#000066">**dfu**</font><br>
-│       │   └───src<br>
-│       ├───<font color="#000066">**flash_programmer**</font><br>
-│       │   ├───nand<br>
-│       │   └───nor<br>
-│       ├───<font color="#000066">**JLink_programmer**</font><br>
-│       │   ├───bin<br>
-│       │   └───Devices<br>
-│       │       └───Kneron<br>
-│       │           └───Winbond<br>
-│       └───spl_aes<br>
+│   │   │   ├───wifi<br>
+│   │   │   │   ├───BufList<br>
+│   │   │   │   ├───ESP8266<br>
+│   │   │   │   │   ├───CMSIS_DV_Results<br>
+│   │   │   │   │   └───Config<br>
+│   │   ├───<font color="#000066">**kl720**</font><br>
+│   │   │   ├───<font color="#000066">**common**</font><br>
+│   │   │   ├───<font color="#000066">**scpu**</font><br>
+│   │   │   │   ├───<font color="#000066">**drv**</font><br>
+│   │   │   │   │   └───include<br>
+│   │   │   │   ├───<font color="#000066">**rtos**</font><br>
+│   │   │   │   │   ├───rtx<br>
+│   │   │   │   │   │   └───include<br>
+│   │   │   │   └───<font color="#000066">**startup**</font><br>
+│   ├───<font color="#000066">**utils**</font><br>
+│   │   ├───bin_gen<br>
+│   │   │   └───flash_bin<br>
+│   │   ├───<font color="#000066">**dfu**</font><br>
+│   │   │   └───src<br>
+│   │   ├───<font color="#000066">**flash_programmer**</font><br>
+│   │   │   ├───nand<br>
+│   │   │   └───nor<br>
+│   │   ├───<font color="#000066">**JLink_programmer**</font><br>
+│   │   │   ├───bin<br>
+│   │   │   ├───Devices<br>
+│   │   │   │   ├───Kneron<br>
+│   │   │   │   │   └───Winbond<br>
+│   │   └───spl_aes<br>
 
 
 ### 2.2. Detailed explanation
@@ -211,12 +211,12 @@ It can be generic flash driver, firmware upgrade manager, file system...etc.
 │   │   │   ├───nand<br>
 │   │   │   ├───nor<br>
 │   │   │   └───wifi<br>
-│   │   └───<font color="#0000dd">**kl720**</font><br>
-│   │       ├───common<br>
-│   │       └───scpu<br>
-│   │           ├───drv<br>
-│   │           ├───rtos<br>
-│   │           └───startup<br>
+│   │   ├───<font color="#0000dd">**kl720**</font><br>
+│   │   │   ├───common<br>
+│   │   │   ├───scpu<br>
+│   │   │   │   ├───drv<br>
+│   │   │   │   ├───rtos<br>
+│   │   │   │   └───startup<br>
 
 Platform = board + dev + ASIC. 
 
