@@ -1640,7 +1640,6 @@ Kneron KL520 series AI SoC Development Kit
 	- This pipeline mode can be toggled on/off (1/0) to demonstrate performance improvement. 
 	- Note that there may be delay to see first good inference due to opening camera/sensor. 
 
-    ![](./imgs/getting_start_imgs/appendix.PNG)
 
 ---
 ### Supported/Unsupported Peripheral Table
