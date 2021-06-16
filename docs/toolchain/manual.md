@@ -244,6 +244,9 @@ For section 3.1, both KDP520 and KDP 720 share the same scripts.
 But after section 3.2 (including 3.2), KDP520 and KDP720 are using different scripts.
 **Please run the commands corresponding to your hardware version.**
 
+We also provide Python APIs for playing with the toolchain. Please check 'Toolchain Python API' for details.
+But we recommend you finish reading this manual first to have an impression on the function of each utility.
+
 ### 3.1 Converters
 
 Here we will introduce scripts which help us easily convert the models from different platforms to ONNX. Note that the
@@ -390,17 +393,50 @@ python /workspace/libs/ONNX_Convertor/optimizer_scripts/onnx1_4to1_6.py input.on
 ```
 
 
-### 3.2 FpAnalyser, Compiler and IpEvaluator
+### 3.2 IP Evaluator
 
-In the following part of this section, we'll use the `LittleNet` as an example. You can find the folder under
-`/workspace/examples`. To use it copy it under `/data1`.
+The tool described in this section is mainly used to check your model's performance estimation and whether your model is supported by the toolchain. It can be used with both `.bie` and `.onnx` file. (The `.bie` file is the result of FP analyser which described in the next section.)
+
+#### 3.2.1 Running the programs
+
+To run the compile and the ip evaluator, you need to have an `.onnx` or a `.bie` file as the input. Here we take the
+`LittleNet` as the example which is already inside the docker:
+
+```bash
+# For KDP520
+cd /workspace/scripts && ./compilerIpevaluator_520.sh /workspace/examples/LittleNet/LittleNet.onnx
+
+# For KDP720
+cd /workspace/scripts && ./compilerIpevaluator_720.sh /workspace/examples/LittleNet/LittleNet.onnx
+```
+
+This part uses the default configuration for the hardware and not available for fine-tuning.
+
+#### 3.2.2 Get the result
+
+A folder called `compiler` will be generated in `/data1`, which stores the result of the compiler and IP Evaluator. If you are using this script with an `onnx` file, please ignore the binary files since they are not quantized and unable to be used.
+
+We can find the following files after running the script above:
+
+* `/data1/compiler/command.bin`: the compiled binary for the hardware.
+* `/data1/compiler/setup.bin`: the compiled binary for the hardware.
+* `/data1/compiler/weight.bin`: the compiled binary for the hardware.
+* `/data1/compiler/ioinfo.csv`: the hardware IO mapping information of the model.
+* `/data1/compiler/ip_eval_prof.txt`:  the IP evaluation report, which is the estimate performance of your model on the NPU. *(Only the 520 version script generate this file.)*
+* `/data1/compiler/ProfileResult.txt`:  the IP evaluation report, which is the estimate performance of your model on the NPU. *(Only the 720 version script generate this file.)*
+
+
+### 3.3 FpAnalyser, Compiler and IpEvaluator
+
+In this section and the following sections, we'll use the `LittleNet` as an example. You can find the folder under
+`/workspace/examples`. To use it, copy it under `/data1`.
 
 ```bash
 cp -r /workspace/examples/LittleNet /data1
 cp /data1/LittleNet/input_params.json /data1
 ```
 
-#### 3.2.1 Prepare the input
+#### 3.3.1 Prepare the input
 
 Before running the programs, you need to prepare the inputs. In our toolchain, all the outputs are placed under `/data1`.
 We call it the Interactivate Folder. So, we recommend you create this folder if it is not already there. Then we need to
@@ -412,7 +448,7 @@ for the input parameters in [section FAQ question 1](#1-how-to-configure-the-inp
 > The `input_params.json` is different in 0.10.0. Please check the FAQ for new config fields or use section 3.7.3 to
 > upgrade your existed `input_params.json`.
 
-#### 3.2.2 Running the program
+#### 3.3.2 Running the program
 
 After preparing `input_params.json`, you can run the programs by the following command:
 
@@ -428,7 +464,7 @@ python /workspace/scripts/fpAnalyserCompilerIpevaluator_720.py -t 8
 
 `thread_number`: the number of thread to use.
 
-#### 3.2.3 Get the result
+#### 3.3.3 Get the result
 
 After running this program, the folders called `compiler` and `fpAnalyser` will be generated under `/data1`. `compiler` stores the result of compiler and ipEvaluator. `fpAnalyser` stores the result of the model analyzer.
 
@@ -442,7 +478,9 @@ We can find the following files after running the script above:
 * `/data1/compiler/ip_eval_prof.txt`:  the IP evaluation report, which is the estimate performance of your model on the NPU. *(Only the 520 version script generate this file.)*
 * `/data1/compiler/ProfileResult.txt`:  the IP evaluation report, which is the estimate performance of your model on the NPU. *(Only the 720 version script generate this file.)*
 
-#### 3.2.4 Hardware validation (optional)
+### 3.4 Hardware validation (optional)
+
+#### 3.4.1 Run hardware validate script.
 
 This step will make sure whether the mathematical simulator’s result is the same as the hardware simulator’s. In other
 words, this step makes sure the model can run correctly on the hardware.
@@ -457,41 +495,10 @@ python /workspace/scripts/hardware_validate_720.py
 
 If it succeeds, you can the command line print out log: `[info] hardware validating successes!`. Otherwise, you might need to check your model to see if it has passed the converter. If the problem persist, please ask our stuff for help and provide the simulator result and the hardware simulator result under `/data1/simulator` and `/data1/c_sim`.
 
-### 3.3 Simulator and Emulator (Deprecated)
+#### 3.4.2 Simulator and Emulator
 
-**The simulator and the emulator are no longer available for running seperately with the script. Please use end to end simulator instead.**
+One can also run simulator manually to get the result and check if it meets the need. This part is descibed in the end to end simulator document. Please check.
 
-### 3.4 Compiler and Evaluator
-
-The function of this part is similar with [part 3.2](#32-fpanalyser-compiler-and-ipevaluator), and the difference is that this part does not run FP-analyser, it can be used when your model structure is prepared but hasn’t been trained, or when you only want to check your model's performance estimation.
-
-#### 3.4.1 Running the programs
-
-To run the compile and the ip evaluator, you need to have an onnx or a bie file as the input. Here we take the
-`LittleNet` as the example:
-
-```bash
-# For KDP520
-cd /workspace/scripts && ./compilerIpevaluator_520.sh /data1/LittleNet/LittleNet.onnx
-
-# For KDP720
-cd /workspace/scripts && ./compilerIpevaluator_720.sh /data1/LittleNet/LittleNet.onnx
-```
-
-This part uses the default configuration for the hardware and not available for fine-tuning.
-
-#### 3.4.2 Get the result
-
-A folder called `compiler` will be generated in `/data1`, which stores the result of the compiler and IP Evaluator. If you are using this script with an `onnx` file, please ignore the binary files since they are not quantized and unable to be used.
-
-We can find the following files after running the script above:
-
-* `/data1/compiler/command.bin`: the compiled binary for the hardware.
-* `/data1/compiler/setup.bin`: the compiled binary for the hardware.
-* `/data1/compiler/weight.bin`: the compiled binary for the hardware.
-* `/data1/compiler/ioinfo.csv`: the hardware IO mapping information of the model.
-* `/data1/compiler/ip_eval_prof.txt`:  the IP evaluation report, which is the estimate performance of your model on the NPU. *(Only the 520 version script generate this file.)*
-* `/data1/compiler/ProfileResult.txt`:  the IP evaluation report, which is the estimate performance of your model on the NPU. *(Only the 720 version script generate this file.)*
 
 ### 3.5 Batch-Compile
 
@@ -551,6 +558,10 @@ Under `/data1`, you’ll find a folder called `batch_compile`, which contains th
 > `weight.bin`, `setup.bin` and `weight.bin` are for hardware simulator. They only contains information for a single model. They are mostly for debugging and testing usages.
 >
 > `model_*.nef` is for the firmware to load onto the chip. It could contain information for multiple models. It's mainly used for firmware testing and deployment.
+
+#### 3.5.4 Run batch compile with multiple models
+
+Just like in section 3.5.1, we provide the `/data1/batch_input_params.json`
 
 ### 3.6 FpAnalyser and Batch-Compile (Optional)
 
