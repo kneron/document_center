@@ -265,7 +265,7 @@ The E2E Simulator supports two kinds of inferencers depending on how you compile
 Now, we only need to modify the section related to the float inferencer. First, we need to fill in `onnx_file` with the path to the model we saved earlier in step 2. For the Dynasty inferencer to work, we also need to find the input node names for this model. You can use something like [Netron](https://netron.app/) to check this. After doing so, we can see that the input node name is input_1_o0.
 
 ```json
-"onnx_file": "yolo.onnx"
+"onnx_file": "yolo.opt.onnx"
 "onnx_input": ["input_1_o0"]
 ```
 
@@ -275,7 +275,7 @@ It will look like this in the end:
 <p><span style="font-weight: bold;">Figure 3.</span> example.json</p>
 </div>
 
-## 4.0 Flow.py
+## 4. Flow.py
 The last step is modifying `flow.py` to setup the testing flow.
 
 ### 4.1 Adding JSON files
@@ -308,7 +308,7 @@ def test_yolo(file_names, user_config):
 <p><span style="font-weight: bold;">Figure 4.</span> flow.py</p>
 </div>
 
-## 5.0 Running the test
+## 5. Running the test
 Now, everything is prepared, and we can run the test. We have prepared a test dataset of one image for example usage; it can be found at `app/test_image_folder/yolo`. To run the command, we need three inputs: the path to your app, the path to the image directory, and the name of the function in flow.py to run. In this example, the inputs are `app/yolo`, `app/test_image_folder/yolo`, and `test_yolo`. Be sure that you are in the base directory of the e2e-simulator to run the test. Put it all together in a call to simulator.py, and you get:
 
 ```bash
@@ -328,5 +328,258 @@ If everything went correctly, you should see our outputs on the terminal to be s
 ```
 
 These our the bounding boxes that our compiled model and postprocess were able to find in our test image. Since we also returned these arrays in our `test_yolo` function, we should see the exact same results in the dumped result JSON file. You can find it at `/workspace/E2E_simulator/bin/out/test_image_folder/yolo/000000350003.jpg/result.json`. Thus, our simulator was able to successfully find boxes in the image given the public YOLO model, and the preprocess and postprocess functions. You can use the simulator to tweak your model or functions to get your desired results.
+
+## Python API
+As of version 0.14.0, there is a Python function that performs the inference step on its own. We will now go over an example on how to call this API.
+
+All of the models are prepared at the beginning of this example. We will also be working from the `/data1` directory.
+
+We will be using the same preprocess and postprocess as in the E2E Simulator walkthrough, but we will be using three different models to inference this time: NEF, ONNX, and BIE. The NEF uses the CSIM to perform the inference. The ONNX and BIE use the Dynasty float and fixed, respsectively, to perform the inference.
+
+## 1. Setup
+As before, let us copy or rename the downloaded `keras-yolo3` directory to remove the dash as to allow for acceptable Python imports.
+
+```bash
+cp -r keras-yolo3 keras_yolo3
+```
+
+Now let us create a new Python file to run our example code called `inference.py`.
+
+```bash
+touch /data1/inference.py
+```
+
+## 2. Preprocess/postprocess
+Now, let us import the preprocess and postprocess function defined above into our new Python file. However, we can modify some parts to make it simpler, since it does not need to use the E2E Simulator API.
+
+## 2.1 Preprocess
+We will use the same imports as before.
+
+```python
+import numpy as np
+from keras_yolo3.yolo3.utils import letterbox_image
+from PIL import Image
+```
+
+Next, we modify the preprocess function itself a little bit. Let us just change the inputs to just take the input image path.
+
+```python
+def preprocess(input_image):
+    image = Image.open(input_image)
+    new_image_size = (416, 416)  # to match our model input size when converting above
+    boxed_image = letterbox_image(image, new_image_size)
+    image_data = np.array(boxed_image, dtype='float32')
+
+    print(image_data.shape)
+    image_data /= 255.
+    image_data = np.expand_dims(image_data, 0)  # Add batch dimension.
+
+    post_dict = {
+        "image_shape": [image.size[1], image.size[0]]
+    }
+    return [image_data], post_dict
+```
+
+## 2.2 Postprocess
+We will also use the same imports as before. We just need to modify the `keras_yolo3` import path. The NumPy import was also removed since it was imported from the preprocess.
+
+```python
+import pathlib
+import sys
+import tensorflow as tf
+sys.path.append(str(pathlib.Path("keras_yolo3").resolve()))
+from yolo3.model import yolo_eval
+```
+
+Next, we modify the preprocess function itself a little bit. The only thing we need to modify here is the path to the anchors.
+
+```python
+def postprocess(inf_results, pre_data):
+    new_data = [tf.convert_to_tensor(data, dtype=tf.float32) for data in inf_results]
+    anchors_path = "keras_yolo3/model_data/yolo_anchors.txt"
+    with open(anchors_path) as f:
+        anchors = f.readline()
+    anchors = [float(x) for x in anchors.split(',')]
+    anchors = np.array(anchors).reshape(-1, 2)
+    num_classes = 80
+    image_shape = pre_data["image_shape"]
+    boxes, scores, classes = yolo_eval(new_data, anchors, num_classes, image_shape)
+    with tf.Session() as sess:
+        boxes = boxes.eval()
+        scores = scores.eval()
+        classes = classes.eval()
+
+    return boxes, scores, classes
+```
+
+## 3. Inference
+Now, let us setup for the inference function.
+
+First, we need to import the corresponding module.
+
+```python
+import ktc
+```
+
+Then, we just need to call the kneron_inference function.
+Let us first call using the same ONNX model as was used in the E2E example. For ONNX files, you need to specify the `onnx_file` and `input_names` input parameters. Preprocess data is the results of the preprocess function, so we call this function after.
+
+```python
+    inf_results = ktc.kneron_inference(preprocess_data, onnx_file="yolo.opt.onnx", input_names=["input_1_o0"])
+```
+
+Next, let us call the inference function using the BIE model. For BIE files, you need to specify the `bie_file` and `input_names` input parameters.
+
+```python
+    inf_results = ktc.kneron_inference(preprocess_data, bie_file="/data1/fpAnalyser/yolo.opt.quan.wqbi.bie", input_names=["input_1_o0"])
+```
+
+Last, let us call the inference function using the NEF model. For NEF files, you will only need to specify the `nef_file` input parameters. The `radix` parameter here is set because the default value is 8, but this yolo model uses 7.
+
+```python
+    inf_results = ktc.kneron_inference(preprocess_data, nef_file="/data1/batch_compile/models_520.nef", radix=7)
+```
+
+## 4. Running the example
+Now, let us put it all together, including all 3 models.
+
+```python
+def run_example(input_image):
+    preprocess_data, post_dict = preprocess(input_image)
+
+    # ONNX model
+    inf_results = ktc.kneron_inference(preprocess_data, onnx_file="yolo.opt.onnx", input_names=["input_1_o0"])
+
+    results = postprocess(inf_results, post_dict)
+    print(results)
+
+    # BIE model
+    inf_results = ktc.kneron_inference(preprocess_data, bie_file="/data1/fpAnalyser/yolo.opt.quan.wqbi.bie", input_names=["input_1_o0"])
+
+    results = postprocess(inf_results, post_dict)
+    print(results)
+
+    # NEF model
+    inf_results = ktc.kneron_inference(preprocess_data, "/data1/batch_compile/models_520.nef", radix=7)
+
+    results = postprocess(inf_results, post_dict)
+    print(results)
+```
+
+For simplicity, let us provide the Python script with an input image through the command line and run an image.
+
+```python
+input_image = sys.argv[1]
+run_example(input_image)
+```
+
+Our file should look something like this:
+
+```python
+import numpy as np
+from keras_yolo3.yolo3.utils import letterbox_image
+from PIL import Image
+
+import pathlib
+import sys
+import tensorflow as tf
+sys.path.append(str(pathlib.Path("keras_yolo3").resolve()))
+from keras_yolo3.yolo3.model import yolo_eval
+
+import ktc
+
+def preprocess(input_image):
+    image = Image.open(input_image)
+    new_image_size = (416, 416)  # to match our model input size when converting above
+    boxed_image = letterbox_image(image, new_image_size)
+    image_data = np.array(boxed_image, dtype='float32')
+
+    print(image_data.shape)
+    image_data /= 255.
+    image_data = np.expand_dims(image_data, 0)  # Add batch dimension.
+
+    post_dict = {
+        "image_shape": [image.size[1], image.size[0]]
+    }
+    return [image_data], post_dict
+
+def postprocess(inf_results, pre_data):
+    new_data = [tf.convert_to_tensor(data, dtype=tf.float32) for data in inf_results]
+    anchors_path = "keras_yolo3/model_data/yolo_anchors.txt"
+    with open(anchors_path) as f:
+        anchors = f.readline()
+    anchors = [float(x) for x in anchors.split(',')]
+    anchors = np.array(anchors).reshape(-1, 2)
+    num_classes = 80
+    image_shape = pre_data["image_shape"]
+    boxes, scores, classes = yolo_eval(new_data, anchors, num_classes, image_shape)
+    with tf.Session() as sess:
+        boxes = boxes.eval()
+        scores = scores.eval()
+        classes = classes.eval()
+
+    return boxes, scores, classes
+
+def run_example(input_image):
+    preprocess_data, post_dict = preprocess(input_image)
+
+    # ONNX model
+    inf_results = ktc.kneron_inference(preprocess_data, onnx_file="yolo.opt.onnx", input_names=["input_1_o0"])
+
+    results = postprocess(inf_results, post_dict)
+    print(results)
+
+    # BIE model
+    inf_results = ktc.kneron_inference(preprocess_data, bie_file="/data1/fpAnalyser/yolo.opt.quan.wqbi.bie", input_names=["input_1_o0"])
+
+    results = postprocess(inf_results, post_dict)
+    print(results)
+
+    # NEF model
+    inf_results = ktc.kneron_inference(preprocess_data, "/data1/batch_compile/models_520.nef", radix=7)
+
+    results = postprocess(inf_results, post_dict)
+    print(results)
+
+input_image = sys.argv[1]
+run_example(input_image)
+
+```
+
+Now run the example itself using the following command:
+
+```bash
+cd /data1 && python inference.py /workspace/E2E_Simulator/app/test_image_folder/yolo/000000350003.jpg
+```
+
+## 5. Results
+Now, we can take a look at the results.
+
+The ONNX model results should be the exact same as from the E2E simulator inference.
+
+```
+(array([[251.099  , 535.6055 , 298.40985, 551.92285],
+       [256.12146, 408.87692, 295.4361 , 424.1309 ],
+       [259.28464, 474.59253, 298.83353, 525.9219 ],
+       [238.99045, 233.12668, 309.90182, 364.7603 ]], dtype=float32), array([0.9018596 , 0.88071   , 0.99525476, 0.8776726 ], dtype=float32), array([0, 0, 2, 7], dtype=int32))
+```
+
+The BIE model results will be a little different from the float results due to precision differences.
+
+```
+(array([[256.47696, 409.87057, 294.36542, 423.48828],
+       [250.96204, 535.34863, 297.11588, 551.937  ],
+       [257.84247, 474.8471 , 300.94632, 525.61633],
+       [240.04744, 230.77686, 309.27823, 369.07642]], dtype=float32), array([0.7631709 , 0.6412693 , 0.98547626, 0.81262827], dtype=float32), array([0, 0, 2, 7], dtype=int32))
+```
+
+Lastly, the NEF model should be exactly the same as the BIE model results. However, in this case, the differences are due to precision loss when converting the preprocessed input into fixed point values.
+
+```
+(array([[256.47696, 409.87057, 294.36542, 423.48828],
+       [250.96204, 535.34863, 297.11588, 551.937  ],
+       [258.71356, 474.8471 , 301.81738, 525.61633],
+       [240.04744, 230.1287 , 309.27823, 368.42828]], dtype=float32), array([0.76361674, 0.72682774, 0.9857495 , 0.892929  ], dtype=float32), array([0, 0, 2, 7], dtype=int32))
+```
 
 This concludes the tutorial involving the public YOLO model.

@@ -68,6 +68,10 @@ nav:
     - ONNX Converter: toolchain/converters.md
     - Python API: toolchain/python_api.md
     - History Versions: toolchain/history.md
+  - Model Training:
+    - Image Classification: model_training/classification.md
+    - Object Detection (fcos): model_training/object_detection_fcos.md
+    - Object Detection (YOLOv5): model_training/object_detection_yolov5.md
 extra:
     logo: 'imgs/logo.png'
 plugins:
