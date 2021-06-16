@@ -561,7 +561,29 @@ Under `/data1`, you’ll find a folder called `batch_compile`, which contains th
 
 #### 3.5.4 Run batch compile with multiple models
 
-Just like in section 3.5.1, we provide the `/data1/batch_input_params.json`
+The name 'batch compile' comes from its ability to compile multiple models together.
+
+The `/data1/batch_input_params.json` is just like in section 3.5.1, but with one more model which can be found under E2E simulator folder.
+
+```json
+{
+    "models": [
+        {
+            "id": 19,
+            "version": "1",
+            "path": "/data1/fpAnalyser/LittleNet.quan.wqbi.bie"
+        },
+        {
+            "id": 1000,
+            "version": "1",
+            "path": "/workspace/E2E_simulator/app/fd_external/model/520/ssd7_0.8_epoch-97_loss-0.1407_val_loss-0.0825_opt.piano.kdp520.scaled.quan.wqbi.bie"
+        }
+    ]
+}
+```
+
+The command is the same as in section 3.5.2 and the results are `.bin` files for each model and on `.nef` file like mentioned in section 3.5.4.
+
 
 ### 3.6 FpAnalyser and Batch-Compile (Optional)
 
