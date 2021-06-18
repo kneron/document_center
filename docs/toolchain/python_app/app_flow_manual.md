@@ -161,11 +161,11 @@ If your postprocess functions are defined in Python, integration is simple yet a
 
 #### C defined
 1. Like the preprocess, compile the C/C++ functions into a shared library (.so).
-2. However, your postprocess C function should take in an kdp_image structure as input, as the helper functions will load data into this class. Depending on the version, the Python class is defined in ```c_structure/kdp_image_520.py``` or ```c_structure/kdp_image_720.py```, and the C structure is defined in ```c_structure/520/include/kdpio.h``` or ```c_structure/720/postprocess/kneron_api_data.h```.
+2. However, your postprocess C function should take in an kdp_image structure as input, as the helper functions will load data into this class. Depending on the version, the Python class is defined in ```c_structure/kdp_image_520.py``` or ```c_structure/kdp_image_720.py```, and the C structure is defined in ```c_structure/520/include/kdpio.h``` or ```c_structure/720/postprocess/kneron_api_data.h```. Your postprocess function MUST include the header containing the kdp_image structure for the corresponding version that you wish to run.
 3. Copy the library into your application's directory.
 4. Import the shared library into whichever module needs it using the standard ctypes module.
 5. Define any C/C++ structures and function wrappers that are needed as in the preprocess.
-6. Create a Python function that takes a TestConfig class and prev_output variable as input that calls your function wrapper. You must load the output data into memory before calling your function wrapper. To do so, depending on the inferencer mode you set, call ```prep_inference_results``` and ```load_np_to_memory``` from ```c_interface/postprocess.py```. Example usage can be found in ```app/fdr_external/postprocess/fd.py``` under the postprocess function.
+6. Create a Python function that takes a TestConfig class and prev_output variable as input that calls your function wrapper. You must load the output data into memory before calling your function wrapper. To do so, depending on the inferencer mode you set, call ```prep_inference_results``` and ```load_np_to_memory``` from ```c_interface/postprocess.py```. Example usage can be found in ```app/fdr_external/postprocess/fd.py``` under the postprocess function. Do note that these functions currently only work with CSIM, since the setup.bin file is required as input.
 7. Make sure your return value is whatever is convenient for your usage.
 8. Set the value of the ```post_type``` field in the input JSON to the name of your function, as defined [here](#setting-up-json).
 
