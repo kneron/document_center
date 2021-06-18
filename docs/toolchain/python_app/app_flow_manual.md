@@ -303,6 +303,53 @@ Use this command to run the fdr example set up in ```app/fd_external```:
 python3 simulator.py app/fd_external app/test_image_folder/fd fdr
 ```
 
+## Python API Inference
+This is a standalone feature that allows the user to perform inference given a model and some inputs. This is separate from the E2E Simulator itself. For details, you can take a look at ```python_flow/kneron_inference.py```.
+
+### Necessary items
+There are only two items that you need to prepare to run the inference function. Everything else is optional parameters.\
+
+* preprocessed input: list of NumPy arrays in (1, h, w, c) format
+* model file: depending on what kind of model you want to run, but it will be one of NEF, ONNX, and BIE file
+
+### Inputs
+
+```python
+def kneron_inference(pre_results, nef_file="", onnx_file="", bie_file="", model_id=None,
+                     input_names=[], radix=8, data_type="float", reordering=[],
+                     ioinfo_file="", dump=False, platform=520)
+```
+
+* ```pre_results```: same as ```preprocessed input``` mentioned above
+* ```nef_file/onnx_file/bie_file```: path to your input model file
+  * only one of these will be used, if they are all specified priority is NEF -> ONNX -> BIE
+* ```model_id```: ID of model to run inference
+  * only used with NEF file
+  * only needed if NEF model has model models
+* ```input_names```: list of input node names
+  * only needed with ONNX/BIE file
+* ```radix```: integer radix to convert from float to fixed input
+  * for NEF file, will be used to convert to CSIM RGBA input
+  * for ONNX/BIE file, will be used to dump RGBA file for debsugging
+* ```data_type```: string data format that you would like the output returned as
+  * ```float``` or ```fixed```
+* ```reordering```: list of node names/integers specifying the output order
+  * integers for NEF file without ```ioinfo_file```, node names with ```ioinfo_file```
+  * node names for ONNX and BIE file
+* ```ioinfo_file```: string path to file mapping output node number to name
+  * only used with NEF file
+* ```dump```: flag to dump intermediate nodes
+* ```platform```: integer platform to be used
+  * used with NEF file to prepare CSIM input
+  * used with BIE file to indicate Dynasty fixed model version
+  * ```520``` or ```720```
+
+### Usage
+Prepare a preprocess function and postprocess function. Then, simply call the kneron_inference function using the results of your preprocess function and input model file to get inference results. Then, use those inference results as input into your postprocess function.
+
+### Example
+For a detailed example on how to call the kneron_inference function, please explore this [YOLO EXAMPLE](#http://doc.kneron.com/docs/#toolchain/yolo_example/#python-api)
+
 ## FAQ
 
 ### 1. How do I enable simulator output?
