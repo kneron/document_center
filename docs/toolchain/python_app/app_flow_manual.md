@@ -161,11 +161,11 @@ If your postprocess functions are defined in Python, integration is simple yet a
 
 #### C defined
 1. Like the preprocess, compile the C/C++ functions into a shared library (.so).
-2. However, your postprocess C function should take in an kdp_image structure as input, as the helper functions will load data into this class. Depending on the version, the Python class is defined in ```c_structure/kdp_image_520.py``` or ```c_structure/kdp_image_720.py```, and the C structure is defined in ```c_structure/520/include/kdpio.h``` or ```c_structure/720/postprocess/kneron_api_data.h```.
+2. However, your postprocess C function should take in an kdp_image structure as input, as the helper functions will load data into this class. Depending on the version, the Python class is defined in ```c_structure/kdp_image_520.py``` or ```c_structure/kdp_image_720.py```, and the C structure is defined in ```c_structure/520/include/kdpio.h``` or ```c_structure/720/postprocess/kneron_api_data.h```. Your postprocess function MUST include the header containing the kdp_image structure for the corresponding version that you wish to run.
 3. Copy the library into your application's directory.
 4. Import the shared library into whichever module needs it using the standard ctypes module.
 5. Define any C/C++ structures and function wrappers that are needed as in the preprocess.
-6. Create a Python function that takes a TestConfig class and prev_output variable as input that calls your function wrapper. You must load the output data into memory before calling your function wrapper. To do so, depending on the inferencer mode you set, call ```prep_inference_results``` and ```load_np_to_memory``` from ```c_interface/postprocess.py```. Example usage can be found in ```app/fdr_external/postprocess/fd.py``` under the postprocess function.
+6. Create a Python function that takes a TestConfig class and prev_output variable as input that calls your function wrapper. You must load the output data into memory before calling your function wrapper. To do so, depending on the inferencer mode you set, call ```prep_inference_results``` and ```load_np_to_memory``` from ```c_interface/postprocess.py```. Example usage can be found in ```app/fdr_external/postprocess/fd.py``` under the postprocess function. Do note that these functions currently only work with CSIM, since the setup.bin file is required as input.
 7. Make sure your return value is whatever is convenient for your usage.
 8. Set the value of the ```post_type``` field in the input JSON to the name of your function, as defined [here](#setting-up-json).
 
@@ -302,6 +302,53 @@ Use this command to run the fdr example set up in ```app/fd_external```:
 ```bash
 python3 simulator.py app/fd_external app/test_image_folder/fd fdr
 ```
+
+## Python API Inference
+This is a standalone feature that allows the user to perform inference given a model and some inputs. This is separate from the E2E Simulator itself. For details, you can take a look at ```python_flow/kneron_inference.py```.
+
+### Necessary items
+There are only two items that you need to prepare to run the inference function. Everything else is optional parameters.\
+
+* preprocessed input: list of NumPy arrays in (1, h, w, c) format
+* model file: depending on what kind of model you want to run, but it will be one of NEF, ONNX, and BIE file
+
+### Inputs
+
+```python
+def kneron_inference(pre_results, nef_file="", onnx_file="", bie_file="", model_id=None,
+                     input_names=[], radix=8, data_type="float", reordering=[],
+                     ioinfo_file="", dump=False, platform=520)
+```
+
+* ```pre_results```: same as ```preprocessed input``` mentioned above
+* ```nef_file/onnx_file/bie_file```: path to your input model file
+  * only one of these will be used, if they are all specified priority is NEF -> ONNX -> BIE
+* ```model_id```: ID of model to run inference
+  * only used with NEF file
+  * only needed if NEF model has model models
+* ```input_names```: list of input node names
+  * only needed with ONNX/BIE file
+* ```radix```: integer radix to convert from float to fixed input
+  * for NEF file, will be used to convert to CSIM RGBA input
+  * for ONNX/BIE file, will be used to dump RGBA file for debsugging
+* ```data_type```: string data format that you would like the output returned as
+  * ```float``` or ```fixed```
+* ```reordering```: list of node names/integers specifying the output order
+  * integers for NEF file without ```ioinfo_file```, node names with ```ioinfo_file```
+  * node names for ONNX and BIE file
+* ```ioinfo_file```: string path to file mapping output node number to name
+  * only used with NEF file
+* ```dump```: flag to dump intermediate nodes
+* ```platform```: integer platform to be used
+  * used with NEF file to prepare CSIM input
+  * used with BIE file to indicate Dynasty fixed model version
+  * ```520``` or ```720```
+
+### Usage
+Prepare a preprocess function and postprocess function. Then, simply call the kneron_inference function using the results of your preprocess function and input model file to get inference results. Then, use those inference results as input into your postprocess function.
+
+### Example
+For a detailed example on how to call the kneron_inference function, please explore this [YOLO EXAMPLE](#http://doc.kneron.com/docs/#toolchain/yolo_example/#python-api)
 
 ## FAQ
 
