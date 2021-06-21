@@ -1,4 +1,4 @@
-# Toolchain Common Errors
+# Toolchain Common Exceptions
 
 ## ONNX Converter and Optimizers
 
