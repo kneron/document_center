@@ -4,8 +4,8 @@
 
 # Kneron Linux Toolchain Manual
 
-**2021 May**
-**Toolchain v0.14.2**
+**2021 Jun**
+**Toolchain v0.15.0**
 
 [PDF Downloads](manual.pdf)
 
@@ -14,7 +14,7 @@
 KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 520 and KDP 720. For better
 environment compatibility, we provide a docker which include all the dependencies as well as the toolchain software.
 
-**This document is compatible with `kneron/toolchain:v0.14.2`.**
+**This document is compatible with `kneron/toolchain:v0.15.0`.**
 
  *Performance simulation result on NPU KDP520:*
 
@@ -52,10 +52,12 @@ In this document, you'll learn:
 
 1. How to install and use the toolchain docker.
 2. What tools are in the toolchain.
-3. How to use utilize the tools through python API.
+3. How to use utilize the tools through Python API.
 
 ** Major changes of past versions**
 
+* **[v0.15.0]**
+    * Document now is written for Python API. The original script document can be found in [Command Line Script Tools](http://doc.kneron.com/docs/toolchain/command_line/).
 * **[v0.14.0]**
     * ONNX is updated to 1.6.0
     * Pytorch is updated to 1.7.1
@@ -141,11 +143,10 @@ from the container.
 After logging into the container, you are under `/workspace`, where all the tools are. Here is the folder structure and
 their usage:
 
-TODO: Update the file structure for ai training and ktc package
-
 ```
 /workspace
 |-- E2E_Simulator       # End to end simulator
+|-- ai_training         # AI training project.
 |-- cmake               # Environment
 |-- examples            # Example for the workflow, will be used later.
 |-- libs                # The libraries
@@ -161,26 +162,20 @@ TODO: Update the file structure for ai training and ktc package
 
 ### 2.2 Work flow
 
-TODO: Update this part
-
-Before we start actually introducing the scripts, let me introduce the general work flow.
+Before we start actually introducing the usage, let us go through the general work flow.
 
 <div align="center">
-<img src="../imgs/manual/toolchain_process.png">
+<img src="../imgs/manual/Manual_Flow_Chart.png">
 <p><span style="font-weight: bold;">Figure 1.</span> Diagram of working flow</p>
 </div>
 
-To keep the diagram as clear as possible, some inputs and outputs are omitted. But it is enough to show the general
-steps:
+To keep the diagram as clear as possible, some details are omitted. But it is enough to show the general steps. There are three main sections:
 
-1. Convert and optimize the models. Generate an optimized onnx file. Details are in [section 3.1](#31-converters)
-2. Use the optimized onnx file and a set of images to do the model analysis. Generate an encrypted bie file.
-3. Compile the bie file to generate binaries for hardware simulator. This step also generates the IP evaluation result.
-4. Use the binaries generated in step 3 and an image as input to simulate the hardware. Get the results as txt files.
-5. Use the bie file and the same image in step 4 as input to simulate the calculation. Get the result as txt files.
-6. Compare the txt files generated in step 4 and step 5 to make sure this model can be taken by the kdp720 hardware.
+1. ONNX section. Convert the model from different platforms to onnx and optimize the onnx file. Evaluate the onnx the model to check the operator support and the estimate performance. Then, test the onnx model and compare the result with the source.
+2. Bie section. Quantize the model and generate bie file. Test the bie file and compare the result with the previous step.
+3. Nef section. Batch compile multiple bie models into a bie binary file. Test the nef file and compare the result with the previous step.
 
-Step 1 is in section 3.1. Step 2-6 are automated in [section 3.2](#32-fpanalyser-compiler-and-ipevaluator) using scripts.
+> The workflow has been changed a lot since v0.15.0. We recommend Python API instead of the original scritps for a more smooth workflow. But this doesn't means the scripts used before are abandoned. They are still available and the document can be found in [Command Line Script Tools](http://doc.kneron.com/docs/toolchain/command_line/). The detailed document of the Python API can be found in [Toolchain Python API](http://doc.kneron.com/docs/toolchain/python_api/)
 
 ### 2.3 Supported operators
 
@@ -242,7 +237,32 @@ Table 1.2 shows the list of functions KDP720 supports base on ONNX 1.6.1.
 
 ## 3 ONNX Workflow
 
+Our toolchain utilities take ONNX files as inputs. The ONNX workflow is mainly about convert models from other platforms to ONNX and prepare the onnx for the quantization and compilation. There are three main steps: conversion, evaluation and testing.
+
 ### 3.1 Model Conversion and Optimization
+
+The onnx converter part currently support Keras, TFLite, a subset of Tensorflow, Caffe and Pytorch. Here, we will only briefly introduce some common usage of the python API. This part of python API is based on our converter and optimizer open-source project which can be found on Github <https://github.com/kneron/ONNX_Convertor>. The detailed usage of those converter scripts can be found in [ONNX Converter](http://doc.kneron.com/docs/toolchain/converters/).
+
+The example models used in the following converter command are not included in the docker by default. They can be found on Github <https://github.com/kneron/ConvertorExamples>. You can download them through these commands:
+
+```bash
+git clone https://github.com/kneron/ConvertorExamples.git
+cd ConvertorExamples && git lfs pull
+```
+
+### 3.1.1 Keras to ONNX
+
+### 3.1.2 Caffe to ONNX
+
+### 3.1.3 TFLite to ONNX
+
+### 3.1.4 Pytorch to ONNX
+
+### 3.1.5 ONNX Optimization
+
+### 3.1.6 ONNX Opset Upgrade
+
+### 3.1.7 ONNX Editor
 
 ### 3.2 IP Evaluation
 
