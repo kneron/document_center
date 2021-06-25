@@ -9,7 +9,7 @@
 2. Decompress the **kneron_plus_vXXX.zip**
 
     ```bash
-    $ unzip kneron_plus_v1.0.0.zip
+    $ unzip kneron_plus_vX.X.X.zip
     ```
 
 3. Build code
@@ -131,7 +131,6 @@ The key features of APP inference are listed below:
 
 - Specified model NEF.
 - Normally post-process is done in SoC.
-- Simplfied function parameters.
 
 ### 3.2 Generic Inference Example
 
@@ -140,18 +139,7 @@ The key features of APP inference are listed below:
 It needs more complex input parameters and normally the post-process is implemented by users in host side.
 
 
-The **'generic_inference'** is an example for showing how it work.
-
-By default, it runs with a Tiny Yolo v3 model NEF and takes an BMP image as input and does post-process in host side.
-
-Below shortly explains the key input parameters:
-
-- **model file path** : NEF file path, it can be changed to user's own NEF.
-- **image file path** : An image file path in BMP format. The actual input format for now supported is RGB565 or RGBA8888.
-- **inference model ID** : The model ID of one model in the NEF. Each model should have a unique ID.
-- **image format** : This indicates what image format preferred to be converted, the example converts BMP to RGB565 or RGBA888.
-- **normalize mode** : Normalize mode depends how data is normalized when training the model.
-- **post process** : In PLUS we provide a few post-processing functions, if choosing 'yolo_v3' it use an internal post-processing function for processing yolo_v3 and outputs bounding boxes. For other models, users can use 'none' to diretly get floating point values of each output node.
+The **'kl520_demo_generic_inference'** is an example for showing how it work based on a Tiny Yolo v3 model.
 
 #### 3.2.1 Generic Inference with Post Process on Device
 
@@ -182,19 +170,14 @@ $ sudo ./kl520_demo_generic_inference_post_yolo
 
 ```
 
-From the console output, it can be observed that the information of models in the NEF is printed, including model ID, raw resolution, intput channel, raw image format and raw output size.
-
-**Raw output** size indicates that a buffer of the size should be prepared to receive the output directly from the AI dongle, and it cannot be used until converting the raw output to well-structed floating point values.
-
-
-If [post process] is set to 'yolo_v3', it draws detected objects in a new-created **output_one_bike_many_cars_224x224.bmp**.
+And it draws detected objects in a new-created **output_one_bike_many_cars_224x224.bmp**.
 
 ![](../imgs/ex_kdp2_generic_inference_raw.bmp)
 
 
 #### 3.2.2 Generic Inference without Post Process on Device
 
-Otherwise if **post process** is set to 'none', the example dumps floating point values into **.txt** files for each output node.
+Otherwise if **post process** can be done in host software, this example dumps floating point values into **.txt** files for each output node.
 
 ```bash
 $ sudo ./kl520_demo_generic_inference
