@@ -107,7 +107,7 @@ $ sudo apt install build-essential
 Decompress the **kneron_plus_vXXX.zip**.
 
 ```bash
-$ unzip kneron_plus_v1.0.0.zip
+$ unzip kneron_plus_vX.X.X.zip
 ```
 
 Build code.
