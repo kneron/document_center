@@ -20,15 +20,15 @@ The instruction is valid for Windows 10 version only.
 1. Download **Zadig** application from [zadig.akeo.ie](https://zadig.akeo.ie/) appropriate for Windows 10.
 2. Connect Kneron device to your PC.
 3. Run the Zadig application.
-    The application should detect device as "**Unknown Device #1**" with USB ID "**3231/0200**" and the screen should look like that:
+    The application should detect device as "**Kneron KL720**" with USB ID "**3231/0200**" and the screen should look like that:
 
     ![](./imgs/getting_start_imgs_720/1_2_1.png)
 
     Make sure that the **Driver** field, has **WinUSB** option selected.
 
-4. Click "Install Driver" button.
+4. Click "**Install Driver**" button.
 
-When installation process is finished, "**Unknown Device #1**" can be found in Windows Device Manager under **Universal Serial Bus Devices** tree node.
+When installation process is finished, "**Kneron KL720**" can be found in Windows Device Manager under **Universal Serial Bus Devices** tree node.
 
 #### 1.2.2. Environment, gcc, etc.
 Get [git for windows SDK (MUST BE!)](https://gitforwindows.org/) installed
