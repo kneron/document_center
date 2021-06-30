@@ -86,6 +86,12 @@ m = ktc.onnx_optimizer.onnx2onnx_flow(m)
 ```
 
 Now, we have optimized onnx model in variable "m".
+We can save the onnx model 'm' to disk for further check (like Netron or onnxruntime).
+
+```python
+onnx.save(m,'yolo.opt.onnx')
+```
+Here we save it to `/data1/yolo.opt.onnx` for further verification in Step 4.
 
 ## Step 3: IP Evaluation
 To make sure the onnx model is expected, we had better check the onnx model's performance and if there is any unsuppoorted operator (or cpu node) inside.
@@ -106,6 +112,10 @@ you can see the estimated fps (npu only) report shown on your terminal like this
 <div style="background-color: rgb(80, 80, 80); font-size: 11px; font-style: italic;" >
 
 ```
+    Npu performance evaluation result:
+    ***** Warning: this model has 2 CPU ops which may cause that the report's fps is different from the actual fps *****
+    ***** Warning: CPU ops types: , KneronResize.
+
     [Evaluation Result]
     estimate FPS float = 1.39266
     total time = 718.052 ms
@@ -117,6 +127,10 @@ you can see the estimated fps (npu only) report shown on your terminal like this
 ```
 
 </div>
+
+two things we have to emphasize on this report:
+* 2 cpu node in our model, which type is KneronResize
+* the estimated FPS is 1.39266, the report is for NPU only
 
 at the same time, a folder "compiler" will be generated in your docker mounted folder(/data1), the evaluation result could be found in that folder. One important thing is to check the 'ioinfo.csv' in /data1/compiler, it looks like this:
 
@@ -141,8 +155,7 @@ each line shows the information of each node, and the first element of a line sh
 >* o : output node
 >* c : cpu node
 
-so under kl520, there are two cpu node in our onnx model. 
-
+so under kl520, there are two cpu node in our onnx model, the node name are 'up_sampling2d_1_o0_kn' and 'up_sampling2d_2_o0_kn'
 
 ## Step 4: Check ONNX model and Pre&Post process are good 
 If we can get correct detection result from onnx and given pre post process, everything should be good.
@@ -254,7 +267,7 @@ the bie model will be generated at `/data1/output.bie`.
 ## Step 6: Check BIE model accuracy is good enough
 After quantization, the model accuracy slightly drop is expected. We had better check the accuracy is good enough to use. 
 
-The toolchain api 'ktc.kneron_inference' can help us to check:
+Toolchain api 'ktc.kneron_inference' can help us to check. The usage of 'ktc.kneron_inference' is similar to Step 4, only one different is at the 2nd parameter, changed from onnx_file to bie_file:
 
 ```python
 ## bie model check
@@ -301,18 +314,33 @@ print("\nCompile done. Save Nef file to '" + str(nef_model_path) + "'")
 You can find the `nef` file under `/data1/batch_compile/models_520.nef`.
 The 'models_520.nef' is the final compiled model.
 
+To learn the usage of generated NEF model on KL520, please check the document in following link:
+http://doc.kneron.com/docs/#520_1.5.0.0/getting_start/
 
 
 ## (optional) Step 8. Check NEF model 
-Toolchain api 'ktc.inference' does support doing NEF model inference.
+Toolchain api 'ktc.inference' does support doing NEF model inference. The usage of 'ktc.kneron_inference' is similar to Step 4 and Step 6, only two things are different
+* the 2nd parameter of 'ktc.kneron_inference' is 'nef_model'
+* need to check 'radix' (see the toolchain mannual to learn more)
+
+the code looks like this:
 
 ```python
 # nef model check
+
 input_image = Image.open('/data1/000000350003.jpg')
+
+# resize and normalize input data
 in_data = preprocess(input_image)
-out_data = ktc.kneron_inference([in_data], nef_file=nef_model_path, radix=7)
+
+# check nef radix from quantization data
+radix = ktc.get_radix(img_list)
+# nef inference
+out_data = ktc.kneron_inference([in_data], nef_file=nef_model_path, radix=radix)
+
+# nef output data processing
 det_res = postprocess(out_data, [input_image.size[1], input_image.size[0]])
-print('++++++++++ nef result ++++++++++++++')
+
 print(det_res)
 ```
 you can see the result on your terminal like this:
@@ -326,10 +354,9 @@ you can see the result on your terminal like this:
 ```
 
 </div>
+
 the NEF model should be exactly the same as the BIE model results. However, in this case, the differences are due to precision loss when converting the preprocessed input into fixed point values.
 
-
-This concludes the tutorial involving the public YOLO model.
 
 ## Appendix
 The whole model conversion process from onnx to nef(step 1 ~ 6) could be written into one python script:
