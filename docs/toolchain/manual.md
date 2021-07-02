@@ -4,7 +4,7 @@
 
 # Kneron Linux Toolchain Manual
 
-**2021 Jun**
+**2021 Jul**
 **Toolchain v0.15.0**
 
 [PDF Downloads](manual.pdf)
@@ -264,7 +264,7 @@ cd ConvertorExamples && git lfs pull
 ### 3.1.1 Keras to ONNX
 
 For Keras, our converter support models from Keras 2.2.4. **Note that `tf.keras` and Keras 2.3 is not supported.** You may
-need to export the model as tflite model and see [section 3.1.3](#313-tflite-to-onnx) for TF Lite model conversion.
+need to export the model as tflite model and see [section 3.1.4](#314-tf-lite-to-onnx) for TF Lite model conversion.
 
 Suppose there is an onet hdf5 model exported By Keras, you need to convert it to onnx by the following python code:
 
@@ -641,11 +641,12 @@ After getting the `hw_results` and post-process it, you may want to compare the 
 
 ## 6 What's Next
 
+* Check `/workspace/examples/LittleNet/python_api_workflow.py`. All the example Python API usages are inside this runnable script.
 * Try it with your own models.
-* Check YOLO Example for a step-by-step walk through using YOLOv3 as the example.
-* Check the Python API document for more detailed Python API usage.
-* Check the Command Line Script Tools for command line script usage.
-* Check ONNX Converter for the usage of underlying project <https://github.com/kneron/ONNX_Convertor>.
+* Check the [YOLO Example](http://doc.kneron.com/docs/toolchain/yolo_example/) for a step-by-step walk through using YOLOv3 as the example.
+* Check the [Toolchain Python API](http://doc.kneron.com/docs/toolchain/python_api/) document for more detailed Python API usage.
+* Check the [Command Line Script Tools](http://doc.kneron.com/docs/toolchain/command_line/) for command line script usage.
+* Check the [ONNX Converter](http://doc.kneron.com/docs/toolchain/converters/) for the usage of underlying project <https://github.com/kneron/ONNX_Convertor>.
 
 ## FAQ
 
