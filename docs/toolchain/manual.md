@@ -564,12 +564,21 @@ We would use `ktc.kneron_inference` here, too. But here we are using the generat
 The python code would be like:
 
 ```python
-fixed_results = ktc.kneron_inference(input_data, bie_file=bie_path, input_names=["data_out"])
+fixed_results = ktc.kneron_inference(input_data, bie_file=bie_path, input_names=["data_out"], radix=radix)
 ```
 
-The usage is almost the same as using onnx. In the code above, `inf_results` is a list of result data. `bie_file` is the path to the input bie. `input_data` is a list of input data after preprocess the `input_names` is a list of model input name.
+The usage is almost the same as using onnx. In the code above, `inf_results` is a list of result data. `bie_file` is the path to the input bie. `input_data` is a list of input data after preprocess the `input_names` is a list of model input name. We also need to provide the radix value which is a special value can be obtained by `ktc.get_radix`.
+
+`ktc.get_radix` takes the preprocessed input images as input and generate the radix value needed by hardware E2E simulation.
 
 Here we use the same input `input_data` which we used in section 3.3. And the `bie_path` is the return value in section 4.1.
+
+The full code would be:
+
+```python
+radix = ktc.get_radix(input_images)
+fixed_results = ktc.kneron_inference(input_data, bie_file=bie_path, input_names=["data_out"], radix=radix)
+```
 
 As mentioned above, we do not provide any postprocess. In reality, you may want to have your own postprocess function in Python, too.
 
@@ -619,14 +628,12 @@ We would use `ktc.kneron_inference` here again. And we are using the generated n
 For the batch compile with only LittleNet, the python code would be like:
 
 ```python
-hw_results = ktc.kneron_inference(input_data, nef_file=compile_result, radix=ktc.get_radix(input_images))
+hw_results = ktc.kneron_inference(input_data, nef_file=compile_result, radix=radix)
 ```
 
-The usage is a little different here. In the code above, `hw_results` is a list of result data. `nef_file` is the path to the input nef. `input_data` is a list of input data after preprocess. But the `input_names` is no longer needed. Instead, we need to provide the radix value which is a special value can be obtained by `ktc.get_radix`.
+The usage is a little different here. In the code above, `hw_results` is a list of result data. `nef_file` is the path to the input nef. `input_data` is a list of input data after preprocess. `radix` is the radix value of inputs.
 
-`ktc.get_radix` takes the preprocessed input images as input and generate the radix value needed by hardware E2E simulation.
-
-Here we use the same input `input_data` which we used in section 3.3. And the `compile_result` is the one that generated with only LittleNet model.
+Here we use the same input `input_data` which we used in section 3.3 and the same `radix` in section 4.2. And the `compile_result` is the one that generated with only LittleNet model.
 
 As mentioned above, we do not provide any postprocess. In reality, you may want to have your own postprocess function in Python, too.
 
