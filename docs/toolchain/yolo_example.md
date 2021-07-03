@@ -19,7 +19,7 @@ docker run --rm -it -v /your/folder/path/for/docker_mount:/data1 kneron/toolchai
 go to our mounted folder and download a public keras based YOLOv3 model from Github <https://github.com/qqwweee/keras-yolo3>
 
 ```bash
-cd /data1 && git clone https://github.com/qqwweee/keras-yolo3.git
+cd /data1 && git clone https://github.com/qqwweee/keras-yolo3.git keras_yolo3
 ```
 follow the model's document to save the pretrain model as an `h5` model:
 
@@ -113,8 +113,8 @@ you can see the estimated fps (npu only) report shown on your terminal like this
 
 ```
     Npu performance evaluation result:
-    ***** Warning: this model has 2 CPU ops which may cause that the report's fps is different from the actual fps *****
-    ***** Warning: CPU ops types: , KneronResize.
+    ***** Warning: this model has 1 CPU ops which may cause that the report's fps is different from the actual fps *****
+    ***** Warning: CPU ops types: KneronResize.
 
     [Evaluation Result]
     estimate FPS float = 1.39266
@@ -124,12 +124,13 @@ you can see the estimated fps (npu only) report shown on your terminal like this
     MAC efficiency to total time = 29.7734 %
     MAC idle time = 153.815 ms
     MAC running time = 564.237 ms
+    
 ```
 
 </div>
 
 two things we have to emphasize on this report:
-* 2 cpu node in our model, which type is KneronResize
+* 1 op type will run as cpu node in our model, which type is KneronResize
 * the estimated FPS is 1.39266, the report is for NPU only
 
 at the same time, a folder "compiler" will be generated in your docker mounted folder(/data1), the evaluation result could be found in that folder. One important thing is to check the 'ioinfo.csv' in /data1/compiler, it looks like this:
