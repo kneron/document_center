@@ -123,7 +123,7 @@ you can see the estimated fps (npu only) report shown on your terminal like this
     average DRAM bandwidth = 0.341753 GB/s
     MAC efficiency to total time = 29.7734 %
     MAC idle time = 153.815 ms
-    MAC running time = 564.237 
+    MAC running time = 564.237 ms
     
 ```
 
