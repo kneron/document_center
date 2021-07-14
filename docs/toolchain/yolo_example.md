@@ -223,6 +223,7 @@ det_res = postprocess(out_data, [input_image.size[1], input_image.size[0]])
 print(det_res)
 ```
 you can see the result on your terminal like this:
+
 <div style="background-color: rgb(80, 80, 80); font-size: 11px; font-style: italic;" >
 
 ```
@@ -233,6 +234,7 @@ you can see the result on your terminal like this:
 ```
 
 </div>
+
 looks good.
 
 *Note that we only use one image as example. Use more data to check accuracy is a good idea.
@@ -288,6 +290,7 @@ print(det_res)
 ```
 
 you can see the result on your terminal like this:
+
 <div style="background-color: rgb(80, 80, 80); font-size: 11px; font-style: italic;" >
 
 ```
@@ -298,6 +301,7 @@ you can see the result on your terminal like this:
 ```
 
 </div>
+
 slightly different from the Step 3, but looks good enough.
 
 *Note that we only use one image as example. Use more data to check accuracy is a good idea.
@@ -345,6 +349,7 @@ det_res = postprocess(out_data, [input_image.size[1], input_image.size[0]])
 print(det_res)
 ```
 you can see the result on your terminal like this:
+
 <div style="background-color: rgb(80, 80, 80); font-size: 11px; font-style: italic;" >
 
 ```
