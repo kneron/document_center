@@ -270,7 +270,11 @@ the bie model will be generated at `/data1/output.bie`.
 ## Step 6: Check BIE model accuracy is good enough
 After quantization, the model accuracy slightly drop is expected. We had better check the accuracy is good enough to use. 
 
-Toolchain api 'ktc.kneron_inference' can help us to check. The usage of 'ktc.kneron_inference' is similar to Step 4, only one different is at the 2nd parameter, changed from onnx_file to bie_file:
+Toolchain api 'ktc.kneron_inference' can help us to check. The usage of 'ktc.kneron_inference' is similar to Step 4, but there would be several changes:
+
+1. The 2nd parameter is changed from onnx_file to bie_file.
+2. You need to provide the radix value, which can be obtained by `ktc.get_radix` with input images as the parameter.
+3. If the platform is not 520, you need to provide an extra parameter: `platform`, e.g. `platform=720`.
 
 ```python
 ## bie model check
@@ -324,9 +328,11 @@ http://doc.kneron.com/docs/#520_1.5.0.0/getting_start/
 
 
 ## (optional) Step 8. Check NEF model 
-Toolchain api 'ktc.inference' does support doing NEF model inference. The usage of 'ktc.kneron_inference' is similar to Step 4 and Step 6, only two things are different
-* the 2nd parameter of 'ktc.kneron_inference' is 'nef_model'
-* need to check 'radix' (see the toolchain mannual to learn more)
+Toolchain api 'ktc.inference' does support doing NEF model inference. The usage of 'ktc.kneron_inference' is similar to Step 4 and Step 6, only several things are different
+
+1. The 2nd parameter is changed from to nef_model.
+2. You need to provide the radix value, which can be obtained by `ktc.get_radix` with input images as the parameter.
+3. If the platform is not 520, you need to provide an extra parameter: `platform`, e.g. `platform=720`.
 
 the code looks like this:
 
