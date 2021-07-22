@@ -348,7 +348,7 @@ def kneron_inference(pre_results, nef_file="", onnx_file="", bie_file="", model_
 Prepare a preprocess function and postprocess function. Then, simply call the kneron_inference function using the results of your preprocess function and input model file to get inference results. Then, use those inference results as input into your postprocess function.
 
 ### Example
-For a detailed example on how to call the kneron_inference function, please explore this [YOLO EXAMPLE](#http://doc.kneron.com/docs/#toolchain/yolo_example/#python-api)
+For a detailed example on how to call the kneron_inference function, please explore this [YOLO EXAMPLE](http://doc.kneron.com/docs/toolchain/yolo_example/#python-api)
 
 ## FAQ
 
