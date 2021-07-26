@@ -308,6 +308,8 @@ you can see the result on your terminal like this:
 
 slightly different from the Step 3, but looks good enough.
 
+*If you are running the example using 720 as the hardware platform, there might be one extra bounding box. This is normal. We may observe different behaviour from 520 and 720.*
+
 *Note that we only use one image as example. Use more data to check accuracy is a good idea.
 
 ## Step 7: Compile
