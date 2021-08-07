@@ -24,7 +24,7 @@ cd /data1 && git clone https://github.com/qqwweee/keras-yolo3.git keras_yolo3
 follow the model's document to save the pretrain model as an `h5` model:
 
 ```bash
-cd keras-yolo3
+cd keras_yolo3
 wget https://pjreddie.com/media/files/yolov3.weights
 python convert.py yolov3.cfg yolov3.weights /data1/yolo.h5
 ```

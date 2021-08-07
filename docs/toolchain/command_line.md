@@ -403,6 +403,9 @@ Here is an example JSON with comments. **Please remove all the comments in the r
     // [optional]
     // Whether seperate buffers for each model output. Default is true.
     "dedicated_output_buffer": true,
+    // [optional]
+    // Whether compress weight for saving space.
+    "weight_compress": false,
     // Batch compile model list
     "models": [
         {

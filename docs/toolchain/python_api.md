@@ -288,7 +288,7 @@ The compile functions serve the same purpose as the batch compiler in the toolch
 returned from both function
 
 ```python
-ktc.compile(model_list, output_dir=None, dedicated_output_buffer=True)
+ktc.compile(model_list, output_dir=None, dedicated_output_buffer=True, weight_compress=False)
 ```
 
 Compile the models and generate the nef file. The nef path will be returned.
@@ -298,10 +298,12 @@ Args:
 * model_list (List[ModelConfig]): a list of models need to be compile. Models with onnx should run analysis() before compilation.
 * output_dir (str, optional): output directory. Defaults to None.
 * dedicated_output_buffer (bool, optional): dedicated output buffer. Defaults to True.
+* weight_compress (bool, optional): compress weight for saving space. Defaults to False.
 
 ```python
-ktc.encrypt_compile(model_list, output_dir=None, dedicated_output_buffer=True, mode=None, key="", key_file="", encryption_efuse_key="")
+ktc.encrypt_compile(model_list, output_dir=None, dedicated_output_buffer=True, mode=None, key="", key_file="", encryption_efuse_key="", weight_compress=False)
 ```
+
 Compile the models, generate an encrypted nef file. The nef path will be returned.
 
 Args:
@@ -313,6 +315,7 @@ Args:
 * key (str, optional): a hex code. Required in mode 1 Defaults to "".
 * key_file (str, optional): key file path. Required in mode 1. Defaults to "".
 * encryption_efuse_key (str, optional): a hex code. Required in mode 2 and optional in mode 1. Defaults to "".
+* weight_compress (bool, optional): compress weight for saving space. Defaults to False.
 
 
 ## 3 Inferencer

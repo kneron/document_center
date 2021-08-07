@@ -4,8 +4,8 @@
 
 # Kneron Linux Toolchain Manual
 
-**2021 Jul**
-**Toolchain v0.15.0**
+**2021 Aug**
+**Toolchain v0.15.1**
 
 [PDF Downloads](manual.pdf)
 
@@ -52,7 +52,7 @@ In this document, you'll learn:
 
 1. How to install and use the toolchain docker.
 2. What tools are in the toolchain.
-3. How to use utilize the tools through Python API.
+3. How to utilize the tools through Python API.
 
 ** Major changes of past versions**
 
@@ -111,7 +111,7 @@ You can use the following command to pull the latest toolchain docker.
 docker pull kneron/toolchain:latest
 ```
 
-Note that this document is compatible with toolchain v0.14.2. You can find the version of the toolchain in
+Note that this document is compatible with toolchain v0.15.1. You can find the version of the toolchain in
 `/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.14.2, you may need to find the
 latest document from the [online document center](http://doc.kneron.com/docs).
 
@@ -418,7 +418,7 @@ In this line of python code, `ktc.onnx_optimizer.onnx1_4to1_6` is the function t
 ### 3.1.7 ONNX Editor
 
 KL520/KL720 NPU supports most of the compute extensive OPs, such as Conv, BatchNormalization, Fully Connect/GEMM, in order to speed up the model inference run time. On the other hand, there are some OPs that KL520 NPU cannot support well, such as `Softmax` or `Sigmod`. However, these OPs usually are not compute extensive and they are better to execute in CPU.
-Therefore, Kneron provides python APIs which help user modify the model so that KL520 NPU can runthe model more efficiently.
+Therefore, Kneron provides python APIs which help user modify the model so that KL520 NPU can run the model more efficiently.
 
 You can find the detailed description of this tool from [Toolchain Python API](http://doc.kneron.com/docs/toolchain/python_api/) for the python API and [ONNX Converter](http://doc.kneron.com/docs/toolchain/converters/) for the command usage.
 
