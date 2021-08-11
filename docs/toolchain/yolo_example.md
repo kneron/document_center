@@ -25,8 +25,8 @@ follow the model's document to save the pretrain model as an `h5` model:
 
 ```bash
 cd keras_yolo3
-wget https://pjreddie.com/media/files/yolov3.weights
-python convert.py yolov3.cfg yolov3.weights /data1/yolo.h5
+wget https://pjreddie.com/media/files/yolov3-tiny.weights
+python convert.py yolov3-tiny.cfg yolov3-tiny.weights /data1/yolo.h5
 ```
 
 We now have `yolo.h5` under our mounted folder `/data1`.
@@ -100,7 +100,7 @@ To make sure the onnx model is expected, we had better check the onnx model's pe
 
 ```python
 # npu(only) performance simulation
-km = ktc.ModelConfig(1001, "0001", "520", onnx_model=m)
+km = ktc.ModelConfig(19, "0001", "520", onnx_model=m)
 eval_result = km.evaluate()
 print("\nNpu performance evaluation result:\n" + str(eval_result))
 ```
@@ -112,26 +112,24 @@ you can see the estimated fps (npu only) report shown on your terminal like this
 <div style="background-color: rgb(80, 80, 80); font-size: 11px; font-style: italic;" >
 
 ```
-    Npu performance evaluation result:
-    ***** Warning: this model has 1 CPU ops which may cause that the report's fps is different from the actual fps *****
-    ***** Warning: CPU ops types: KneronResize.
+    ***** Warning: CPU ops types: , KneronResize.
 
     [Evaluation Result]
-    estimate FPS float = 1.39266
-    total time = 718.052 ms
-    total theoretical covolution time = 213.788 ms
-    average DRAM bandwidth = 0.341753 GB/s
-    MAC efficiency to total time = 29.7734 %
-    MAC idle time = 153.815 ms
-    MAC running time = 564.237 ms
+    estimate FPS float = 22.5861
+    total time = 44.2751 ms
+    total theoretical covolution time = 16.7271 ms
+    average DRAM bandwidth = 0.279219 GB/s
+    MAC efficiency to total time = 37.7799 %
+    MAC idle time = 3.85105 ms
+    MAC running time = 40.424 ms
     
 ```
 
 </div>
 
 two things we have to emphasize on this report:
-* 1 op type will run as cpu node in our model, which type is KneronResize
-* the estimated FPS is 1.39266, the report is for NPU only
+* found ops type will run as cpu node 'KneronResize' in our model
+* the estimated FPS is 22.5861, the report is for NPU only
 
 at the same time, a folder "compiler" will be generated in your docker mounted folder(/data1), the evaluation result could be found in that folder. One important thing is to check the 'ioinfo.csv' in /data1/compiler, it looks like this:
 
@@ -139,11 +137,9 @@ at the same time, a folder "compiler" will be generated in your docker mounted f
 
 ```
     i,0,input_1_o0,3,416,416
-    c,0,up_sampling2d_1_o0_kn,256,26,26
-    c,1,up_sampling2d_2_o0_kn,128,52,52
-    o,0,conv2d_59_o0,255,13,13
-    o,1,conv2d_67_o0,255,26,26
-    o,2,conv2d_75_o0,255,52,52
+    c,0,up_sampling2d_1_o0_kn,128,26,26
+    o,0,conv2d_10_o0,255,13,13
+    o,1,conv2d_13_o0,255,26,26
 ```
 
 </div>
@@ -156,7 +152,7 @@ each line shows the information of each node, and the first element of a line sh
 >* o : output node
 >* c : cpu node
 
-so under kl520, there are two cpu node in our onnx model, the node name are 'up_sampling2d_1_o0_kn' and 'up_sampling2d_2_o0_kn'
+so under kl520, there is one cpu node in our onnx model, the node name is 'up_sampling2d_1_o0_kn'
 
 ## Step 4: Check ONNX model and Pre&Post process are good 
 If we can get correct detection result from onnx and given pre post process, everything should be good.
@@ -227,10 +223,8 @@ you can see the result on your terminal like this:
 <div style="background-color: rgb(80, 80, 80); font-size: 11px; font-style: italic;" >
 
 ```
-(array([[251.099  , 535.6055 , 298.40985, 551.92285],
-       [256.12146, 408.87692, 295.4361 , 424.1309 ],
-       [259.28464, 474.59253, 298.83353, 525.9219 ],
-       [238.99045, 233.12668, 309.90186, 364.7603 ]], dtype=float32), array([0.9018596 , 0.88071007, 0.99525476, 0.87767243], dtype=float32), array([0, 0, 2, 7], dtype=int32))
+(array([[256.76965, 478.51398, 299.1326 , 516.0876 ],
+       [242.99532, 269.6974 , 297.42365, 330.28348]], dtype=float32), array([0.9248918, 0.786504 ], dtype=float32), array([2, 7], dtype=int32))
 ```
 
 </div>
@@ -284,8 +278,11 @@ input_image = Image.open('/data1/000000350003.jpg')
 # resize and normalize input data
 in_data = preprocess(input_image)
 
+# check nef radix from quantization data
+radix = ktc.get_radix(img_list)
+
 # bie inference 
-out_data = ktc.kneron_inference([in_data], bie_file=bie_model_path, input_names=["input_1_o0"])
+out_data = ktc.kneron_inference([in_data], bie_file=bie_model_path, input_names=["input_1_o0"], radix=radix)
 
 # bie output data processing
 det_res = postprocess(out_data, [input_image.size[1], input_image.size[0]])
@@ -298,15 +295,12 @@ you can see the result on your terminal like this:
 <div style="background-color: rgb(80, 80, 80); font-size: 11px; font-style: italic;" >
 
 ```
-(array([[252.5644 , 409.62875, 298.71826, 422.9387 ],
-       [251.66833, 534.666  , 297.8222 , 552.76654],
-       [261.4086 , 474.91138, 296.7932 , 525.6806 ],
-       [239.97507, 229.75151, 309.20587, 369.74634]], dtype=float32), array([0.8616499 , 0.82176036, 0.9962568 , 0.82386315], dtype=float32), array([0, 0, 2, 7], dtype=int32))
+(array([[256.5947 , 477.06683, 294.99393, 519.8097 ]], dtype=float32), array([0.8253723], dtype=float32), array([2], dtype=int32))
 ```
 
 </div>
 
-slightly different from the Step 3, but looks good enough.
+slightly different from the Step 3, we lost one bounding box after quantization. Slightly accuracy drop is acceptable after quantization.
 
 *If you are running the example using 720 as the hardware platform, there might be one extra bounding box. This is normal. We may observe different behaviour from 520 and 720.*
 
@@ -348,6 +342,7 @@ in_data = preprocess(input_image)
 
 # check nef radix from quantization data
 radix = ktc.get_radix(img_list)
+
 # nef inference
 out_data = ktc.kneron_inference([in_data], nef_file=nef_model_path, radix=radix)
 
@@ -361,15 +356,12 @@ you can see the result on your terminal like this:
 <div style="background-color: rgb(80, 80, 80); font-size: 11px; font-style: italic;" >
 
 ```
-(array([[251.66833, 534.666  , 297.8222 , 552.76654],
-       [252.5644 , 409.62875, 298.71826, 422.9387 ],
-       [262.0151 , 474.91138, 297.39972, 525.6806 ],
-       [239.97507, 229.75151, 309.20587, 369.74634]], dtype=float32), array([0.86275786, 0.86213624, 0.99394107, 0.8687069 ], dtype=float32), array([0, 0, 2, 7], dtype=int32))
+(array([[256.5947 , 477.06683, 294.99393, 519.8097 ]], dtype=float32), array([0.8253723], dtype=float32), array([2], dtype=int32))
 ```
 
 </div>
 
-the NEF model should be exactly the same as the BIE model results. However, in this case, the differences are due to precision loss when converting the preprocessed input into fixed point values.
+the NEF model should be exactly the same as the BIE model results.
 
 
 ## Appendix
@@ -433,7 +425,7 @@ onnx.save(m,'yolo.opt.onnx')
 
 
 # npu(only) performance simulation
-km = ktc.ModelConfig(1001, "0001", "520", onnx_model=m)
+km = ktc.ModelConfig(19, "0001", "520", onnx_model=m)
 eval_result = km.evaluate()
 print("\nNpu performance evaluation result:\n" + str(eval_result))
 
@@ -466,7 +458,8 @@ print("\nFix point analysis done. Save bie model to '" + str(bie_model_path) + "
 # bie model check
 input_image = Image.open('/data1/000000350003.jpg')
 in_data = preprocess(input_image)
-out_data = ktc.kneron_inference([in_data], bie_file=bie_model_path, input_names=["input_1_o0"])
+radix = ktc.get_radix(img_list)
+out_data = ktc.kneron_inference([in_data], bie_file=bie_model_path, input_names=["input_1_o0"], radix=radix)
 det_res = postprocess(out_data, [input_image.size[1], input_image.size[0]])
 print(det_res)
 
@@ -478,7 +471,8 @@ print("\nCompile done. Save Nef file to '" + str(nef_model_path) + "'")
 # nef model check
 input_image = Image.open('/data1/000000350003.jpg')
 in_data = preprocess(input_image)
-out_data = ktc.kneron_inference([in_data], nef_file=nef_model_path, radix=7)
+radix = ktc.get_radix(img_list)
+out_data = ktc.kneron_inference([in_data], nef_file=nef_model_path, radix=radix)
 det_res = postprocess(out_data, [input_image.size[1], input_image.size[0]])
 print(det_res)
 
