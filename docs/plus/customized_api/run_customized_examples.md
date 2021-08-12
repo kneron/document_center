@@ -2,6 +2,8 @@
 
 **Note**: We built and run the examples below under OS Windows 10 (19041.1052), Keil uVision5 (5.27.1.0), MSYS2 MinGW 64-bit (20210419), and cmake version 3.20.2.
 
+---
+
 ## 1. Build Firmware
 
 1. Execute Keil uVision5
@@ -21,6 +23,8 @@
 *If build succeeded, **kdp2_fw_scpu.bin** and **kdp2_fw_ncpu.bin** will be put into {PLUS_FOLDER_PATH}/res/firmware/KL520/
 
 ![](../imgs/keil_build_firmware.png)
+
+---
 
 ## 2. Build PLUS
 
