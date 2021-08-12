@@ -128,7 +128,7 @@ you can see the estimated fps (npu only) report shown on your terminal like this
 </div>
 
 two things we have to emphasize on this report:
-* found ops type will run as cpu node 'KneronResize' in our model
+* found op type will run as cpu node 'KneronResize' in our model
 * the estimated FPS is 22.5861, the report is for NPU only
 
 at the same time, a folder "compiler" will be generated in your docker mounted folder(/data1), the evaluation result could be found in that folder. One important thing is to check the 'ioinfo.csv' in /data1/compiler, it looks like this:
@@ -184,7 +184,7 @@ def postprocess(inf_results, ori_image_shape):
     tensor_data = [tf.convert_to_tensor(data, dtype=tf.float32) for data in inf_results]
 
     # get anchor info
-    anchors_path = "/data1/keras_yolo3/model_data/yolo_anchors.txt"
+    anchors_path = "/data1/keras_yolo3/model_data/tiny_yolo_anchors.txt"
     with open(anchors_path) as f:
         anchors = f.readline()
     anchors = [float(x) for x in anchors.split(',')]
@@ -223,8 +223,8 @@ you can see the result on your terminal like this:
 <div style="background-color: rgb(80, 80, 80); font-size: 11px; font-style: italic;" >
 
 ```
-(array([[256.76965, 478.51398, 299.1326 , 516.0876 ],
-       [242.99532, 269.6974 , 297.42365, 330.28348]], dtype=float32), array([0.9248918, 0.786504 ], dtype=float32), array([2, 7], dtype=int32))
+(array([[258.8878 , 470.29474, 297.01447, 524.3069 ],
+       [233.62653, 218.19923, 306.79245, 381.78162]], dtype=float32), array([0.9248918, 0.786504 ], dtype=float32), array([2, 7], dtype=int32))
 ```
 
 </div>
@@ -295,7 +295,7 @@ you can see the result on your terminal like this:
 <div style="background-color: rgb(80, 80, 80); font-size: 11px; font-style: italic;" >
 
 ```
-(array([[256.5947 , 477.06683, 294.99393, 519.8097 ]], dtype=float32), array([0.8253723], dtype=float32), array([2], dtype=int32))
+(array([[258.51468, 467.71683, 293.07394, 529.15967]], dtype=float32), array([0.8253723], dtype=float32), array([2], dtype=int32))
 ```
 
 </div>
@@ -318,9 +318,6 @@ print("\nCompile done. Save Nef file to '" + str(nef_model_path) + "'")
 
 You can find the `nef` file under `/data1/batch_compile/models_520.nef`.
 The 'models_520.nef' is the final compiled model.
-
-To learn the usage of generated NEF model on KL520, please check the document in following link:
-http://doc.kneron.com/docs/#520_1.5.0.0/getting_start/
 
 
 ## (optional) Step 8. Check NEF model 
@@ -356,13 +353,45 @@ you can see the result on your terminal like this:
 <div style="background-color: rgb(80, 80, 80); font-size: 11px; font-style: italic;" >
 
 ```
-(array([[256.5947 , 477.06683, 294.99393, 519.8097 ]], dtype=float32), array([0.8253723], dtype=float32), array([2], dtype=int32))
+(array([[258.51468, 467.71683, 293.07394, 529.15967]], dtype=float32), array([0.8253723], dtype=float32), array([2], dtype=int32))
 ```
 
 </div>
 
 the NEF model should be exactly the same as the BIE model results.
 
+
+## Step 9. Prepare host_lib ( Don't do it in toolchain docker )
+To run NEF on KL520, we need help from host_lib:
+
+https://github.com/kneron/host_lib
+
+Please 
+1. connect KL520 USB dongle and USB camera to your computer
+2. git clone https://github.com/kneron/host_lib.git
+3. follow the instruction in the github link to setup the environment 
+
+## Step 10. Run our yolo NEF on KL520 with host_lib 
+We leverage the provided the example code in host_lib to run our yolo NEF
+1. replace 'host_lib/input_models/KL520/tiny_yolo_v3/models_520.nef' with our yolo NEF
+2. modified 'host_lib/python/examples_kl520/cam_dme_serial_post_host_yolo.py' line 29, change model input size from (224,224) to (416,416):
+
+<div align="center">
+<img src="../imgs/yolo_example/host_lib_modify_input_size.png">
+<p><span style="font-weight: bold;">Figure 2.</span> modify input_size in example </p>
+</div>
+
+3. run example 'cam_dme_serial_post_host_yolo.py'
+```bash
+    cd host_lib/python
+    python main.py -t KL520-cam_dme_serial_post_host_yolo
+```
+then, you can see a window pop up and show us the yolo NEF detection result from camera:
+
+<div align="center">
+<img src="../imgs/yolo_example/detection_res.png">
+<p><span style="font-weight: bold;">Figure 3.</span> detection result </p>
+</div>
 
 ## Appendix
 The whole model conversion process from onnx to nef(step 1 ~ 6) could be written into one python script:
@@ -386,7 +415,7 @@ def postprocess(inf_results, ori_image_shape):
     tensor_data = [tf.convert_to_tensor(data, dtype=tf.float32) for data in inf_results]
 
     # get anchor info
-    anchors_path = "/data1/keras_yolo3/model_data/yolo_anchors.txt"
+    anchors_path = "/data1/keras_yolo3/model_data/tiny_yolo_anchors.txt"
     with open(anchors_path) as f:
         anchors = f.readline()
     anchors = [float(x) for x in anchors.split(',')]
@@ -477,3 +506,5 @@ det_res = postprocess(out_data, [input_image.size[1], input_image.size[0]])
 print(det_res)
 
 ```
+
+
