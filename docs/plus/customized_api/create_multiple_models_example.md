@@ -1,6 +1,8 @@
 # Create Multiple Models Example
 
 
+---
+
 ## 1. Download Source Code
 
 1. Download the latest **kneron_plus_vXXX.zip** into Windows from <https://www.kneron.com/tw/support/developers/>. It is located at **Kneron PLUS** section.
@@ -9,6 +11,7 @@
 
 Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped folder path of PLUS.
 
+---
 
 ## 2. PLUS (Software) Development
 
@@ -194,7 +197,7 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
         my_mul_example_header_t input_header;
         my_mul_example_result_t output_result;
 
-        input_header.header_stamp.job_id = MY_NUL_EXAMPLE_JOB_ID;
+        input_header.header_stamp.job_id = MY_MUL_EXAMPLE_JOB_ID;
         input_header.img_width = img_width;
         input_header.img_height = img_height;
 
@@ -247,6 +250,7 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
     }
     ```
 
+---
 
 ## 3. SCPU Firmware Development for Face Detect + Landmark
 
@@ -285,6 +289,8 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
         uint32_t face_count;
         one_face_data_t faces[FD_MAX];
     } __attribute__((aligned(4))) my_mul_example_result_t;
+
+    void my_mul_example_inf(uint32_t job_id, void *inf_input_buf);
     ```
 
 3. Add *my_mul_example_inf.c*
@@ -297,21 +303,21 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
 
         3. Prepare the temporary memory space for the result of middle model via **kmdw_ddr_reserve()**
 
-        4. Prepare **kdp2_inference_config_t** for face detect model, which is used for configure the inference in NCPU firmware.
+        4. Prepare **kmdw_inference_app_config_t** for face detect model, which is used for configure the inference in NCPU firmware.
 
-        5. Activate NCPU firmware for face detect model via **kdp2_inference_start()**.
+        5. Activate NCPU firmware for face detect model via **kmdw_inference_app_execute()**.
 
-        6. Prepare **kdp2_inference_config_t** for landmark model.
+        6. Prepare **kmdw_inference_app_config_t** for landmark model.
 
-        7. Activate NCPU firmware for landmark model via **kdp2_inference_start()**.
+        7. Activate NCPU firmware for landmark model via **kmdw_inference_app_execute()**.
 
-        8. Send the result to PLUS via **kdp2_inference_send_result()**.
+        8. Send the result to PLUS via **kmdw_inference_app_result_enqueue()**.
 
-    - For the customized model, **model_id** of **kdp2_inference_config_t** should be set to the id of the customized model.
+    - For the customized model, **model_id** of **kmdw_inference_app_config_t** should be set to the id of the customized model.
 
-    - The inference result of NCPU will be written to **ncpu_result_buf** of **kdp2_inference_config_t**. Therefore, you must provide a memory space for it (In this example, **ncpu_result_buf** is pointed to **fd_result** for face detect model, and **lm_result** for landmark model.)
+    - The inference result of NCPU will be written to **ncpu_result_buf** of **kmdw_inference_app_config_t**. Therefore, you must provide a memory space for it (In this example, **ncpu_result_buf** is pointed to **fd_result** for face detect model, and **lm_result** for landmark model.)
 
-    - For the detail of **kdp2_inference_config_t**, please refer to section **6.4 Firmware Configuration**
+    - For the detail of **kmdw_inference_app_config_t**, please refer to section [NCPU Firmware Configuration](./ncpu_firmware_configuration.md)
 
     ```cpp
     #include <stdint.h>
@@ -322,7 +328,7 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
     #include "model_res.h"
     #include "kmdw_console.h"
 
-    #include "kmdw_inference.h"
+    #include "kmdw_inference_app.h"
     #include "my_mul_example_inf.h"
 
     #define TY_MAX_BOX_NUM (50)
@@ -336,10 +342,10 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
     {
         /******* Prepare the configuration *******/
 
-        kmdw_inference_config_t inf_config;
+        kmdw_inference_app_config_t inf_config;
 
         // Set the initial value of config to 0, false and NULL
-        memset(&inf_config, 0, sizeof(kmdw_inference_config_t));
+        memset(&inf_config, 0, sizeof(kmdw_inference_app_config_t));
 
         // image buffer address should be just after the header
         inf_config.image_buf = (void *)((uint32_t)input_header + sizeof(my_mul_example_header_t));
@@ -356,7 +362,7 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
 
         /******* Activate inferencing in NCPU *******/
 
-        return kmdw_inference_start(&inf_config);
+        return kmdw_inference_app_execute(&inf_config);
     }
 
     static int inference_face_landmarks(my_mul_example_header_t *input_header,
@@ -365,10 +371,10 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
     {
         /******* Prepare the configuration *******/
 
-        kmdw_inference_config_t inf_config;
+        kmdw_inference_app_config_t inf_config;
 
         // Set the initial value of config to 0, false and NULL
-        memset(&inf_config, 0, sizeof(kmdw_inference_config_t));
+        memset(&inf_config, 0, sizeof(kmdw_inference_app_config_t));
 
         int32_t left = (int32_t)(face_box->x1);
         int32_t top = (int32_t)(face_box->y1);
@@ -398,7 +404,7 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
 
         /******* Activate inferencing in NCPU *******/
 
-        return kmdw_inference_start(&inf_config);
+        return kmdw_inference_app_execute(&inf_config);
     }
 
     static bool init_temp_buffer()
@@ -413,21 +419,21 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
         return true;
     }
 
-    void my_mul_example_inf(void *inf_input_buf)
+    void my_mul_example_inf(uint32_t job_id, void *inf_input_buf)
     {
         my_mul_example_header_t *input_header = (my_mul_example_header_t *)inf_input_buf;
 
         /******* Prepare the memory space of result *******/
 
-        int result_buf_size = sizeof(my_mul_example_result_t);
-        void *inf_result_buf = kmdw_inference_request_result_buffer(&result_buf_size);
+        int result_buf_size;
+        void *inf_result_buf = kmdw_inference_app_result_get_free_buffer(&result_buf_size);
         my_mul_example_result_t *output_result = (my_mul_example_result_t *)inf_result_buf;
 
         /******* Prepare header of output result *******/
 
         output_result->header_stamp.magic_type = KDP2_MAGIC_TYPE_INFERENCE;
         output_result->header_stamp.total_size = sizeof(my_mul_example_result_t);
-        output_result->header_stamp.job_id = MY_MUL_EXAMPLE_JOB_ID;
+        output_result->header_stamp.job_id = job_id;
 
         /******* Prepare the temporary memory space for the result of middle model *******/
 
@@ -438,7 +444,7 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
             if (!status) {
                 // notify host error !
                 output_result->header_stamp.status_code = KP_FW_DDR_MALLOC_FAILED_102;
-                kmdw_inference_send_result((void *)output_result);
+                kmdw_inference_app_result_enqueue((void *)output_result, result_buf_size, false);
                 return;
             }
 
@@ -452,7 +458,7 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
         if (inf_status != KP_SUCCESS) {
             // notify host error !
             output_result->header_stamp.status_code = inf_status;
-            kmdw_inference_send_result((void *)output_result);
+            kmdw_inference_app_result_enqueue((void *)output_result, result_buf_size, false);
             return;
         }
 
@@ -472,7 +478,7 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
                 if (KP_SUCCESS != inf_status) {
                     // notify host error !
                     output_result->header_stamp.status_code = inf_status;
-                    kmdw_inference_send_result((void *)output_result);
+                    kmdw_inference_app_result_enqueue((void *)output_result);
                     return;
                 }
 
@@ -491,13 +497,13 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
         output_result->face_count = face_cnt;
         output_result->header_stamp.status_code = KP_SUCCESS;
 
-        kmdw_inference_send_result((void *)output_result);
+        kmdw_inference_app_result_enqueue((void *)output_result, result_buf_size, false);
     }
     ```
 
 4. Go to SCPU Project Main Folder {PLUS_FOLDER_PATH}/firmware_development/KL520/scpu_kdp2/project/scpu_companion_user_ex/main
 
-4. Edit *main.c*
+5. Edit *main.c*
 
     - **_app_entry_func** is the entry interface for all inference request.
 
@@ -506,12 +512,15 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
     - You need to establish a switch case for **MY_MUL_EXAMPLE_JOB_ID** and corespond the switch case to **my_mul_example_inf()**.
 
     ```cpp
+    #include "cmsis_os2.h" // ARM::CMSIS:RTOS2:Keil RTX5
+
     #include <stdint.h>
     #include <stdlib.h>
     #include <string.h>
 
     #include "kp_struct.h"
-    #include "kmdw_inference.h"
+    #include "kmdw_inference_app.h"
+    #include "kdp2_usb_companion.h"
 
     #include "kdp2_inf_app_yolo.h"
     #include "demo_customize_inf_single_model.h"
@@ -527,36 +536,24 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
     extern void SystemCoreClockUpdate(void);
 
     /* Kneron usb companion interface implementation to work with PLUS host SW */
-    extern void kdp2_usb_companion_init(void);
     extern void main_init_usboot(void);
 
-    /* declare inference code implementation here */
-    extern void kdp2_app_yolo_inference(void *inf_input_buf);            // kdp2_inf_app_yolo.c
-    extern void demo_customize_inf_single_model(void *inf_input_buf);    // demo_customize_inf_single_model.c
-    extern void demo_customize_inf_multiple_models(void *inf_input_buf); // demo_customize_inf_multiple_models.c
-    /* ======================================== */
-    /*              Add Line Begin              */
-    /* ======================================== */
-    extern void my_mul_example_inf(void *inf_input_buf);
-    /* ======================================== */
-    /*               Add Line End               */
-    /* ======================================== */
-
-    static void _app_entry_func(void *inf_input_buf)
+    static void app_func(void *inf_input_buf)
     {
         // check header stamp
         kp_inference_header_stamp_t *header_stamp = (kp_inference_header_stamp_t *)inf_input_buf;
+        uint32_t job_id = header_stamp->job_id;
 
-        switch (header_stamp->job_id)
+        switch (job_id)
         {
         case KDP2_INF_ID_APP_YOLO:
-            kdp2_app_yolo_inference(inf_input_buf);
+            kdp2_app_yolo_inference(job_id, inf_input_buf);
             break;
         case DEMO_CUSTOMIZE_INF_SINGLE_MODEL_JOB_ID: // a demo code implementation in SCPU for user-defined/customized infernece from one model
-            demo_customize_inf_single_model(inf_input_buf);
+            demo_customize_inf_single_model(job_id, inf_input_buf);
             break;
         case DEMO_CUSTOMIZE_INF_MULTIPLE_MODEL_JOB_ID: // a demo code implementation in SCPU for user-defined/customized infernece from two models
-            demo_customize_inf_multiple_models(inf_input_buf);
+            demo_customize_inf_multiple_models(job_id, inf_input_buf);
             break;
         /* ======================================== */
         /*              Add Line Begin              */
@@ -568,7 +565,7 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
         /*               Add Line End               */
         /* ======================================== */
         default:
-            kmdw_inference_send_error_code(0, KP_FW_ERROR_UNKNOWN_APP);
+            kmdw_inference_app_send_status_code(job_id, KP_FW_ERROR_UNKNOWN_APP);
             break;
         }
     }
@@ -584,8 +581,10 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
         /* SDK main init for companion mode */
         main_init_usboot();
 
-        /* initialize inference core threads and memory with user-specified app entry function */
-        kmdw_inference_init(_app_entry_func);
+        /* initialize inference app */
+        /* register APP functions */
+        /* specify depth of inference queues */
+        kmdw_inference_app_init(app_func, 10, 10);
 
         /* start an interface implementation as input/ouput to co-work with inference framework */
         // this can be changed by other interface implementation
@@ -602,6 +601,8 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
         }
     }
     ```
+
+---
 
 ## 4. NCPU Firmware Development for The Pre-process and Post-process
 

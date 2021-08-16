@@ -44,23 +44,36 @@ nav:
     - v1.0.0:
       - Host API Reference: host_lib_1.0.0/kdp_host.h.md
   - Kneron PLUS (alpha site only):
-    - Getting Start: plus/getting_start.md
+    - Getting Started:              plus/getting_start.md
     - Introduction:
-      - Introduction: plus/introduction/introduction.md
-      - Upgrade AI Dongle To KDP2: plus/introduction/upgrade_ai_dongle_to_kdp2.md
-      - Install Dependency: plus/introduction/install_dependency.md
-      - Run Inference Example: plus/introduction/run_inference_example.md
+      - Introduction:               plus/introduction/introduction.md
+      - Install Dependency:         plus/introduction/install_dependency.md
+      - Upgrade AI Dongle To KDP2:  plus/introduction/upgrade_ai_dongle_to_kdp2.md
+      - Write Model To Flash:       plus/introduction/write_model_to_flash.md
+      - Run Examples:               plus/introduction/run_examples.md
+      - Yolo Object Name Mapping:   plus/introduction/yolo_object_name_mapping.md
     - Customized API:
-      - Introduction: plus/customized_api/introduction.md
-      - Install Dependency: plus/customized_api/install_dependency.md
+      - Introduction:               plus/customized_api/introduction.md
+      - Install Dependency:         plus/customized_api/install_dependency.md
       - Create Single Model Example: plus/customized_api/create_single_model_example.md
       - Create Multiple Models Example: plus/customized_api/create_multiple_models_example.md
       - NCPU Firmware Configuration: plus/customized_api/ncpu_firmware_configuration.md
-      - Run Customized Examples: plus/customized_api/run_customized_examples.md
-    - API Reference v1.0.x:
-      - Data Structure: plus/api_reference_1.0.x/kp_struct.h.md
-      - Core API: plus/api_reference_1.0.x/kp_core.h.md
-      - Inference API: plus/api_reference_1.0.x/kp_inference.h.md
+      - Run Customized Examples:    plus/customized_api/run_customized_examples.md
+    - Model Zoo:
+      - Introduction:               plus/modelzoo/index.md
+      - Classification:             plus/modelzoo/kn-model-zoo_generic_inference_classification.md
+      - Object Detection(Fcos):     plus/modelzoo/kn-model-zoo_generic_inference_post_fcos.md
+      - Object Detection(Yolo v5):  plus/modelzoo/kn-model-zoo_generic_inference_post_yolov5.md
+    - API Reference:
+      - v1.1.x:
+        - Data Structure:             plus/api_reference_1.1.x/kp_struct.h.md
+        - Core API:                   plus/api_reference_1.1.x/kp_core.h.md
+        - Inference API:              plus/api_reference_1.1.x/kp_inference.h.md
+      - Archive:
+        - v1.0.x:
+          - Data Structure:           plus/api_reference_1.0.x/kp_struct.h.md
+          - Core API:                 plus/api_reference_1.0.x/kp_core.h.md
+          - Inference API:            plus/api_reference_1.0.x/kp_inference.h.md
   - Toolchain Docker:
     - Toolchain Manual: toolchain/manual.md
     - Yolo Example: toolchain/yolo_example.md

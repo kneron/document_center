@@ -1,8 +1,8 @@
 # Firmware Configuration
 
-When SCPU activates NCPU to run models, **kdp2_inference_config_t**, which contains configurations of NCPU, is required to pass to NCPU.
+When SCPU activates NCPU to run models, **kmdw_inference_app_config_t**, which contains configurations of NCPU, is required to pass to NCPU.
 
-**kdp2_inference_config_t** contains following configurable options:
+**kmdw_inference_app_config_t** contains following configurable options:
 
 - void* **image_buf**:
     - The buffer address of the image.
