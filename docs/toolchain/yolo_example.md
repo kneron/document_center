@@ -367,12 +367,15 @@ To run NEF on KL520, we need help from host_lib:
 https://github.com/kneron/host_lib
 
 Please 
+
 1. connect KL520 USB dongle and USB camera to your computer
 2. git clone https://github.com/kneron/host_lib.git
 3. follow the instruction in the github link to setup the environment 
 
 ## Step 10. Run our yolo NEF on KL520 with host_lib 
+
 We leverage the provided the example code in host_lib to run our yolo NEF
+
 1. replace 'host_lib/input_models/KL520/tiny_yolo_v3/models_520.nef' with our yolo NEF
 2. modified 'host_lib/python/examples_kl520/cam_dme_serial_post_host_yolo.py' line 29, change model input size from (224,224) to (416,416):
 
@@ -381,7 +384,14 @@ We leverage the provided the example code in host_lib to run our yolo NEF
 <p><span style="font-weight: bold;">Figure 2.</span> modify input_size in example </p>
 </div>
 
-3. run example 'cam_dme_serial_post_host_yolo.py'
+3. modify preprocess config from "Kneron" mode to "Yolo" mode
+
+<div align="center">
+<img src="../imgs/yolo_example/preprocess_from_KnMod_to_YoloMod.png">
+<p><span style="font-weight: bold;">Figure 3.</span> modify preprocess method in example </p>
+</div>
+
+4. run example 'cam_dme_serial_post_host_yolo.py'
 ```bash
     cd host_lib/python
     python main.py -t KL520-cam_dme_serial_post_host_yolo
@@ -390,7 +400,7 @@ then, you can see a window pop up and show us the yolo NEF detection result from
 
 <div align="center">
 <img src="../imgs/yolo_example/detection_res.png">
-<p><span style="font-weight: bold;">Figure 3.</span> detection result </p>
+<p><span style="font-weight: bold;">Figure 4.</span> detection result </p>
 </div>
 
 ## Appendix
