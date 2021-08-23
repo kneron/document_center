@@ -112,7 +112,8 @@ you can see the estimated fps (npu only) report shown on your terminal like this
 <div style="background-color: rgb(80, 80, 80); font-size: 11px; font-style: italic;" >
 
 ```
-    ***** Warning: CPU ops types: , KneronResize.
+    ***** Warning: this model has 1 CPU ops which may cause that the report's fps is different from the actual fps *****
+    ***** Warning: CPU ops types: KneronResize.
 
     [Evaluation Result]
     estimate FPS float = 22.5861
@@ -128,7 +129,7 @@ you can see the estimated fps (npu only) report shown on your terminal like this
 </div>
 
 two things we have to emphasize on this report:
-* found op type will run as cpu node 'KneronResize' in our model
+* found one cpu node 'KneronResize' in our model
 * the estimated FPS is 22.5861, the report is for NPU only
 
 at the same time, a folder "compiler" will be generated in your docker mounted folder(/data1), the evaluation result could be found in that folder. One important thing is to check the 'ioinfo.csv' in /data1/compiler, it looks like this:
