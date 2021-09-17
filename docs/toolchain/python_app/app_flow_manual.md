@@ -1,4 +1,4 @@
-# Kneron End to End Simulator v0.9.0
+# Kneron End to End Simulator v0.10.2
 
 This project allows users to perform image inference using Kneron's built in simulator. As of version 0.5.0 the 520 and 720 simulators have been merged into one codebase, and any existing apps will need to be updated to the new structure to work.
 
@@ -11,13 +11,15 @@ This project allows users to perform image inference using Kneron's built in sim
 
 * bin: all of the outputs that the application will dump
 	* csim_dump: model inference results will be dumped here if you used CSIM
+	* dongle_dump: model_inference results will be dumped here if you used Dongle
 	* dynasty_dump: model inference results will be dumped here if you used Dynasty
 	* out: any intermediate or output file will be dumped here
 * c_interface: Python code and shared libraries that allows for communication with C code
-  * 520/720: example C source code for preprocess and postprocess
+  * src: example C source code for preprocess and postprocess
+  * src_python: Python source code to call the corresponding C code
 * python_flow: all of the Python code that makes up the application framework, THIS SHOULD NOT BE MODIFIED
 	* common: shared classes
-	* dongle: library to perform dongle infeerence
+	* dongle: library to perform Dongle inference
   * dynasty: library to perform Dynasty inference
 	* internal: various functions used internally, does not affect external usage
 	* nef: library to perform standalone inference with NEF/ONNX/BIE models, unused with E2E flow
@@ -165,8 +167,8 @@ If your postprocess functions are defined in Python, integration is simple yet a
 3. Copy the library into your application's directory.
 4. Import the shared library into whichever module needs it using the standard ctypes module.
 5. Define any C/C++ structures and function wrappers that are needed as in the preprocess.
-6. Create a Python function that takes a TestConfig class and prev_output variable as input that calls your function wrapper. You must load the output data into memory before calling your function wrapper. To do so, depending on the inferencer mode you set, call ```prep_inference_results``` and ```load_np_to_memory``` from ```c_interface/postprocess.py```. Example usage can be found in ```app/fdr_external/postprocess/fd.py``` under the postprocess function. Do note that these functions currently only work with CSIM, since the setup.bin file is required as input.
-7. Make sure your return value is whatever is convenient for your usage.
+6. Create a Python function that takes a TestConfig class and prev_output variable as input that calls your function wrapper. You must load the output data into memory before calling your function wrapper. To do so, call ```run_c_function``` with the appropriate arguments. Example usage can be found in ```app/fdr_external/postprocess/fd.py``` under the postprocess function. Do note that these functions currently only work with CSIM, since the setup.bin file is required as input.
+7. Make sure your return value is whatever is convenient for your usage. You may also use ```get_result``` to help get the Python data structure back if your result is stored in a structure inside kdp_image.
 8. Set the value of the ```post_type``` field in the input JSON to the name of your function, as defined [here](#setting-up-json).
 
 There are also some conversion functions for your convenience under ```python_flow/utils/utils.py```.
@@ -175,12 +177,12 @@ Use ```convert_binary_to_numpy``` to get a NumPy array from an input binary imag
 ## Usage
 
 ```
-usage: simulator.py [-h] [-b BIN_INPUT] [-c {before,none}] [-d] [--dump]
-                    [-f {ALL,INF,NIR,RGB}] [--fusion] [-i {binary,image}]
-                    [-il IMAGE_JSON] [-p {alg,sys520,sys530,sys720}]
-                    [-n NUM_IMAGES] [-r]
+usage: simulator.py [-h] [-b BIN_INPUT] [-c {before,none}] [--debug] [-d]
+                    [--dump] [-f {ALL,INF,NIR,RGB}] [--fusion]
+                    [-i {binary,image}] [-il IMAGE_JSON]
+                    [-p {alg,sys520,sys530,sys720}] [-n NUM_IMAGES] [-r] [-s]
                     [--runner_dump [RUNNER_DUMP [RUNNER_DUMP ...]]] [--rgba]
-                    [-w WORKERS] [-g GROUP] [-in NUM_INFERENCE]
+                    [-w WORKERS] [-g GROUP] [-in NUM_INFERENCE] [-bp]
                     app_folder image_directory test
 
 Runs a test on multiple images
@@ -195,8 +197,9 @@ optional arguments:
   -b BIN_INPUT, --bin_input BIN_INPUT
                         file to specify the format and dimensions of the binary inputs
   -c {before,none}, --clear {before,none}
-                        when to clear CSIM or Dynasty dumps, default: 'none'
-  -d, --debug           flag to enable prints
+                        when to clear CSIM or Dynasty dumps, default: 'before'
+  --debug               enable debug flag for the runners
+  -d, --debug_print     flag to enable prints
   --dump                flag to dump intermediate node outputs for the simulator
   -f {ALL,INF,NIR,RGB}, --fmt {ALL,INF,NIR,RGB}
                         format of the input images to test, default:'ALL'
@@ -210,6 +213,7 @@ optional arguments:
   -n NUM_IMAGES, --num_images NUM_IMAGES
                         number of images to test
   -r, --resume          flag to resume dataset from where it left off previously
+  -s, --sort            sort the images in alphanumerical order
   --runner_dump [RUNNER_DUMP [RUNNER_DUMP ...]]
                         name of runners to dump result
   --rgba                flag to dumb preprocessed RGBA binary
@@ -219,32 +223,36 @@ optional arguments:
                         group using this e2e platform(CI/SYS/ALGO)
   -in NUM_INFERENCE, --num_inference NUM_INFERENCE
                         number of devices(520/720) to run inference, default: 1
+  -bp, --bypass_batch_compile
+                        flag to bypass batch compile
 ```
 
 * -h: show the help message
 * -b: set this option if you are testing binary files and need to provide color format and image dimensions
-  * Will assume all inputs follow the specified size and color
-  * Example can be found at ```app/template_app/example_bin_input.json```
+	* Will assume all inputs follow the specified size and color
+	* Example can be found at ```app/template_app/example_bin_input.json```
 * -c: set this option if you want to remove CSIM or Dynasty dumps
-  * If set to after, it will clear after running inference - more useful if limited space
-  * If set to before, it will clear before running inference - more useful if you do not want old results to affect the current run
+	* If set to after, it will clear after running inference - more useful if limited space
+	* If set to before, it will clear before running inference - more useful if you do not want old results to affect the current run
 * -d: set this option if you want to see all your print statements, default will hide the prints
 * --dump: set this option if you want to dump all node outputs in your model
 * -f: default is "ALL", other format specifiers will filter the test images to only images with that prefix
 * --fusion: set if you are using fusion input, probably will not need to use
 * -i: default will look for image input (PNG, JPG, etc.)
-  * If binary, will look for binary files instead
+	* If binary, will look for binary files instead
 * -il: set this if you want to test a specific dataset defined in a JSON file, rather than an entire image directory
-  * Example can be found at ```app/template_app/example_image_list.json```
+	* Example can be found at ```app/template_app/example_image_list.json```
   * Every JSON key except ```id``` is used
 * -p: set this to determine what kind of JSON folder will be used
-  * This will only be used for internal runners, external users do not need to use this option
+	* This will only be used for internal runners, external users do not need to use this option
 * -n: set for number of images to test, default is all of the images in the test directory
 * -r: set this option if you want to resume a dataset that was previously run that ended in the middle because of crash/user stop/other error
+* -s: sort the inputs in alphanumerical order
 * --rgba: set this option if you want to dump preprocessed RGBA binary when running Dynasty float/fixed, for your reference
 * -w: default number is 1, similar to how many images you want to run at the same time
 * -g: set this to indicate which team's service you want to call
 * -in: set this to the number of 520/720 devices you want to use to run inference
+* -bp: bypass batch compile
 
 ## Adding own application
 We will go over how to create your own application for testing. It is recommended to copy ```app/template_app``` as a base; we will refer to this application as ```my_app```. All your application code should be placed under ```app/my_app/```.
@@ -284,7 +292,7 @@ We will be referring to ```my_app/flow.py``` for this section. DO NOT place ```f
 1. Import ```python_flow/flow.py```.
 2. Fill in the user_config dictionary with all of the input JSON files to be used. The key should be the model name, and the value should be the path to the input JSON, relative to ```my_app/```. The model name here does not need to match the ```model_type``` in the input JSON; it will just be for access in your test function. DO NOT change the name of ```user_config```.
 3. Define a test function that takes in as input a list of string image files and a dictionary of models mapped to a TestConfig. (```your_test_name``` in this example). The list of string image files will be of length one unless you choose the ```fusion``` command line option; normally you would either select bin or image (fusion is a special case).
-	1. Call flow.run_simulator once for each stage in your flow. The inputs are a TestConfig class, the list of input image files, and any data you wish to pass into your preprocess function. The TestConfig class comes from accessing the user_config dictionary with the model JSON you wish to use. The preprocess input may be set to None if you do not need it.
+	1. Call ```flow.run_simulator``` once for each stage in your flow. The inputs are a TestConfig class, the list of input image files, and any data you wish to pass into your preprocess function. The TestConfig class comes from accessing the user_config dictionary with the model JSON you wish to use. The preprocess input may be set to None if you do not need it.
 	2. Add any extra work you may need for your testing.
 4. You may return a dictionary to be dumped out to a file. The dictionary will be dumped to an output JSON file in a file called ```results.json``` with the same keys and values that you provide. There will be one JSON file per input image that you provide; it will be under the bin folder following the same path as the original image. This is for convenience to see all the results for each test image that you provide.
 
@@ -307,7 +315,7 @@ python3 simulator.py app/fd_external app/test_image_folder/fd fdr
 This is a standalone feature that allows the user to perform inference given a model and some inputs. This is separate from the E2E Simulator itself. For details, you can take a look at ```python_flow/kneron_inference.py```.
 
 ### Necessary items
-There are only two items that you need to prepare to run the inference function. Everything else is optional parameters.\
+There are only two items that you need to prepare to run the inference function. Everything else is optional.
 
 * preprocessed input: list of NumPy arrays in (1, h, w, c) format
 * model file: depending on what kind of model you want to run, but it will be one of NEF, ONNX, and BIE file
@@ -322,33 +330,33 @@ def kneron_inference(pre_results, nef_file="", onnx_file="", bie_file="", model_
 
 * ```pre_results```: same as ```preprocessed input``` mentioned above
 * ```nef_file/onnx_file/bie_file```: path to your input model file
-  * only one of these will be used, if they are all specified priority is NEF -> ONNX -> BIE
+	* only one of these will be used, if they are all specified priority is NEF -> ONNX -> BIE
 * ```model_id```: ID of model to run inference
-  * only used with NEF file
+	* only used with NEF file
   * only needed if NEF model has model models
 * ```input_names```: list of input node names
-  * only needed with ONNX/BIE file
+	* only needed with ONNX/BIE file
 * ```radix```: integer radix to convert from float to fixed input
-  * for NEF file, will be used to convert to CSIM RGBA input
-  * for ONNX/BIE file, will be used to dump RGBA file for debsugging
+	* for NEF file, will be used to convert to CSIM RGBA input
+	* for ONNX/BIE file, will be used to dump RGBA file for debugging
 * ```data_type```: string data format that you would like the output returned as
-  * ```float``` or ```fixed```
+	* ```float``` or ```fixed```
 * ```reordering```: list of node names/integers specifying the output order
-  * integers for NEF file without ```ioinfo_file```, node names with ```ioinfo_file```
-  * node names for ONNX and BIE file
+	* integers for NEF file without ```ioinfo_file```, node names with ```ioinfo_file```
+	* node names for ONNX and BIE file
 * ```ioinfo_file```: string path to file mapping output node number to name
-  * only used with NEF file
+	* only used with NEF file
 * ```dump```: flag to dump intermediate nodes
 * ```platform```: integer platform to be used
-  * used with NEF file to prepare CSIM input
-  * used with BIE file to indicate Dynasty fixed model version
-  * ```520``` or ```720```
+	* used with NEF file to prepare CSIM input
+	* used with BIE file to indicate Dynasty fixed model version
+	* ```520``` or ```720```
 
 ### Usage
 Prepare a preprocess function and postprocess function. Then, simply call the kneron_inference function using the results of your preprocess function and input model file to get inference results. Then, use those inference results as input into your postprocess function.
 
 ### Example
-For a detailed example on how to call the kneron_inference function, please explore this [YOLO EXAMPLE](http://doc.kneron.com/docs/toolchain/yolo_example/#python-api)
+For a detailed example on how to call the kneron_inference function, please explore this [YOLO example](http://doc.kneron.com/docs/toolchain/yolo_example/#python-api).
 
 ## FAQ
 
@@ -388,5 +396,5 @@ For 520, the next 16 bytes of data correspond to channel of 1, while for 720, th
 To recap, for 520, width increments first, up to the aligned 16 byte width. Channel increments next, and height increments last. For 720, width increments first, also up to the aligned 16 byte width. Height increments next, and channel increments last.
 
 ## Useful notes/recap/reminder
-* When using C postprocess, although the inference results are supplied as input in the function, you will still need to call the utility functions ```prep_inference_results``` and ```load_np_to_memory``` to load the data before calling your postprocess wrapper.
+* When using C postprocess, calling ```run_c_function``` with the appropriate arguments will be everything you need to call your C code. You may also use ```get_result``` to get your class strcture if you're result is in a C structure inside kdp_image.
 * C structure wrapper examples can be found under ```python_flow/kdp_image_520.py``` (or 720 version) and ```python_flow/wrappers.py```; C function wrapper examples can be found under ```python_flow/preprocess.py``` or ```python_flow/postprocess.py```.
