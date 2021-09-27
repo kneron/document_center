@@ -1,4 +1,4 @@
-# Kneron End to End Simulator v0.10.2
+# Kneron End to End Simulator v0.11.0
 
 This project allows users to perform image inference using Kneron's built in simulator. As of version 0.5.0 the 520 and 720 simulators have been merged into one codebase, and any existing apps will need to be updated to the new structure to work.
 
@@ -178,11 +178,12 @@ Use ```convert_binary_to_numpy``` to get a NumPy array from an input binary imag
 
 ```
 usage: simulator.py [-h] [-b BIN_INPUT] [-c {before,none}] [--debug] [-d]
-                    [--dump] [-f {ALL,INF,NIR,RGB}] [--fusion]
+                    [--dump] [-f {ALL,INF,NIR,RGB}] [-fl FLOW] [--fusion]
                     [-i {binary,image}] [-il IMAGE_JSON]
-                    [-p {alg,sys520,sys530,sys720}] [-n NUM_IMAGES] [-r] [-s]
+                    [-p {alg,sys520,sys530,sys720}] [-n NUM_IMAGES] [-r]
                     [--runner_dump [RUNNER_DUMP [RUNNER_DUMP ...]]] [--rgba]
-                    [-w WORKERS] [-g GROUP] [-in NUM_INFERENCE] [-bp]
+                    [-s] [-v VIDEO VIDEO VIDEO] [-w WORKERS] [-g GROUP]
+                    [-in NUM_INFERENCE] [-bp]
                     app_folder image_directory test
 
 Runs a test on multiple images
@@ -203,6 +204,8 @@ optional arguments:
   --dump                flag to dump intermediate node outputs for the simulator
   -f {ALL,INF,NIR,RGB}, --fmt {ALL,INF,NIR,RGB}
                         format of the input images to test, default:'ALL'
+  -fl FLOW, --flow FLOW
+                        flow.py number to run
   --fusion              flag to enable fusion test input
   -i {binary,image}, --inputs {binary,image}
                         type of inputs to be tested, default: 'image'
@@ -213,10 +216,15 @@ optional arguments:
   -n NUM_IMAGES, --num_images NUM_IMAGES
                         number of images to test
   -r, --resume          flag to resume dataset from where it left off previously
-  -s, --sort            sort the images in alphanumerical order
   --runner_dump [RUNNER_DUMP [RUNNER_DUMP ...]]
                         name of runners to dump result
   --rgba                flag to dumb preprocessed RGBA binary
+  -s, --sort            sort the images in alphanumerical order
+  -v VIDEO VIDEO VIDEO, --video VIDEO VIDEO VIDEO
+                        parameters to help drop images for video
+                        (1) 'excess', 'randomly', 'periodically'
+                        (2) app fps
+                        (3) video fps
   -w WORKERS, --workers WORKERS
                         number of worker processes to run, default: 1
   -g GROUP, --group GROUP
@@ -237,6 +245,8 @@ optional arguments:
 * -d: set this option if you want to see all your print statements, default will hide the prints
 * --dump: set this option if you want to dump all node outputs in your model
 * -f: default is "ALL", other format specifiers will filter the test images to only images with that prefix
+* -fl: default will run the "original" flow.py
+	* The other flow files should be in the format `flow_xx.py` where xx is the number of the flow you want to run
 * --fusion: set if you are using fusion input, probably will not need to use
 * -i: default will look for image input (PNG, JPG, etc.)
 	* If binary, will look for binary files instead
@@ -248,6 +258,9 @@ optional arguments:
 * -n: set for number of images to test, default is all of the images in the test directory
 * -r: set this option if you want to resume a dataset that was previously run that ended in the middle because of crash/user stop/other error
 * -s: sort the inputs in alphanumerical order
+* -v: set this if you want to simulate the hardware limitations and drop some input images when running a video dataset
+	* First argument should be one of the three specified in (1)
+	* Second and third arguments are the application and actual video FPS that you are trying to simulate
 * --rgba: set this option if you want to dump preprocessed RGBA binary when running Dynasty float/fixed, for your reference
 * -w: default number is 1, similar to how many images you want to run at the same time
 * -g: set this to indicate which team's service you want to call
