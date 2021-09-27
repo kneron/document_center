@@ -1693,5 +1693,5 @@ Kneron KL520 series AI SoC Development Kit
 
 
     <div align="center">
-    <img src="../imgs/getting_start_imgs/appendix.PNG">
+    <img src="../imgs/getting_start_imgs/appendix.png">
     </div>
