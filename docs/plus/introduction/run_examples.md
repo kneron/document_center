@@ -2,9 +2,6 @@
 
 The provided examples are designed to show how to use KP APIs and present Kneron Device features. Error handling, wording and application layer features are not covered. They are open for more creatives.
 
-
-**Note**: We built and run the examples below under OS Ubuntu 18.04.5 LTS with cmake version 3.10.2.
-
 **Note**: If you are using Windows, please execute all the instruction below in MSYS2 MinGW 64-bit.
 
 **Note**: In the inference related examples, we are using KL520 for most demo. If you wish to use KL720, just change the prefix of the example name from kl520 to kl720.
@@ -12,6 +9,8 @@ The provided examples are designed to show how to use KP APIs and present Kneron
 **Note**: Few examples will auto connect multiple devices to run inference. If you put hybrid types of dongles on host, the inference may fail.
 
 **Note**: If you modify code to change different test image file. Input image aspect ratio is suggested to be aligned to model input aspect ratio.
+
+**Note**: Reference to [Yolo Object Name Mapping](./yolo_object_name_mapping.md) for the detection result classes of YOLO examples.
 
 ---
 
@@ -36,6 +35,11 @@ The provided examples are designed to show how to use KP APIs and present Kneron
     $ cmake ..
     $ make -j
     ```
+    **Note**: if you also want to build OpenCV examples at this moment,
+    please adjust cmake command as following
+    ```bash
+    $ cmake .. -D WITH_OPENCV=ON
+    ```
 
     If you are using MSYS2 MinGW 64-bit in Windows:
 
@@ -46,6 +50,13 @@ The provided examples are designed to show how to use KP APIs and present Kneron
     $ cmake .. -G "MSYS Makefiles"
     $ make -j
     ```
+    **Note**: if you also want to build OpenCV examples at this moment,
+    please adjust cmake command as following
+    ```bash
+    $ cmake .. -G "MSYS Makefiles" -D WITH_OPENCV=ON
+    ```
+
+    **Note**: Some examples may cause warnings during cmake process due to the length of the paths. You can rename these examples to shorter names to avoid these warnings.
 
     - Once build is done, the **libkplus.so** will be in **build/src/**
 
@@ -68,7 +79,9 @@ The provided examples are designed to show how to use KP APIs and present Kneron
 
 ## 2. Scan Device Example
 
-While one or multiple AI dongles are plugged into the host, they can be scanned to get some basic device information.
+Note: This example is to show the usage of `kp_scan_devices()`.
+
+While one or multiple AI devices are plugged into the host, they can be scanned to get some basic device information.
 
 ```bash
 $ sudo ./scan_devices
@@ -108,13 +121,13 @@ Above shows that it founds two KL520 devices, a brief descript listed below.
 - **USB port path** : This means the physical USB port path on the host.
 - **kn_number** : Kneron's serial number for the device.
 - **Connectable** : It tells if this device is connectable; one device can only be connected by one program at the same time.
-- **Firmware** : This shows which firmware the AI dongle is using, KDP or KDP2 Loader.
+- **Firmware** : This shows which firmware the AI device is using, KDP or KDP2 Loader.
 
 ---
 
 ## 3. Connect Device Example
 
-This example is to show different filter ways of finding target devices to connect.
+This example is to show the usage of `kp_device_group_t`, `kp_connect_device()` and different filter ways of finding target devices to connect. Furthermore, the `kp_device_group_t` is a working unit to be operated in **Kneron PLUS API**.
 
 Notice that it is not allowed to connect different target platform devices into a deivce group.
 
@@ -144,6 +157,8 @@ Arguments:
 ---
 
 ## 4. APP Inference Example
+
+Note: This example is to show the usage of `kp_app_yolo_inference_send()` and `kp_app_yolo_inference_receive()`.
 
 APP Inference Examples are using the **APP Inference APIs**, which provide some decent functions for specific applications with specified NEF models and it is designed to be used in a easy way.
 
@@ -186,9 +201,40 @@ The key features of APP inference are listed below:
 
 ---
 
-## 5. Generice Inference Example
+## 5. Generic Inference Example
 
-Generic inference examples are using the **Genereic Inference API**, which is intended for advanced users who are interested in developing their models and implement corresponding post-processing code.
+Following examples show the usage of `kp_generic_raw_inference_send()` and `kp_generic_raw_inference_receive()`.
+
+Generic inference examples are using the **Generic Inference API**, which is intended for advanced users who are interested in developing their models and implement corresponding post-processing code.
+
+**Generic Inference API** allows users to directly run a model with or without Kneron pre-processing and obtain the raw output from the model, without any developments of Kneron AI device's firmware. Please refer [5.1 Generic Inference With Raw Output](#51-generic-inference-with-raw-output) and [5.2 Generic Inference Without Kneron Pre-Processing On Device](#52-generic-inference-without-kneron-pre-processing-on-device) for the demonstration of the usage.
+
+However, **Generic Inference API** can only provide the raw output from the model without post-processing. If you wish to get the result with post-processing, you may implement the corresponding post-processing in Software (Please refer [5.3 Generic Inference With Post-Processing](#53-generic-inference-with-post-processing) for the demonstration).
+
+In **Generic Inference API**, you may customized what to do in the pre-processing. There are few items are provided:
+
+1. Image Resize
+    - You can choose to do or not to do the image resize by setting `resize_mode` in `kp_generic_raw_image_header_t`.
+2. Image Padding
+    - You can choose to do *Symmetric Padding* (Top, Bottom, Left, Right), *Corner Padding* (Right, Bottom), and not to do the image padding by setting `padding_mode` in `kp_generic_raw_image_header_t`.
+3. Image Cropping
+    - You can choose to do or not to do the image cropping by setting `crop_count` and `inf_crop` in `kp_generic_raw_image_header_t`.
+    - Please refer [5.4 Generic Inference With Cropping Image in Pre-Process](#54-generic-inference-with-cropping-image-in-pre-process) for the demonstration.
+4. Image Format
+    - You have to provide the format of the input image correctly by setting `image_format` in `kp_generic_raw_image_header_t`.
+    - In the pre-process, the image will be convert to the format *RGBA8888*.
+5. Data Normalization
+    - You can choose to do *Kneron Normalization*, *Tensor Flow Normalization*, *Yolo Normalization*, or other *Customized Normalization* by setting `normalize_mode` in `kp_generic_raw_image_header_t`.
+
+Furthermore, if you wish to execute the post-processing on Kneron AI devices (or implement different pre-processing on devices), you should use **Customized Inference API** instead of **Generic Inference API**, and need to develope the code into Kneron AI device's firmware. Please refer [6. Customized Inference Example](#6-customized-inference-example) for more information.
+
+**Generic Inference API** provide following functions to retrieve specific output node data (More information please reference *API Reference/Inference API*):
+
+| Retrieve Node Function                               | Description                                                                              |
+| ---------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| kp\_generic\_inference\_retrieve\_raw\_fixed\_node() | Retrieves **RAW format data** in fixed-point format on the per-node basis.               |
+| kp\_generic\_inference\_retrieve\_fixed\_node()      | Retrieves and converts RAW format data to **fixed-point** data on the per-node basis.    |
+| kp\_generic\_inference\_retrieve\_float\_node()      | Retrieves and converts RAW format data to **floating-point** data on the per-node basis. |
 
 ### 5.1 Generic Inference With Raw Output
 
@@ -237,7 +283,54 @@ dumped node 0 output to 'output_bike_cars_street_224x224_node0_7x7x255.txt'
 dumped node 1 output to 'output_bike_cars_street_224x224_node1_14x14x255.txt'
 ```
 
-### 5.2 Generic Inference With Post-Processing
+### 5.2 Generic Inference Without Kneron Pre-Processing On Device
+
+The **kl520_demo_generic_inference_bypass_pre_proc** is an example for showing how it gets raw output from device, running a Tiny Yolo v3 model with a non pre-processing required image (noramlized, same size as model input required, and in format RGBA8888). This example shows the usage of `kp_generic_raw_inference_bypass_pre_proc_send()` and `kp_generic_raw_inference_bypass_pre_proc_receive()`.
+
+```bash
+$ sudo ./kl520_demo_generic_inference_bypass_pre_proc
+```
+
+```bash
+connect device ... OK
+upload firmware ... OK
+upload model ... OK
+read image ... OK
+
+starting inference loop 100 times:
+.....................................................
+
+inference loop is done, starting post-processing ...
+
+number of output node : 2
+
+node 0:
+width: 7:
+height: 7:
+channel: 255:
+number of data (float): 12495:
+first 20 data:
+        1.359, 0.340, 0.340, -0.510, 0.340, 0.340,
+        -0.849, 0.849, 0.849, 0.510, 0.679,
+        0.510, 0.679, 0.679, 0.000, 0.340,
+        0.340, 0.510, 0.340, 0.000,
+
+node 1:
+width: 14:
+height: 14:
+channel: 255:
+number of data (float): 49980:
+first 20 data:
+        0.874, -0.349, 0.000, 0.175, 0.000, -0.175,
+        0.175, 0.175, 0.175, 0.175, -0.175,
+        0.175, -0.175, -0.699, 1.398, 1.048,
+        1.048, 0.874, 0.524, 0.699,
+
+dumped node 0 output to 'output_bike_cars_street_224x224_rgba8888_normalized_node0_7x7x255.txt'
+dumped node 1 output to 'output_bike_cars_street_224x224_rgba8888_normalized_node1_14x14x255.txt'
+```
+
+### 5.3 Generic Inference With Post-Processing
 
 The **kl520_demo_generic_inference_post_yolo** is an example for showing how it gets raw output from device, running a Tiny Yolo v3 model, and does post-processing in the software.
 
@@ -274,6 +367,64 @@ output bounding boxes on 'output_bike_cars_street_224x224.bmp'
 And it draws detected objects in a new-created **output_one_bike_many_cars_224x224.bmp**.
 
 ![](../imgs/ex_kdp2_generic_inference_raw.bmp)
+
+### 5.4 Generic Inference With Cropping Image in Pre-Process
+
+The **kl520_demo_generic_inference_crop** is an example for showing how to do cropping image on device, execute inference only on the cropped areas of image, get the raw output from device, and does post-processing in the software.
+
+The flow in concept:
+1. Setting crop information in `kp_generic_raw_image_header_t`
+2. Send an image to inference
+3. Recieve result *N* times (*N* specify for number of crop bounding boxes)
+
+```bash
+$ sudo ./kl520_demo_generic_inference_crop
+```
+
+```bash
+connect device ... OK
+upload firmware ... OK
+upload model ... OK
+read image ... OK
+
+starting inference loop 50 times:
+..................................................
+
+inference loop is done, starting post-processing ...
+
+doing tiny yolo v3 post-processing ...
+
+crop box width : 400
+crop box height : 400
+crop box number : 0
+detectable class count : 80
+box count : 6
+Box 0 (x1, y1, x2, y2, score, class) = 119.0, 143.0, 399.0, 398.0, 0.941047, 2
+Box 1 (x1, y1, x2, y2, score, class) = 248.0, 52.0, 392.0, 155.0, 0.829827, 2
+Box 2 (x1, y1, x2, y2, score, class) = 0.0, 96.0, 201.0, 219.0, 0.663775, 2
+Box 3 (x1, y1, x2, y2, score, class) = 46.0, 127.0, 218.0, 301.0, 0.624829, 2
+Box 4 (x1, y1, x2, y2, score, class) = 158.0, 22.0, 330.0, 109.0, 0.267690, 2
+Box 5 (x1, y1, x2, y2, score, class) = 16.0, 79.0, 62.0, 226.0, 0.223999, 2
+
+output bounding boxes on 'output_one_bike_many_cars_800x800_crop0.bmp'
+
+crop box width : 450
+crop box height : 450
+crop box number : 1
+detectable class count : 80
+box count : 3
+Box 0 (x1, y1, x2, y2, score, class) = 141.0, 9.0, 279.0, 411.0, 0.954721, 0
+Box 1 (x1, y1, x2, y2, score, class) = 150.0, 163.0, 247.0, 442.0, 0.787696, 1
+Box 2 (x1, y1, x2, y2, score, class) = 0.0, 4.0, 249.0, 86.0, 0.224773, 2
+
+output bounding boxes on 'output_one_bike_many_cars_800x800_crop1.bmp'
+```
+
+And it draws detected objects in a new-created **output_one_bike_many_cars_800x800_crop0.bmp** and **output_one_bike_many_cars_800x800_crop1.bmp**.
+
+![](../imgs/ex_kdp2_generic_inference_crop_1.bmp)
+
+![](../imgs/ex_kdp2_generic_inference_crop_2.bmp)
 
 ---
 
@@ -326,7 +477,7 @@ output bounding boxes on 'output_bike_cars_street_224x224.bmp'
 
 Besides using multiple threads to speed up the performance, multiple dongles can also be adapted to further enhance the performance.
 
-The example is for showing how to leverage mutiple dongles to speed up the performance.
+The example is for showing how to leverage multiple dongles to speed up the performance.
 
 1. Using one KL720
     ```bash
@@ -447,7 +598,7 @@ If the camera produces frames faster than device inference, displaying frames fr
 
 ![](../imgs/cam_demo_without_drop_frame.png)
 
-**kl720_demo_cam_app_yolo_inference_async** is an example for showing how to config device to drop frame if the buffer is full.
+**kl720_demo_cam_app_yolo_inference_async** is an example for showing how to use `kp_inf_configuration_t` and `kp_inference_configure()` config device to drop frame if the buffer is full.
 
 ![](../imgs/cam_demo_with_drop_frame.png)
 
@@ -455,7 +606,7 @@ The image display FPS raised from **25.76** (without drop frame) to **30.13** (w
 
 ---
 
-## 10. Post-Processing Configure Example
+## 10. Post-Processing Configure Example (APP YOLO)
 
 APP Inference Examples are using functions for specific applications and do post-processing on device. However, the post-processing can be configured based on your requirements.
 
@@ -539,9 +690,9 @@ The box count of result dropped since the probability threshold has been set hig
 
 Model Zoo examples simply show one image inference via different pre-trained models.
 
-The model backbones are availble and could be retrained for specific need.  
+The model backbones are availble and could be retrained for specific need.
 
-Please refer to [Model Zoo](../modelzoo/index.md) section for more information.  
+Please refer to [Model Zoo](../modelzoo/index.md) section for more information.
 
 
 

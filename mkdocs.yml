@@ -14,43 +14,16 @@ markdown_extensions:
   - pymdownx.tilde
 
 nav:
-  - Home: index.md
-  - Getting Started:
-    - KL520:
-      - Archive:
-        - v1.3.0.0: 520_1.3.0.0/getting_start.md
-        - v1.4.0.0: 520_1.4.0.0/getting_start.md
-        - v1.4.0.0 For Kdp2 API(alpha release): 520_1.4.0.0/getting_start_520_kdp2.md
-      - v1.5.0.0: 520_1.5.0.0/getting_start.md
-    - KL720:
-      - Archive:
-        - v1.1.0: 720_1.1.0/getting_start_720.md
-      - v1.3.0: 720_1.3.0/getting_start_720.md
-  - Host API Reference:
-    - Archive:
-      - v0.8.0:
-        - Host API Intro: host_lib_0.8.0/host_api_reference.md
-        - Host API reference: host_lib_0.8.0/host_api/app_api.md
-        - DME API reference: host_lib_0.8.0/host_api/dme_api.md
-        - ISI API reference: host_lib_0.8.0/host_api/isi_api.md
-        - System API reference: host_lib_0.8.0/host_api/system.md
-      - v0.9.0:
-        - Host API reference: host_lib_0.9.0/host_api_reference.md
-        - Host Kdp2 API reference:
-          - Data Structure: host_lib_0.9.0/kdp2_api/kdp2_struct.h.md
-          - Core API: host_lib_0.9.0/kdp2_api/kdp2_core.h.md
-          - APP API: host_lib_0.9.0/kdp2_api/kdp2_app.h.md
-          - Post Process API: host_lib_0.9.0/kdp2_api/kdp2_postprocess.h.md
-    - v1.0.0:
-      - Host API Reference: host_lib_1.0.0/kdp_host.h.md
-  - Kneron PLUS (alpha site only):
-    - Getting Started:              plus/getting_start.md
+  - Kneron AI:                      index.md
+  - Kneron PLUS:
+    - Getting Started:              plus/getting_started.md
     - Introduction:
       - Introduction:               plus/introduction/introduction.md
       - Install Dependency:         plus/introduction/install_dependency.md
-      - Upgrade AI Dongle To KDP2:  plus/introduction/upgrade_ai_dongle_to_kdp2.md
+      - Upgrade AI Dongle To KDP2:  plus/introduction/upgrade_ai_device_to_kdp2.md
       - Write Model To Flash:       plus/introduction/write_model_to_flash.md
       - Run Examples:               plus/introduction/run_examples.md
+      - Run Examples for Enterprise: plus/introduction/run_examples_enterprise.md
       - Yolo Object Name Mapping:   plus/introduction/yolo_object_name_mapping.md
     - Customized API:
       - Introduction:               plus/customized_api/introduction.md
@@ -65,15 +38,42 @@ nav:
       - Object Detection(Fcos):     plus/modelzoo/kn-model-zoo_generic_inference_post_fcos.md
       - Object Detection(Yolo v5):  plus/modelzoo/kn-model-zoo_generic_inference_post_yolov5.md
     - API Reference:
-      - v1.1.x:
-        - Data Structure:             plus/api_reference_1.1.x/kp_struct.h.md
-        - Core API:                   plus/api_reference_1.1.x/kp_core.h.md
-        - Inference API:              plus/api_reference_1.1.x/kp_inference.h.md
+      - v1.2.x:
+        - Data Structure:           plus/api_reference_1.2.x/kp_struct.h.md
+        - Core API:                 plus/api_reference_1.2.x/kp_core.h.md
+        - Inference API:            plus/api_reference_1.2.x/kp_inference.h.md
       - Archive:
+        - v1.1.x:
+          - Data Structure:         plus/api_reference_1.1.x/kp_struct.h.md
+          - Core API:               plus/api_reference_1.1.x/kp_core.h.md
+          - Inference API:          plus/api_reference_1.1.x/kp_inference.h.md
         - v1.0.x:
-          - Data Structure:           plus/api_reference_1.0.x/kp_struct.h.md
-          - Core API:                 plus/api_reference_1.0.x/kp_core.h.md
-          - Inference API:            plus/api_reference_1.0.x/kp_inference.h.md
+          - Data Structure:         plus/api_reference_1.0.x/kp_struct.h.md
+          - Core API:               plus/api_reference_1.0.x/kp_core.h.md
+          - Inference API:          plus/api_reference_1.0.x/kp_inference.h.md
+  - Firmware SDK:
+    - KL520 SDK:
+      - v1.6.0:                     520_1.6.0/introduction.md
+      - Archive:
+        - v1.5.0.0:                 520_1.5.0.0/getting_start.md
+        - v1.4.0.0:                 520_1.4.0.0/getting_start.md
+        - v1.3.0.0:                 520_1.3.0.0/getting_start.md
+    - KL720 SDK:
+      - v1.4.0:                     720_1.4.0/introduction.md
+      - Archive:
+        - v1.3.0:                   720_1.3.0/getting_start_720.md
+        - v1.1.0:                   720_1.1.0/getting_start_720.md
+    - Archived-Host API Reference:
+      - v1.0.0:
+        - Host API Reference:       host_lib_1.0.0/kdp_host.h.md
+      - v0.9.0:
+        - Host API reference:       host_lib_0.9.0/host_api_reference.md
+      - v0.8.0:
+        - Host API Intro:           host_lib_0.8.0/host_api_reference.md
+        - Host API reference:       host_lib_0.8.0/host_api/app_api.md
+        - DME API reference:        host_lib_0.8.0/host_api/dme_api.md
+        - ISI API reference:        host_lib_0.8.0/host_api/isi_api.md
+        - System API reference:     host_lib_0.8.0/host_api/system.md
   - Toolchain Docker:
     - Toolchain Manual: toolchain/manual.md
     - Yolo Example: toolchain/yolo_example.md
