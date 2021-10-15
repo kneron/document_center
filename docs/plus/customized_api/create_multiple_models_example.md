@@ -94,13 +94,13 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
 
 4. Add *my_mul_example.c*
 
-    - There are 6 steps for inferencing in Kneron AI dongle:
+    - There are 6 steps for inferencing in Kneron AI device:
 
-        1. Connect Kneron AI dongle.
+        1. Connect Kneron AI device.
 
-        2. Upload the firmware to AI dongle.
+        2. Upload the firmware to AI device.
 
-        3. Upload the model to AI dongle.
+        3. Upload the model to AI device.
 
         4. Prepare data for the header.
 
@@ -353,9 +353,10 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
         inf_config.image_height = input_header->img_height;
         inf_config.image_channel = 3;                                       // assume RGB565
         inf_config.image_format = KP_IMAGE_FORMAT_RGB565;                   // assume RGB565
+        inf_config.image_resize = KP_RESIZE_ENABLE;                         // enable resize
+        inf_config.image_padding = KP_PADDING_CORNER;                       // enable padding on corner
         inf_config.image_norm = KP_NORMALIZE_KNERON;                        // this depends on model
         inf_config.model_id = KNERON_FD_MASK_MBSSD_200_200_3;               // this depends on model
-        inf_config.enable_preprocess = true;                                // enable preprocess in ncpu/npu
 
         // set up fd result output buffer for ncpu/npu
         inf_config.ncpu_result_buf = (void *)fd_result;
@@ -388,9 +389,10 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
         inf_config.image_channel = 3;                                       // assume RGB565
         inf_config.image_format = KP_IMAGE_FORMAT_RGB565;                   // assume RGB565
         inf_config.image_norm = KP_NORMALIZE_KNERON;                        // this depends on model
+        inf_config.image_resize = KP_RESIZE_ENABLE;                         // enable resize
+        inf_config.image_padding = KP_PADDING_CORNER;                       // enable padding on corner
         inf_config.model_id = KNERON_LM_5PTS_ONET_56_56_3;                  // this depends on model
         inf_config.enable_crop = true;                                      // enable crop image in ncpu/npu
-        inf_config.enable_preprocess = true;                                // enable preprocess in ncpu/npu
 
         // set crop box
         inf_config.crop_area.crop_number = 0;
@@ -607,7 +609,7 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
 ## 4. NCPU Firmware Development for The Pre-process and Post-process
 
 
-If the customized models need a customized pre-process or post-process on Kneron AI dongle, you can add the pre-process and post-process in the following files.
+If the customized models need a customized pre-process or post-process on Kneron AI device, you can add the pre-process and post-process in the following files.
 
 1. Go to NCPU Project Main Folder {PLUS_FOLDER_PATH}/firmware_development/KL520/ncpu_kdp2/project/ncpu_companion_user_ex/main/
 
@@ -624,3 +626,13 @@ If the customized models need a customized pre-process or post-process on Kneron
     - Once pre-process and post-process are registered, they will automatically execute before and after the inference of model.
 
     - The pre-process and post-process for certain model are specified by the model Id.
+
+**Note**: During developing the post-processing, you must be aware of what pre-process has done, including image resize, image padding, and image cropping.
+
+**Note**: In post-processing, the memory layout of data in **raw_cnn_res_t** for KL520 and KL720 are different.
+
+1. For KL520, the data values are in (height, channel, width_align) format, where width_align is the width aligned to the nearest 16 bytes.
+
+2. For KL720, the data values are in (channel, height, width_align) format, where width_align is the width aligned to the nearest 16 bytes.
+
+    ![](../imgs/customized_api_post_proc_mem_layout.png)

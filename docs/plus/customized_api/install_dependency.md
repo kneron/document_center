@@ -10,9 +10,10 @@ the developing of customized api must be proceeded under OS Windows 10.
 
         ```bash
         $ pacman -Syu
-        $ pacman -Sy
-        $ pacman -S base-devel gcc vim cmake
+        $ pacman -S --needed base-devel mingw-w64-x86_64-toolchain
         $ pacman -S mingw-w64-x86_64-libusb
+        $ pacman -S mingw-w64-x86_64-cmake
+        $ pacman -S vim zip unzip
         ```
 
 2. **Keil MDK version 5**

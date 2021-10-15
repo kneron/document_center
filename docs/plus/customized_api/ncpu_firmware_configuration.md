@@ -16,6 +16,14 @@ When SCPU activates NCPU to run models, **kmdw_inference_app_config_t**, which c
 - uint32_t **image_channel**:
     - The channel count of the image.
 
+- uint32_t **image_resize**:
+    - This is used for image resize in pre-process.
+    - Please refer to **kp_resize_mode_t**.
+
+- uint32_t **image_padding**:
+    - This is used for image padding in pre-process.
+    - Please refer to **kp_padding_mode_t**.
+
 - uint32_t **image_format**:
     - This is used for color space conversion in pre-process.
     - Please refer to **kp_image_format_t**.
@@ -23,6 +31,15 @@ When SCPU activates NCPU to run models, **kmdw_inference_app_config_t**, which c
 - uint32_t **image_norm**:
     - This is used for data normalization in pre-process.
     - Please refer to **kp_normalize_mode_t**.
+
+- bool **bypass_pre_proc**:
+    - If this is true, NCPU will **NOT** execute the pre-process. The size, channel, format, ... of the input image must be exactly the same as the requirement of the model.
+    - If this is true, **image_width**, **image_height**, **image_channel**, **image_resize**, **image_padding**, **image_format**, and **image_norm** will be ignored.
+    - If this is true, **image_buf_size** must be provided correctly.
+
+- uint32_t **image_buf_size**:
+    - The size of image buffer.
+    - This is only used when **bypass_pre_proc** is true.
 
 - int **model_id**:
     - The ID of the target model to be inferenced in NCPU.
@@ -45,11 +62,6 @@ When SCPU activates NCPU to run models, **kmdw_inference_app_config_t**, which c
 
 - kmdw_inference_result_callback_t **result_callback**:
     - The callback function for parallel mode
-
-- bool **enable_preprocess**:
-    - If this is true, NCPU will execute the pre-process. The customized post-process must be registered via **kdpio_pre_processing_register()**.
-    - The pre-process are including color space converion, resolution scaling, normalization, ... etc.
-    - If this is false, NCPU does not execute the pre-process. The size, channel, format, ... of the input image should be exactly the same as the requirement of the model.
 
 - void* **inf_result_buf**:
     - This only works for parallel mode to carry it back to user callback function.

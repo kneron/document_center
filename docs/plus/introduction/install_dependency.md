@@ -19,14 +19,14 @@ And the following sections in this chapter will provide the instructions for ins
     ```bash
     $ sudo apt install cmake
     $ sudo apt install libusb-1.0-0-dev
-    $ sudo apt install build-essential  
+    $ sudo apt install build-essential
     ```
 
 ---
 
 ## 2. Windows 10
 
-### 2.1 Kneron AI Dongle Driver
+### 2.1 Kneron AI Device Driver
 
 - Download Zadig application from zadig.akeo.ie appropriate for Windows 10.
 
@@ -56,7 +56,7 @@ And the following sections in this chapter will provide the instructions for ins
 
     - Click "Install Driver" button.
 
-    **Note**: After Upgrade Kneron KL720 to KDP2, you may need to reinstall the driver of KL720, since the USB ID will be changed to "3231/0720".
+    **Note**: After Upgrade Kneron KL720 to KDP2 (ex. via Kneron DFUT), you may need to re-install the driver of KL720, since the USB ID will be changed to "3231/0720".
 
 
 
@@ -68,7 +68,72 @@ And the following sections in this chapter will provide the instructions for ins
 
     ```bash
     $ pacman -Syu
-    $ pacman -Sy
-    $ pacman -S base-devel gcc vim cmake
+    $ pacman -S --needed base-devel mingw-w64-x86_64-toolchain
     $ pacman -S mingw-w64-x86_64-libusb
+    $ pacman -S mingw-w64-x86_64-cmake
+    $ pacman -S vim zip unzip
     ```
+
+### 2.3 OpenCV
+
+Kneron Plus provides few examples which are using OpenCV to demonstrate the inference usage with the input of web camera.
+To build and run these examples, you need to install OpenCV.
+
+- Execute **MSYS2 MinGW 64-bit** to build OpenCV
+
+    ```bash
+    $ cd /c/
+    $ mkdir opencv_347
+    $ cd opencv_347
+
+    $ wget https://github.com/opencv/opencv/archive/3.4.7.zip
+    $ unzip 3.4.7.zip
+    $ rm 3.4.7.zip
+    $ mv opencv-3.4.7 opencv
+
+    $ wget https://github.com/opencv/opencv_contrib/archive/3.4.7.zip
+    $ unzip 3.4.7.zip
+    $ rm 3.4.7.zip
+    $ mv opencv_contrib-3.4.7 opencv_contrib
+
+    $ cd opencv
+    $ mkdir build
+    $ cd build/
+    $ cmake -D CMAKE_BUILD_TYPE=RELEASE  -D WITH_CUDA=OFF -D INSTALL_PYTHON_EXAMPLES=OFF -D INSTALL_C_EXAMPLES=OFF -D BUILD_EXAMPLES=OFF -D BUILD_DOCS=OFF -D BUILD_PERF_TESTS=OFF -D WITH_GSTREAMER=OFF -D WITH_LIBV4L=ON -D ENABLE_PRECOMPILED_HEADERS=OFF -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules .. -G "MSYS Makefiles"
+    $ make -j4
+    $ make install
+    ```
+
+- Add OpenCV into environment value
+
+    - Open "this computer", right click on blank, and choose "Properties".
+    ![](../imgs/windows_this_computer.png)
+
+    - Click "Advanced system settings" on the left panel.
+    ![](../imgs/windows_system.png)
+
+    - Click "Environment Varialbes".
+    ![](../imgs/windows_system_properties.png)
+
+    - Add "OpenCV_DIR" and set the value to "C:\opencv_347\opencv\build\install".
+    ![](../imgs/windows_add_opencv_path.png)
+
+    - Edit "Path", and add "%OpenCV_DIR%\x64\mingw\bin" and "%OpenCV_DIR%".
+    ![](../imgs/windows_add_opencv_lib_path.png)
+
+- Change properties of MSYS2
+    ```bash
+    $ cd /
+    $ vim msys2_shell.cmd
+    ```
+
+    On line 17, change
+    ```bash
+    rem set MSYS_PATH_TYPE=inherit
+    ```
+    to
+    ```bash
+    set MSYS_PATH_TYPE=inherit
+    ```
+
+- Close and execute **MSYS2 MinGW 64-bit**

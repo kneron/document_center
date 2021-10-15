@@ -1,6 +1,6 @@
 # Introduction
 
-In order to run customized models on Kneron AI dongle, there are four stages are involved:
+In order to run customized models on Kneron AI device, there are four stages are involved:
 
 - **Model Development**
 
@@ -18,6 +18,6 @@ In order to run customized models on Kneron AI dongle, there are four stages are
 
     Where models actually run. Besides the model inference, the preprocess and the postprocess can be chosen to run on NCPU Firmware.
 
-The diagram below demostrates the inference flow for every models runnig on Kneron AI dongle, and how the PLUS, SCPU, and NCPU interact with each other.
+The diagram below demonstrates the inference flow for every models runnig on Kneron AI device, and how the PLUS, SCPU, and NCPU interact with each other.
 
 ![](../imgs/customized_api_develop_flow.png)

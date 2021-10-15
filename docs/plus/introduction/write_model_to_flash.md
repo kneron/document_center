@@ -1,30 +1,30 @@
 # Write Model To Flash
 
-**Note**: We run the examples below under OS Ubuntu 18.04.5 LTS with cmake version 3.10.2.
-
----
-
 ## 1. Introduction
 
-The inference model must be loaded into Kneron AI dongle before the inference process.
+The inference model must be loaded into Kneron AI device before the inference process.
 
 There are two ways to load models:
 
 - **Upload Model via USB**
 
-    - The model file (.nef) can be uploaded to Kneron AI dongle using **kp_load_model_from_file\(\)**, a KP API, before inference.
+    - The model file (.nef) can be uploaded to Kneron AI device using `kp_load_model_from_file()`, a KP API, before inference.
 
     - For the usage, please refer examples related to inference.
 
+    - In this method, the size of the model file must be below **40 MB** for KL520, and **95 MB** for KL720.
+
 - **Load Model from Flash**
 
-    - The model file (.nef) is written in flash, and it can be loaded using **kp_load_model_from_flash\(\)**, a KP API, before inference.
+    - The model file (.nef) is written in flash, and it can be loaded using `kp_load_model_from_flash()`, a KP API, before inference.
 
     - The GUI or command line of **KneronDFUT** can be used for writing the model file into flash.
 
     - For the usage, please refer the example **kl520_demo_app_yolo_inference_flash_model** or **kl720_demo_app_yolo_inference_flash_model**.
 
-**Note**: Only one model can be loaded, no matter it was uploaded via USB or loaded from flash. If you want to change the model, please reboot the Kneron AI dongle.
+    - In this method, the size of the model file must be below **32 MB** for KL520, and **70 MB** for KL720.
+
+**Note**: Only one model file (.nef) can be loaded, no matter it was uploaded via USB or loaded from flash. If you want to change the model, please reboot the Kneron AI device.
 
 **Note**: Upload model via USB can be directly used without writting model into flash.
 
@@ -48,7 +48,7 @@ $ sudo ./KneronDFUT --help
 
 ## 3. Write Model Into KL520
 
-### 3.1 Use GUI to Write Model into AI Dongle
+### 3.1 Use GUI to Write Model into AI Device
 
 ```bash
 $ sudo ./KneronDFUT
@@ -66,7 +66,7 @@ $ sudo ./KneronDFUT
 
     ![](../imgs/dfut_kl520_model.png)
 
-### 3.2 Use Command Line to Write Model into AI Dongle
+### 3.2 Use Command Line to Write Model into AI Device
 
 1. List all dongles
 
@@ -102,7 +102,7 @@ $ sudo ./KneronDFUT
 
 ## 4. Write Model Into KL720
 
-### 4.1 Use GUI to Write Model into AI Dongle
+### 4.1 Use GUI to Write Model into AI Device
 
 ```bash
 $ sudo ./KneronDFUT
@@ -120,7 +120,7 @@ $ sudo ./KneronDFUT
 
     ![](../imgs/dfut_kl720_model.png)
 
-### 4.2 Use Command Line to Write Model into AI Dongle
+### 4.2 Use Command Line to Write Model into AI Device
 
 1. List all dongles
 
