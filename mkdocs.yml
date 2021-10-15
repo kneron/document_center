@@ -53,13 +53,13 @@ nav:
           - Inference API:          plus/api_reference_1.0.x/kp_inference.h.md
   - Firmware SDK:
     - KL520 SDK:
-      - v1.6.0:                     520_1.6.0/introduction.md
+      - v1.6.X:                     520_1.6.0/introduction.md
       - Archive:
         - v1.5.0.0:                 520_1.5.0.0/getting_start.md
         - v1.4.0.0:                 520_1.4.0.0/getting_start.md
         - v1.3.0.0:                 520_1.3.0.0/getting_start.md
     - KL720 SDK:
-      - v1.4.0:                     720_1.4.0/introduction.md
+      - v1.4.X:                     720_1.4.0/introduction.md
       - Archive:
         - v1.3.0:                   720_1.3.0/getting_start_720.md
         - v1.1.0:                   720_1.1.0/getting_start_720.md
