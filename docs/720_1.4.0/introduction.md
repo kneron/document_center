@@ -1,5 +1,7 @@
 ﻿# Introduction
 
+**note:** KL720 SDK v1.4.x starts to support Kneron PLUS
+
 ## 1. Requirements
 
 **Hardware**:
