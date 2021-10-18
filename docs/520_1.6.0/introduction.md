@@ -1,5 +1,7 @@
 # Introduction
 
+**note:** KL520 SDK v1.6.x starts to support Kneron PLUS
+
 ## 1. Requirements
 
 **Hardware**:

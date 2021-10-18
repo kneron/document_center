@@ -33,6 +33,15 @@ Kneron AI consists the following components:
         - KL520: Dongle, 96board, M.2 board  
         - KL720: Dongle, 96board  
 
+---
+## Compatibility Table
+
+Versions           | KL520 SDK version | KL720 SDK version 
+:------------------|:------------------|:--------------
+Kneron PLUS v1.2.x | 1.6.x             | 1.4.x         
+host_lib    v1.0.0 | 1.5.0.0           | 1.3.0         
+host_lib    v0.9.x | 1.4.0.x           | 
+
 **Notes:**  
 	**Host API v1.0.0(host_lib)** *sticks with [KL520 SDK v1.5.0.0](./520_1.5.0.0/getting_start.md) / [KL720 SDK v1.3.0](./720_1.3.0/getting_start_720.md) and deprecated from KL520 SDK v1.6.0/KL720 SDK v1.4.1*
 
@@ -40,9 +49,9 @@ Kneron AI consists the following components:
 ## First Touch 
 
 **Kneron PLUS** provides low barrier AI inference experience to touch AI.
-  
+
 Please see [Kneron PLUS - Getting Started](./plus/getting_started.md) as a start
-  
+
 ---
 ## Reference
 
