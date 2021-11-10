@@ -599,7 +599,7 @@ The Python API is very simple:
 compile_result = ktc.compile(model_list)
 ```
 
-The `compile_result` is the path for the generated nef file. By default, it is under /workspace/batch_compile. It takes a list of `ktc.ModelConfig` object as input. Note that the ModelConfig onject must have bie file inside. In details, it must be under either of the following status: the ModelConfig is initialized with `bie_path`, the ModelConfig is initialized with `onnx_model` or `onnx_path` but it have successfully run `analysis` function.
+The `compile_result` is the path for the generated nef file. By default, it is under /data1/batch_compile. It takes a list of `ktc.ModelConfig` object as input. Note that the ModelConfig onject must have bie file inside. In details, it must be under either of the following status: the ModelConfig is initialized with `bie_path`, the ModelConfig is initialized with `onnx_model` or `onnx_path` but it have successfully run `analysis` function.
 
 For the LittleNet example, the python code would be:
 
