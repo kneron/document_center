@@ -413,7 +413,7 @@ There is a display function in ```python_flow/utils/utils.py``` that can be call
 
 The inference output when using CSIM 520/720 are fixed point values in a text file. By default, the simulator will convert those fixed point values into floating point NumPy arrays. You can set the ```data_type``` field in the input_json to get the inference results as fixed point values. The conversion from fixed to floating point values is as follows:
 
-```
+```python
 float_val = fixed_val / scale / (2 ^ radix)
 ```
 
@@ -437,5 +437,6 @@ For 520, the next 16 bytes of data correspond to channel of 1, while for 720, th
 To recap, for 520, width increments first, up to the aligned 16 byte width. Channel increments next, and height increments last. For 720, width increments first, also up to the aligned 16 byte width. Height increments next, and channel increments last.
 
 ## Useful notes/recap/reminder
+
 * When using C postprocess, calling ```run_c_function``` with the appropriate arguments will be everything you need to call your C code. You may also use ```get_result``` to get your class strcture if you're result is in a C structure inside kdp_image.
 * C structure wrapper examples can be found under ```python_flow/kdp_image_520.py``` (or 720 version) and ```python_flow/wrappers.py```; C function wrapper examples can be found under ```python_flow/preprocess.py``` or ```python_flow/postprocess.py```.
