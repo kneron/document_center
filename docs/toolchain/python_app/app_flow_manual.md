@@ -54,7 +54,6 @@ Kneron simulator uses a JSON file to specify parameters used throughout the test
 </div>
 In each JSON, there are three sections (pre, emu, post) to define parameters necessary to complete the testing process. The parameters shown are the minimum required to run the simulator; you may add new parameters to the "pre" or "post" to pass into your preprocess or postprocess functions.
 
-
 If any of the required keys are missing, the program will end. The required keys will be specified in their respective sections.
 #### Preprocess Parameters
 **Required keys:** pre_type
@@ -104,18 +103,20 @@ Note on the reordering parameter: this can be specified for your convenience in 
 | **post_type** | Name of the postprocess function to run, in Python import format   | any postprocess function you wish to call |
 
 ## Custom pre/postprocess
-Since inference results can vary based on users' intentions, we provide support for integrating custom preprocess and postprocess functions. The preprocess and postprocess functions you supply into the ```pre_type``` and ```post_type``` fields must follow the API that we provide.
+Since inference results can vary based on users' tests, we provide support for integrating custom preprocess and postprocess functions. The preprocess and postprocess functions you supply into the ```pre_type``` and ```post_type``` fields must follow the API that we provide.
 
 Both the preprocess and postprocess must take in a TestConfig class as input. For reference, you can find it defined at python_flow/common/config.py. This class is filled with parameters from the supplied input JSONs and other environment variables. To access all of those parameters, you will need to access the "config" attribute, a dictionary. There are four keys to access the dictionary: ```pre```, ```emu```, ```post```, and ```flow```. The first three keys have values that are dictionaries with the same exact values as in the JSON files. The ```flow``` key simply has values parsed from the command line options and other environment variables such as the input image.
 
-The preprocess must take in as input a TestConfig class and a variable that represents anything you may want to pass into your preprocess function. The second variable may be needed if your preprocess depends on the results of a previous stage in the flow. It must output a tuple consisting of a list of NumPy arrays and a dictionary. The list of NumPy arrays should be in channel last format (1, h, w, c) and have a one-to-one correspondence with each input you have in your model. The dictionary holds any values you wish to communicate from your preprocess to your postprocess.
+The preprocess must take in as input a TestConfig class and a variable that represents anything you may want to pass into your preprocess function. The second variable may be needed, for example, if your preprocess depends on the results of a previous stage in the flow. It must output a tuple consisting of a list of NumPy arrays and a dictionary. The list of NumPy arrays should be in channel last format (1, h, w, c) and have a one-to-one correspondence with each input you have in your model. The dictionary holds any values you wish to communicate from your preprocess to your postprocess.
 
-The postprocess must take in as input a TestConfig class, a dictionary, and a list of NumPy arrays. The TestConfig class is the same class as used in the preprocess. The dictionary is the same as the second output of your preprocess function. The last input is the results of the model inference. There will be one NumPy array per output of your model, and each array will be in channel last format (d1, d2, ..., c). The order of the output nodes will be based on the list you provided in the ```reordering``` field in the input JSON. The output for the postprocess can be anything that is convenient for your uses. 
+The postprocess must take in as input a TestConfig class, a dictionary, and a list of NumPy arrays. The TestConfig class is the same class as used in the preprocess. The dictionary is the same as the second output of your preprocess function. The last input is the results of the model inference. There will be one NumPy array per output of your model, and by default, each array will be in channel last format (d1, d2, ..., c). The order of the output nodes will be based on the list you provided in the ```reordering``` field in the input JSON. The output for the postprocess can be anything that is convenient for your needs.
 
 For preprocess/postprocess reference, you may look at ```app/fd_external/preprocess/fd.py``` and ```app/fd_external/postprocess/fd.py```. For a template of the API, you may look at ```app/template_app```.
 
 ### Preprocess
+
 #### Python defined
+
 If your preprocess functions are defined in Python, integration is simple.
 
 1. Make sure your Python function takes two parameters as input: a TestConfig class and a prev_output variable.
@@ -123,24 +124,30 @@ If your preprocess functions are defined in Python, integration is simple.
 3. Set the value of the ```pre_type``` field in the input JSON to the name of your function, as defined [here](#setting-up-json).
 
 #### C defined
+
 1. Compile the C/C++ functions into a shared library (.so). Be sure to add ```extern "C"``` to any C++ functions you intend to directly call in the Python flow.
 2. Copy the library into your application's directory.
 3. Import the shared library into whichever module needs it using the standard ctypes module:
+
     ```python
     MY_LIB = ctypes.CDLL("./my_lib.so")
     ```
+
 4. Define any C/C++ structures that are needed for parameters as classes in Python. These classes must extend ```ctypes.Structure``` and store the structure fields in the ```_fields_``` variable. This is a list of tuples where the first item is the name of the variable, and the second item is the type of that variable. The names and order must be defined exactly as in the C code.
 5. Define a wrapper to the C/C++ function you wish to call. You need to specify three items: the function name as defined in the C code, the input argument types, and the result argument types.
 6. Create a Python function that takes a TestConfig class and prev_output variable as input that calls your function wrapper. You can get the inputs you need from the TestConfig class and pass it to the wrapper as needed.
 7. Make sure your return value is a tuple of a list of your preprocessed NumPy arrays in channel last format and a dictionary of values to be passed to the postprocess. You will need to translate your C preprocessed data into NumPy arrays for the return value.
 8. Set the value of the ```pre_type``` field in the input JSON to the name of your function, as defined [here](#setting-up-json).
 
-#### C defined (using Python API in c_structure/preprocess.py)
+#### C defined (using Python API in c_interface/preprocess.py)
+
 1. Add your preprocess function into ```c_interface/520/preprocess/pre_processing_main.c``` or into 720. Make sure it takes in a kdp_image structure (or pointer) as input. Compile the shared library by going into the ```c_interface``` directory and running ```make```.
 2. Import the shared library into whichever module needs it using the standard ctypes module:
+
     ```python
     MY_LIB = ctypes.CDLL("c_structure/libprocessing520.so")
     ```
+
   The path will need to be modified if you are using a relative path. You may use an absolute path as well.
 3. Define any extra C/C++ structures that are needed for parameters as classes in Python. These classes must extend ```ctypes.Structure``` and store the structure fields in the ```_fields_``` variable. This is a list of tuples where the first item is the name of the variable, and the second item is the type of that variable. The names and order must be defined exactly as in the C code.
 4. Define a wrapper to the C/C++ function you wish to call. You need to specify three items: the function name as defined in the C code, the input argument types, and the result argument types.
@@ -148,13 +155,15 @@ If your preprocess functions are defined in Python, integration is simple.
 6. Call either ```load_image_to_memory``` or ```load_binary_to_memory```, depending on the type of your input image, to load the file into the kdp_image structure.
 7. Call your Python C function wrapper.
 8. Call ```get_rgb_data``` to get the preprocessed C data into a NumPy array in channel last format.
-9. Make sure your return value is the NumPy array from````get_rgb_data``` and a dictionary of values to be passed to the postprocess.
+9. Make sure your return value is the NumPy array from ```get_rgb_data``` and a dictionary of values to be passed to the postprocess.
 10. Set the value of the ```pre_type``` field in the input JSON to the name of your function, as defined [here](#setting-up-json).
 
 Note: examples on the structure wrappers can be found under ```c_structure``` in the kdp_image files; examples on the function wrappers can be found under ```c_structure``` in postprocess.py and preprocess.py.
 
 ### Postprocess
+
 #### Python defined
+
 If your postprocess functions are defined in Python, integration is simple yet again.
 
 1. Make sure your Python function takes three parameters as input: a TestConfig class, a dictionary, and a list of NumPy arrays.
@@ -162,6 +171,7 @@ If your postprocess functions are defined in Python, integration is simple yet a
 3. Set the value of the ```post_type``` field in the input JSON to the name of your function, as defined [here](setting-up-json).
 
 #### C defined
+
 1. Like the preprocess, compile the C/C++ functions into a shared library (.so).
 2. However, your postprocess C function should take in an kdp_image structure as input, as the helper functions will load data into this class. Depending on the version, the Python class is defined in ```c_structure/kdp_image_520.py``` or ```c_structure/kdp_image_720.py```, and the C structure is defined in ```c_structure/520/include/kdpio.h``` or ```c_structure/720/postprocess/kneron_api_data.h```. Your postprocess function MUST include the header containing the kdp_image structure for the corresponding version that you wish to run.
 3. Copy the library into your application's directory.
