@@ -187,13 +187,13 @@ Use ```convert_binary_to_numpy``` to get a NumPy array from an input binary imag
 ## Usage
 
 ```
-usage: simulator.py [-h] [-b BIN_INPUT] [-c {before,none}] [--debug] [-d]
-                    [--dump] [-f {ALL,INF,NIR,RGB}] [-fl FLOW] [--fusion]
-                    [-i {binary,image}] [-il IMAGE_JSON]
-                    [-p {alg,sys520,sys530,sys720}] [-n NUM_IMAGES] [-r]
+usage: simulator.py [-h] [-j JSON_OPTIONS] [-b BIN_INPUT] [-c {before,none}]
+                    [--debug] [-d] [--dump] [-f {ALL,INF,NIR,RGB}] [-fl FLOW]
+                    [--fusion] [-il IMAGE_JSON] [-i {binary,image,image_txt}]
+                    [-n NUM_IMAGES] [-p {alg,sys520,sys530,sys720}] [-r]
                     [--runner_dump [RUNNER_DUMP [RUNNER_DUMP ...]]] [--rgba]
                     [-s] [-v VIDEO VIDEO VIDEO] [-w WORKERS] [-g GROUP]
-                    [-in NUM_INFERENCE] [-bp]
+                    [-in NUM_INFERENCE] [-bp] [-dfix]
                     app_folder image_directory test
 
 Runs a test on multiple images
@@ -205,6 +205,9 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
+  -j JSON_OPTIONS, --json_options JSON_OPTIONS
+                        JSON file holding the command line options.
+                        NOTE: using this option will ignore all other provided options.
   -b BIN_INPUT, --bin_input BIN_INPUT
                         file to specify the format and dimensions of the binary inputs
   -c {before,none}, --clear {before,none}
@@ -215,16 +218,16 @@ optional arguments:
   -f {ALL,INF,NIR,RGB}, --fmt {ALL,INF,NIR,RGB}
                         format of the input images to test, default:'ALL'
   -fl FLOW, --flow FLOW
-                        flow.py number to run
+                        suffix of flow.py to run
   --fusion              flag to enable fusion test input
-  -i {binary,image}, --inputs {binary,image}
-                        type of inputs to be tested, default: 'image'
   -il IMAGE_JSON, --image_json IMAGE_JSON
                         path to JSON file holding all of the test images, to be used instead of image_directory if specified
-  -p {alg,sys520,sys530,sys720}, --platform {alg,sys520,sys530,sys720}
-                        platform to use for input JSON subfolder, only internal runners are affected, default will use no subfolder
+  -i {binary,image}, --inputs {binary,image}
+                        type of inputs to be tested, default: 'image'
   -n NUM_IMAGES, --num_images NUM_IMAGES
                         number of images to test
+  -p {alg,sys520,sys530,sys720}, --platform {alg,sys520,sys530,sys720}
+                        platform to use for input JSON subfolder, only internal runners are affected, default will use no subfolder
   -r, --resume          flag to resume dataset from where it left off previously
   --runner_dump [RUNNER_DUMP [RUNNER_DUMP ...]]
                         name of runners to dump result
@@ -240,12 +243,15 @@ optional arguments:
   -g GROUP, --group GROUP
                         group using this e2e platform(CI/SYS/ALGO)
   -in NUM_INFERENCE, --num_inference NUM_INFERENCE
-                        number of devices(520/720) to run inference, default: 1
+                        number of devices (520/720) to run inference, default: 1
   -bp, --bypass_batch_compile
                         flag to bypass batch compile
+  -dfix, --dongle_fixed_mode
+                        flag to enable dongle to return fixed result then convert to float using CSIM utility function
 ```
 
 * -h: show the help message
+* -j: set this option to use a JSON file to pass in the other command line options, rather than typing them out in the command line
 * -b: set this option if you are testing binary files and need to provide color format and image dimensions
 	* Will assume all inputs follow the specified size and color
 	* Example can be found at ```app/template_app/example_bin_input.json```
@@ -256,16 +262,16 @@ optional arguments:
 * --dump: set this option if you want to dump all node outputs in your model
 * -f: default is "ALL", other format specifiers will filter the test images to only images with that prefix
 * -fl: default will run the "original" flow.py
-	* The other flow files should be in the format `flow_xx.py` where xx is the number of the flow you want to run
+	* The other flow files should be in the format `flow_xx.py` where xx is the suffix of the flow you want to run
 * --fusion: set if you are using fusion input, probably will not need to use
+* -il: set this if you want to test a specific dataset defined in a JSON file, rather than an entire image directory
 * -i: default will look for image input (PNG, JPG, etc.)
 	* If binary, will look for binary files instead
-* -il: set this if you want to test a specific dataset defined in a JSON file, rather than an entire image directory
 	* Example can be found at ```app/template_app/example_image_list.json```
   * Every JSON key except ```id``` is used
+* -n: set for number of images to test, default is all of the images in the test directory
 * -p: set this to determine what kind of JSON folder will be used
 	* This will only be used for internal runners, external users do not need to use this option
-* -n: set for number of images to test, default is all of the images in the test directory
 * -r: set this option if you want to resume a dataset that was previously run that ended in the middle because of crash/user stop/other error
 * -s: sort the inputs in alphanumerical order
 * -v: set this if you want to simulate the hardware limitations and drop some input images when running a video dataset
@@ -276,8 +282,10 @@ optional arguments:
 * -g: set this to indicate which team's service you want to call
 * -in: set this to the number of 520/720 devices you want to use to run inference
 * -bp: bypass batch compile
+* -dfix: set this to have the dongle output be converted to float
 
 ## Adding own application
+
 We will go over how to create your own application for testing. It is recommended to copy ```app/template_app``` as a base; we will refer to this application as ```my_app```. All your application code should be placed under ```app/my_app/```.
 
 You will need the following to run your application:
