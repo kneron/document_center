@@ -1,4 +1,4 @@
-# Kneron End to End Simulator v0.11.0
+# Kneron End to End Simulator v0.15.5
 
 This project allows users to perform image inference using Kneron's built in simulator. As of version 0.5.0 the 520 and 720 simulators have been merged into one codebase, and any existing apps will need to be updated to the new structure to work.
 
@@ -13,7 +13,7 @@ This project allows users to perform image inference using Kneron's built in sim
 	* csim_dump: model inference results will be dumped here if you used CSIM
 	* dongle_dump: model_inference results will be dumped here if you used Dongle
 	* dynasty_dump: model inference results will be dumped here if you used Dynasty
-	* out: any intermediate or output file will be dumped here
+	* out: any intermediate or output file not directly dumped from inference will be dumped here
 * c_interface: Python code and shared libraries that allows for communication with C code
   * src: example C source code for preprocess and postprocess
   * src_python: Python source code to call the corresponding C code
@@ -21,12 +21,12 @@ This project allows users to perform image inference using Kneron's built in sim
 	* common: shared classes
 	* dongle: library to perform Dongle inference
   * dynasty: library to perform Dynasty inference
-	* internal: various functions used internally, does not affect external usage
-	* nef: library to perform standalone inference with NEF/ONNX/BIE models, unused with E2E flow
-	* prepostprocess: Kneron PPP library
+  * internal: various functions used internally, does not affect external usage and can be ignored
+  * nef: library to perform standalone inference with NEF models, can be ignored
+  * prepostprocess: Kneron PPP library
   * utils: various utility functions
   * code for controlling the simulator flow
-  * various binaries and libraries for CSIM
+  * various binaries and libraries to run CSIM inference
 
 <div align="center">
 <img src="../../imgs/python_app/app_structure.png">
@@ -40,7 +40,7 @@ This project allows users to perform image inference using Kneron's built in sim
 
 * app: holds example of a test application, application does not have to be placed in this folder
 	* application: should hold input jsons, model files, and preprocess/postprocess files
-		* flow.py: filled out by the user to create testing flows for their application, REQUIRED
+		* flow.py: filled out by the user to create testing flows for their application, this file is REQUIRED
     * input_jsons: input jsons MUST be placed in this folder in the application
   * template_app: template with the requirements to run the simulator
     * you can use this as a base guideline to start your application
