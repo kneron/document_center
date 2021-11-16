@@ -289,6 +289,7 @@ optional arguments:
 We will go over how to create your own application for testing. It is recommended to copy ```app/template_app``` as a base; we will refer to this application as ```my_app```. All your application code should be placed under ```app/my_app/```.
 
 You will need the following to run your application:
+
 * all model files that you plan on testing
 	* BIE if you are running Dynasty fixed, ONNX if you are running Dynasty float
 	* weight, setup, and command binaries if you are running CSIM 520/720, ioinfo CSV file is optional
@@ -298,21 +299,25 @@ You will need the following to run your application:
 * a set of test images
 
 ### Model files
-To get the input model files from your model, [follow these steps](http://doc.kneron.com/docs/#toolchain/manual/#3-toolchain-scripts-usage). The ONNX, BIE, ioinfo CSV, and weight/setup/command binaries will all be generated upon completing step 3.2.
+
+To get the input model files from your model, [follow the steps in section 2](http://doc.kneron.com/docs/#toolchain/command_line/). The ONNX, BIE, ioinfo CSV, and weight/setup/command binaries will all be generated upon completing step 2.3.
 
 ### Preprocess and postprocess
+
 [Follow these steps](#custom-prepostprocess) to add your preprocess and postprocess functions. You may use ```my_app/template_app/preprocess.py``` and ```my_app/template_app/postprocess.py``` as a guideline.
 
 ### Setting up JSON
+
 We will be using ```my_app/postprocess.py```, ```my_app/preprocess.py```, and ```my_app/input_jsons/example.json``` for this section. Reminder that all input JSON files MUST be placed under ```my_app/input_jsons```. Refer to these [tables](#configuring-input) for more information about each specific parameter.
 
 1. Fill in the ```pre_type``` and ```post_type``` fields with the corresponding functions you would like to run for preprocess and postprocess. In our case, it will be the ```preprocess``` and ```postprocess``` functions in their respective files. You want to fill in these two fields with a string that is similar to a Python import, with the import being relative to ```my_app/```. For the ```pre_type``` field, it would be ```preprocess.preprocess```. It is essentially the relative path to the preprocess file with "." instead of "/", and with the name of your preprocess function attached to the end. It is the same case for the postprocess function.
 2. Fill in the type of inferencer and Kneron platform you wish to use in ```emu_mode``` and ```platform```.
-3. Fill in ```model_type``` with the name of your model (this is only for dumping out files). 
+3. Fill in ```model_type``` with the name of your model (this is only for dumping out files).
 4. Fill in the subsection that you set in ```emu_mode``` with the correct values. The paths you specify may be absolute or relative to ```my_app/```.
 5. Fill in or modify any other sections in the input JSON that you feel is appropriate.
 
 ### Setting up flow
+
 We will be referring to ```my_app/flow.py``` for this section. DO NOT place ```flow.py``` in another folder; it must be placed in the base folder of the application.
 
 <div align="center">
@@ -328,6 +333,7 @@ We will be referring to ```my_app/flow.py``` for this section. DO NOT place ```f
 4. You may return a dictionary to be dumped out to a file. The dictionary will be dumped to an output JSON file in a file called ```results.json``` with the same keys and values that you provide. There will be one JSON file per input image that you provide; it will be under the bin folder following the same path as the original image. This is for convenience to see all the results for each test image that you provide.
 
 ### Running the test.
+
 The last step is to prepare your image dataset. Your image data set can be placed anywhere. An small example dataset is in ```app/test_image_folder```.
 
 Now, we can run the test. Arguments are explained [here](#usage). This is assuming you copied ```my_app``` into the app folder.
@@ -343,9 +349,11 @@ python3 simulator.py app/fd_external app/test_image_folder/fd fdr
 ```
 
 ## Python API Inference
+
 This is a standalone feature that allows the user to perform inference given a model and some inputs. This is separate from the E2E Simulator itself. For details, you can take a look at ```python_flow/kneron_inference.py```.
 
 ### Necessary items
+
 There are only two items that you need to prepare to run the inference function. Everything else is optional.
 
 * preprocessed input: list of NumPy arrays in (1, h, w, c) format
@@ -364,7 +372,7 @@ def kneron_inference(pre_results, nef_file="", onnx_file="", bie_file="", model_
 	* only one of these will be used, if they are all specified priority is NEF -> ONNX -> BIE
 * ```model_id```: ID of model to run inference
 	* only used with NEF file
-  * only needed if NEF model has model models
+  * only needed if NEF model has multiple models
 * ```input_names```: list of input node names
 	* only needed with ONNX/BIE file
 * ```radix```: integer radix to convert from float to fixed input
@@ -384,9 +392,11 @@ def kneron_inference(pre_results, nef_file="", onnx_file="", bie_file="", model_
 	* ```520``` or ```720```
 
 ### Usage
+
 Prepare a preprocess function and postprocess function. Then, simply call the kneron_inference function using the results of your preprocess function and input model file to get inference results. Then, use those inference results as input into your postprocess function.
 
 ### Example
+
 For a detailed example on how to call the kneron_inference function, please explore this [YOLO example](http://doc.kneron.com/docs/toolchain/yolo_example/#python-api).
 
 ## FAQ
