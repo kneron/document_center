@@ -90,7 +90,9 @@ download Docker Desktop.
 >
 > For Windows 10 users, we recommend using docker with wsl2, which is Windows subsystem Linux provided by Microsoft.
 > Here is [how to install wsl2](https://docs.microsoft.com/en-us/windows/wsl/install-win10) and
-> [how to install and run docker with wsl2](https://docs.docker.com/docker-for-windows/wsl/)
+> [how to install and run docker with wsl2](https://docs.docker.com/docker-for-windows/wsl/). Also, you might to want to
+> adjust the resources docker use to ensure the tools' normal usage. Please check the FAQ at the end of this document on
+> how to do that.
 
 Please double-check whether the docker is successfully installed and callable from the console before going on to the
 next section. If there is any problem about the docker installation, please search online or go to the docker community
@@ -672,3 +674,43 @@ Please try the following solutions:
 3. Fine tuning the analysis with outlier and quantize mode.
 
 If none of the above works, please search on forum <https://www.kneron.com/forum/categories/ai-model-migration>. You can also contact us through the forum if no match issue found. The technical support would reply directly to your post.
+
+
+### 3. How to adjust the system resources usage of the docker?
+
+To ensure the quantization tool can work, we recommend the docker has at least 4GB of memory. The actual required size depends on your model size and the image number of quantization.
+
+For Linux uses, by default, docker can share all the CPU and memory resouces of their host machine. So, this isn't a problem.
+But for Windows users, not like Linux, the system resources are not shared. User might want to adjust the resources usage by themselves.
+
+For the docker based on wsl2, as we recommended in the section 1 of this document, it can use update to 50% of your total system memory and all the CPU resources. And here is a artical introduce [how to manage the system resources used by wsl2](https://ryanharrison.co.uk/2021/05/13/wsl2-better-managing-system-resources.html#:~:text=1%20Setting%20a%20WSL2%20Memory%20Limit.%20By%20default,the%20WSL2%20Virtual%20Disk.%20...%204%20Docker.%20).
+
+For the docker based on wsl, users can find the management of the system resouces directly in the setting of the docker.
+
+For the docker toolbox, it is actually based on the VirtualBox virtual machine. So, user need find which virtual machine the docker is using first. User need to start the docker terminal to ensure the docker is running before we start. And here is following precedue
+
+* Open the VirtualBox management tool.
+
+<div align="center">
+<img src="https://www.kneron.com/forum/uploads/482/12PLQFMGH9BV.jpg">
+<p><span style="font-weight: bold;">Figure FAQ3.1</span> VirtualBox</p>
+
+* Check the status. There should be only one virtual machine running if there is no other virtual machines started manually by the user.
+
+<img src="https://www.kneron.com/forum/uploads/216/ASLEVYP50EBB.jpg">
+<p><span style="font-weight: bold;">Figure FAQ3.2</span> VM status</p>
+</div>
+
+* Close the docker terminal and shutdown the virtual machine before we adjust the resources usage.
+
+<img src="https://www.kneron.com/forum/uploads/610/2U405146XBZ5.jpg">
+<p><span style="font-weight: bold;">Figure FAQ3.3</span> VM shutdown</p>
+</div>
+
+* Adjust the memory usage in the virtual machine settings. You can also change the cpu count here as well.
+
+<img src="https://www.kneron.com/forum/uploads/558/E0TXAFQZE8S5.jpg">
+<p><span style="font-weight: bold;">Figure FAQ3.4</span> VM settings</p>
+</div>
+
+* Save the setting and restart the docker terminal. Now you can use more memory in your docker container.
