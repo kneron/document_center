@@ -647,6 +647,15 @@ hw_results = ktc.kneron_inference(input_data, nef_file=compile_result, model_id=
 
 After getting the `hw_results` and post-process it, you may want to compare the result with the `fixed_results` which is generated in section 4.2 to see if the results match. If the results mismatch, please contact us direcly through forum <https://www.kneron.com/forum/>.
 
+### 5.3 NEF Combine
+
+This section is not part of the normal workflow. But it would be very useful when you already have multiple nef files, some of which might from different versions of the toolchain, and you want to combine them into one. Here we provide a python API to achieve it.
+
+```python
+ktc.combine_nef(nef_path_list, output_path = "/data1/combined")
+```
+
+Here the `nef_path_list` shall be a list of the `str` which are the path to the nef files you want to combine. It should not be empty. And the second argument is optional. It should be the output folder path of the combined nef. By default, it should be `/data1/combined`. The return value is the output folder path. The combined nef file would be under the output folder and be named as `models_<target>.def`. For example, if your target platform is 520, the result file name would be `models_520.nef` inside the output folder.
 
 ## 6 What's Next
 
