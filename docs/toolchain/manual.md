@@ -479,7 +479,7 @@ The python code would be like:
 inf_results = ktc.kneron_inference(input_data, onnx_file="/workspace/examples/LittleNet/LittleNet.onnx", input_names=["data_out"])
 ```
 
-In the code above, `inf_results` is a list of result data. `onnx_file` is the path to the input onnx. `input_data` is a list of input data after preprocess the `input_names` is a list of string mapping the input data to specific input on the graph using the sequence.
+In the code above, `inf_results` is a list of result data. `onnx_file` is the path to the input onnx. `input_data` is a list of input data after preprocess the `input_names` is a list of string mapping the input data to specific input on the graph using the sequence. **Note that the input shoule have the same dimension as the model but in channel last format.**
 
 Here we provide a very simple preprocess function which only do the resize and normalization:
 
@@ -490,8 +490,8 @@ import numpy as np
 def preprocess(input_file):
     image = Image.open(input_file)
     image = image.convert("RGB")
-    image = Image.fromarray(np.array(image)[...,::-1])
     img_data = np.array(image.resize((112, 96), Image.BILINEAR)) / 255
+    img_data = np.transpose(img_data, (1, 0, 2))
     return img_data
 ```
 
@@ -504,8 +504,8 @@ import numpy as np
 def preprocess(input_file):
     image = Image.open(input_file)
     image = image.convert("RGB")
-    image = Image.fromarray(np.array(image)[...,::-1])
     img_data = np.array(image.resize((112, 96), Image.BILINEAR)) / 255
+    img_data = np.transpose(img_data, (1, 0, 2))
     return img_data
 
 input_data = [preprocess("/workspace/examples/LittleNet/pytorch_imgs/Abdullah_0001.png")]
@@ -569,7 +569,7 @@ The python code would be like:
 fixed_results = ktc.kneron_inference(input_data, bie_file=bie_path, input_names=["data_out"], radix=radix)
 ```
 
-The usage is almost the same as using onnx. In the code above, `inf_results` is a list of result data. `bie_file` is the path to the input bie. `input_data` is a list of input data after preprocess the `input_names` is a list of model input name. We also need to provide the radix value which is a special value can be obtained by `ktc.get_radix`. If your platform is not 520, you may need an extra parameter `platform`, e.g. `platform=720`.
+The usage is almost the same as using onnx. In the code above, `inf_results` is a list of result data. `bie_file` is the path to the input bie. `input_data` is a list of input data after preprocess the `input_names` is a list of model input name. The requirement is the same as in section 3.3. We also need to provide the radix value which is a special value can be obtained by `ktc.get_radix`. If your platform is not 520, you may need an extra parameter `platform`, e.g. `platform=720`.
 
 `ktc.get_radix` takes the preprocessed input images as input and generate the radix value needed by hardware E2E simulation.
 
@@ -633,7 +633,7 @@ For the batch compile with only LittleNet, the python code would be like:
 hw_results = ktc.kneron_inference(input_data, nef_file=compile_result, radix=radix)
 ```
 
-The usage is a little different here. In the code above, `hw_results` is a list of result data. `nef_file` is the path to the input nef. `input_data` is a list of input data after preprocess. `radix` is the radix value of inputs. If your platform is not 520, you may need an extra parameter `platform`, e.g. `platform=720`.
+The usage is a little different here. In the code above, `hw_results` is a list of result data. `nef_file` is the path to the input nef. `input_data` is a list of input data after preprocess. The requirement is the same as in section 3.3. `radix` is the radix value of inputs. If your platform is not 520, you may need an extra parameter `platform`, e.g. `platform=720`.
 
 Here we use the same input `input_data` which we used in section 3.3 and the same `radix` in section 4.2. And the `compile_result` is the one that generated with only LittleNet model.
 
