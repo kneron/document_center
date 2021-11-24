@@ -317,6 +317,20 @@ Args:
 * encryption_efuse_key (str, optional): a hex code. Required in mode 2 and optional in mode 1. Defaults to "".
 * weight_compress (bool, optional): compress weight for saving space. Defaults to False.
 
+### 2.5 Combine NEF Files
+
+```python
+ktc.combine_nef(nef_path_list, output_path = "/data1/combined")
+```
+
+You can combine multiple generated NEF files into one with this API. This is very useful when you already have multiple
+nef files from different versions of the toolchain. The return value is the output folder path.
+
+Args:
+
+* nef_list (List[str]): a list of nef file paths to combine.
+* output_path (str, optional): output folder name. Defaults to /data1/combined. The nef path would be /data1/combined/models_<target>.nef.
+
 
 ## 3 Inferencer
 

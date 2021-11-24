@@ -281,6 +281,16 @@ If you have the configuration file from toolchain v0.9.0, you can use the follow
 python /workspace/scripts/upgrade_input_params.py old_input_params.json new_input_params.json
 ```
 
+#### 6.4 Combine NEF files
+
+You can combine multiple generated NEF files into one with `/workspace/libs/compiler/kneron_nef_utils`. This is very useful when you already have multiple nef files from different versions of the toolchain. The usage is as below:
+
+```bash
+/workspace/libs/compiler/kneron_nef_utils -c "nef_file_1 nef_file_2 ..." -O output_folder_name
+```
+
+In the command above, the nef file list after `-c` are the nef files you want to compiler. And the result will be saved in the folder given after `-O`. The result file is names as `models_<platform>.def`, e.g. `models_520.nef`. If the output folder is not given in the argument, the result is save in an `output` folder under the current path.
+
 ## Appendix
 
 ### A. How to configure the `input_params.json`?

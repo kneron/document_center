@@ -5,7 +5,7 @@
 # Kneron Linux Toolchain Manual
 
 **2021 Aug**
-**Toolchain v0.15.4**
+**Toolchain v0.15.5**
 
 [PDF Downloads](manual.pdf)
 
@@ -14,7 +14,7 @@
 KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 520 and KDP 720. For better
 environment compatibility, we provide a docker which include all the dependencies as well as the toolchain software.
 
-**This document is compatible with `kneron/toolchain:v0.15.4`.**
+**This document is compatible with `kneron/toolchain:v0.15.5`.**
 
  *Performance simulation result on NPU KDP520:*
 
@@ -90,7 +90,9 @@ download Docker Desktop.
 >
 > For Windows 10 users, we recommend using docker with wsl2, which is Windows subsystem Linux provided by Microsoft.
 > Here is [how to install wsl2](https://docs.microsoft.com/en-us/windows/wsl/install-win10) and
-> [how to install and run docker with wsl2](https://docs.docker.com/docker-for-windows/wsl/)
+> [how to install and run docker with wsl2](https://docs.docker.com/docker-for-windows/wsl/). Also, you might to want to
+> adjust the resources docker use to ensure the tools' normal usage. Please check the FAQ at the end of this document on
+> how to do that.
 
 Please double-check whether the docker is successfully installed and callable from the console before going on to the
 next section. If there is any problem about the docker installation, please search online or go to the docker community
@@ -111,8 +113,8 @@ You can use the following command to pull the latest toolchain docker.
 docker pull kneron/toolchain:latest
 ```
 
-Note that this document is compatible with toolchain v0.15.4. You can find the version of the toolchain in
-`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.14.2, you may need to find the
+Note that this document is compatible with toolchain v0.15.5. You can find the version of the toolchain in
+`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.15.5, you may need to find the
 latest document from the [online document center](http://doc.kneron.com/docs).
 
 ## 2. Toolchain Docker Overview
@@ -477,7 +479,7 @@ The python code would be like:
 inf_results = ktc.kneron_inference(input_data, onnx_file="/workspace/examples/LittleNet/LittleNet.onnx", input_names=["data_out"])
 ```
 
-In the code above, `inf_results` is a list of result data. `onnx_file` is the path to the input onnx. `input_data` is a list of input data after preprocess the `input_names` is a list of string mapping the input data to specific input on the graph using the sequence.
+In the code above, `inf_results` is a list of result data. `onnx_file` is the path to the input onnx. `input_data` is a list of input data after preprocess the `input_names` is a list of string mapping the input data to specific input on the graph using the sequence. **Note that the input shoule have the same dimension as the model but in channel last format.**
 
 Here we provide a very simple preprocess function which only do the resize and normalization:
 
@@ -488,8 +490,8 @@ import numpy as np
 def preprocess(input_file):
     image = Image.open(input_file)
     image = image.convert("RGB")
-    image = Image.fromarray(np.array(image)[...,::-1])
     img_data = np.array(image.resize((112, 96), Image.BILINEAR)) / 255
+    img_data = np.transpose(img_data, (1, 0, 2))
     return img_data
 ```
 
@@ -502,8 +504,8 @@ import numpy as np
 def preprocess(input_file):
     image = Image.open(input_file)
     image = image.convert("RGB")
-    image = Image.fromarray(np.array(image)[...,::-1])
     img_data = np.array(image.resize((112, 96), Image.BILINEAR)) / 255
+    img_data = np.transpose(img_data, (1, 0, 2))
     return img_data
 
 input_data = [preprocess("/workspace/examples/LittleNet/pytorch_imgs/Abdullah_0001.png")]
@@ -567,7 +569,7 @@ The python code would be like:
 fixed_results = ktc.kneron_inference(input_data, bie_file=bie_path, input_names=["data_out"], radix=radix)
 ```
 
-The usage is almost the same as using onnx. In the code above, `inf_results` is a list of result data. `bie_file` is the path to the input bie. `input_data` is a list of input data after preprocess the `input_names` is a list of model input name. We also need to provide the radix value which is a special value can be obtained by `ktc.get_radix`. If your platform is not 520, you may need an extra parameter `platform`, e.g. `platform=720`.
+The usage is almost the same as using onnx. In the code above, `inf_results` is a list of result data. `bie_file` is the path to the input bie. `input_data` is a list of input data after preprocess the `input_names` is a list of model input name. The requirement is the same as in section 3.3. We also need to provide the radix value which is a special value can be obtained by `ktc.get_radix`. If your platform is not 520, you may need an extra parameter `platform`, e.g. `platform=720`.
 
 `ktc.get_radix` takes the preprocessed input images as input and generate the radix value needed by hardware E2E simulation.
 
@@ -599,9 +601,9 @@ The Python API is very simple:
 compile_result = ktc.compile(model_list)
 ```
 
-The `compile_result` is the path for the generated nef file. By default, it is under /data1/batch_compile. It takes a list of `ktc.ModelConfig` object as input. Note that the ModelConfig onject must have bie file inside. In details, it must be under either of the following status: the ModelConfig is initialized with `bie_path`, the ModelConfig is initialized with `onnx_model` or `onnx_path` but it have successfully run `analysis` function.
+The `compile_result` is the path for the generated nef file. By default, it is under /data1/batch_compile. It takes a list of `ktc.ModelConfig` object as the input `model_list`. The usage of `kt.ModelConfig` can be found in section 3.2. Note that the ModelConfig onject must have bie file inside. In details, it must be under either of the following status: the ModelConfig is initialized with `bie_path`, the ModelConfig is initialized with `onnx_model` or `onnx_path` but it have successfully run `analysis` function.
 
-For the LittleNet example, the python code would be:
+For the LittleNet example, please check the code below. Note that `km` is the `ktc.ModelConfig` object we generate in section 3.2 and use in the section 4.
 
 ```python
 compile_result = ktc.compile([km])
@@ -611,6 +613,7 @@ For multiple models, we can simply extend the model list.
 
 ```python
 # dummy.bie is not a real example bie which is available in the docker. Just for command showcase.
+# Please adjust the parameters according to your actual input.
 km2 = ktc.ModelConfig(1002, "0001", "520", bie_path="dummy.bie")
 compile_result = ktc.compile([km, km2])
 ```
@@ -631,7 +634,7 @@ For the batch compile with only LittleNet, the python code would be like:
 hw_results = ktc.kneron_inference(input_data, nef_file=compile_result, radix=radix)
 ```
 
-The usage is a little different here. In the code above, `hw_results` is a list of result data. `nef_file` is the path to the input nef. `input_data` is a list of input data after preprocess. `radix` is the radix value of inputs. If your platform is not 520, you may need an extra parameter `platform`, e.g. `platform=720`.
+The usage is a little different here. In the code above, `hw_results` is a list of result data. `nef_file` is the path to the input nef. `input_data` is a list of input data after preprocess. The requirement is the same as in section 3.3. `radix` is the radix value of inputs. If your platform is not 520, you may need an extra parameter `platform`, e.g. `platform=720`.
 
 Here we use the same input `input_data` which we used in section 3.3 and the same `radix` in section 4.2. And the `compile_result` is the one that generated with only LittleNet model.
 
@@ -645,6 +648,15 @@ hw_results = ktc.kneron_inference(input_data, nef_file=compile_result, model_id=
 
 After getting the `hw_results` and post-process it, you may want to compare the result with the `fixed_results` which is generated in section 4.2 to see if the results match. If the results mismatch, please contact us direcly through forum <https://www.kneron.com/forum/>.
 
+### 5.3 NEF Combine
+
+This section is not part of the normal workflow. But it would be very useful when you already have multiple nef files, some of which might from different versions of the toolchain, and you want to combine them into one. Here we provide a python API to achieve it.
+
+```python
+ktc.combine_nef(nef_path_list, output_path = "/data1/combined")
+```
+
+Here the `nef_path_list` shall be a list of the `str` which are the path to the nef files you want to combine. It should not be empty. And the second argument is optional. It should be the output folder path of the combined nef. By default, it should be `/data1/combined`. The return value is the output folder path. The combined nef file would be under the output folder and be named as `models_<target>.def`. For example, if your target platform is 520, the result file name would be `models_520.nef` inside the output folder.
 
 ## 6 What's Next
 
@@ -672,3 +684,43 @@ Please try the following solutions:
 3. Fine tuning the analysis with outlier and quantize mode.
 
 If none of the above works, please search on forum <https://www.kneron.com/forum/categories/ai-model-migration>. You can also contact us through the forum if no match issue found. The technical support would reply directly to your post.
+
+
+### 3. How to adjust the system resources usage of the docker?
+
+To ensure the quantization tool can work, we recommend the docker has at least 4GB of memory. The actual required size depends on your model size and the image number of quantization.
+
+For Linux uses, by default, docker can share all the CPU and memory resouces of their host machine. So, this isn't a problem.
+But for Windows users, not like Linux, the system resources are not shared. User might want to adjust the resources usage by themselves.
+
+For the docker based on wsl2, as we recommended in the section 1 of this document, it can use update to 50% of your total system memory and all the CPU resources. And here is a artical introduce [how to manage the system resources used by wsl2](https://ryanharrison.co.uk/2021/05/13/wsl2-better-managing-system-resources.html#:~:text=1%20Setting%20a%20WSL2%20Memory%20Limit.%20By%20default,the%20WSL2%20Virtual%20Disk.%20...%204%20Docker.%20).
+
+For the docker based on wsl, users can find the management of the system resouces directly in the setting of the docker.
+
+For the docker toolbox, it is actually based on the VirtualBox virtual machine. So, user need find which virtual machine the docker is using first. User need to start the docker terminal to ensure the docker is running before we start. And here is following precedue
+
+* Open the VirtualBox management tool.
+
+<div align="center">
+<img src="https://www.kneron.com/forum/uploads/482/12PLQFMGH9BV.jpg">
+<p><span style="font-weight: bold;">Figure FAQ3.1</span> VirtualBox</p>
+
+* Check the status. There should be only one virtual machine running if there is no other virtual machines started manually by the user.
+
+<img src="https://www.kneron.com/forum/uploads/216/ASLEVYP50EBB.jpg">
+<p><span style="font-weight: bold;">Figure FAQ3.2</span> VM status</p>
+</div>
+
+* Close the docker terminal and shutdown the virtual machine before we adjust the resources usage.
+
+<img src="https://www.kneron.com/forum/uploads/610/2U405146XBZ5.jpg">
+<p><span style="font-weight: bold;">Figure FAQ3.3</span> VM shutdown</p>
+</div>
+
+* Adjust the memory usage in the virtual machine settings. You can also change the cpu count here as well.
+
+<img src="https://www.kneron.com/forum/uploads/558/E0TXAFQZE8S5.jpg">
+<p><span style="font-weight: bold;">Figure FAQ3.4</span> VM settings</p>
+</div>
+
+* Save the setting and restart the docker terminal. Now you can use more memory in your docker container.
