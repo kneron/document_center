@@ -12,16 +12,17 @@ docker pull kneron/toolchain:latest
 
 Start the docker with a local folder mounted into the docker.
 
-```
+```bash
 docker run --rm -it -v /your/folder/path/for/docker_mount:/data1 kneron/toolchain:latest
 ```
 
-go to our mounted folder and download a public keras based YOLOv3 model from Github <https://github.com/qqwweee/keras-yolo3>
+Go to our mounted folder and download a public keras based YOLOv3 model from Github <https://github.com/qqwweee/keras-yolo3>
 
 ```bash
 cd /data1 && git clone https://github.com/qqwweee/keras-yolo3.git keras_yolo3
 ```
-follow the model's document to save the pretrain model as an `h5` model:
+
+Follow the model's document to save the pretrained model as an `h5` file:
 
 ```bash
 cd keras_yolo3
@@ -34,34 +35,40 @@ We now have `yolo.h5` under our mounted folder `/data1`.
 We also need to preprare some images under the mounted folder. We have provided some example input images at <http://doc.kneron.com/docs/toolchain/res/test_image10.zip>.
 
 Here is how you can get it:
+
 ```bash
 cd /data1
 wget http://doc.kneron.com/docs/toolchain/res/test_image10.zip
 unzip test_image10.zip
 ```
-Now we have images in folder `test_image10/` at `/data1`, this is for quantization.
 
-We also need some extra images for accuracy testing. But considering the complexity of document, we use only one image in toolchain docker for testing. 
+Now we have images in folder `test_image10/` at `/data1`; these are needed for quantization.
+
+We also need some extra images for accuracy testing. But considering the complexity of document, we use only one image in toolchain docker for testing.
 
 ```bash
 cd /data1
 cp /workspace/E2E_Simulator/app/test_image_folder/yolo/000000350003.jpg ./.
 ```
-Now we have images `000000350003.jpg` at `/data1`, this is for testing.
+
+Now we have image `000000350003.jpg` at `/data1` for testing.
 
 ## Step 1: Import KTC and required lib in python shell
-Now, we go through all toolchain flow by KTC(Kneron Toolchain) python api in python shell.
-* run "python" to open to python shell:
+
+Now, we go through all toolchain flow by KTC (Kneron Toolchain) using the Python API in the Python shell.
+
+* Run "python" to open to Python shell:
+
 <div align="center">
 <img src="../imgs/yolo_example/python_shell.png">
 <p><span style="font-weight: bold;">Figure 1.</span> python shell</p>
 </div>
-and then, 
 
-* import KTC and others necessary libs
+* Import KTC and other necessary modules
 
 ```python
 import ktc
+import numpy as np
 import os
 import onnx
 from PIL import Image
@@ -70,44 +77,40 @@ import numpy as np
 
 ## Step 2: Convert and optimize the pretrain model
 
-You can check model architecture with [Netron](https://netron.app/).
+You can check the model architecture with [Netron](https://netron.app/).
 
-We could find this model has no input shape, it's illegal for our toolchain. We need to specify the input shape while doing the conversion. 
+We find this model has no input shape, so it will be unable to run in our toolchain. We need to specify the input shape while doing the conversion.
 
 ```python
 # convert h5 model to onnx
-m = ktc.onnx_optimizer.keras2onnx_flow("/data1/yolo.h5", input_shape = [1,416,416,3])
+m = ktc.onnx_optimizer.keras2onnx_flow("/data1/yolo.h5", input_shape = [1, 416, 416, 3])
 ```
 
-Not only conversion, we also need to optimize it to make it compatible and efficient for our hardware.
+Not only do we need to do conversion, but we also need to optimize it to make it efficient and compatible with our hardware.
 
 ```python
 m = ktc.onnx_optimizer.onnx2onnx_flow(m)
 ```
 
 Now, we have optimized onnx model in variable "m".
-We can save the onnx model 'm' to disk for further check (like Netron or onnxruntime).
+Here, we save the onnx model 'm' to disk at `/data1/yolo.opt.onnx` for further verification (like Netron or onnxruntime) in step 4.
 
 ```python
 onnx.save(m,'yolo.opt.onnx')
 ```
-Here we save it to `/data1/yolo.opt.onnx` for further verification in Step 4.
 
 ## Step 3: IP Evaluation
-To make sure the onnx model is expected, we had better check the onnx model's performance and if there is any unsuppoorted operator (or cpu node) inside.
 
-
+To make sure the onnx model is as expected, we should check the onnx model's performance and see if there are any unsupprted operators (or CPU nodes).
 
 ```python
-# npu(only) performance simulation
+# npu (only) performance simulation
 km = ktc.ModelConfig(19, "0001", "520", onnx_model=m)
 eval_result = km.evaluate()
 print("\nNpu performance evaluation result:\n" + str(eval_result))
 ```
 
-
-
-you can see the estimated fps (npu only) report shown on your terminal like this:
+The estimated FPS (NPU only) report on your terminal should look similar to this:
 
 <div style="background-color: rgb(80, 80, 80); font-size: 11px; font-style: italic;" >
 
@@ -123,16 +126,16 @@ you can see the estimated fps (npu only) report shown on your terminal like this
     MAC efficiency to total time = 37.7799 %
     MAC idle time = 3.85105 ms
     MAC running time = 40.424 ms
-    
 ```
 
 </div>
 
-two things we have to emphasize on this report:
-* found one cpu node 'KneronResize' in our model
-* the estimated FPS is 22.5861, the report is for NPU only
+There are two things to take note of in this report:
 
-at the same time, a folder "compiler" will be generated in your docker mounted folder(/data1), the evaluation result could be found in that folder. One important thing is to check the 'ioinfo.csv' in /data1/compiler, it looks like this:
+* Found one CPU node 'KneronResize' in our model
+  Tthe estimated FPS is 22.5861, the report is for NPU only
+
+At the same time, a folder called `compiler` will be generated in your docker mounted folder (`/data1`); the evaluation result will be found in this folder. One important thing is to check the 'ioinfo.csv' in `/data1/compiler`, which looks like this:
 
 <div style="background-color: rgb(80, 80, 80); font-size: 11px; font-style: italic;" >
 
@@ -145,23 +148,23 @@ at the same time, a folder "compiler" will be generated in your docker mounted f
 
 </div>
 
+This file gives information about the special nodes in the ONNX. Each line shows the information of each node, and the first element shows the type of the special node.
+>type explanation:
+>
+>* i: input node
+>* o: output node
+>* c: cpu node
 
-this file show us some special node in onnx.
-each line shows the information of each node, and the first element of a line shows the type of the special node.
->type explaination:
->* i : input node
->* o : output node
->* c : cpu node
+We can see, under KL520, one CPU node called `up_sampling2d_1_o0_kn1` in our ONNX model.
 
-so under kl520, there is one cpu node in our onnx model, the node name is 'up_sampling2d_1_o0_kn'
+## Step 4: Check ONNX model and preprocess and postprocess are good
 
-## Step 4: Check ONNX model and Pre&Post process are good 
-If we can get correct detection result from onnx and given pre post process, everything should be good.
+If we can get correct detection result from the ONNX and provided preprocess and postprocess functions, everything should be correct.
 
-At first, we need to check the pre and post process method. we can find the information at following code <https://github.com/qqwweee/keras-yolo3/blob/master/yolo.py>.
+First, we need to check the preprocess and postprocess methods. [Here](<https://github.com/qqwweee/keras-yolo3/blob/master/yolo.py>) is the relevant code.
 
-here is the extracted pre process:
-``` python
+The following is the extracted preprocess:
+```python
 from yolo3.utils import letterbox_image
 
 def preprocess(pil_img):
@@ -173,8 +176,8 @@ def preprocess(pil_img):
     return np_data
 ```
 
-and post process:
-``` python
+This is the extracted postprocess:
+```python
 import tensorflow as tf
 import pathlib
 import sys
@@ -201,6 +204,7 @@ def postprocess(inf_results, ori_image_shape):
 
     return boxes, scores, classes
 ```
+
 Now, we can check the ONNX inference result with api 'ktc.kneron_inference'.
 
 ```python
@@ -219,27 +223,27 @@ det_res = postprocess(out_data, [input_image.size[1], input_image.size[0]])
 
 print(det_res)
 ```
-you can see the result on your terminal like this:
+
+The result will be displayed on your terminal like this:
 
 <div style="background-color: rgb(80, 80, 80); font-size: 11px; font-style: italic;" >
 
-```
+```bash
 (array([[258.8878 , 470.29474, 297.01447, 524.3069 ],
        [233.62653, 218.19923, 306.79245, 381.78162]], dtype=float32), array([0.9248918, 0.786504 ], dtype=float32), array([2, 7], dtype=int32))
 ```
 
 </div>
 
-looks good.
+This result looks good.
 
-*Note that we only use one image as example. Use more data to check accuracy is a good idea.
+> Note that we only use one image as example. Using more data to check accuracy is a good idea.
 
 ## Step 5: Quantization
-We found the preprocess method at Step 4.
 
-do the same things on our quantization data and put it in a list:
+Let us use the same preprocess on our quantization data and put it in a list:
 
-```bash
+```python
 # load and normalize all image data from folder
 img_list = []
 for (dir_path, _, file_names) in os.walk("/data1/test_image10"):
@@ -252,7 +256,7 @@ for (dir_path, _, file_names) in os.walk("/data1/test_image10"):
         img_list.append(img_data)
 ```
 
-then do quantization:
+Then, perform quantization. The BIE model will be generated at `/data1/output.bie`.
 
 ```python
 # fix point analysis
@@ -260,12 +264,11 @@ bie_model_path = km.analysis({"input_1_o0": img_list})
 print("\nFix point analysis done. Save bie model to '" + str(bie_model_path) + "'")
 ```
 
-the bie model will be generated at `/data1/output.bie`.
+## Step 6: Check if BIE model accuracy is good enough
 
-## Step 6: Check BIE model accuracy is good enough
-After quantization, the model accuracy slightly drop is expected. We had better check the accuracy is good enough to use. 
+After quantization, the slight drop in model accuracy is expected. We should check if this accuracy is good enough to use.
 
-Toolchain api 'ktc.kneron_inference' can help us to check. The usage of 'ktc.kneron_inference' is similar to Step 4, but there would be several changes:
+Toolchain API `ktc.kneron_inference` can help us to check. The usage of 'ktc.kneron_inference' is similar to Step 4, but there are several differences:
 
 1. The 2nd parameter is changed from onnx_file to bie_file.
 2. You need to provide the radix value, which can be obtained by `ktc.get_radix` with input images as the parameter.
@@ -273,7 +276,6 @@ Toolchain api 'ktc.kneron_inference' can help us to check. The usage of 'ktc.kne
 
 ```python
 ## bie model check
-
 input_image = Image.open('/data1/000000350003.jpg')
 
 # resize and normalize input data
@@ -287,29 +289,26 @@ out_data = ktc.kneron_inference([in_data], bie_file=bie_model_path, input_names=
 
 # bie output data processing
 det_res = postprocess(out_data, [input_image.size[1], input_image.size[0]])
-
 print(det_res)
 ```
 
-you can see the result on your terminal like this:
+The result will be displayed on your terminal like this:
 
 <div style="background-color: rgb(80, 80, 80); font-size: 11px; font-style: italic;" >
 
-```
+```bash
 (array([[258.51468, 467.71683, 293.07394, 529.15967]], dtype=float32), array([0.8253723], dtype=float32), array([2], dtype=int32))
 ```
 
 </div>
 
-slightly different from the Step 3, we lost one bounding box after quantization. Slightly accuracy drop is acceptable after quantization.
+This is slightly different from the result in Step 3: we lost one bounding box after quantization. Note that this loss is acceptable after quantization.
 
 *If you are running the example using 720 as the hardware platform, there might be one extra bounding box. This is normal. We may observe different behaviour from 520 and 720.*
 
-*Note that we only use one image as example. Use more data to check accuracy is a good idea.
-
 ## Step 7: Compile
 
-The final step is compile the bie model to nef model. 
+The final step is compile the BIE model into an NEF model.
 
 ```python
 # compile
@@ -317,22 +316,19 @@ nef_model_path = ktc.compile([km])
 print("\nCompile done. Save Nef file to '" + str(nef_model_path) + "'")
 ```
 
-You can find the `nef` file under `/data1/batch_compile/models_520.nef`.
-The 'models_520.nef' is the final compiled model.
+You can find the NEF file under `/data1/batch_compile/models_520.nef`. `models_520.nef` is the final compiled model.
 
 
-## (optional) Step 8. Check NEF model 
-Toolchain api 'ktc.inference' does support doing NEF model inference. The usage of 'ktc.kneron_inference' is similar to Step 4 and Step 6, only several things are different
+## (optional) Step 8. Check NEF model
+
+Toolchain api `ktc.inference` does support NEF model inference. The usage of `ktc.kneron_inference` is similar to the steps in Step 4 and Step 6, with minor differences.
 
 1. The 2nd parameter is changed from to nef_model.
 2. You need to provide the radix value, which can be obtained by `ktc.get_radix` with input images as the parameter.
 3. If the platform is not 520, you need to provide an extra parameter: `platform`, e.g. `platform=720`.
 
-the code looks like this:
-
 ```python
 # nef model check
-
 input_image = Image.open('/data1/000000350003.jpg')
 
 # resize and normalize input data
@@ -346,58 +342,56 @@ out_data = ktc.kneron_inference([in_data], nef_file=nef_model_path, radix=radix)
 
 # nef output data processing
 det_res = postprocess(out_data, [input_image.size[1], input_image.size[0]])
-
 print(det_res)
 ```
-you can see the result on your terminal like this:
+
+The result will be displayed on your terminal like this:
 
 <div style="background-color: rgb(80, 80, 80); font-size: 11px; font-style: italic;" >
 
-```
+```bash
 (array([[258.51468, 467.71683, 293.07394, 529.15967]], dtype=float32), array([0.8253723], dtype=float32), array([2], dtype=int32))
 ```
 
 </div>
 
-the NEF model should be exactly the same as the BIE model results.
+> Note: the NEF model results should be exactly the same as the BIE model results.
 
+## Step 9. Prepare host_lib (Don't do it in toolchain docker)
 
-## Step 9. Prepare host_lib ( Don't do it in toolchain docker )
-To run NEF on KL520, we need help from host_lib:
+To run NEF on KL520, we need help from [host_lib](https://github.com/kneron/host_lib):
 
-https://github.com/kneron/host_lib
-
-Please 
-
-1. connect KL520 USB dongle and USB camera to your computer
+1. Connect KL520 USB dongle and USB camera to your computer
 2. git clone https://github.com/kneron/host_lib.git
-3. follow the instruction in the github link to setup the environment 
+3. Follow the instruction in the github link to setup the environment
 
-## Step 10. Run our yolo NEF on KL520 with host_lib 
+## Step 10. Run our yolo NEF on KL520 with host_lib
 
-We leverage the provided the example code in host_lib to run our yolo NEF
+We leverage the provided the example code in host_lib to run our YOLO NEF.
 
-1. replace 'host_lib/input_models/KL520/tiny_yolo_v3/models_520.nef' with our yolo NEF
-2. modified 'host_lib/python/examples_kl520/cam_dme_serial_post_host_yolo.py' line 29, change model input size from (224,224) to (416,416):
+1. Replace `host_lib/input_models/KL520/tiny_yolo_v3/models_520.nef` with our YOLO NEF.
+2. Modify `host_lib/python/examples_kl520/cam_dme_serial_post_host_yolo.py` line 29. Change model input size from (224,224) to (416,416)
 
 <div align="center">
 <img src="../imgs/yolo_example/host_lib_modify_input_size.png">
 <p><span style="font-weight: bold;">Figure 2.</span> modify input_size in example </p>
 </div>
 
-3. modify preprocess config from "Kneron" mode to "Yolo" mode
+3. Modify preprocess config from "Kneron" mode to "Yolo" mode
 
 <div align="center">
 <img src="../imgs/yolo_example/preprocess_from_KnMod_to_YoloMod.png">
 <p><span style="font-weight: bold;">Figure 3.</span> modify preprocess method in example </p>
 </div>
 
-4. run example 'cam_dme_serial_post_host_yolo.py'
+4. Run example `cam_dme_serial_post_host_yolo.py`
+
 ```bash
     cd host_lib/python
     python main.py -t KL520-cam_dme_serial_post_host_yolo
 ```
-then, you can see a window pop up and show us the yolo NEF detection result from camera:
+
+Then, you should see a window pop up and show us the YOLO NEF detection result from camera:
 
 <div align="center">
 <img src="../imgs/yolo_example/detection_res.png">
@@ -405,7 +399,8 @@ then, you can see a window pop up and show us the yolo NEF detection result from
 </div>
 
 ## Appendix
-The whole model conversion process from onnx to nef(step 1 ~ 6) could be written into one python script:
+
+The whole model conversion process from ONNX to NEF (Steps 1-6) can be combined into one Python script:
 
 ```python
 import ktc
@@ -413,7 +408,6 @@ import os
 import onnx
 from PIL import Image
 import numpy as np
-
 
 ###  post process function  ###
 import tensorflow as tf
@@ -442,8 +436,6 @@ def postprocess(inf_results, ori_image_shape):
 
     return boxes, scores, classes
 
-
-
 ###  pre process function  ###
 from yolo3.utils import letterbox_image
 
@@ -456,8 +448,6 @@ def preprocess(pil_img):
     return np_data
 
 
-
-
 # convert h5 model to onnx
 m = ktc.onnx_optimizer.keras2onnx_flow("/data1/yolo.h5", input_shape = [1,416,416,3])
 m = ktc.onnx_optimizer.onnx2onnx_flow(m)
@@ -468,7 +458,6 @@ onnx.save(m,'yolo.opt.onnx')
 km = ktc.ModelConfig(19, "0001", "520", onnx_model=m)
 eval_result = km.evaluate()
 print("\nNpu performance evaluation result:\n" + str(eval_result))
-
 
 
 ## onnx model check
@@ -515,7 +504,4 @@ radix = ktc.get_radix(img_list)
 out_data = ktc.kneron_inference([in_data], nef_file=nef_model_path, radix=radix)
 det_res = postprocess(out_data, [input_image.size[1], input_image.size[0]])
 print(det_res)
-
 ```
-
-
