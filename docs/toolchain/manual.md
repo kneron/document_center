@@ -5,7 +5,7 @@
 # Kneron Linux Toolchain Manual
 
 **2021 Aug**
-**Toolchain v0.15.4**
+**Toolchain v0.15.5**
 
 [PDF Downloads](manual.pdf)
 
@@ -14,7 +14,7 @@
 KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 520 and KDP 720. For better
 environment compatibility, we provide a docker which include all the dependencies as well as the toolchain software.
 
-**This document is compatible with `kneron/toolchain:v0.15.4`.**
+**This document is compatible with `kneron/toolchain:v0.15.5`.**
 
  *Performance simulation result on NPU KDP520:*
 
@@ -113,8 +113,8 @@ You can use the following command to pull the latest toolchain docker.
 docker pull kneron/toolchain:latest
 ```
 
-Note that this document is compatible with toolchain v0.15.4. You can find the version of the toolchain in
-`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.14.2, you may need to find the
+Note that this document is compatible with toolchain v0.15.5. You can find the version of the toolchain in
+`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.15.5, you may need to find the
 latest document from the [online document center](http://doc.kneron.com/docs).
 
 ## 2. Toolchain Docker Overview
@@ -601,9 +601,9 @@ The Python API is very simple:
 compile_result = ktc.compile(model_list)
 ```
 
-The `compile_result` is the path for the generated nef file. By default, it is under /data1/batch_compile. It takes a list of `ktc.ModelConfig` object as input. Note that the ModelConfig onject must have bie file inside. In details, it must be under either of the following status: the ModelConfig is initialized with `bie_path`, the ModelConfig is initialized with `onnx_model` or `onnx_path` but it have successfully run `analysis` function.
+The `compile_result` is the path for the generated nef file. By default, it is under /data1/batch_compile. It takes a list of `ktc.ModelConfig` object as the input `model_list`. The usage of `kt.ModelConfig` can be found in section 3.2. Note that the ModelConfig onject must have bie file inside. In details, it must be under either of the following status: the ModelConfig is initialized with `bie_path`, the ModelConfig is initialized with `onnx_model` or `onnx_path` but it have successfully run `analysis` function.
 
-For the LittleNet example, the python code would be:
+For the LittleNet example, please check the code below. Note that `km` is the `ktc.ModelConfig` object we generate in section 3.2 and use in the section 4.
 
 ```python
 compile_result = ktc.compile([km])
@@ -613,6 +613,7 @@ For multiple models, we can simply extend the model list.
 
 ```python
 # dummy.bie is not a real example bie which is available in the docker. Just for command showcase.
+# Please adjust the parameters according to your actual input.
 km2 = ktc.ModelConfig(1002, "0001", "520", bie_path="dummy.bie")
 compile_result = ktc.compile([km, km2])
 ```
