@@ -191,6 +191,10 @@ python /workspace/libs/ONNX_Convertor/tflite-onnx/onnx_tflite/tflite2onnx.py -tf
 
 Then need to run the command in [section 6](#6-onnx-to-onnx-onnx-optimization).
 
+*__TF Lite quant models:__*
+
+If the tflite model provided is a quantized model, use the same command above to convert it into onnx. A user_config.json will be generated in the same path as -save_path provided. This file could be moved to the model input folder as one of the knerex input to do better quantization.
+
 ## 6 ONNX to ONNX (ONNX optimization)
 
 After converting models from other frameworks to onnx format, you need to run the following command to optimize the 
