@@ -38,6 +38,7 @@ Kneron AI consists the following components:
 
 Versions           | KL520 SDK version | KL720 SDK version 
 :------------------|:------------------|:--------------
+Kneron PLUS v1.3.x | 1.7.x             | 1.5.x         
 Kneron PLUS v1.2.x | 1.6.x             | 1.4.x         
 host_lib    v1.0.0 | 1.5.0.0           | 1.3.0         
 host_lib    v0.9.x | 1.4.0.x           | 
@@ -56,8 +57,8 @@ Please see [Kneron PLUS - Getting Started](./plus/getting_started.md) as a start
 ## Reference
 
  - [Kneron PLUS](./plus/introduction/introduction.md) 
- - [Firmware KL520 SDK](./520_1.6.0/introduction.md)
- - [Firmware KL720 SDK](./720_1.4.0/introduction.md)
+ - [Firmware KL520 SDK](./520_1.7.0/introduction.md)
+ - [Firmware KL720 SDK](./720_1.5.0/introduction.md)
  - [Kneron Model Toolchain](./toolchain/manual.md)
  - [Model Zoo - examples](./plus/modelzoo/index.md)
  - [Model Zoo - retraining](./model_training/classification.md)

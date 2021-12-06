@@ -33,24 +33,24 @@ Below gives some definitions regarding the Kneron PLUS:
 
 The features which PLUS Supported are listed below:
 
-Index   | Category              | Supported Item                                            | KL520 | KL720
+Index   | Category              | Supported Item                                            | KL520 | KL720 
 ------- | :-------------------- | :-------------------------------------------------------- | :---: | :---:
-1       | Image Format          | RGBA8888 , RAW8 , YUYV422 , RGB565                        |       |
-2       | System                | Firmware In Flash                                         |       |
-3       |                       | Model In Flash                                            |       |
-4       |                       | Runtime Upload Firmware                                   |       | X
-5       |                       | Runtime Upload Model                                      |       |
-6       |                       | Software Reset                                            |       |
-7       |                       | Software Shutdown (/Developing Broad Only)          |       | X
-8       |                       | Software Reboot                                           |       |
-9       |                       | Scan Devices                                              |       |
-10      |                       | Device Log via USB                                        |       |
-11      |                       | Device Connection : All Dongles, Specified Dongle(s)                          |       |
-12      | Inference             | Flexible Send / Receive Inference                         |       |
-13      |                       | Multiple Dongle Auto Dispatch                             |       |
-14      |                       | Enable / Disable Pre-process on Device                    |       |
+1       | Image Format          | RGBA8888 , RAW8 , YUYV422 , RGB565 , YCbCr                |       |       
+2       | System                | Firmware In Flash                                         |       |       
+3       |                       | Model In Flash                                            |       |       
+4       |                       | Runtime Upload Firmware                                   |       | X     
+5       |                       | Runtime Upload Model                                      |       |       
+6       |                       | Software Reset                                            |       |       
+7       |                       | Software Shutdown (/Developing Broad Only)                |       | X     
+8       |                       | Software Reboot                                           |       |       
+9       |                       | Scan Devices                                              |       |       
+10      |                       | Device Log via USB                                        |       |       
+11      |                       | Device Connection : All Dongles, Specified Dongle(s)      |       |       
+12      | Inference             | Flexible Send / Receive Inference                         |       |       
+13      |                       | Multiple Dongle Auto Dispatch                             |       |       
+14      |                       | Enable / Disable Pre-process on Device                    |       |       
 15      |                       | Enable / Disable Post-process on Device                   |       |
-16      |                       | Output Floating Point / Fixed Point Result              |       |
+16      |                       | Output Floating Point / Fixed Point Result                |       |
 17      | System / Model Info   | Get Firmware Version                                      |       |
 18      |                       | Get KN Number                                             |       |
 19      |                       | Get Model CRC                                             |       |
@@ -69,7 +69,11 @@ Index   | Category              | Supported Item                                
 32      |                       | Generic Inference (Bypass Pre Process)                    |       |
 33      |                       | Customized Inference with Single Model (C code only)      |       | X
 34      |                       | Customized Inference with Multiple Models (C code only)   |       | X
-35      | Model Zoo Examples    | Simple examples for pre-trained models                    |       |
+35      | Inference Debug       | Data Dump for Inference Process (C code only)             |       | 
+36      |                       | Inference Profiling APIs (C code only)                    |       | 
+38      | Model Zoo Examples    | Simple examples for pre-trained models                    |       |
+39      | Utilities             | (win10) USB Driver Installer example                      |       | 
+
 
 
 The following components are contained in Kneron PLUS:
