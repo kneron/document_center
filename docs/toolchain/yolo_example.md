@@ -361,7 +361,7 @@ The result will be displayed on your terminal like this:
 
 To run NEF on KL520, we need help from [Kneron PLUS](http://doc.kneron.com/docs/#plus/getting_started/):
 
-1. Connect KL520 USB dongle and USB camera to your computer
+1. Connect KL520 USB dongle to your computer
 2. Follow the instruction in document([Kneron PLUS](http://doc.kneron.com/docs/#plus/getting_started/)) to setup the environment (Note: python usage document is at "kneron_plus/python/README.md" in Kneron PLUS folder) 
 
 ## Step 10. Run our yolo NEF on KL520 with Kneron PLUS
@@ -369,14 +369,14 @@ To run NEF on KL520, we need help from [Kneron PLUS](http://doc.kneron.com/docs/
 We leverage the provided the example code in Kneron PLUS to run our YOLO NEF.
 
 1. Replace `kneron_plus/res/models/KL520/tiny_yolo_v3/models_520.nef` with our YOLO NEF.
-2. Modify `kneron_plus/python/example/KL520DemoGenericInferencePostYolo.py` line 20. Change input image from bike_cars_street_224x224.bmp to bike_cars_street_416x416.bmp
+2. Modify `kneron_plus/python/example/KL520DemoGenericInferencePostYolo.py` line 20. Change input image from "bike_cars_street_224x224.bmp" to "bike_cars_street_416x416.bmp"
 
 <div align="center">
 <img src="../imgs/yolo_example/kplus_modify_input_img.png">
 <p><span style="font-weight: bold;">Figure 2.</span> modify input image in example </p>
 </div>
 
-3. Modify line 105. change preprocess config from "Kneron" mode to "Yolo" mode
+3. Modify line 105. change normaization method in preprocess config from "Kneron" mode to "Yolo" mode
 
 <div align="center">
 <img src="../imgs/yolo_example/preprocess_from_KnMod_to_YoloMod.png">
@@ -390,7 +390,7 @@ We leverage the provided the example code in Kneron PLUS to run our YOLO NEF.
     python KL520DemoGenericInferencePostYolo.py
 ```
 
-Then, you should see a window pop up and show us the YOLO NEF detection result from camera:
+Then, you should see the YOLO NEF detection result is saved to "./output_bike_cars_street_416x416.bmp" :
 
 <div align="center">
 <img src="../imgs/yolo_example/detection_res.png">
