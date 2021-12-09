@@ -105,7 +105,7 @@ To make sure the onnx model is as expected, we should check the onnx model's per
 
 ```python
 # npu (only) performance simulation
-km = ktc.ModelConfig(19, "0001", "520", onnx_model=m)
+km = ktc.ModelConfig(33, "0001", "520", onnx_model=m)
 eval_result = km.evaluate()
 print("\nNpu performance evaluation result:\n" + str(eval_result))
 ```
@@ -357,41 +357,40 @@ The result will be displayed on your terminal like this:
 
 > Note: the NEF model results should be exactly the same as the BIE model results.
 
-## Step 9. Prepare host_lib (Don't do it in toolchain docker)
+## Step 9. Prepare Kneron PLUS (Don't do it in toolchain docker)
 
-To run NEF on KL520, we need help from [host_lib](https://github.com/kneron/host_lib):
+To run NEF on KL520, we need help from [Kneron PLUS](http://doc.kneron.com/docs/#plus/getting_started/):
 
-1. Connect KL520 USB dongle and USB camera to your computer
-2. git clone https://github.com/kneron/host_lib.git
-3. Follow the instruction in the github link to setup the environment
+1. Connect KL520 USB dongle to your computer
+2. Follow the instruction in document([Kneron PLUS](http://doc.kneron.com/docs/#plus/getting_started/)) to setup the environment (Note: python usage document is at "kneron_plus/python/README.md" in Kneron PLUS folder) 
 
-## Step 10. Run our yolo NEF on KL520 with host_lib
+## Step 10. Run our yolo NEF on KL520 with Kneron PLUS
 
-We leverage the provided the example code in host_lib to run our YOLO NEF.
+We leverage the provided the example code in Kneron PLUS to run our YOLO NEF.
 
-1. Replace `host_lib/input_models/KL520/tiny_yolo_v3/models_520.nef` with our YOLO NEF.
-2. Modify `host_lib/python/examples_kl520/cam_dme_serial_post_host_yolo.py` line 29. Change model input size from (224,224) to (416,416)
+1. Replace `kneron_plus/res/models/KL520/tiny_yolo_v3/models_520.nef` with our YOLO NEF.
+2. Modify `kneron_plus/python/example/KL520DemoGenericInferencePostYolo.py` line 20. Change input image from "bike_cars_street_224x224.bmp" to "bike_cars_street_416x416.bmp"
 
 <div align="center">
-<img src="../imgs/yolo_example/host_lib_modify_input_size.png">
-<p><span style="font-weight: bold;">Figure 2.</span> modify input_size in example </p>
+<img src="../imgs/yolo_example/kplus_modify_input_img.png">
+<p><span style="font-weight: bold;">Figure 2.</span> modify input image in example </p>
 </div>
 
-3. Modify preprocess config from "Kneron" mode to "Yolo" mode
+3. Modify line 105. change normaization method in preprocess config from "Kneron" mode to "Yolo" mode
 
 <div align="center">
 <img src="../imgs/yolo_example/preprocess_from_KnMod_to_YoloMod.png">
-<p><span style="font-weight: bold;">Figure 3.</span> modify preprocess method in example </p>
+<p><span style="font-weight: bold;">Figure 3.</span> modify normalization method in example </p>
 </div>
 
-4. Run example `cam_dme_serial_post_host_yolo.py`
+4. Run example `KL520DemoGenericInferencePostYolo.py`
 
 ```bash
-    cd host_lib/python
-    python main.py -t KL520-cam_dme_serial_post_host_yolo
+    cd kneron_plus/python/example
+    python KL520DemoGenericInferencePostYolo.py
 ```
 
-Then, you should see a window pop up and show us the YOLO NEF detection result from camera:
+Then, you should see the YOLO NEF detection result is saved to "./output_bike_cars_street_416x416.bmp" :
 
 <div align="center">
 <img src="../imgs/yolo_example/detection_res.png">
@@ -454,8 +453,10 @@ m = ktc.onnx_optimizer.onnx2onnx_flow(m)
 onnx.save(m,'yolo.opt.onnx')
 
 
+# setup ktc config
+km = ktc.ModelConfig(33, "0001", "520", onnx_model=m)
+
 # npu(only) performance simulation
-km = ktc.ModelConfig(19, "0001", "520", onnx_model=m)
 eval_result = km.evaluate()
 print("\nNpu performance evaluation result:\n" + str(eval_result))
 
@@ -488,7 +489,7 @@ print("\nFix point analysis done. Save bie model to '" + str(bie_model_path) + "
 input_image = Image.open('/data1/000000350003.jpg')
 in_data = preprocess(input_image)
 radix = ktc.get_radix(img_list)
-out_data = ktc.kneron_inference([in_data], bie_file=bie_model_path, input_names=["input_1_o0"], radix=radix)
+out_data = ktc.kneron_inference([in_data], bie_file=bie_model_path, input_names=["input_1_o0"], radix=radix, platform=520)
 det_res = postprocess(out_data, [input_image.size[1], input_image.size[0]])
 print(det_res)
 
@@ -501,7 +502,7 @@ print("\nCompile done. Save Nef file to '" + str(nef_model_path) + "'")
 input_image = Image.open('/data1/000000350003.jpg')
 in_data = preprocess(input_image)
 radix = ktc.get_radix(img_list)
-out_data = ktc.kneron_inference([in_data], nef_file=nef_model_path, radix=radix)
+out_data = ktc.kneron_inference([in_data], nef_file=nef_model_path, radix=radix, platform=520)
 det_res = postprocess(out_data, [input_image.size[1], input_image.size[0]])
 print(det_res)
 ```
