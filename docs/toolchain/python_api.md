@@ -90,7 +90,7 @@ Args:
 #### General onnx optimization
 
 ```python
-ktc.onnx_optimizer.onnx2onnx_flow(m, disable_fuse_bn=False, bn_on_skip=False, bn_before_add=False, bgr=False, norm=False, rgba2yynn=False, eliminate_tail=False)
+ktc.onnx_optimizer.onnx2onnx_flow(m, disable_fuse_bn=False, bn_on_skip=False, bn_before_add=False, bgr=False, norm=False, rgba2yynn=False, eliminate_tail=False, opt_matmul=False)
 ```
 
 Return the optimized model. Optimize the onnx model.
@@ -105,6 +105,7 @@ Args:
 * norm (bool, optional): add an Conv layer to add 0.5 tp the input. Defaults to False.
 * rgba2yynn (bool, optional): add an Conv layer to convert rgb input to yynn . Defaults to False.
 * eliminate_tail (bool, optional): remove the trailing NPU unsupported nodes. Defaults to False.
+* opt_matmul (bool, optional): optimize the MatMul layers according to the NPU limit. Defaults to False.
 
 ### 1.3 Editors
 

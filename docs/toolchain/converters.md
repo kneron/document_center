@@ -209,6 +209,12 @@ python /workspace/libs/ONNX_Convertor/optimizer_scripts/onnx2onnx.py input.onnx 
 If you meet the errors related to `node not found` or `invalid input`, this might be caused by a bug in the onnx
 library. Please try using `--no-bn-fusion` flag.
 
+*__MatMul optimization for kneron hardware__*
+
+If your model has MatMul nodes with inputs of 3D instead of 2D and you want to deploy your model using Kneron hardware,
+please use `--opt-matmul` flag to optimize the model. This flag allows the optimizer to split the input due to current
+hardware input without affecting the correctness of calculation.
+
 ## 7 Model Editor
 
 KL720 NPU supports most of the compute extensive OPs, such as Conv, BatchNormalization, Fully Connect/GEMM, in order to
