@@ -44,7 +44,7 @@ UART0: Command Port (either CN10 or J8)
 
 2. Edit setup.py, search “COM_ID” and modify the ID to match your UART port number
 
-    ex: COM_ID = 3 # COM3
+    ex: COM_ID = 6 # COM6
 
     ![](../imgs/flash_management/com_port_num.png)
 
@@ -58,11 +58,11 @@ Morever, the addressing is in 4KB alignment.
 Command:
 
     >> python3 bin_gen.py <options>
-
+    
     options argument:
-
+    
     -h, --help      Show this help message and exit
-
+    
     -p, --CPU_ONLY  SPL/SCPU/NCPU only
 
 Output:

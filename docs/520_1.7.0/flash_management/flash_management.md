@@ -56,7 +56,7 @@ Please do it every time after plugging in the power
 
 2. Edit setup.py, search “**COM_ID**” and modify the ID to match your UART port number
 
-   EX: COM_ID = 3 # COM3
+   EX: COM_ID = 4 # COM4
 
    ![](img/10_3_1.png)
 
