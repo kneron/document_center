@@ -1,6 +1,6 @@
 # Introduction
 
-**note:** KL520 SDK v1.6.x starts to support Kneron PLUS
+**note:** KL520 SDK v1.7.x is compatible with Kneron PLUS v1.3.x
 
 ## 1. Requirements
 
