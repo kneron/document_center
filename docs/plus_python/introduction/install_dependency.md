@@ -1,0 +1,88 @@
+# Installation
+
+Verified platforms and OS to run Kneron PLUS API:
+
+- Windows 10 (x86_64 64-bit)
+- Ubuntu 18.04 (x86_64 64-bit)
+- Raspberry Pi OS - Buster (armv7l 32-bit)
+
+And the following sections in this chapter will provide the instructions for installing the tools and dependency python packages to the corresponding platform.
+
+## 1. Install Python Package
+
+- Upgrade pip (pip version >= 21.X.X):
+    ```bash
+    $ python -m pip install --upgrade pip
+    ```
+
+- Install the package with pip:  
+    ```bash
+    $ # Please make sure your pip version >= 21.X.X before installing python packages.
+    $ cd ./package/{platform}/
+    $ pip install KneronPLUS-{version}-py3-none-any.whl
+    ```
+
+- Install the examples requirement package with pip:
+    ```bash
+    $ pip install opencv-python
+    ```
+
+## 2. Install Kneron AI Device Driver on Windows 10
+
+#### 2.1 Using **PLUS Example** to Install Driver
+
+- Please refer [Run Example](./run_example.md#4-install-driver-for-windows-example) for the usage.
+
+#### 2.2 Using **Kneron DFUT** to Install Driver
+
+- Please refer [Upgrade AI Device To KDP2](./upgrade_ai_device_to_kdp2.md#3-install-driver-for-windows) for the usage.
+
+#### 2.3 Using **Zadig** to Install Driver
+
+- Download Zadig application from zadig.akeo.ie appropriate for Windows 10.
+- Connect Kneron KL520/KL720 device to your PC.
+- Run the Zadig application.
+
+1. KL520
+
+    - The application should detect Kneron KL520 device as "Kneron KL520" with USB ID
+    "3231/0100" as shown below:
+
+        ![](../imgs/zadig_install_kl520_driver.png)
+
+    - Make sure that the Driver field, has WinUSB option selected.
+
+    - Click "Install Driver" button.
+
+2. KL720
+
+    - The application should detect Kneron KL720 device as "Kneron KL720" with USB ID
+    "3231/0200" as shown below:
+
+        ![](../imgs/zadig_install_kl720_driver.png)
+
+    - Make sure that the Driver field, has WinUSB option selected.
+
+    - Click "Install Driver" button.
+
+    **Note**: After Upgrade Kneron KL720 to KDP2 (ex. via Kneron DFUT), you may need to re-install the driver of KL720, since the USB ID will be changed to "3231/0720".
+
+## 3. Update Kneron AI Device USB Permission on Ubuntu  
+
+ * Config USB permission on Ubuntu  
+   ```bash
+   $ sudo bash install_libusb.sh
+   ```
+
+ * Or add following lines in `/etc/udev/rules.d/10-local.rules` manually  
+   ```text
+   KERNEL=="ttyUSB*",ATTRS{idVendor}=="067b",ATTRS{idProduct}=="2303",MODE="0777",SYMLINK+="kneron_uart"
+   KERNEL=="ttyUSB*",ATTRS{idVendor}=="1a86",ATTRS{idProduct}=="7523",MODE="0777", SYMLINK+="kneron_pwr"
+   SUBSYSTEM=="usb",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0100",MODE="0666"
+   SUBSYSTEM=="usb",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0200",MODE="0666"
+   SUBSYSTEM=="usb",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0720",MODE="0666"
+   ```
+   and restart service by following command  
+   ```bash
+   $ sudo udevadm trigger
+   ```

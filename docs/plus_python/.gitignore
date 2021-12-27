@@ -1,0 +1,5 @@
+.vscode/
+.vs
+.idea
+__pycache__
+kp_*
