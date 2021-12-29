@@ -8,7 +8,7 @@ This tutorial shows how to get system information from Kneron devices.
 
 ---
 
-### Get system information of Kneron devices by `kp.core.get_system_info(device_group: DeviceGroup, usb_port_id: int)`:
+### Get system information of Kneron devices by *kp.core.get_system_info(device_group: DeviceGroup, usb_port_id: int)*:
 
 ```python
 system_infos = []

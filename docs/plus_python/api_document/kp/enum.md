@@ -162,11 +162,11 @@ Return code of PLUS APIs.
 
     **KP_FW_NCPU_INVALID_IMAGE_201** : [`int`](https://docs.python.org/3/library/functions.html#int), default=201
 
-    **KP_FW_EFUSE_CAN_NOT_BURN** : [`int`](https://docs.python.org/3/library/functions.html#int), default=300
+    **KP_FW_EFUSE_CAN_NOT_BURN_300** : [`int`](https://docs.python.org/3/library/functions.html#int), default=300
 
-    **KP_FW_EFUSE_PROTECTED** : [`int`](https://docs.python.org/3/library/functions.html#int), default=301
+    **KP_FW_EFUSE_PROTECTED_301** : [`int`](https://docs.python.org/3/library/functions.html#int), default=301
 
-    **KP_FW_EFUSE_OTHER** : [`int`](https://docs.python.org/3/library/functions.html#int), default=302
+    **KP_FW_EFUSE_OTHER_302** : [`int`](https://docs.python.org/3/library/functions.html#int), default=302
 
 
 <!-- !! processed by numpydoc !! -->

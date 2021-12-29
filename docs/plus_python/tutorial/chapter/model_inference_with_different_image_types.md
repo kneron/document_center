@@ -11,7 +11,7 @@ This tutorial shows how to inference model by Kneron devices in following two ty
 ---
 
 ### Inference general format image:
-Kneron PLUS support **`BGR565`**, **`BGRA8888`**, **`Grayscale`** numpy.ndarray image inference.  
+Kneron PLUS support **`BGR565`**, **`BGRA8888`**, **`RAW8 (Grayscale)`** numpy.ndarray image inference.  
 
 > Recommend use **`cv2`** to read the image or capture camera frame.  
 
@@ -197,9 +197,7 @@ Kneron PLUS support **`BGR565`**, **`BGRA8888`**, **`Grayscale`** numpy.ndarray 
 ---
 
 ### Inference binary image data:
-Kneron PLUS support **`BGR565`**, **`BGRA8888`**, **`Grayscale`** numpy.ndarray image inference.
-
-> Recommend use **`cv2`** to read the image or capture camera frame.  
+Kneron PLUS support **`BGR565`**, **`BGRA8888`**, **`RAW8 (Grayscale)`**, **`YCbCr422 (YUYV422)`** bytes data inference.
 
 - Read RGB565 image from disk  
 

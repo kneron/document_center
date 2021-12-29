@@ -1,5 +1,11 @@
 # Write Model To Flash
 
+**Note**: KneronDFUT supports 3 platforms - Windows 10 (x86_64 64-bit), Ubuntu 18.04 (x86_64 64-bit), and Raspberry Pi OS - Buster (armv7l 32-bit)
+
+**Note**: If you are not using the 3 platforms, you may use the DFUT_console provided in Kneron PLUS. Please refer [Build with DFUT_console](../../plus_c/introduction/build_plus.md#23-build-with-dfutconsole)
+
+**Note**: Please use the latest version of KneronDFUT to avoid problems caused by incompatibility.
+
 ## 1. Introduction
 
 The inference model must be loaded into Kneron AI device before the inference process.
@@ -14,7 +20,7 @@ There are two ways to load models:
 
     - For the usage, please refer examples related to inference.
 
-    - In this method, the size of the model file must be below **40 MB** for KL520, and **95 MB** for KL720.
+    - In this method, the size of the model in device DDR memory (larger than NEF file size) must be below **35 MB** for KL520, and **75 MB** for KL720.
 
 - **Load Model from Flash**
 
@@ -24,9 +30,9 @@ There are two ways to load models:
 
     - The GUI or command line of **KneronDFUT** can be used for writing the model file into flash.
 
-    - For the usage, please refer the example **kl520_demo_app_yolo_inference_flash_model** or **kl720_demo_app_yolo_inference_flash_model**.
+    - For the usage, please refer the example **kl520_demo_generic_inference_flash_model** or **kl720_demo_generic_inference_flash_model**.
 
-    - For Python users, please refer the example **KL520DemoAppYoloInferenceFlashModel.py** or **KL720DemoAppYoloInferenceFlashModel.py**.
+    - For Python users, please refer the example **KL520DemoGenericInferenceFlashModel.py** or **KL720DemoGenericInferenceFlashModel.py**.
 
     - In this method, the size of the model file must be below **32 MB** for KL520, and **70 MB** for KL720.
 

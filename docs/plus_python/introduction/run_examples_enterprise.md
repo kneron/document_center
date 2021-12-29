@@ -1,6 +1,6 @@
 # Run Examples for Enterprise
 
-Other than the examples briefed in [Run Examples](./run_example.md), Kneron PLUS Enterprise also provides few examples for demonstrating the usage of advanced features.
+Other than the examples briefed in [Run Examples](./run_examples.md), Kneron PLUS Enterprise also provides few examples for demonstrating the usage of advanced features.
 
 **Note 1**: In the inference related examples, we are using KL520 for most demo. If you wish to use KL720, just change the prefix of the example name from kl520 to kl720. (There might be no KL520 version or KL720 version on certain examples.)
 
@@ -23,12 +23,12 @@ $ python3 KL520UpdateKdp2ToKdp2FlashBoot.py
  - Success
 ```
 
-* **Note**: Firmware Update Support Table  
+* **Note**: Firmware Update Support Table
 
-    | Origin Firmware | Target Firmware           | Kneron DFUT | C API | Python API |  
-    | --------------- | ------------------------- | ----------- | ----- | ---------- |  
-    | KDP             | KDP2 USB-Boot(KL520 Only) | Yes         | Yes   |            |  
-    | KDP             | KDP2 Flash-Boot           | Yes         | Yes   |            |  
-    | KDP2 USB-Boot   | KDP2 Flash-Boot           | Yes         | Yes   | Yes        |  
-    | KDP2 Flash-Boot | KDP2 USB-Boot(KL520 Only) | Yes         | Yes   |            |  
-    | KDP2 Flash-Boot | KDP2 Flash-Boot           | Yes         | Yes   | Yes        |  
+    | Origin Firmware | Target Firmware           | Kneron DFUT | C API | Python API |
+    | --------------- | ------------------------- | ----------- | ----- | ---------- |
+    | KDP             | KDP2 USB-Boot(KL520 Only) | Yes         | Yes   |            |
+    | KDP             | KDP2 Flash-Boot           | Yes         | Yes   |            |
+    | KDP2 USB-Boot   | KDP2 Flash-Boot           | Yes         | Yes   | Yes        |
+    | KDP2 Flash-Boot | KDP2 USB-Boot(KL520 Only) | Yes         | Yes   |            |
+    | KDP2 Flash-Boot | KDP2 Flash-Boot           | Yes         | Yes   | Yes        |

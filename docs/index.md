@@ -60,7 +60,7 @@ Please see [Kneron PLUS-C - Getting Started](./plus_c/getting_started.md) \(or [
  - [Firmware KL520 SDK](./520_1.7.0/introduction.md)
  - [Firmware KL720 SDK](./720_1.5.0/introduction.md)
  - [Kneron Model Toolchain](./toolchain/manual.md)
- - [Model Zoo - C-examples](./plus_c/modelzoo/index.md) / [Python-examples](./plus_python/modelzoo_document/index.md)
+ - [Model Zoo - C-examples](./plus_c/modelzoo/index.md) / [Python-examples](./plus_python/modelzoo/index.md)
  - [Model Zoo - retraining](./model_training/classification.md)
 
 

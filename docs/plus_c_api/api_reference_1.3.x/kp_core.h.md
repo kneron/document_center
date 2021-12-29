@@ -27,8 +27,6 @@ Core functions provide fundamental functionality like connection and firmware up
     - [kp_load_model](#kp_load_model)
     - [kp_load_model_from_file](#kp_load_model_from_file)
     - [kp_load_model_from_flash](#kp_load_model_from_flash)
-    - [kp_profile_get_statistics](#kp_profile_get_statistics)
-    - [kp_profile_set_enable](#kp_profile_set_enable)
     - [kp_reset_device](#kp_reset_device)
     - [kp_scan_devices](#kp_scan_devices)
     - [kp_set_timeout](#kp_set_timeout)
@@ -399,48 +397,6 @@ int kp_load_model_from_flash(
 **Returns:**
 
 int refer to KP_API_RETURN_CODE in kp_struct.h
-
-
----
-### **kp_profile_get_statistics**
-> Collect inference profile results.
-
-```c
-int kp_profile_get_statistics(
-	kp_device_group_t devices
-	kp_profile_data_t *profile_data
-)
-```
-**Parameters:**
-
-<pre>
-<em>devices</em>         [in]      a set of devices handle.
-<em>profile_data</em>    [out]     refer to kp_profile_data_t.
-</pre>
-**Returns:**
-
-refer to KP_API_RETURN_CODE in kp_struct.h
-
-
----
-### **kp_profile_set_enable**
-> To set enable/disable debug profile.
-
-```c
-int kp_profile_set_enable(
-	kp_device_group_t devices
-	bool enable
-)
-```
-**Parameters:**
-
-<pre>
-<em>devices</em>         [in]      a set of devices handle.
-<em>enable</em>          [in]      set enable/disable.
-</pre>
-**Returns:**
-
-refer to KP_API_RETURN_CODE in kp_struct.h
 
 
 ---

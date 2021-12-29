@@ -2,6 +2,8 @@
 
 **Note**: KneronDFUT supports 3 platforms - Windows 10 (x86_64 64-bit), Ubuntu 18.04 (x86_64 64-bit), and Raspberry Pi OS - Buster (armv7l 32-bit)
 
+**Note**: If you are not using the 3 platforms, you may use the DFUT_console provided in Kneron PLUS. Please refer [Build with DFUT_console](../../plus_c/introduction/build_plus.md#23-build-with-dfutconsole)
+
 **Note**: Please use the latest version of KneronDFUT to avoid problems caused by incompatibility.
 
 **Note**: Downgrading Kneron AI device to previous KDP firmware is not allowed.
@@ -99,6 +101,8 @@ When you execute any kind of update on Kneron DFUT, it will check whether the dr
 Note: Kneron DFUT only check and install driver when it was executed on Windows.
 
 Note: In order to install driver, Kneron DFUT must be run as Administrator.
+
+Note: This feature and example are only provided in Kneron DFUT v1.3.0 and above.
 
 1. Use Command line
 

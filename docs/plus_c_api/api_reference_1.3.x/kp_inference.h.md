@@ -25,6 +25,8 @@ Differnt set of inference APIs would need different models to make it work.
     - [kp_generic_raw_inference_receive](#kp_generic_raw_inference_receive)
     - [kp_generic_raw_inference_send](#kp_generic_raw_inference_send)
     - [kp_inference_configure](#kp_inference_configure)
+    - [kp_profile_get_statistics](#kp_profile_get_statistics)
+    - [kp_profile_set_enable](#kp_profile_set_enable)
 
 
 ---
@@ -374,6 +376,48 @@ int kp_inference_configure(
 
 <pre>
 <em>conf</em>            [in]      refer to kp_inf_configuration_t.
+</pre>
+**Returns:**
+
+refer to KP_API_RETURN_CODE in kp_struct.h
+
+
+---
+### **kp_profile_get_statistics**
+> Collect inference profile results.
+
+```c
+int kp_profile_get_statistics(
+	kp_device_group_t devices
+	kp_profile_data_t *profile_data
+)
+```
+**Parameters:**
+
+<pre>
+<em>devices</em>         [in]      a set of devices handle.
+<em>profile_data</em>    [out]     refer to kp_profile_data_t.
+</pre>
+**Returns:**
+
+refer to KP_API_RETURN_CODE in kp_struct.h
+
+
+---
+### **kp_profile_set_enable**
+> To set enable/disable debug profile.
+
+```c
+int kp_profile_set_enable(
+	kp_device_group_t devices
+	bool enable
+)
+```
+**Parameters:**
+
+<pre>
+<em>devices</em>         [in]      a set of devices handle.
+<em>enable</em>          [in]      set enable/disable.
 </pre>
 **Returns:**
 

@@ -8,6 +8,8 @@ Verified platforms and OS to run Kneron PLUS API:
 
 And the following sections in this chapter will provide the instructions for installing the tools and dependency python packages to the corresponding platform.
 
+---
+
 ## 1. Install Python Package
 
 - Upgrade pip (pip version >= 21.X.X):
@@ -15,7 +17,7 @@ And the following sections in this chapter will provide the instructions for ins
     $ python -m pip install --upgrade pip
     ```
 
-- Install the package with pip:  
+- Install the package with pip:
     ```bash
     $ # Please make sure your pip version >= 21.X.X before installing python packages.
     $ cd ./package/{platform}/
@@ -27,15 +29,46 @@ And the following sections in this chapter will provide the instructions for ins
     $ pip install opencv-python
     ```
 
+- Common problem:  
+
+    If pip install/run application fails, it may cause by using python 2.X as python interpreter. Please make sure the interpreter and pip is `Python 3` on the host:  
+
+    ```bash
+    # check pip version
+    $ pip -V
+    $ pip3 -V
+
+    # check python interpreter version
+    $ python -V
+    $ python3 -V
+    ```
+
+    You also can install package by specify python interpreter by following scripts:  
+    ```bash
+    $ python -m pip install {package_path}
+    # or
+    $ python3 -m pip install {package_path}
+    ```
+
 ## 2. Install Kneron AI Device Driver on Windows 10
 
-#### 2.1 Using **PLUS Example** to Install Driver
+There are three ways to install device driver to Windows:
 
-- Please refer [Run Example](./run_example.md#4-install-driver-for-windows-example) for the usage.
+- Kneron DFUT (Recommended)
+- PLUS Example
+- Zadig
 
-#### 2.2 Using **Kneron DFUT** to Install Driver
+#### 2.1 Using **Kneron DFUT** to Install Driver
+
+Note: This feature is only provided in Kneron DFUT v1.3.0 and above.
 
 - Please refer [Upgrade AI Device To KDP2](./upgrade_ai_device_to_kdp2.md#3-install-driver-for-windows) for the usage.
+
+#### 2.2 Using **PLUS Example** to Install Driver
+
+Note: This feature is only provided in Kneron PLUS v1.3.0 and above.
+
+- Please refer [Run Example](./run_examples.md#2-install-driver-for-windows-example) for the usage.
 
 #### 2.3 Using **Zadig** to Install Driver
 
@@ -67,14 +100,14 @@ And the following sections in this chapter will provide the instructions for ins
 
     **Note**: After Upgrade Kneron KL720 to KDP2 (ex. via Kneron DFUT), you may need to re-install the driver of KL720, since the USB ID will be changed to "3231/0720".
 
-## 3. Update Kneron AI Device USB Permission on Ubuntu  
+## 3. Update Kneron AI Device USB Permission on Ubuntu
 
- * Config USB permission on Ubuntu  
+ * Config USB permission on Ubuntu
    ```bash
    $ sudo bash install_libusb.sh
    ```
 
- * Or add following lines in `/etc/udev/rules.d/10-local.rules` manually  
+ * Or add following lines in `/etc/udev/rules.d/10-local.rules` manually
    ```text
    KERNEL=="ttyUSB*",ATTRS{idVendor}=="067b",ATTRS{idProduct}=="2303",MODE="0777",SYMLINK+="kneron_uart"
    KERNEL=="ttyUSB*",ATTRS{idVendor}=="1a86",ATTRS{idProduct}=="7523",MODE="0777", SYMLINK+="kneron_pwr"
@@ -82,7 +115,7 @@ And the following sections in this chapter will provide the instructions for ins
    SUBSYSTEM=="usb",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0200",MODE="0666"
    SUBSYSTEM=="usb",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0720",MODE="0666"
    ```
-   and restart service by following command  
+   and restart service by following command (You may need to restart the service after rebooting the host PC)
    ```bash
    $ sudo udevadm trigger
    ```

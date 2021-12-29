@@ -194,6 +194,27 @@ $ sudo ./KneronDFUT --help
     $ pip install opencv-python
     ```
 
+- Common problem:  
+
+    If pip install/run application fails, it may cause by using python 2.X as python interpreter. Please make sure the interpreter and pip is `Python 3` on the host:  
+
+    ```bash
+    # check pip version
+    $ pip -V
+    $ pip3 -V
+
+    # check python interpreter version
+    $ python -V
+    $ python3 -V
+    ```
+
+    You also can install package by specify python interpreter by following scripts:  
+    ```bash
+    $ python -m pip install {package_path}
+    # or
+    $ python3 -m pip install {package_path}
+    ```
+
 > **Note**: **[Ubuntu]** Please update Kneron device USB permission before following steps on Ubuntu. See the [Installation
 ](./introduction/install_dependency.md) for details.  
 

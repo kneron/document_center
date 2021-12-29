@@ -5,13 +5,11 @@ The provided examples are designed to show how to use KP APIs and present Kneron
 > **Note 1**: In the inference related examples, we are using KL520 for most demo. If you wish to use KL720, just change the prefix of the example name from kl520 to kl720.
 
 > **Note 2**: **[Ubuntu]** Please update Kneron device USB permission before following steps on Ubuntu. See the [Installation
-](./install_dependency.md) for details.  
+](./install_dependency.md) for details.
 
 > **Note 3**: Few examples will auto connect multiple devices to run inference. If you put hybrid types of devices on host, the inference may fail.
 
 > **Note 4**: If you modify code to change different test image file. Input image aspect ratio is suggested to be aligned to model input aspect ratio.
-
-> **Note 5**: Reference to [Yolo Object Name Mapping](./yolo_object_name_mapping.md) for the detection result classes of YOLO examples.
 
 1. [Scan Device Example](#1-scan-device-example)
 2. [Install Driver for Windows Example](#2-install-driver-for-windows-example)
@@ -113,7 +111,11 @@ The PLUS provides two categories of API set for model inference.
 
 2. **Customized inference (C Language Only)** category which is intended for advanced users who are interested in developing their models and implement corresponding post-processing code **on Kneron AI devices** (or implement different pre-processing on devices)
 
-Below will demonstrate only usage in two examples for **Generic inference**. For **Customized inference (C Language Only)**, please refer the [**C language documents**](../../plus_c/getting_started.md).
+The main difference between **Generic Inference** and **Customized Inference** is shown below:
+
+![](../imgs/generic_customized_diff.png)
+
+Below will demonstrate only usage in two examples for **Generic inference**. For **Customized inference (C Language Only)**, please refer the [**C language documents**](../../plus_c/customized_api/introduction.md).
 
 ### 3.2 Generic Inference Example
 
@@ -121,14 +123,14 @@ Following examples show the usage of `kp.inference.generic_raw_inference_send()`
 
 Generic inference examples are using the **Generic Inference API**, which is intended for advanced users who are interested in developing their models and implement corresponding pre/post-processing code.
 
-**Generic Inference API** allows users to directly run a model with or without Kneron pre-processing and obtain the raw output from the model, without any developments of Kneron AI device's firmware. Please refer following sections for the demonstration of the usage:  
+**Generic Inference API** allows users to directly run a model with or without Kneron pre-processing and obtain the raw output from the model, without any developments of Kneron AI device's firmware. Please refer following sections for the demonstration of the usage:
 
-* [3.2.1 Generic Inference With Raw Output](#321-generic-inference-with-raw-output)  
-* [3.2.2 Generic Inference Without Kneron Pre-Processing On Device](#322-generic-inference-without-kneron-pre-processing-on-device)  
+* [3.2.1 Generic Inference With Raw Output](#321-generic-inference-with-raw-output)
+* [3.2.2 Generic Inference Without Kneron Pre-Processing On Device](#322-generic-inference-without-kneron-pre-processing-on-device)
 
 However, **Generic Inference API** can only provide the raw output from the model without post-processing. If you wish to get the result with post-processing, you may implement the corresponding post-processing in Software. Please refer following sections for the demonstration of the usage:
 
-* [3.2.3 Generic Inference With Post-Processing](#323-generic-inference-with-post-processing)  
+* [3.2.3 Generic Inference With Post-Processing](#323-generic-inference-with-post-processing)
 
 In **Generic Inference API**, you may customized what to do in the pre-processing. There are few items are provided:
 
@@ -335,6 +337,8 @@ $ python3 KL520DemoGenericInferenceBypassPreProc.py
 
 #### 3.2.3 Generic Inference With Post-Processing
 
+**Note**: Reference to [Yolo Object Name Mapping](./yolo_object_name_mapping.md) for the detection result classes of YOLO examples.  
+
 The **'KL520DemoGenericInferencePostYolo.py'** is an example for showing how it gets raw output from device, running a Tiny Yolo v3 model, and does post-processing in the software (host side).
 
 ```bash
@@ -422,9 +426,11 @@ It draws detected objects in a new-created **output_one_bike_many_cars_224x224.b
 
 #### 3.2.4 Generic Inference With Cropping Image in Pre-Process
 
-The **'KL520DemoGenericInferenceCrop.py'** is an example for showing how to do cropping image on device, execute inference only on the cropped areas of image, get the raw output from device, and does post-processing in the software.  
+**Note**: Reference to [Yolo Object Name Mapping](./yolo_object_name_mapping.md) for the detection result classes of YOLO examples.  
 
-The flow in concept:  
+The **'KL520DemoGenericInferenceCrop.py'** is an example for showing how to do cropping image on device, execute inference only on the cropped areas of image, get the raw output from device, and does post-processing in the software.
+
+The flow in concept:
 
 1. Setting crop information in `kp.GenericRawImageHeader`
 2. Send an image to inference
@@ -657,11 +663,11 @@ $ python3 KL520DemoGenericInferenceMultiThread.py
 
 ---
 
-## 5. Drop Frame Usage Example  
+## 5. Drop Frame Usage Example
 
 If the camera produces frames faster than device inference, displaying frames from camera may be delayed by the inference speed since sending image to device may be blocked when buffer of device is full.
 
-**'KL720DemoCamGenericInferenceDropFrame.py'** is an example for showing how to config device to drop frame if the buffer is full.
+**'KL520DemoCamGenericInferenceDropFrame.py'** is an example for showing how to config device to drop frame if the buffer is full.
 
 The configure function shows in the following code block:
 ```python
@@ -680,9 +686,9 @@ except kp.ApiKPException as exception:
 
 ---
 
-## 6. Model Zoo Examples  
+## 6. Model Zoo Examples
 
-Model Zoo examples simply show one image inference via different pre-trained models. The model backbones are available and could be retrained for specific need. Please refer to [Model Zoo](../modelzoo_document/index.md) section for more information.  
+Model Zoo examples simply show one image inference via different pre-trained models. The model backbones are available and could be retrained for specific need. Please refer to [Model Zoo](../modelzoo/index.md) section for more information.
 
 ```bash
 $ python3 KL720KnModelZooGenericInferenceClassification.py

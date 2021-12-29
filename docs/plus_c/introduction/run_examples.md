@@ -1,6 +1,6 @@
 # Run Inference Examples
 
-The provided examples are designed to show how to use KP APIs and present Kneron Device features. Error handling, wording and application layer features are not covered. They are open for more creatives.
+**Note**: Please build [Kneron PLUS](./build_plus.md) first.
 
 **Note**: If you are using Windows, please execute all the instruction below in MSYS2 MinGW 64-bit.
 
@@ -12,72 +12,25 @@ The provided examples are designed to show how to use KP APIs and present Kneron
 
 **Note**: If you modify code to change different test image file. Input image aspect ratio is suggested to be aligned to model input aspect ratio.
 
-**Note**: Reference to [Yolo Object Name Mapping](./yolo_object_name_mapping.md) for the detection result classes of YOLO examples.
 
----
 
-## Build PLUS
+The provided examples are designed to show how to use KP APIs and present Kneron Device features. Error handling, wording and application layer features are not covered. They are open for more creatives.
 
-1. Download the latest **kneron_plus_vXXX.zip** into Ubuntu from <https://www.kneron.com/tw/support/developers/>. It is located at **Kneron PLUS** section.
-
-2. Decompress the **kneron_plus_vXXX.zip**
-
-    ```bash
-    $ unzip kneron_plus_vX.X.X.zip
-    ```
-
-3. Build code
-
-    If you are using Ubuntu:
-
-    ```bash
-    $ cd kneron_plus/
-    $ mkdir build
-    $ cd build
-    $ cmake ..
-    $ make -j
-    ```
-    **Note**: if you also want to build OpenCV examples at this moment,
-    please adjust cmake command as following
-    ```bash
-    $ cmake -DWITH_OPENCV=ON ..
-    ```
-
-    If you are using MSYS2 MinGW 64-bit in Windows:
-
-    ```bash
-    $ cd kneron_plus/
-    $ mkdir build
-    $ cd build
-    $ cmake .. -G"MSYS Makefiles"
-    $ make -j
-    ```
-    **Note**: if you also want to build OpenCV examples at this moment,
-    please adjust cmake command as following
-    ```bash
-    $ cmake -DWITH_OPENCV=ON .. -G"MSYS Makefiles"
-    ```
-
-    **Note**: Some examples may cause warnings during cmake process due to the length of the paths. You can rename these examples to shorter names to avoid these warnings.
-
-    - Once build is done, the **libkplus.so** will be in **build/src/**
-
-    - Example executables will be in **build/bin/**
-
-4. Check if PLUS examples are built successfully.
-
-    ```bash
-    $ ls bin/
-
-        kl520_demo_customize_inf_multiple_models
-        kl520_demo_customize_inf_single_model
-        kl520_demo_generic_inference
-        ...
-    ```
-
----
 
 ## 1. System Examples
+
+System control APIs are provided for information extract, data upload and device connection. 
+
+Please see the following examples for API usage
+
+- [Scan Device Example](#11-scan-device-example)
+- [Connect Device Example](#12-connect-device-example)
+- [Install Driver for Windows Example](#13-install-driver-for-windows-example)
+- [Load Firmware and Model Example](#14-load-firmware-and-model-example)
+- [Generic Command Example](#15-generic-command-example)
+- [DFUT_console utility example](#16-dfut_console)
+
+
 
 ### 1.1 Scan Device Example
 
@@ -160,9 +113,11 @@ Arguments:
 
 ### 1.3 Install Driver for Windows Example
 
-Note: This example is to show the usage of `kp_install_driver_for_windows()` and help users to install driver to Windows directly.
+Note: This example is only provided in Kneron PLUS v1.3.0 and above.
 
 Note: This example is only available on Windows 10, and it must be run as Administrator.
+
+This example is to show the usage of `kp_install_driver_for_windows()` and help users to install driver to Windows directly.
 
 1. For installing the driver for KL520:
 
@@ -188,13 +143,6 @@ Note: This example is only available on Windows 10, and it must be run as Admini
     ```
 
     ```bash
-    [arguments]
-    -h     : help
-    -target: [target platform] (ALL, KL520, KL720) = KL720
-
-    [note]
-        You must run this app as administrator on Windows
-
     Installing driver for KL720 ... Success (0)
     ```
 
@@ -324,19 +272,51 @@ The `generic_command` is an example for showing you how to use few system API:
     disconnecting device ...
     ```
 
+
+### 1.6 DFUT_console
+
+Note: This tool is only provided in Kneron PLUS v1.3.0 and above.
+
+Please refer [Build with DFUT_console](./build_plus.md#23-build-with-dfutconsole)
+
+DFUT_console provides only the console interface of the Kneron DFUT.
+
+Therefore, all the functions in console mode, other than executable file name, are the same.
+
+1. For upgrading KL520 to USB boot mode, please refer [Upgrade KL520 to USB Boot Mode](./upgrade_ai_device_to_kdp2.md#32-use-command-line-to-update-ai-device).
+
+2. For upgrading KL520 to Flash boot mode, please refer [Upgrade KL520 to Flash Boot Mode](./upgrade_ai_device_to_kdp2.md#42-use-command-line-to-update-ai-device).
+
+3. For writing model into KL520, please refer [Write Model Into KL520](./write_model_to_flash.md#32-use-command-line-to-write-model-into-ai-device).
+
+4. For upgrading KL720 to Flash boot mode, please refer [Upgrade KL720 to Flash Boot Mode](./upgrade_ai_device_to_kdp2.md#52-use-command-line-to-update-ai-device).
+
+5. For writing model into KL720, please refer [Write Model Into KL720](./write_model_to_flash.md#42-use-command-line-to-write-model-into-ai-device).
+
+
+
 ---
 
-## 2.Inference API Examples
+## 2. Inference API Examples
 
 Kneron PLUS provides two different API set for inference:
 
 1. [Generic Inference](#21-generic-inference-example)
-
+   - [Generic Inference With Raw Output](#211-generic-inference-with-raw-output)
+   - [Generic Inference Without Kneron Pre-Processing On Device](#211-generic-inference-with-raw-output)
+   - [Generic Inference With Post-Processing](#213-generic-inference-with-post-processing)
+   - [Generic Inference With Cropping Image in Pre-Process](#214-generic-inference-with-cropping-image-in-pre-process)
+   - [Generic Inference Using Model in Flash](#215-generic-inference-using-model-in-flash)
 2. [Customized Inference](#22-customized-inference-example)
+
+
+
 
 The main difference between **Generic Inference** and **Customized Inference** is shown below:
 
 ![](../imgs/generic_customized_diff.png)
+
+
 
 ### 2.1 Generic Inference Example
 
@@ -372,6 +352,8 @@ Furthermore, if you wish to execute the post-processing on Kneron AI devices (or
 | kp\_generic\_inference\_retrieve\_raw\_fixed\_node() | Retrieves **RAW format data** in fixed-point format on the per-node basis.               |
 | kp\_generic\_inference\_retrieve\_fixed\_node()      | Retrieves and converts RAW format data to **fixed-point** data on the per-node basis.    |
 | kp\_generic\_inference\_retrieve\_float\_node()      | Retrieves and converts RAW format data to **floating-point** data on the per-node basis. |
+
+
 
 #### 2.1.1 Generic Inference With Raw Output
 
@@ -420,6 +402,8 @@ dumped node 0 output to 'output_bike_cars_street_224x224_node0_7x7x255.txt'
 dumped node 1 output to 'output_bike_cars_street_224x224_node1_14x14x255.txt'
 ```
 
+
+
 #### 2.1.2 Generic Inference Without Kneron Pre-Processing On Device
 
 The **kl520_demo_generic_inference_bypass_pre_proc** is an example for showing how it gets raw output from device, running a Tiny Yolo v3 model with a non pre-processing required image (normalized, same size as model input required, and in format RGBA8888). This example shows the usage of `kp_generic_raw_inference_bypass_pre_proc_send()` and `kp_generic_raw_inference_bypass_pre_proc_receive()`.
@@ -467,7 +451,11 @@ dumped node 0 output to 'output_bike_cars_street_224x224_rgba8888_normalized_nod
 dumped node 1 output to 'output_bike_cars_street_224x224_rgba8888_normalized_node1_14x14x255.txt'
 ```
 
+
+
 #### 2.1.3 Generic Inference With Post-Processing
+
+Note: Reference to [Yolo Object Name Mapping](./yolo_object_name_mapping.md) for the detection result classes.
 
 The **kl520_demo_generic_inference_post_yolo** is an example for showing how it gets raw output from device, running a Tiny Yolo v3 model, and does post-processing in the software.
 
@@ -565,6 +553,8 @@ And it draws detected objects in a new-created **output_one_bike_many_cars_800x8
 
 
 #### 2.1.5 Generic Inference Using Model in Flash
+
+Note: This example is only provided in Kneron PLUS v1.3.0 and above.
 
 The `kl520_demo_generic_inference_flash_model` is a example for showing you how to use the model in device flash via `kp_load_model_from_flash()`.
 
@@ -664,6 +654,8 @@ output bounding boxes on 'output_bike_cars_street_224x224.bmp'
 
 ### 3.1 Multiple Threads Usage Example
 
+Note: This example is only provided in Kneron PLUS v1.3.0 and above.
+
 In the previous inference related examples, sending images to device and receiving results from device are running sequentially.
 
 However, sending images and receiving results can be done in different threads to maximum the processing speed.
@@ -700,27 +692,9 @@ output bounding boxes on 'output_bike_cars_street_224x224.bmp'
 
 ### 3.2 Drop Frame Usage Example
 
-PLUS provides examples using web camera to do inference.
+Note: This example is only provided in Kneron PLUS v1.3.0 and above.
 
-To build these camera examples, please build PLUS with:
-
-```bash
-$ cd kneron_plus/
-$ mkdir build
-$ cd build
-$ cmake -DWITH_OPENCV=ON ..
-$ make -j
-```
-
-If you are using MSYS2 MinGW 64-bit in Windows:
-
-```bash
-$ cd kneron_plus/
-$ mkdir build
-$ cd build
-$ cmake -DWITH_OPENCV=ON .. -G"MSYS Makefiles"
-$ make -j
-```
+This example belongs to OpenCV examples. Please [build Kneron PLUS with OpenCV](./build_plus.md#22-build-with-opencv-examples).
 
 If the camera produces frames faster than device inference, displaying frames from camera may be delayed by the inference speed since sending image to device may be blocked when buffer of device is full.
 
@@ -787,6 +761,8 @@ output bounding boxes on 'output_one_bike_many_cars_800x800.bmp'
 ## 5. Debug Related Examples
 ### 5.1 Debug Flow Example
 
+Note: This feature and example are only provided in Kneron PLUS v1.3.0 and above.
+
 This example is to demonstrate the usage of **kp_dbg_set_enable_checkpoints()** and **kp_dbg_receive_checkpoint_data()**. And the diagram below shows the flow of this two APIs for single model usage.
 
 ![](../imgs/debug_checkpoint_flow.png)
@@ -797,15 +773,15 @@ There are three check points can be set by **kp_dbg_set_enable_checkpoints()**:
 - KP_DBG_CHECKPOINT_AFTER_PREPROCESS
 - KP_DBG_CHECKPOINT_AFTER_INFERENCE
 
-If *KP_DBG_CHECKPOINT_BEFORE_PREPROCESS* is set, the image sent by **kp_xxx_inference_send()** will be retrieved by **kp_dbg_receive_checkpoint_data()**.
+If *KP_DBG_CHECKPOINT_BEFORE_PREPROCESS* is set, the image sent by ``kp_xxx_inference_send()` will be retrieved by `kp_dbg_receive_checkpoint_data()`.
 
-If *KP_DBG_CHECKPOINT_AFTER_PREPROCESS* is set, the image which has been performed pre-process will be retrieved by **kp_dbg_receive_checkpoint_data()**.
+If *KP_DBG_CHECKPOINT_AFTER_PREPROCESS* is set, the image which has been performed pre-process will be retrieved by `kp_dbg_receive_checkpoint_data()`.
 
-If *KP_DBG_CHECKPOINT_AFTER_INFERENCE* is set, the raw output data of the model will be retrieved by **kp_dbg_receive_checkpoint_data()**.
+If *KP_DBG_CHECKPOINT_AFTER_INFERENCE* is set, the raw output data of the model will be retrieved by `kp_dbg_receive_checkpoint_data()`.
 
-After all debug data have been retrieved, **kp_dbg_receive_checkpoint_data()** will receive data with status **KP_DBG_CHECKPOINT_END_37** to notify the debug process has finished.
+After all debug data have been retrieved, `kp_dbg_receive_checkpoint_data()` will receive data with status **KP_DBG_CHECKPOINT_END_37** to notify the debug process has finished.
 
-Note: If you are using multiple models, **kp_dbg_receive_checkpoint_data()** may need to be called more times than the diagram shows.
+Note: If you are using multiple models, `kp_dbg_receive_checkpoint_data()` may need to be called more times than the diagram shows.
 
 ```bash
 $ ./kl520_demo_customize_inf_single_model_debug.exe
@@ -857,13 +833,15 @@ receive inference result ... OK
 
 ### 5.2 Execution Time Profiling Example
 
-This example is to demonstrate the usage of **kp_profile_set_enable()** and **kp_profile_get_statistics()**. And the diagram below shows the flow of this two APIs for single model usage.
+Note: This feature and example are only provided in Kneron PLUS v1.3.0 and above.
+
+This example is to demonstrate the usage of `kp_profile_set_enable()` and `kp_profile_get_statistics()`. And the diagram below shows the flow of this two APIs for single model usage.
 
 ![](../imgs/execution_time_profile.png)
 
-Unlike [Debug Flow](#51-debug-flow-example), **kp_profile_get_statistics()** does not need to be called between kp_xxx_inference_send() and kp_xxx_inference_receive(). It only needs to be call after one or more inferences are completed.
+Unlike [Debug Flow](#51-debug-flow-example), `kp_profile_get_statistics()` does not need to be called between kp_xxx_inference_send() and kp_xxx_inference_receive(). It only needs to be call after one or more inferences are completed.
 
-Therefore, **kp_xxx_inference_send()** and **kp_xxx_inference_receive()** can be called multiple times between **kp_profile_set_enable()** and **kp_profile_get_statistics()**.
+Therefore, `kp_xxx_inference_send()` and `kp_xxx_inference_receive()` can be called multiple times between `kp_profile_set_enable()` and `kp_profile_get_statistics()`.
 
 The pre-process time, inference time, and post-process time are the sum of these time in each inference.
 

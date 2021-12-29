@@ -2,6 +2,8 @@
 
 Other than the examples briefed in [Run Examples](./run_examples.md), Kneron PLUS Enterprise also provides few examples for demonstrating the usage of advanced features.
 
+**Note**: Please build [Kneron PLUS](./build_plus.md) first.
+
 **Note**: If you are using Windows, please execute all the instruction below in MSYS2 MinGW 64-bit.
 
 **Note**: To execute **MSYS2 MinGW 64-bit**, please use the shortcut or `c:\msys64\msys2_shell.cmd -mingw64` instead of `c:\msys64\mingw64.exe`.
@@ -12,21 +14,11 @@ Other than the examples briefed in [Run Examples](./run_examples.md), Kneron PLU
 
 **Note**: If you modify code to change different test image file. Input image aspect ratio is suggested to be aligned to model input aspect ratio.
 
-## Build PLUS
+---
 
-1. Download the latest **kneron_plus_enterprise_vXXX.zip** into Ubuntu from <https://www.kneron.com/tw/support/developers/>. It is located at **Kneron PLUS - enterprise** section.
+## 1. Update KDP Firmware to KDP2 USB Boot (KL520 only)
 
-2. Decompress the **kneron_plus_enterprise_vXXX.zip**
-
-    ```bash
-    $ unzip kneron_plus_enterprise_vX.X.X.zip
-    ```
-
-3. Build code - Please reference [Run Examples](./run_examples.md#1-build-plus)
-
-## 1. Update KDP Firmware to KDP2 Usb Boot (KL520 only)
-
-This example is to show how to connect a Kneron AI device in KDP firmware via `kp_connect_device()`, and the sequence of `kp_load_firmware_from_file()`, `kp_update_kdp2_usb_loader_from_file()` and `kp_switch_to_kdp2_usb_boot()` to update Kneron AI device from KDP firmware to KDP2 Usb boot.
+This example is to show how to connect a Kneron AI device in KDP firmware via `kp_connect_device()`, and the sequence of `kp_load_firmware_from_file()`, `kp_update_kdp2_usb_loader_from_file()` and `kp_switch_to_kdp2_usb_boot()` to update Kneron AI device from KDP firmware to KDP2 USB boot.
 
 ```bash
 $ sudo ./kl520_update_kdp_to_kdp2_usb_boot
@@ -42,9 +34,9 @@ disconnecting device ...
 
 ---
 
-## 2. Update KDP2 Firmware to KDP2 Usb Boot (KL520 only)
+## 2. Update KDP2 Firmware to KDP2 USB Boot (KL520 only)
 
-This example is to show the sequence of `kp_load_firmware_from_file()` and `kp_switch_to_kdp2_usb_boot()` to update Kneron AI device from KDP2 firmware (both Usb boot and Flash boot are acceptable) to KDP2 Usb boot.
+This example is to show the sequence of `kp_load_firmware_from_file()` and `kp_switch_to_kdp2_usb_boot()` to update Kneron AI device from KDP2 firmware (both USB boot and Flash boot are acceptable) to KDP2 Usb boot.
 
 ```bash
 $ ./kl520_update_kdp2_to_kdp2_usb_boot
@@ -109,6 +101,8 @@ update model ... OK
 ---
 
 ## 6. Load Firmware through UART (KL520 only)
+
+Note: After device is reset, the firmware is required to be loaded again.
 
 This example shows the usage of loading firmware into device via UART instead of loading through USB or loading from Flash.
 
@@ -219,24 +213,23 @@ This example is to show the usage of `kp_memory_read()` and `kp_memory_write()` 
 
 ## 8. Access Firmware Log via USB
 
-This example is to show the usage of `kp_enable_firmware_log()` for enabling the firmware log via USB.
+This example is to show the usage of `kp_enable_firmware_log()` and `kp_disable_firmware_log()` for enabling and disabling the firmware log via USB.
 
 ```bash
-$ ./kl720_demo_app_yolo_inference_multithread_print_log.exe
+$ ./kl720_demo_generic_inference_print_log.exe
 ```
 
 ```bash
--h     : help
--port  : [port id] = 0 (0 for auto-search)
--loop  : [test loops] = 100
-
 connect device ... OK
 upload model ... OK
+[0.326]USB is connected
 read image ... OK
 
 starting inference loop 100 times:
-......................[CRITICAL] Current TDC Temperature is about [44]
-..............................................................................
+..........................................[5.000]Current TDC Temperature is about [55]
+..........................................................
+
+inference loop is done
 ```
 
 ---
@@ -247,7 +240,7 @@ starting inference loop 100 times:
 
 **Note**: (hardware)**Kneron LW 3D module** is required.
 
-**Note**: (firmware)HICO mode is a special firmware different from the regular one. (KL720_SDK/firmware/build/solution_kdp2_hico_mipi)
+**Note**: (firmware)HICO mode is a special firmware different from the regular one. (**KL720_SDK/firmware/build/solution_kdp2_hico_mipi**)
 
 In most of the previous examples, we introduced the usage of the software side to send image to device and receive the inference result from device via USB.
 
@@ -265,11 +258,13 @@ $ sudo ./kl720_demo_hico_cam_inference
 
 ## 10. HICO TOF Camera Inference (KL720 only)
 
+**Note**: This feature and example are only provided in Kneron PLUS v1.3.0 and above.
+
 **Note**: (hardware)96-Board with KL720 11x11 chip is required.
 
 **Note**: (hardware)**TOF_ISR** and converter board are required.
 
-**Note**: (firmware)HICO mode is a special firmware different from the regular one. `KL720_SDK/firmware/build/solution_kdp2_hico_tof`)
+**Note**: (firmware)HICO mode is a special firmware different from the regular one. (**KL720_SDK/firmware/build/solution_kdp2_hico_tof**)
 
 Similar to *HICO Camera Inference* example, this example is using TOF camera and to demonstrate object detection plus decoding for depth and NIR image from TOF raw data.
 

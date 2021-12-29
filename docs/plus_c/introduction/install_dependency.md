@@ -28,13 +28,22 @@ And the following sections in this chapter will provide the instructions for ins
 
 ### 2.1 Kneron AI Device Driver
 
-#### 2.1.1 Using **PLUS Example** to Install Driver
+There are three ways to install device driver to Windows:
 
-- Please refer [Run Example](./run_examples.md#13-install-driver-for-windows-example) for the usage.
+- Kneron DFUT (Recommended)
+- PLUS Example
+- Zadig
 
-#### 2.1.2 Using **Kneron DFUT** to Install Driver
+#### 2.1.1 Using **Kneron DFUT** to Install Driver
+
+Note: This feature is only provided in Kneron DFUT v1.3.0 and above.
 
 - Please refer [Upgrade AI Device To KDP2](./upgrade_ai_device_to_kdp2.md#3-install-driver-for-windows) for the usage.
+#### 2.1.2 Using **PLUS Example** to Install Driver
+
+Note: This feature is only provided in Kneron PLUS v1.3.0 and above.
+
+- Please refer [Run Example](./run_examples.md#13-install-driver-for-windows-example) for the usage.
 
 #### 2.1.3 Using **Zadig** to Install Driver
 
