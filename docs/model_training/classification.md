@@ -65,6 +65,8 @@ python train.py --gpu -1 --backbone backbone_name --model-def-path path_to_model
 
 `--gpu` which gpu to run. (-1 if cpu)
 
+`--workers` the number of dataloader workers. (Default: 1)
+
 `--backbone` which backbone model to use. Options: see Models(#Models).
  
 `--freeze-backbone` whether freeze the backbone when the pretrained model is used. (Default: 0)
@@ -91,6 +93,31 @@ python train.py --gpu -1 --backbone backbone_name --model-def-path path_to_model
 
 `--loss` loss function. Options: cross_entropy. (Default: cross_entropy)
 
+# Converting to ONNX
+You may check the [Toolchain manual](http://doc.kneron.com/docs/#toolchain/manual/) for converting PyTorch model to ONNX model. Let's go through an example for converting FP_classifier PyTorch model to ONNX model.
+
+Execute commands in the folder `classification`: 
+```shell
+python pytorch2onnx.py --backbone backbone_name --num_classes the_number_of_classes --snapshot pytorch_model_path --save-path onnx_model_path
+```
+
+`--save-path` path to save the onnx model.
+`--backbone` which backbone model to use. Options: see Models(#Models).
+`--num_classes` the number of classes.
+`--model-def-path` path to pretrained model definition
+`--snapshot` path to the pretrained model.
+
+We could get pytorch to onnx model.
+
+Then, execute commands in the folder `ONNX_Convertor/optimizer_scripts`:
+(reference: https://github.com/kneron/ONNX_Convertor/tree/master/optimizer_scripts)
+
+```shell
+python pytorch2onnx.py onnx_model_path onnx_model_convert_path
+
+```
+
+We could get converted onnx model.
 
 # Inference
 In this section, we will go through using a trained network for inference. That is, we will use the function `inference.py` that takes an image and predict the class label for the image. `inference.py` returns the top $K$ most likely classes along with the probabilities. 
@@ -120,8 +147,20 @@ You could find preprocessing and postprocessing processes in `inference.py`.
 
 # Evaluation
 
+## Evaluation Metric
+We will consider `top-K score`, `precision`, `recall` and `F1 score` for evaluating our model. You can find the script for computing these metrics in `eval_utils/eval.py`. 
+
+`top-K score`: This metric computes the number of times where the correct label is among the top k labels predicted (ranked by predicted scores). Note that the multilabel case isn’t covered here.
+
+`precision`: The precision is the ratio `tp / (tp + fp)` where `tp` is the number of true positives and `fp` the number of false positives. The precision is intuitively the ability of the classifier not to label as positive a sample that is negative. The best value is 1 and the worst value is 0.
+
+`recall`: The recall is the ratio `tp / (tp + fn)` where `tp` is the number of true positives and `fn` the number of false negatives. The recall is intuitively the ability of the classifier to find all the positive samples. The best value is 1 and the worst value is 0.
+
+`F1 score`: The F1 score can be interpreted as a weighted average of the precision and recall, where an F1 score reaches its best value at 1 and worst score at 0. The relative contribution of precision and recall to the F1 score are equal. The formula for the F1 score is:
+`F1 = 2 * (precision * recall) / (precision + recall)`. 
+
 ## Evaluation on a dataset
-In this section, we will go through evaluating a trained network on a dataset. Here, we are going to evaluate a pretrained model on the validation set of the custom dataset. The `./eval_utils/eval.py` will report the top-K score and F1 score for the model evaluated on a testing dataset. The evaluation statistics will be saved to `eval_results.txt`.
+In this section, we will go through evaluating a trained network on a dataset. Here, we are going to evaluate a pretrained model on the validation set of the custom dataset. The `./eval_utils/eval.py` will report the top-K score, precision, recall and F1 score for the model evaluated on a testing dataset. The evaluation statistics will be saved to `eval_results.txt`.
 
 ```shell
 python eval_utils/eval.py --gpu -1 --backbone backbone_name --snapshot path_to_pretrained_model_weights --model-def-path path_to_model_definition_folder --data-dir path_to_dataset_folder
@@ -164,36 +203,11 @@ python eval_utils/eval.py --preds path_to_predicted_results --gts path_to_ground
 
 The evaluation statistics will be saved to `eval_results.txt`.
 
-# Converting to ONNX
-You may check the [Toolchain manual](http://doc.kneron.com/docs/#toolchain/manual/) for converting PyTorch model to ONNX model. Let's go through an example for converting FP_classifier PyTorch model to ONNX model.
-
-Execute commands in the folder `classification`: 
-```shell
-python pytorch2onnx.py --backbone backbone_name --num_classes the_number_of_classes --snapshot pytorch_model_path --save-path onnx_model_path
-```
-
-`--save-path` path to save the onnx model.
-`--backbone` which backbone model to use. Options: see Models(#Models).
-`--num_classes` the number of classes.
-`--model-def-path` path to pretrained model definition
-`--snapshot` path to the pretrained model.
-
-We could get pytorch to onnx model.
-
-Then, execute commands in the folder `ONNX_Convertor/optimizer_scripts`:
-(reference: https://github.com/kneron/ONNX_Convertor/tree/master/optimizer_scripts)
-
-```shell
-python pytorch2onnx.py onnx_model_path onnx_model_convert_path
-
-```
-
-We could get converted onnx model.
 
 # Models
 
 Model | Input Size | FPS on 520 | FPS on 720 | Model Size
---- | --- |:---:|:---:|:---:
+--- | :---: |:---:|:---:|:---:
 [FP_classifier](https://github.com/kneron/Model_Zoo/tree/main/classification/FP_classifier)| 56x32 | 323.471 | 3370.47 | 5.1M
 [mobilenetv2](https://github.com/kneron/Model_Zoo/tree/main/classification/MobileNetV2)| 224x224 | 58.9418 | 620.677 | 14M
 [resnet18](https://github.com/kneron/Model_Zoo/tree/main/classification/ResNet18)| 224x224 | 20.4376 | 141.371 | 46.9M
@@ -209,11 +223,12 @@ efficientnet-b7| 224x224 | 3.35853 | 17.9795 | 217.4M
 
 Note that for EfficientNet, Squeeze-and-Excitation layers are removed and Swish function is replaced by ReLU.  
 
-
 FP_classifier is a pretrained model for classifying person and background images. The class id label mapping file is saved as `./eval_utils/person_class_id.json`.
 
 
-Backbone | FP_classifier | mobilenetv2 | resnet18 | resnet50 | efficientnet
---- | --- | --- | --- | --- | ---
-Accuracy | medium | low | medium | high | medium~high
+\ | FP_classifier | mobilenetv2 | resnet18 | resnet50 
+--- | :---: | :---: | :---: | :---: 
+Rank 1 | 94.13% | 69.82% | 66.46% | 72.80%
+Rank 5 | - | 89.29% | 87.09% | 90.91%
 
+Resnet50 is currently under training for Kneron preprocessing. 

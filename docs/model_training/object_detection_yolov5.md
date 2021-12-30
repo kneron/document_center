@@ -14,6 +14,7 @@ The ipython notebook tutorial is also prepared under the `tutorial` folder as `t
 
 # Installation
 ```bash
+$ pip install -U pip
 $ pip install -r requirements.txt
 ```
 
@@ -56,14 +57,18 @@ Your own datasets are expected to have the following structure. We assume `/data
     -- images
         -- train
             --- img001.jpg
+            --- ...
         -- val
             --- img002.jpg
+            --- ...
     
     -- labels
         -- train
             --- img001.txt
+            --- ...
         -- val
             --- img002.txt
+            --- ...
 
 - yolov5
 
@@ -76,16 +81,17 @@ Your own datasets are expected to have the following structure. We assume `/data
 ###  dataset.yaml
 
 The yaml file for COCO dataset has been prepared in `./data/coco.yaml`. For custom dataset, you need to prepare the yaml file and save it under `./data/`. The yaml file is expected to have the following format:
+
 ```bash
 # train and val datasets (image directory or *.txt file with image paths)  
 train: ./datasets/images/train/  
 val: ./datasets/images/val/  
 
 # number of classes  
-nc: 3  
+nc: number of classes
 
-# class names  
-names: ['cat', 'dog', 'person']  
+# class names
+names: list of class names
 
 ```
 
@@ -130,7 +136,7 @@ We could get `*.npy`
 # Configure the paths yaml file
 You are expected to create a yaml file which stores all the paths related to the trained models. This yaml file will be used in the following sections. You can check and modify the `pretrained_paths_520.yaml` and `pretrained_paths_720.yaml` under `/yolov5/data/`. The yaml file is expected to contain the following information:
 
-```shell
+```bash
 grid_dir: path_to_npy_file_directory
 grid20_path: path_to_grid20_npy_file
 grid40_path: path_to_grid40_npy_file
@@ -154,8 +160,9 @@ names: list_of_class_names
 This section will introduce how to save the trained model for pytorch1.4 supported format and convert to ONNX. 
 
 ## Exporting ONNX model in the PyTorch 1.7 environment
-We can convert the model to onnx by using `yolov5_export.py`. Execute commands in the folder `exporting`:
-```shell
+We can convert the model to onnx by using `yolov5_export.py`. Execute commands in the folder `yolov5`:
+
+```bash
 python ../exporting/yolov5_export.py --data path_to_pretrained_path_yaml_file
 ```
 
@@ -168,10 +175,10 @@ We could get onnx model.
 Pull the latest [ONNX converter](https://github.com/kneron/ONNX_Convertor/tree/master/optimizer_scripts) from github. You may read the latest document from Github for converting ONNX model. Execute commands in the folder `ONNX_Convertor/optimizer_scripts`:
 (reference: https://github.com/kneron/ONNX_Convertor/tree/master/optimizer_scripts)
 
-```shell
-python pytorch2onnx.py /mnt/models/Object_models/YOLOv5/training/yolov5/yolov5s.onnx /mnt/models/Object_models/YOLOv5/training/yolov5/yolov5s_convert.onnx
+```bash
+python -m onnxsim input_onnx_model output_onnx_model
 
-python pytorch2onnx.py /mnt/models/Object_models/YOLOv5/training/yolov5/yolov5s-noupsample.onnx /mnt/models/Object_models/YOLOv5/training/yolov5/yolov5s-noupsample_convert.onnx
+python pytorch2onnx.py input.pth output.onnx
 ```
 
 We could get converted onnx model.
@@ -179,8 +186,9 @@ We could get converted onnx model.
 
 # Inference
 
-Create a yaml file containing the path information. For infernce the model on a single image, execute commands in the folder `yolov5`:
-```shell
+Before model inference, we assume that the model has been converted to onnx model as in the previous section (even if only inference pth model). Create a yaml file containing the path information. For model inference on a single image, execute commands in the folder `yolov5`:
+
+```bash
 python inference.py --data path_to_pretrained_path_yaml_file --img-path path_to_image --save-path path_to_saved_image
 ```
 
@@ -194,19 +202,78 @@ python inference.py --data path_to_pretrained_path_yaml_file --img-path path_to_
 
 `--iou_thres` the iou threshold for NMS. (Default: 0.3) 
 
-`--onnx` whether inference onnx model. 
+`--onnx` whether is onnx model inference. 
 
-You could find preprocessing and postprocessing processes under the folder `exporting/yolov5/`.
+You could find preprocessing and postprocessing processes under the folder `exporting/yolov5/`. 
 
 
 # Evaluation 
 
-For end-to-end testing, you may check the evaluation section of `README` in `fcos`. 
+## Evaluation Metric
 
+We will use mean Average Precision (mAP) for evaluation. You can find the script for computing mAP in `test.py`.
+
+`mAP`: mAP is the average of Average Precision (AP). AP summarizes a precision-recall curve as the weighted mean of precisions achieved at each threshold, with the increase in recall from the previous threshold used as the weight:
+
+<img src="https://latex.codecogs.com/svg.image?AP&space;=&space;\sum_n&space;(R_n-R_{n-1})P_n&space;" title="AP = \sum_n (R_n-R_{n-1})P_n " />
+
+where <img src="https://latex.codecogs.com/svg.image?R_n" title="R_n" />  and <img src="https://latex.codecogs.com/svg.image?P_n" title="P_n" /> are the precision and recall at the nth threshold. The mAP compares the ground-truth bounding box to the detected box and returns a score. The higher the score, the more accurate the model is in its detections.
+
+## Evaluation on a Dataset
+
+For evaluating the trained model on dataset:
+
+```shell
+python test.py --weights path_to_pth_model_weight --data path_to_data_yaml_file
+```
+
+`--weights` The path to pretrained model weight. (Defalut: best.pt)
+
+`--data` The path to data yaml file. (Default: data/coco128.yaml)
+
+`--img-size` Input shape of the model (Default: (640, 640))
+
+`--conf-thres` Object confidence threshold. (Default: 0.001)
+
+`--device` Cuda device, i.e. 0 or 0,1,2,3 or cpu. (Default: cpu)
+
+`--verbose` Whether report mAP by class.
+
+## End-to-End Evaluation
+
+If you would like to perform an end-to-end test with an image dataset, you can use `inference_e2e.py` under the directory `yolov5` to obtain the prediction results.
+You have to prepare an initial parameter yaml file for the inference runner. You may check `utils/init_params.yaml` for the format.
+
+```bash
+python inference_e2e.py --img-path path_to_dataset_folder --params path_to_init_params_file --save-path path_to_save_json_file
+```
+
+`--img-path` Path to the dataset directory
+
+`--params` Path to initial parameter yaml file for the inference runner
+
+`--save-path` Path to save the prediction to a json file
+
+`--gpu` GPU id  (-1 if cpu) (Default: -1)
+
+The predictions will be saved into a json file that has the following structure:
+
+```bash
+[
+    {'img_path':image_path_1
+    'bbox': [[l,t,w,h,score,class_id], [l,t,w,h,score,class_id]]
+    },
+    {'img_path':image_path_2
+    'bbox': [[l,t,w,h,score,class_id], [l,t,w,h,score,class_id]]
+    },
+    ...
+]
+```
 # Model
 
-Backbone | Input Size |  FPS on 520 | FPS on 720 | Model Size (520/720)
---- | --- | --- | --- | ---
-YOLOv5s | 640 | 4.91429 | 24.4114 | 27.1M/29.9M
+Backbone | Input Size |  FPS on 520 | FPS on 720  | Model Size | mAP
+--- | --- |:---:|:---:|:---:|:---:
+[YOLOv5s (no upsample)](https://github.com/kneron/Model_Zoo/tree/main/detection/yolov5/yolov5s-noupsample) | 640x640 | 4.91429 | - | 13.1M | 40.4%
+[YOLOv5s (with upsample)](https://github.com/kneron/Model_Zoo/tree/main/detection/yolov5/yolov5s) | 640x640 | - | 24.4114 | 14.6M | 50.9%
 
-You could find the pretrained models on [link](https://github.com/kneron/Model_Zoo/tree/main/detection/yolov5).
+[YOLOv5s (no upsample)](https://github.com/kneron/Model_Zoo/tree/main/detection/yolov5/yolov5s-noupsample) is the yolov5s model backbone without upsampling operation, since 520 hardware does not support upsampling operation.
