@@ -2,7 +2,7 @@
 
 ## 0. Introduction
 
-Since toolchain version v0.14.0, we introduce Python API and recommend using it for the general work flow. But this doesn't mean that the old approad of script utilities are abandoned. This document provides the usage of all the script utilities.
+Since toolchain version v0.14.0, we introduce Python API and recommend using it for the general work flow. But this doesn't mean that the old approad of script utilities are abandoned. This document provides the usage of all the script utilities. Note that 530 only has the IP evaluator script. For other tools, please refer to the toolchain document.
 
 ### 1. IP Evaluator
 
@@ -19,6 +19,9 @@ cd /workspace/scripts && ./compilerIpevaluator_520.sh /workspace/examples/Little
 
 # For KDP720
 cd /workspace/scripts && ./compilerIpevaluator_720.sh /workspace/examples/LittleNet/LittleNet.onnx
+
+# For KDP530
+cd /workspace/scripts && ./compilerIpevaluator_530.sh /workspace/examples/LittleNet/LittleNet.onnx
 ```
 
 This part uses the default configuration for the hardware and not available for fine-tuning.
