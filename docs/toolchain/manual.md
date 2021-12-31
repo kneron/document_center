@@ -543,7 +543,8 @@ analysis(input_mapping, output_bie = None, threads = 4)
 `input_mapping` is the a dictionary which maps a list of input data to a specific input name. Generally speaking, the quantization would be preciser with more input data.
 `output_bie` is the path where you want your bie generated. By default, it is under /data1/fpAnalyser.
 `threads` is the threads number you want to utilize. Please note more threads would lead to more RAM usage as well.
-The return value is the generated bie path.
+The return value is the generated bie path. 
+This is a very simple example usage. There are many more parameters for fine-tuning. Please check Please check [Toolchain Python API](http://doc.kneron.com/docs/toolchain/python_api/) if needed.
 
 Please also note that this step would be very time-consuming since it analysis the model with every input data you provide.
 
