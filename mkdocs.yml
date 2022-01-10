@@ -87,7 +87,9 @@ nav:
     - Image Classification: model_training/classification.md
     - Object Detection (fcos): model_training/object_detection_fcos.md
     - Object Detection (YOLOv5): model_training/object_detection_yolov5.md
+    - Pose Estimation (Lite-HRNet): model_training/regression.md
     - Evaluation Result: model_training/evaluation.md
+
 
 extra:
     logo: 'imgs/logo.png'
