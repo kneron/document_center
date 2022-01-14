@@ -20,35 +20,50 @@ For better environment compatibility, we provide a docker which include all the 
 
 | Model                | Size    | FPS (npu only) | Time(npu only) | Has CPU node(s)? |
 | -------------------- | ------- | -------------- | -------------- | ---------------- |
-| Inception v3         | 224x224 |    6.3         | 158 ms         |        No        |
-| Inception v4         | 299x299 |    0.48        | 2068 ms        |        No        |
-| Mobilenet v1         | 224x224 |    60.7        | 16.5 ms        |        No        |
-| Mobilenet v2         | 224x224 |    61.3        | 16.3 ms        |        No        |
-| Mobilenet v2 ssdlite | 300x300 |    30.4        | 32.9 ms        |        No        |
-| Resnet50 v1.5        | 224x224 |    7.02        | 142.4 ms       |        No        |
-| OpenPose             | 256x256 |    0.61        | 1639 ms        |        No        |
-| SRCNN                | 384x384 |    7.04        | 142 ms         |        No        |
-| Tiny yolo v3         | 416x416 |    22.8        | 43.8 ms        |        Yes       |
-| Yolo v3              | 416x416 |    1.5         | 666.7 ms       |        Yes       |
+| Inception v3         | 224x224 |    6.3         | 160 ms         |        No        |
+| Inception v4         | 299x299 |    1.45        | 687 ms         |        No        |
+| Mobilenet v1         | 224x224 |    57.3        | 17.4 ms        |        No        |
+| Mobilenet v2         | 224x224 |    54.7        | 18.3 ms        |        No        |
+| Mobilenet v2 ssdlite | 300x300 |    28.5        | 35.1 ms        |        No        |
+| Resnet50 v1.5        | 224x224 |    6.94        | 144.1 ms       |        No        |
+| OpenPose             | 256x256 |    0.64        | 1569 ms        |        No        |
+| SRCNN                | 384x384 |    11.0        | 91 ms          |        No        |
+| Tiny yolo v3         | 416x416 |    21.8        | 45.8 ms        |        Yes       |
+| Yolo v3              | 416x416 |    1.44        | 692.8 ms       |        Yes       |
 
 *Performance simulation result on NPU KDP720:*
 
 | Model                | Size    | FPS (npu only) | Time(npu only) | Has CPU node(s)? |
 | -------------------- | ------- | -------------- | -------------- | ---------------- |
-| Inception v3         | 224x224 |    80.9        | 12.4 ms        |        No        |
-| Inception v4         | 299x299 |    19.9        | 50.2 ms        |        No        |
+| Inception v3         | 224x224 |    82.3        | 12.1 ms        |        No        |
+| Inception v4         | 299x299 |    19.9        | 50.1 ms        |        No        |
 | Mobilenet v1         | 224x224 |    404         | 2.48 ms        |        No        |
-| Mobilenet v2         | 224x224 |    624         | 1.60 ms        |        No        |
-| Mobilenet v2 ssdlite | 300x300 |    283         | 3.54 ms        |        No        |
-| Resnet50 v1.5        | 224x224 |    52.3        | 19.1 ms        |        No        |
+| Mobilenet v2         | 224x224 |    637         | 1.60 ms        |        No        |
+| Mobilenet v2 ssdlite | 300x300 |    286         | 3.50 ms        |        No        |
+| Resnet50 v1.5        | 224x224 |    51.7        | 19.3 ms        |        No        |
 | OpenPose             | 256x256 |    5.3         | 189 ms         |        No        |
 | SRCNN                | 384x384 |    127         | 7.87 ms        |        No        |
 | Tiny yolo v3         | 416x416 |    148         | 6.75 ms        |        No        |
-| Yolo v3              | 416x416 |    10.5        | 95.3 ms        |        No        |
-| Centernet res101     | 512x512 |    3.02        | 331 ms         |        No        |
-| Unet                 | 384x384 |    2.83        | 354 ms         |        No        |
+| Yolo v3              | 416x416 |    9.9         | 101 ms         |        No        |
+| Centernet res101     | 512x512 |    2.76        | 362 ms         |        No        |
+| Unet                 | 384x384 |    2.56        | 391 ms         |        No        |
 
-// TODO: 530 performance sheet
+*Performance simulation result on NPU KDP530:*
+
+| Model                | Size    | FPS (npu only) | Time(npu only) | Has CPU node(s)? |
+| -------------------- | ------- | -------------- | -------------- | ---------------- |
+| Inception v3         | 224x224 |    77.2        | 12.9 ms        |        No        |
+| Inception v4         | 299x299 |    18.0        | 55.4 ms        |        No        |
+| Mobilenet v1         | 224x224 |    352         | 2.84 ms        |        No        |
+| Mobilenet v2         | 224x224 |    478         | 2.09 ms        |        No        |
+| Mobilenet v2 ssdlite | 300x300 |    276         | 3.54 ms        |        No        |
+| Resnet50 v1.5        | 224x224 |    43.6        | 22.9 ms        |        No        |
+| OpenPose             | 256x256 |    3.62        | 276 ms         |        No        |
+| SRCNN                | 384x384 |    58.3        | 17.1 ms        |        No        |
+| Tiny yolo v3         | 416x416 |    73.6        | 13.6 ms        |        No        |
+| Yolo v3              | 416x416 |    6.37        | 157 ms         |        No        |
+| Centernet res101     | 512x512 |    2.53        | 394 ms         |        No        |
+| Unet                 | 384x384 |    1.00        | 997 ms         |        No        |
 
 In this document, you'll learn:
 
