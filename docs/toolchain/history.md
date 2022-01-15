@@ -1,5 +1,6 @@
 # Manual History
 
+* [v0.15.5](../history/manual_v0.15.5.pdf)
 * [v0.14.2](../history/manual_v0.14.2.pdf)
 * [v0.13.1](../history/manual_v0.13.1.pdf)
 * [520 v0.12.1](../history/manual_520_v0.12.1.pdf)

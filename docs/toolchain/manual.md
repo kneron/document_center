@@ -4,49 +4,66 @@
 
 # Kneron Linux Toolchain Manual
 
-**2021 Aug**
-**Toolchain v0.15.5**
+**2022 Jan**
+**Toolchain v0.16.0**
 
 [PDF Downloads](manual.pdf)
 
 ## 0. Overview
 
-KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 520 and KDP 720. For better
-environment compatibility, we provide a docker which include all the dependencies as well as the toolchain software.
+KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 520, KDP 720 and KDP 530.
+For better environment compatibility, we provide a docker which include all the dependencies as well as the toolchain software.
 
-**This document is compatible with `kneron/toolchain:v0.15.5`.**
+**This document is compatible with `kneron/toolchain:v0.16.0`.**
 
  *Performance simulation result on NPU KDP520:*
 
 | Model                | Size    | FPS (npu only) | Time(npu only) | Has CPU node(s)? |
 | -------------------- | ------- | -------------- | -------------- | ---------------- |
-| Inception v3         | 224x224 |    6.3         | 158 ms         |        No        |
-| Inception v4         | 299x299 |    0.48        | 2068 ms        |        No        |
-| Mobilenet v1         | 224x224 |    60.7        | 16.5 ms        |        No        |
-| Mobilenet v2         | 224x224 |    61.3        | 16.3 ms        |        No        |
-| Mobilenet v2 ssdlite | 300x300 |    30.4        | 32.9 ms        |        No        |
-| Resnet50 v1.5        | 224x224 |    7.02        | 142.4 ms       |        No        |
-| OpenPose             | 256x256 |    0.61        | 1639 ms        |        No        |
-| SRCNN                | 384x384 |    7.04        | 142 ms         |        No        |
-| Tiny yolo v3         | 416x416 |    22.8        | 43.8 ms        |        Yes       |
-| Yolo v3              | 416x416 |    1.5         | 666.7 ms       |        Yes       |
+| Inception v3         | 224x224 |    6.3         | 160 ms         |        No        |
+| Inception v4         | 299x299 |    1.45        | 687 ms         |        No        |
+| Mobilenet v1         | 224x224 |    57.3        | 17.4 ms        |        No        |
+| Mobilenet v2         | 224x224 |    54.7        | 18.3 ms        |        No        |
+| Mobilenet v2 ssdlite | 300x300 |    28.5        | 35.1 ms        |        No        |
+| Resnet50 v1.5        | 224x224 |    6.94        | 144.1 ms       |        No        |
+| OpenPose             | 256x256 |    0.64        | 1569 ms        |        No        |
+| SRCNN                | 384x384 |    11.0        | 91 ms          |        No        |
+| Tiny yolo v3         | 416x416 |    21.8        | 45.8 ms        |        Yes       |
+| Yolo v3              | 416x416 |    1.44        | 692.8 ms       |        Yes       |
 
 *Performance simulation result on NPU KDP720:*
 
 | Model                | Size    | FPS (npu only) | Time(npu only) | Has CPU node(s)? |
 | -------------------- | ------- | -------------- | -------------- | ---------------- |
-| Inception v3         | 224x224 |    80.9        | 12.4 ms        |        No        |
-| Inception v4         | 299x299 |    19.9        | 50.2 ms        |        No        |
+| Inception v3         | 224x224 |    82.3        | 12.1 ms        |        No        |
+| Inception v4         | 299x299 |    19.9        | 50.1 ms        |        No        |
 | Mobilenet v1         | 224x224 |    404         | 2.48 ms        |        No        |
-| Mobilenet v2         | 224x224 |    624         | 1.60 ms        |        No        |
-| Mobilenet v2 ssdlite | 300x300 |    283         | 3.54 ms        |        No        |
-| Resnet50 v1.5        | 224x224 |    52.3        | 19.1 ms        |        No        |
+| Mobilenet v2         | 224x224 |    637         | 1.60 ms        |        No        |
+| Mobilenet v2 ssdlite | 300x300 |    286         | 3.50 ms        |        No        |
+| Resnet50 v1.5        | 224x224 |    51.7        | 19.3 ms        |        No        |
 | OpenPose             | 256x256 |    5.3         | 189 ms         |        No        |
 | SRCNN                | 384x384 |    127         | 7.87 ms        |        No        |
 | Tiny yolo v3         | 416x416 |    148         | 6.75 ms        |        No        |
-| Yolo v3              | 416x416 |    10.5        | 95.3 ms        |        No        |
-| Centernet res101     | 512x512 |    3.02        | 331 ms         |        No        |
-| Unet                 | 384x384 |    2.83        | 354 ms         |        No        |
+| Yolo v3              | 416x416 |    9.9         | 101 ms         |        No        |
+| Centernet res101     | 512x512 |    2.76        | 362 ms         |        No        |
+| Unet                 | 384x384 |    2.56        | 391 ms         |        No        |
+
+*Performance simulation result on NPU KDP530:*
+
+| Model                | Size    | FPS (npu only) | Time(npu only) | Has CPU node(s)? |
+| -------------------- | ------- | -------------- | -------------- | ---------------- |
+| Inception v3         | 224x224 |    77.2        | 12.9 ms        |        No        |
+| Inception v4         | 299x299 |    18.0        | 55.4 ms        |        No        |
+| Mobilenet v1         | 224x224 |    352         | 2.84 ms        |        No        |
+| Mobilenet v2         | 224x224 |    478         | 2.09 ms        |        No        |
+| Mobilenet v2 ssdlite | 300x300 |    276         | 3.54 ms        |        No        |
+| Resnet50 v1.5        | 224x224 |    43.6        | 22.9 ms        |        No        |
+| OpenPose             | 256x256 |    3.62        | 276 ms         |        No        |
+| SRCNN                | 384x384 |    58.3        | 17.1 ms        |        No        |
+| Tiny yolo v3         | 416x416 |    73.6        | 13.6 ms        |        No        |
+| Yolo v3              | 416x416 |    6.37        | 157 ms         |        No        |
+| Centernet res101     | 512x512 |    2.53        | 394 ms         |        No        |
+| Unet                 | 384x384 |    1.00        | 997 ms         |        No        |
 
 In this document, you'll learn:
 
@@ -56,8 +73,14 @@ In this document, you'll learn:
 
 ** Major changes of past versions**
 
+* **[v0.16.0]**
+    * Introduce 530 toolchain.
+    * Optimizer supports pixel modification for wider input range adjustment.
+    * FP analysis supports `mmse` mode.
+    * Compiler supports `hardware_cut_opt` option.
 * **[v0.15.0]**
     * Document now is written for Python API. The original script document can be found in [Command Line Script Tools](http://doc.kneron.com/docs/toolchain/command_line/).
+    * Compiler now support weight compress option.
 * **[v0.14.0]**
     * ONNX is updated to 1.6.0
     * Pytorch is updated to 1.7.1
@@ -113,8 +136,8 @@ You can use the following command to pull the latest toolchain docker.
 docker pull kneron/toolchain:latest
 ```
 
-Note that this document is compatible with toolchain v0.15.5. You can find the version of the toolchain in
-`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.15.5, you may need to find the
+Note that this document is compatible with toolchain v0.16.0. You can find the version of the toolchain in
+`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.16.0, you may need to find the
 latest document from the [online document center](http://doc.kneron.com/docs).
 
 ## 2. Toolchain Docker Overview
@@ -376,12 +399,12 @@ We provide a general onnx optimize API. We strongly recommend that all the onnx,
 Suppose we have a onnx object, here is the example python code:
 
 ```python
-optimized_m = ktc.onnx_optimizer.onnx2onnx_flow(result_m, eliminate_tail=True)
+optimized_m = ktc.onnx_optimizer.onnx2onnx_flow(result_m, eliminate_tail=True, opt_matmul=False)
 ```
 
 In this line of python code, `ktc.onnx_optimizer.onnx2onnx_flow` is the function that takes an onnx object and optimize it. The return value `result_m` is the converted onnx object.
 
-**Note** that for hardware usage, `eliminate_tail` should be set to true as in the example. This option eliminate the no calculation operators and the npu unsupported operators (Reshape, Transpose, ...) at the last of the graph. However, since this changes the graph structure, you may need to check the model yourself and add the related functions into post-process to keep the algorithm consistent. If you only want to use onnx model for software testing, the `eliminate_tail` can be set to false to keep the model same as the input from the mathematics perspective.
+**Note** that for hardware usage, `eliminate_tail` should be set to true as in the example. This option eliminate the no calculation operators and the npu unsupported operators (Reshape, Transpose, ...) at the last of the graph. However, since this changes the graph structure, you may need to check the model yourself and add the related functions into post-process to keep the algorithm consistent. If you only want to use onnx model for software testing, the `eliminate_tail` can be set to false to keep the model same as the input from the mathematics perspective. `opt_matmul` is also for hardware usage which optimize the MatMul nodes according to the NPU limit. By default, it is set to False. You only need to enable this flag if there are MatMul nodes with inputs more than 2D.
 
 This function has more parameters for fine-tuning. Please check [Toolchain Python API](http://doc.kneron.com/docs/toolchain/python_api/) if needed.
 
@@ -419,7 +442,7 @@ In this line of python code, `ktc.onnx_optimizer.onnx1_4to1_6` is the function t
 
 ### 3.1.7 ONNX Editor
 
-KL520/KL720 NPU supports most of the compute extensive OPs, such as Conv, BatchNormalization, Fully Connect/GEMM, in order to speed up the model inference run time. On the other hand, there are some OPs that KL520 NPU cannot support well, such as `Softmax` or `Sigmod`. However, these OPs usually are not compute extensive and they are better to execute in CPU.
+KL520/KL720/KL530 NPU supports most of the compute extensive OPs, such as Conv, BatchNormalization, Fully Connect/GEMM, in order to speed up the model inference run time. On the other hand, there are some OPs that KL520 NPU cannot support well, such as `Softmax` or `Sigmod`. However, these OPs usually are not compute extensive and they are better to execute in CPU.
 Therefore, Kneron provides python APIs which help user modify the model so that KL520 NPU can run the model more efficiently.
 
 You can find the detailed description of this tool from [Toolchain Python API](http://doc.kneron.com/docs/toolchain/python_api/) for the python API and [ONNX Converter](http://doc.kneron.com/docs/toolchain/converters/) for the command usage.
@@ -440,7 +463,7 @@ km = ktc.ModelConfig(id, version, platform, onnx_model=None, onnx_path=None, bie
 
 * `id` is the identifier of the model. It should be a integer greater than 0. ID before 32768 are reserved for Kneron models. Please use ID greater than 32768 for custom models.
 * `version` is the model version. It should be a four digit hex code which is written as string, e.g. '001a'.
-* `platform` is the target platform for this model. It should be either '520' or '720'.
+* `platform` is the target platform for this model. It should be '520', '720' or '530'.
 * `onnx_model`, `onnx_path` and `bie_path`. User should provide one of those three parameter and only one. It stores the model itself. `onnx_model` takes the onnx object which is generated through the converter APIs or loaded through onnx library. `onnx_path` is the path to a onnx file. `bie_path` is the path to a bie file. The bie file is the file generated by the kneron toolchain after quantization, which is introduced in the later section.
 
 For this example, we create the LittleNet ModelConfig with the following python code:
@@ -459,7 +482,7 @@ The evaluation result will be returned as string. User can also find the evaluat
 But the report file names are different for different platforms.
 
 * 520: ip_eval_prof.txt
-* 720: ProfileResult.txt
+* 720, 530: ProfileResult.txt
 
 If the model is not supported, there would be warning messages or exceptions. Please modify the model structure referring to the message.
 Please check the report to see if the performance meets your expectation. Please consider redesign the network structure. Also note that the evaluator report only considers the performance of NPU. Thus, if the model contains many operators that are not supported by NPU but by CPU, the actual performance would be even worse.
@@ -535,7 +558,8 @@ analysis(input_mapping, output_bie = None, threads = 4)
 `input_mapping` is the a dictionary which maps a list of input data to a specific input name. Generally speaking, the quantization would be preciser with more input data.
 `output_bie` is the path where you want your bie generated. By default, it is under /data1/fpAnalyser.
 `threads` is the threads number you want to utilize. Please note more threads would lead to more RAM usage as well.
-The return value is the generated bie path.
+The return value is the generated bie path. 
+This is a very simple example usage. There are many more parameters for fine-tuning. Please check Please check [Toolchain Python API](http://doc.kneron.com/docs/toolchain/python_api/) if needed.
 
 Please also note that this step would be very time-consuming since it analysis the model with every input data you provide.
 
@@ -569,7 +593,7 @@ The python code would be like:
 fixed_results = ktc.kneron_inference(input_data, bie_file=bie_path, input_names=["data_out"], radix=radix)
 ```
 
-The usage is almost the same as using onnx. In the code above, `inf_results` is a list of result data. `bie_file` is the path to the input bie. `input_data` is a list of input data after preprocess the `input_names` is a list of model input name. The requirement is the same as in section 3.3. We also need to provide the radix value which is a special value can be obtained by `ktc.get_radix`. If your platform is not 520, you may need an extra parameter `platform`, e.g. `platform=720`.
+The usage is almost the same as using onnx. In the code above, `inf_results` is a list of result data. `bie_file` is the path to the input bie. `input_data` is a list of input data after preprocess the `input_names` is a list of model input name. The requirement is the same as in section 3.3. We also need to provide the radix value which is a special value can be obtained by `ktc.get_radix`. If your platform is not 520, you may need an extra parameter `platform`, e.g. `platform=720` or `platform=530`.
 
 `ktc.get_radix` takes the preprocessed input images as input and generate the radix value needed by hardware E2E simulation.
 
@@ -634,7 +658,7 @@ For the batch compile with only LittleNet, the python code would be like:
 hw_results = ktc.kneron_inference(input_data, nef_file=compile_result, radix=radix)
 ```
 
-The usage is a little different here. In the code above, `hw_results` is a list of result data. `nef_file` is the path to the input nef. `input_data` is a list of input data after preprocess. The requirement is the same as in section 3.3. `radix` is the radix value of inputs. If your platform is not 520, you may need an extra parameter `platform`, e.g. `platform=720`.
+The usage is a little different here. In the code above, `hw_results` is a list of result data. `nef_file` is the path to the input nef. `input_data` is a list of input data after preprocess. The requirement is the same as in section 3.3. `radix` is the radix value of inputs. If your platform is not 520, you may need an extra parameter `platform`, e.g. `platform=720` or `platform=530`.
 
 Here we use the same input `input_data` which we used in section 3.3 and the same `radix` in section 4.2. And the `compile_result` is the one that generated with only LittleNet model.
 
@@ -657,6 +681,12 @@ ktc.combine_nef(nef_path_list, output_path = "/data1/combined")
 ```
 
 Here the `nef_path_list` shall be a list of the `str` which are the path to the nef files you want to combine. It should not be empty. And the second argument is optional. It should be the output folder path of the combined nef. By default, it should be `/data1/combined`. The return value is the output folder path. The combined nef file would be under the output folder and be named as `models_<target>.def`. For example, if your target platform is 520, the result file name would be `models_520.nef` inside the output folder.
+
+Here is an usage example. Suppose you have three 520 nef files: `/data1/model_32769.nef`, `/data1/model_32770.nef` and `/data1/model_32771.nef`. Then you can use the following code to combine them. The result is "/data1/combined/models_520.nef"
+
+```python
+ktc.combine_nef(['/data1/model_32769.nef', '/data1/model_32770.nef', '/data1/model_32771.nef'], output_path = "/data1/combined")
+```
 
 ## 6 What's Next
 

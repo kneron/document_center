@@ -2,7 +2,7 @@
 
 ## 0. Introduction
 
-Since toolchain version v0.14.0, we introduce Python API and recommend using it for the general work flow. But this doesn't mean that the old approad of script utilities are abandoned. This document provides the usage of all the script utilities.
+Since toolchain version v0.14.0, we introduce Python API and recommend using it for the general work flow. But this doesn't mean that the old approad of script utilities are abandoned. This document provides the usage of all the script utilities. Note that 530 only has the IP evaluator script. For other tools, please refer to the toolchain document.
 
 ### 1. IP Evaluator
 
@@ -19,6 +19,9 @@ cd /workspace/scripts && ./compilerIpevaluator_520.sh /workspace/examples/Little
 
 # For KDP720
 cd /workspace/scripts && ./compilerIpevaluator_720.sh /workspace/examples/LittleNet/LittleNet.onnx
+
+# For KDP530
+cd /workspace/scripts && ./compilerIpevaluator_530.sh /workspace/examples/LittleNet/LittleNet.onnx
 ```
 
 This part uses the default configuration for the hardware and not available for fine-tuning.
@@ -129,7 +132,7 @@ Here is the config `/data1/batch_input_params.json` we need to batch compile the
 {
     "models": [
         {
-            "id": 19,
+            "id": 32769,
             "version": "1",
             "path": "/data1/fpAnalyser/LittleNet.quan.wqbi.bie"
         }
@@ -180,12 +183,12 @@ The `/data1/batch_input_params.json` is just like in section 4.1, but with one m
 {
     "models": [
         {
-            "id": 19,
+            "id": 32769,
             "version": "1",
             "path": "/data1/fpAnalyser/LittleNet.quan.wqbi.bie"
         },
         {
-            "id": 1000,
+            "id": 32770,
             "version": "1",
             "path": "/workspace/E2E_simulator/app/fd_external/model/520/ssd7_0.8_epoch-97_loss-0.1407_val_loss-0.0825_opt.piano.kdp520.scaled.quan.wqbi.bie"
         }
@@ -219,7 +222,7 @@ As said in section 4, the details of the config can be found in the appendix. Yo
     },
     "models": [
         {
-            "id": 19,
+            "id": 32769,
             "version": "1",
             "path": "/data1/LittleNet/LittleNet.onnx",
             "input_params": "/data1/LittleNet/input_params.json"
@@ -420,7 +423,7 @@ Here is an example JSON with comments. **Please remove all the comments in the r
     "models": [
         {
             // Model ID
-            "id": 19,
+            "id": 32769,
             // Model version. should be an hex code at most 4 digit.
             "version": "1",
             // The path to the model.

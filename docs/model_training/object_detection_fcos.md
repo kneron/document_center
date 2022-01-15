@@ -10,13 +10,14 @@ You can find the tutorial for finetuning a pretrained model on custom dataset un
 The ipython notebook tutorial is also prepared under the `tutorial` folder as `tutorial/tutorial.ipynb`. You may upload and run this ipython notebook on Google colab.
 
 # Prerequisites
-- Python >= 3.6
+- Python = 3.6 or 3.7
 
 # Installation
 To install the dependencies, run
 ```
-pip install -r requirements.txt
-python setup.py build_ext --inplace
+$ pip install -U pip
+$ pip install -r requirements.txt
+$ python setup.py build_ext --inplace
 ```
 
 # Dataset & Preparation
@@ -28,81 +29,63 @@ Our traning script accepts standard PASCAL VOC dataset and MS COCO dataset. You 
 - Download [2017 MS COCO Dataset](https://cocodataset.org/#download) 
 
 ## Custom Datasets
-You can also train the model on a custom dataset. The CSV files will be used to store the data annotations. To define your own datasets, two CSV files should be used: one file containing annotations and one file containing a class name to ID mapping.
-
-### Annotations format
-The CSV file with annotations should contain one annotation per line. The header can be defined as:
-```
-img_id,xmin,ymin,xmax,ymax,class_id
-```
-Images with multiple bounding boxes should use one row per bounding box. Note that indexing for pixel values starts at 0. The expected format of each line is:
-```
-path/to/image.jpg,x1,y1,x2,y2,class_name
-```
-By default the CSV generator will look for images relative to the directory of the annotations file.
-
-Some images may not contain any labeled objects.
-To add these images to the dataset as negative examples,
-you can define an annotation where `x1`, `y1`, `x2`, `y2` and `class_name` are all empty:
-```
-path/to/image.jpg,,,,,
-```
-A full example:
-```
-img_id,xmin,ymin,xmax,ymax,class_id
-img_001.jpg,171.0,208.0,134.0,285.0,dog
-img_002.jpg,268.0,183.0,259.0,263.0,cat
-img_002.jpg,537.0,187.0,484.0,244.0,person
-img_003.jpg,,,,,
-```
-This defines a dataset with 3 images.
-`img_001.jpg` contains a dog.
-`img_002.jpg` contains a cat and a person.
-`img_003.jpg` contains no interesting objects/animals.
-
-### Class mapping format
-The class name to ID mapping file should contain one mapping per line.
-Each line should use the following format:
-```
-class_name,id
-```
-
-Indexing for classes starts at 0.
-Do not include a background class as it is implicit.
-
-For example:
-```
-cow,0
-cat,1
-bird,2
-```
+You can also train the model on a custom dataset. The custom dataset is expected to follow the YOLO format. You may visit yolov5 document for more details. 
 
 ### Annotation Tools
-You can use [labelme](https://github.com/wkentaro/labelme) to create bounding boxes and labels for your images. For more details, you may visit [labelme](https://github.com/wkentaro/labelme) and check their documents. `csv_preprocess.py` could be used to preprocess and randomly split the data. 
+You can use [makesense.ai](https://www.makesense.ai) to create bounding boxes and labels for your images. For more details, you may visit [makesense.ai](https://www.makesense.ai) and check their documents. An example of using [makesense.ai](https://www.makesense.ai) to annotate custom data is also provided in the tutorial document. 
 
+### dataset.yaml
+For COCO dataset, you need to prepare the yaml file and save it under `./data/coco.yaml`. The yaml file is expected to have the following format:
+
+```shell
+data_root: path to coco dataset dirtory 
+
+# type of dataset
+dataset_type: coco
+
+val_set_name: val2017
+train_set_name: train2017
+train_annotations_path: path to coco training annotations path   
+val_annotations_path: path to coco training validation path
+
+```
+
+For Pascal VOC dataset, you need to prepare the yaml file and save it under `./data/pascal.yaml`. The yaml file is expected to have the following format:
+
+```shell
+data_root: path_to_voc_dataset/VOCdevkit/VOC2012
+train: 'trainval'
+val: 'val'
+
+# type of dataset
+dataset_type: pascal
+
+```
+
+For custom dataset, you need to prepare the yaml file and save it under `./data/`. The yaml file is expected to have the following format (same as yolov5):
+
+```shell
+train: path to training dataset directory 
+val: path to validation dataset directory   
+
+nc: number of class
+
+names: list of class names
+```
 
 # Train 
 
-For training on Pascal VOC, run:
+All outputs (log files and checkpoints) will be saved to the snapshot directory,
+which is specified by `--snapshot-path`. For training, execute the following command in `fcos` directory:
 ```shell
-python train.py --backbone backbone_model_name --batch-size 8 --gpu 0 pascal path_to_voc_dataset/VOCdevkit/VOC2012 --val-annotations-path val
-```
-
-For training on MS COCO, run:
-```shell
-python train.py --backbone backbone_model_name --batch-size 8 --gpu 0 coco path_to_coco_dataset/
-```
-
-For training on a custom dataset, run:
-```shell
-python train.py --backbone backbone_model_name --snapshot path_to_pretrained_model --freeze-backbone --batch-size 4 --gpu 0 csv path_to_image_folder --annotations-path path_to_train_annotation_file --classes-path path_to_class_mapping_file --val-annotations-path path_to_val_annotation_file
+python train.py --backbone backbone_model_name --snapshot path_to_pretrained_model --freeze-backbone --batch-size 4 --gpu 0 --data path_to_data_yaml_file 
 ```
 
 `--backbone` Which backbone model to use. 
 
 `--snapshot` The path to pretrained model
  
-`--freeze-backbone` Whether freeze the backbone when the pretrained model is used 
+`--freeze-backbone` Whether freeze the backbone when the pretrained model is used (True/False)
 
 `--gpu` Which gpu to run. (-1 if cpu)
 
@@ -128,12 +111,15 @@ python train.py --backbone backbone_model_name --snapshot path_to_pretrained_mod
 
 `--input-size` Input size of the model (Default: (512, 512))
 
+`--data` The path to data yaml file
+
 When the validation mAP stops increasing for 5 epochs, the early stopping will be triggered and the training process will be terminated. 
 
 # Inference 
 
-For infernce the model on a single image:
-```shell
+For model infernce on a single image:
+
+```bash
 python inference.py --snapshot path_to_pretrained_model --input-shape model_input_size --gpu 0  --class-id-path path_to_class_id_mapping_file --img-path path_to_image --save-path path_to_saved_image
 ```
 
@@ -173,14 +159,19 @@ python generated_onnx.py -o outputfile.onnx inputfile.h5
 
 # Evaluation 
 
-For evaluating the trained model on MS COCO dataset:
-```shell
-python utils/eval.py --snapshot path_to_pretrained_model --gpu 0 --input-shape model_input_size coco --annotations-path path_to_annotation_file --set-name train/val/test --data-dir path_to_data_directory
-```
+## Evaluation Metric
+We will use mean Average Precision (mAP) for evaluation. You can find the script for computing mAP in `utils/eval.py`.
 
-For evaluating the trained model on a custom dataset:
+`mAP`: mAP is the average of Average Precision (AP). AP summarizes a precision-recall curve as the weighted mean of precisions achieved at each threshold, with the increase in recall from the previous threshold used as the weight:
+
+<img src="https://latex.codecogs.com/svg.image?AP&space;=&space;\sum_n&space;(R_n-R_{n-1})P_n&space;" title="AP = \sum_n (R_n-R_{n-1})P_n " />
+
+where <img src="https://latex.codecogs.com/svg.image?R_n" title="R_n" />  and <img src="https://latex.codecogs.com/svg.image?P_n" title="P_n" /> are the precision and recall at the nth threshold. The mAP compares the ground-truth bounding box to the detected box and returns a score. The higher the score, the more accurate the model is in its detections.
+
+## Evaluation on a Dataset
+For evaluating the trained model on dataset:
 ```shell
-python utils/eval.py --snapshot path_to_pretrained_model --gpu 0 --input-shape model_input_size csv --annotations-path path_to_annotation_file --classes-path path_to_class_id_mapping_file --data-dir path_to_data_directory
+python utils/eval.py --snapshot path_to_pretrained_model --gpu 0 --input-shape model_input_size --data path_to_data_yaml_file
 ```
 
 `--snapshot` Path to pretrained model
@@ -191,34 +182,35 @@ python utils/eval.py --snapshot path_to_pretrained_model --gpu 0 --input-shape m
 
 `--class-id-path` Path to the class id mapping file.
 
-`--data-dir` Path to the image data directory.
+`--data` The path to data yaml file
 
-`--annotations-path` Path to the annotation file.
+## End-to-End Evaluation
+If you would like to perform an end-to-end test with an image dataset, you can use `inference_e2e.py` under the directory `fcos` to obtain the prediction results.
+You have to prepare an initial parameter yaml file for the inference runner. You may check `utils/init_params.json` for the format.
 
-`--set-name` Train, validation or test folder. (for evaluating on COCO)
-
-
-For evaluating the a pre-computed bboxes json file (end-to-end testing) on custom dataset:
-```shell
-python utils/eval.py --detections-path path_to_detection_result_file e2e --annotations-path path_to_annotation_file --classes-path path_to_class_id_mapping_file --data-dir path_to_data_directory
+```bash
+python inference_e2e.py --img-path path_to_dataset_folder --params path_to_init_params_file --save-path path_to_save_json_file
 ```
+`--img-path` Path to the dataset directory
 
-`--detections-path` Path to the detection bboxes file.
+`--params` Path to initial parameter yaml file for the inference runner
 
-`--input-shape` Input shape of the model (Default: (512, 512))
+`--save-path` Path to save the prediction to a json file
 
-`--class-id-path` Path to the class id mapping file.
+`--gpu` GPU id  (-1 if cpu) (Default: -1)
 
-`--data-dir` Path to the image data directory.
-
-`--annotations-path` Path to the annotation file (ground truth).
-
-`--score-thres` The score threshold of bounding boxes. (Default: 0.1)
-
-`--iou-thres` the iou threshold. (Default: 0.35) 
-
-The evaluation statistics will be saved in `mAP_result.txt`. You may check the format in tutorial. 
-
+The predictions will be saved into a json file that has the following structure:
+```bash
+[
+    {'img_path':image_path_1
+    'bbox': [[l,t,w,h,score,class_id], [l,t,w,h,score,class_id]]
+    },
+    {'img_path':image_path_2
+    'bbox': [[l,t,w,h,score,class_id], [l,t,w,h,score,class_id]]
+    },
+    ...
+]
+```
 
 # Models
 
@@ -235,6 +227,6 @@ resnet18 | 512 | pan | 4.88634 | 30.1866 | 33.8M
 resnet18 | 416 | pan | 6.8977 | 46.9993 | 33.8M
 resnet18 | 320 | pan | 10.9281 | 82.4277 | 33.8M
 
-Backbone | darknet53s | darknet53ss  | resnet18
---- | --- | --- | ---
-Accuracy | medium~high | low | medium
+ \ | darknet53s | 
+--- |:---:
+mAP | 44.8% |

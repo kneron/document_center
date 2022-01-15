@@ -90,7 +90,7 @@ Args:
 #### General onnx optimization
 
 ```python
-ktc.onnx_optimizer.onnx2onnx_flow(m, disable_fuse_bn=False, bn_on_skip=False, bn_before_add=False, bgr=False, norm=False, rgba2yynn=False, eliminate_tail=False)
+ktc.onnx_optimizer.onnx2onnx_flow(m, disable_fuse_bn=False, bn_on_skip=False, bn_before_add=False, bgr=False, norm=False, rgba2yynn=False, eliminate_tail=False, opt_matmul=False)
 ```
 
 Return the optimized model. Optimize the onnx model.
@@ -105,6 +105,7 @@ Args:
 * norm (bool, optional): add an Conv layer to add 0.5 tp the input. Defaults to False.
 * rgba2yynn (bool, optional): add an Conv layer to convert rgb input to yynn . Defaults to False.
 * eliminate_tail (bool, optional): remove the trailing NPU unsupported nodes. Defaults to False.
+* opt_matmul (bool, optional): optimize the MatMul layers according to the NPU limit. Defaults to False.
 
 ### 1.3 Editors
 
@@ -229,6 +230,20 @@ Args:
 * old_name (str): old output name.
 * new_name (str): new output name.
 
+#### Input pixel shift
+
+```python
+ktc.onnx_optimizer.pixel_modify(model, scale, bias)
+```
+
+Return the result onnx model. Add a special BN node to adjust the input range. Currently only support single input model.
+
+Args:
+
+* model (onnx.ModelProto): input onnx model.
+* scale (List[float]): the scale of the BN node.
+* bias (List[float]): the bias of the BN node
+
 ## 2 Toolchain Utilities
 
 This section mainly contains the API manual of analyser, compiler and IP evaluator.
@@ -270,6 +285,11 @@ Args:
 * threads (int, optional): multithread setting. Defaults to 4.
 * quantize_mode (str, optional): quantize_mode setting. Currently support default and post_sigmoid. Defaults to "default".
 * outlier (float, optional): remove outliers when calculating max & min. It should be between 0 and 1.0. Defaults to 0.999.
+* datapath_range_method (str, optional): could be 'mmse' or 'percentage. mmse: use snr-based-range method. percentage: use arbitary percentage. Default to 'percentage'.
+* percentile (float, optional): used under 'mmse' mode. The range to search. The larger the value, the larger the search range, the better the performance but the longer the simulation time. Defaults to 0.001,
+* outlier_factor (float, optional): used under 'mmse' mode. The factor applied on outliers. For example, if clamping data is sensitive to your model, set outlier_factor to 2 or higher. Higher outlier_factor will reduce outlier removal by increasing range. Defaults to 1.0.
+* percentage (float, optional): used under 'percentage' mode. Suggest to set value between 0.999 and 1.0. Use 1.0 for detection models. Defaults to 0.999.
+* bitwidth_mode (str, optioanl): could be "8" or "16". Try "16" if quantized model has performance degradation. Defaults to "8".
 
 ### 2.3 Model Evaluation
 
@@ -298,8 +318,8 @@ Args:
 * model_list (List[ModelConfig]): a list of models need to be compile. Models with onnx should run analysis() before compilation.
 * output_dir (str, optional): output directory. Defaults to None.
 * dedicated_output_buffer (bool, optional): dedicated output buffer. Defaults to True.
-* weight_compress (bool, optional): compress weight for saving space. Defaults to False.
-
+* weight_compress (bool, optional): compress weight to slightly reduce the binary file size. Defaults to False.
+* hardware_cut_opt (bool, optional): optimize the hardware memory usage while processing large inputs. This option might cause the compiling time increase. Currently, only available for 720. Defaults to False.
 ```python
 ktc.encrypt_compile(model_list, output_dir=None, dedicated_output_buffer=True, mode=None, key="", key_file="", encryption_efuse_key="", weight_compress=False)
 ```
@@ -315,8 +335,8 @@ Args:
 * key (str, optional): a hex code. Required in mode 1 Defaults to "".
 * key_file (str, optional): key file path. Required in mode 1. Defaults to "".
 * encryption_efuse_key (str, optional): a hex code. Required in mode 2 and optional in mode 1. Defaults to "".
-* weight_compress (bool, optional): compress weight for saving space. Defaults to False.
-
+* weight_compress (bool, optional): compress weight to slightly reduce the binary file size. Defaults to False.
+* hardware_cut_opt (bool, optional): optimize the hardware memory usage while processing large inputs. This option might cause the compiling time increase. Currently, only available for 720. Defaults to False.
 ### 2.5 Combine NEF Files
 
 ```python

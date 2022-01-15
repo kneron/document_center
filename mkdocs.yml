@@ -125,18 +125,23 @@ nav:
         - ISI API reference:                      host_lib_0.8.0/host_api/isi_api.md
         - System API reference:                   host_lib_0.8.0/host_api/system.md
   - Toolchain Docker:
-    - Toolchain Manual: toolchain/manual.md
-    - Yolo Example: toolchain/yolo_example.md
-    - End to End Simulator: toolchain/python_app/app_flow_manual.md
-    - ONNX Converter: toolchain/converters.md
-    - Script Tools: toolchain/command_line.md
-    - Python API: toolchain/python_api.md
-    - Toolchain Common Exceptions: toolchain/errors.md
-    - History Versions: toolchain/history.md
+    - Toolchain Manual:                           toolchain/manual.md
+    - Yolo Example:                               toolchain/yolo_example.md
+    - Yolo Example (With In-Model Preprocess):    toolchain/yolo_example_InModelPreproc_trick.md
+    - End to End Simulator:                       toolchain/python_app/app_flow_manual.md
+    - ONNX Converter:                             toolchain/converters.md
+    - Script Tools:                               toolchain/command_line.md
+    - Python API:                                 toolchain/python_api.md
+    - Toolchain Common Exceptions:                toolchain/errors.md
+    - History Versions:                           toolchain/history.md
   - Model Training:
     - Image Classification:                       model_training/classification.md
     - Object Detection (fcos):                    model_training/object_detection_fcos.md
     - Object Detection (YOLOv5):                  model_training/object_detection_yolov5.md
+    - Pose Estimation (Lite-HRNet):               model_training/regression.md
+    - Evaluation Result:                          model_training/evaluation.md
+
+
 extra:
     logo: 'imgs/logo.png'
 plugins:
