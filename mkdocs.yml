@@ -77,6 +77,7 @@ nav:
   - Toolchain Docker:
     - Toolchain Manual: toolchain/manual.md
     - Yolo Example: toolchain/yolo_example.md
+    - Yolo Example (With In-Model Preprocess): toolchain/yolo_example_InModelPreproc_trick.md
     - End to End Simulator: toolchain/python_app/app_flow_manual.md
     - ONNX Converter: toolchain/converters.md
     - Script Tools: toolchain/command_line.md

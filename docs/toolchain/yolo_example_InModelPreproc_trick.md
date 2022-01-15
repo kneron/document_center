@@ -1,10 +1,10 @@
 # YOLOv3 with In-Model-Preprocess trick Step by Step
 
-In this document, we provide a step by step example on how to utilize our tools to compile and test with a newly downloaded YOLOv3 model. We found data normalization is quite disturbing whten doin model quantization and porting , so we also provide a trick to let user could porting there model without worry about this. 
+In this document, we provide a step by step example on how to utilize our tools to compile and test with a newly downloaded YOLOv3 model. We found data normalization is quite disturbing when doing model quantization and porting, so we also provide a trick to let user port their models without worrying about this.
 
-(* the major difference between Yolo Example and this example, 
-1. Step 2: Convert and optimize the pretrain model 
-2. Step 4: Check ONNX model and preprocess and postprocess are good )
+>  The major difference between Yolo Example and this example:
+> 1. Step 2: Convert and optimize the pretrain model.
+> 2. Step 4: Check ONNX model and preprocess and postprocess are good.
 
 ## Step 0: Prepare environment and data
 
@@ -103,9 +103,9 @@ Now, in order to make model porting easier, we do In-Model-Preprocess trick. We 
 
 ```python
 # add pixel modify node:
-#   1. scaling 1/255 for every channel due to original normalize method, 
+#   1. scaling 1/255 for every channel due to original normalize method,
 #   2. shift 0.5 to change input range from 0~255 to -128 to 127
-ktc.onnx_optimizer.pixel_modify(m,[1/255,1/255,1/255],[0.5,0.5,0.5])
+ktc.onnx_optimizer.pixel_modify(m, [1/255, 1/255, 1/255], [0.5, 0.5, 0.5])
 
 # do onnx2onnx again to calculate "pixel_modify" BN node's output shape
 m = ktc.onnx_optimizer.onnx2onnx_flow(m)
@@ -115,7 +115,7 @@ Now, we have optimized onnx model in variable "m", which input data is in range 
 Here, we save the onnx model 'm' to disk at `/data1/yolo.opt.onnx` for further verification (like Netron or onnxruntime) in step 4.
 
 ```python
-onnx.save(m,'yolo.opt.onnx')
+onnx.save(m, 'yolo.opt.onnx')
 ```
 
 ## Step 3: IP Evaluation
@@ -181,6 +181,7 @@ If we can get correct detection result from the ONNX and provided preprocess and
 First, we need to check the preprocess and postprocess methods. [Here](<https://github.com/qqwweee/keras-yolo3/blob/master/yolo.py>) is the relevant code.
 
 The following is the extracted preprocess:
+
 ```python
 from yolo3.utils import letterbox_image
 
@@ -192,7 +193,8 @@ def preprocess(pil_img):
     np_data /= 255.
     return np_data
 ```
-but we need to modify this preprocess function due to the In-Model-Preprocess trick in previous step.
+
+But we need to modify this preprocess function due to the In-Model-Preprocess trick in previous step.
 
 ```python
 from yolo3.utils import letterbox_image
@@ -210,6 +212,7 @@ def preprocess(pil_img):
 ```
 
 This is the extracted postprocess:
+
 ```python
 import tensorflow as tf
 import pathlib
@@ -238,7 +241,7 @@ def postprocess(inf_results, ori_image_shape):
     return boxes, scores, classes
 ```
 
-Now, we can check the ONNX inference result with api 'ktc.kneron_inference'.
+Now, we can check the ONNX inference result with api `ktc.kneron_inference`.
 
 ```python
 ## onnx model check
