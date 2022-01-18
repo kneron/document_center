@@ -18,7 +18,7 @@ This **Getting Started** document only focuses on host software usage with the A
 
 - **How to upgrade the AI device to KDP2 firmware loader.**
 - **How to install the software package**
-- **How to run the APP Yolo inference example.**
+- **How to run the generic inference example.**
 
 For **model development**, please refer the [Toolchain Docker](../toolchain/manual.md) part.
 
@@ -215,7 +215,7 @@ $ sudo ./KneronDFUT --help
     $ python3 -m pip install {package_path}
     ```
 
-> **Note**: **[Ubuntu]** Please update Kneron device USB permission before following steps on Ubuntu. See the [Installation
+> **Note**: **[Ubuntu][Raspberry Pi]** Please update Kneron device USB permission before following steps on Ubuntu. See the [Installation
 ](./introduction/install_dependency.md) for details.  
 
 ## 4. Run Inference Examples

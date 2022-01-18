@@ -1,10 +1,12 @@
 # Installation
 
-Verified platforms and OS to run Kneron PLUS API:
+Verified platforms, OS and Python Version to run Kneron PLUS API:
 
-- Windows 10 (x86_64 64-bit)
-- Ubuntu 18.04 (x86_64 64-bit)
-- Raspberry Pi OS - Buster (armv7l 32-bit)
+| OS                       | Platform      | Python Version          |
+|--------------------------|---------------|-------------------------|
+| Windows 10               | x86_64 64-bit | 3.5-3.9 (x86_64 64-bit) |
+| Ubuntu 18.04             | x86_64 64-bit | 3.5-3.9 (x86_64 64-bit) |
+| Raspberry Pi OS - Buster | armv7l 32-bit | 3.5-3.9 (armv7l 32-bit) |
 
 And the following sections in this chapter will provide the instructions for installing the tools and dependency python packages to the corresponding platform.
 
@@ -100,9 +102,9 @@ Note: This feature is only provided in Kneron PLUS v1.3.0 and above.
 
     **Note**: After Upgrade Kneron KL720 to KDP2 (ex. via Kneron DFUT), you may need to re-install the driver of KL720, since the USB ID will be changed to "3231/0720".
 
-## 3. Update Kneron AI Device USB Permission on Ubuntu
+## 3. Update Kneron AI Device USB Permission on Ubuntu and Raspberry Pi
 
- * Config USB permission on Ubuntu
+ * Config USB permission on Ubuntu/Raspberry Pi
    ```bash
    $ sudo bash install_libusb.sh
    ```

@@ -28,8 +28,10 @@ There are two modes to activate KDP2 firmware in Kneron AI device:
 
     - The GUI or command line of **KneronDFUT** can be used for writing the loader firmware to flash memory and switch AI devices to USB boot mode.
 
-    - After writing the loader firmware and switching device to USB boot mode, The KDP2 firmware can be uploaded via **kp_load_firmware_from_file()**, a KP API, before inference.
+    - After writing the loader firmware and switching device to USB boot mode. The KDP2 firmware can be uploaded via following KP API, before inference:  
 
+        * C user: `kp_load_firmware_from_file()`  
+        * Python user: `kp.core.load_firmware_from_file()`  
 
 - **Firmware in Flash Memory (Flash Boot)**
 
