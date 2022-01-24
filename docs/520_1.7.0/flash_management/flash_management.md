@@ -11,9 +11,11 @@
 
 #### 2.1. Connecting UART0 (Program Flash via UART0 Interface)
 
-UART0: Command Port
+1. UART0: Command Port
+2. The UART Tx/Rx definition may be different from various vendors. If your USB-UART cable doesn't work, please swap Tx/Rx pin, re-plug and try again.
 
 ![](img/10_2_1.png)
+![](img/10_2_1_1.png)
 
 
 #### 2.2. Connecting 5V power and trun on power switch
@@ -33,6 +35,7 @@ Please do it every time after plugging in the power
 #### 2.4. Set bootstrap settings to manual boot mode (Program Flash via UART0 Interface)
 
 1. Must set bootstrap settings to manual boot mode
+    ![](img/10_2_4_1.png)
 2. Reset pin or power must be controllable to enter manual boot mode.
 
 ![](img/10_2_4.png)
