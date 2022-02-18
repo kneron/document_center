@@ -24,7 +24,7 @@ Note: We built and run the examples below under OS Windows 10 (19041.1052), Keil
 ---
 
 ## How to:
-### step 1. read document at [Getting_start](http://doc.kneron.com/docs/#plus/getting_start/) and make sure PLUS is ready
+### step 1. read document at [Getting_start](../getting_started.md) and make sure PLUS is ready
 ### step 2-1. run KL520 example:
 ```bash
     cd build/bin/
