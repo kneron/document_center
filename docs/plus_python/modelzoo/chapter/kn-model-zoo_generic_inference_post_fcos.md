@@ -24,7 +24,7 @@ to learn how to convert the trained model to NEF model
 
 ## How to:  
 
-### step 1. read document at "python/doc/markdown/getting_start.md" and make sure PLUS is ready  
+### step 1. read document at [Getting_start](../../getting_start.md) and make sure PLUS is ready  
 
 ### step 2-1. run KL520 example:  
 
