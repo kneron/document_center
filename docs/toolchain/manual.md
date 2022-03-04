@@ -312,7 +312,7 @@ The Pytorch inside the docker is version 1.7.1. We currently only support models
 
 > TIPS on export onnx using `torch.onnx`:
 >
-> You can use `torch.onnx` to export your model into onnx object. Here is the [Pytorch 1.7.1 version document](https://pytorch.org/docs/1.6.1/onnx.html) for `onnx.torch`. An example code for exporting the model is:
+> You can use `torch.onnx` to export your model into onnx object. Here is the [Pytorch to ONNX document](https://pytorch.org/docs/stable/onnx.html#example-alexnet-from-pytorch-to-onnx) for `onnx.torch`. An example code for exporting the model is:
 
 ```python
 import torch.onnx
