@@ -5,7 +5,7 @@
 # Kneron Linux Toolchain Manual
 
 **2022 Jan**
-**Toolchain v0.16.0**
+**Toolchain v0.17.0**
 
 [PDF Downloads](manual.pdf)
 
@@ -14,7 +14,7 @@
 KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 520, KDP 720 and KDP 530.
 For better environment compatibility, we provide a docker which include all the dependencies as well as the toolchain software.
 
-**This document is compatible with `kneron/toolchain:v0.16.0`.**
+**This document is compatible with `kneron/toolchain:v0.17.0`.**
 
  *Performance simulation result on NPU KDP520:*
 
@@ -73,11 +73,15 @@ In this document, you'll learn:
 
 ** Major changes of past versions**
 
+* **[v0.17.0]**
+    * Optimize analysis API. Now we verify the model while analysing the fixed point performance.
+    * E2E simulator no longer requires `radix` parameter.
 * **[v0.16.0]**
     * Introduce 530 toolchain.
     * Optimizer supports pixel modification for wider input range adjustment.
     * FP analysis supports `mmse` mode.
     * Compiler supports `hardware_cut_opt` option.
+    * Compiler supports combining nef files.
 * **[v0.15.0]**
     * Document now is written for Python API. The original script document can be found in [Command Line Script Tools](http://doc.kneron.com/docs/toolchain/command_line/).
     * Compiler now support weight compress option.
@@ -136,8 +140,8 @@ You can use the following command to pull the latest toolchain docker.
 docker pull kneron/toolchain:latest
 ```
 
-Note that this document is compatible with toolchain v0.16.0. You can find the version of the toolchain in
-`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.16.0, you may need to find the
+Note that this document is compatible with toolchain v0.17.0. You can find the version of the toolchain in
+`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.17.0, you may need to find the
 latest document from the [online document center](http://doc.kneron.com/docs).
 
 ## 2. Toolchain Docker Overview
@@ -590,21 +594,10 @@ We would use `ktc.kneron_inference` here, too. But here we are using the generat
 The python code would be like:
 
 ```python
-fixed_results = ktc.kneron_inference(input_data, bie_file=bie_path, input_names=["data_out"], radix=radix)
+fixed_results = ktc.kneron_inference(input_data, bie_file=bie_path, input_names=["data_out"])
 ```
 
-The usage is almost the same as using onnx. In the code above, `inf_results` is a list of result data. `bie_file` is the path to the input bie. `input_data` is a list of input data after preprocess the `input_names` is a list of model input name. The requirement is the same as in section 3.3. We also need to provide the radix value which is a special value can be obtained by `ktc.get_radix`. If your platform is not 520, you may need an extra parameter `platform`, e.g. `platform=720` or `platform=530`.
-
-`ktc.get_radix` takes the preprocessed input images as input and generate the radix value needed by hardware E2E simulation.
-
-Here we use the same input `input_data` which we used in section 3.3. And the `bie_path` is the return value in section 4.1.
-
-The full code would be:
-
-```python
-radix = ktc.get_radix(input_images)
-fixed_results = ktc.kneron_inference(input_data, bie_file=bie_path, input_names=["data_out"], radix=radix)
-```
+The usage is almost the same as using onnx. In the code above, `inf_results` is a list of result data. `bie_file` is the path to the input bie. `input_data` is a list of input data after preprocess the `input_names` is a list of model input name. The requirement is the same as in section 3.3. If your platform is not 520, you may need an extra parameter `platform`, e.g. `platform=720` or `platform=530`.
 
 As mentioned above, we do not provide any postprocess. In reality, you may want to have your own postprocess function in Python, too.
 
@@ -655,19 +648,19 @@ We would use `ktc.kneron_inference` here again. And we are using the generated n
 For the batch compile with only LittleNet, the python code would be like:
 
 ```python
-hw_results = ktc.kneron_inference(input_data, nef_file=compile_result, radix=radix)
+hw_results = ktc.kneron_inference(input_data, nef_file=compile_result)
 ```
 
-The usage is a little different here. In the code above, `hw_results` is a list of result data. `nef_file` is the path to the input nef. `input_data` is a list of input data after preprocess. The requirement is the same as in section 3.3. `radix` is the radix value of inputs. If your platform is not 520, you may need an extra parameter `platform`, e.g. `platform=720` or `platform=530`.
+The usage is a little different here. In the code above, `hw_results` is a list of result data. `nef_file` is the path to the input nef. `input_data` is a list of input data after preprocess. The requirement is the same as in section 3.3. If your platform is not 520, you may need an extra parameter `platform`, e.g. `platform=720` or `platform=530`.
 
-Here we use the same input `input_data` which we used in section 3.3 and the same `radix` in section 4.2. And the `compile_result` is the one that generated with only LittleNet model.
+Here we use the same input `input_data` which we used in section 3.3. And the `compile_result` is the one that generated with only LittleNet model.
 
 As mentioned above, we do not provide any postprocess. In reality, you may want to have your own postprocess function in Python, too.
 
 For nef file with mutiple models, we can specify the model with model ID:
 
 ```python
-hw_results = ktc.kneron_inference(input_data, nef_file=compile_result, model_id=32769, radix=ktc.get_radix(input_images))
+hw_results = ktc.kneron_inference(input_data, nef_file=compile_result, model_id=32769)
 ```
 
 After getting the `hw_results` and post-process it, you may want to compare the result with the `fixed_results` which is generated in section 4.2 to see if the results match. If the results mismatch, please contact us direcly through forum <https://www.kneron.com/forum/>.

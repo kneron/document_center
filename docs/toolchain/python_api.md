@@ -284,7 +284,7 @@ Args:
 * output_bie (str, optional): path to the output bie file. Defaults to "/data1/output.bie".
 * threads (int, optional): multithread setting. Defaults to 4.
 * quantize_mode (str, optional): quantize_mode setting. Currently support default and post_sigmoid. Defaults to "default".
-* outlier (float, optional): remove outliers when calculating max & min. It should be between 0 and 1.0. Defaults to 0.999.
+* outlier (float, optional): deprecated. Please use percentage instead.
 * datapath_range_method (str, optional): could be 'mmse' or 'percentage. mmse: use snr-based-range method. percentage: use arbitary percentage. Default to 'percentage'.
 * percentile (float, optional): used under 'mmse' mode. The range to search. The larger the value, the larger the search range, the better the performance but the longer the simulation time. Defaults to 0.001,
 * outlier_factor (float, optional): used under 'mmse' mode. The factor applied on outliers. For example, if clamping data is sensitive to your model, set outlier_factor to 2 or higher. Higher outlier_factor will reduce outlier removal by increasing range. Defaults to 1.0.
