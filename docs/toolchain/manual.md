@@ -491,6 +491,9 @@ But the report file names are different for different platforms.
 If the model is not supported, there would be warning messages or exceptions. Please modify the model structure referring to the message.
 Please check the report to see if the performance meets your expectation. Please consider redesign the network structure. Also note that the evaluator report only considers the performance of NPU. Thus, if the model contains many operators that are not supported by NPU but by CPU, the actual performance would be even worse.
 
+> TIPS:
+> You can find the profiling configuration under `/workspace/scripts/res`. The configuration files are named like `ip_config_<platform>.json`. You can change the
+> bandwidth according to your scenario .
 
 ### 3.3 E2E Simulator Check (Floating Point)
 
