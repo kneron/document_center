@@ -4,8 +4,8 @@
 
 # Kneron Linux Toolchain Manual
 
-**2022 Mar**
-**Toolchain v0.17.1**
+**2022 Apr**
+**Toolchain v0.17.2**
 
 [PDF Downloads](manual.pdf)
 
@@ -14,7 +14,7 @@
 KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 520, KDP 720 and KDP 530.
 For better environment compatibility, we provide a docker which include all the dependencies as well as the toolchain software.
 
-**This document is compatible with `kneron/toolchain:v0.17.1`.**
+**This document is compatible with `kneron/toolchain:v0.17.2`.**
 
  *Performance simulation result on NPU KDP520:*
 
@@ -140,8 +140,8 @@ You can use the following command to pull the latest toolchain docker.
 docker pull kneron/toolchain:latest
 ```
 
-Note that this document is compatible with toolchain v0.17.1. You can find the version of the toolchain in
-`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.17.1, you may need to find the
+Note that this document is compatible with toolchain v0.17.2. You can find the version of the toolchain in
+`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.17.2, you may need to find the
 latest document from the [online document center](http://doc.kneron.com/docs).
 
 ## 2. Toolchain Docker Overview
@@ -559,13 +559,15 @@ In this chapter, we would go through the steps of quantization.
 Quantization is the step where the floating-point weight are quantized into fixed-point to reduce the size and the calculation complexity. The Python API for this step is called `analysis`. It is also a class function of `ktc.ModelConfig`. It takes a dictionary as input.
 
 ```python
-analysis(input_mapping, output_bie = None, threads = 4)
+analysis(input_mapping, output_bie = None, threads = 4, skip_verify=True)
 ```
 
 `input_mapping` is the a dictionary which maps a list of input data to a specific input name. Generally speaking, the quantization would be preciser with more input data.
 `output_bie` is the path where you want your bie generated. By default, it is under /data1/fpAnalyser.
 `threads` is the threads number you want to utilize. Please note more threads would lead to more RAM usage as well.
-The return value is the generated bie path. 
+`skip_verify` is an optional flag to determine whether to skip the model verification step while doing the quantization. The model verification makes sure your model can be processed correctly by our toolchain. But this step could take more time and consume more system resources. *Note that if your memory is not enough, the utility would raise segmentation fault.* By default, this flag is set to True, which means the verification is skipped.  
+The return value is the generated bie path.
+
 This is a very simple example usage. There are many more parameters for fine-tuning. Please check Please check [Toolchain Python API](http://doc.kneron.com/docs/toolchain/python_api/) if needed.
 
 Please also note that this step would be very time-consuming since it analysis the model with every input data you provide.
