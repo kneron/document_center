@@ -289,6 +289,7 @@ Args:
 * percentile (float, optional): used under 'mmse' mode. The range to search. The larger the value, the larger the search range, the better the performance but the longer the simulation time. Defaults to 0.001,
 * outlier_factor (float, optional): used under 'mmse' mode. The factor applied on outliers. For example, if clamping data is sensitive to your model, set outlier_factor to 2 or higher. Higher outlier_factor will reduce outlier removal by increasing range. Defaults to 1.0.
 * percentage (float, optional): used under 'percentage' mode. Suggest to set value between 0.999 and 1.0. Use 1.0 for detection models. Defaults to 0.999.
+* skip_verify (bool, optional): whether skip the model verification step. The model verification step makes sure your model can be processed correctly by our toolchain. But it takes longer time and more memory. Defaults to False.
 
 ### 2.3 Model Evaluation
 
@@ -319,6 +320,8 @@ Args:
 * dedicated_output_buffer (bool, optional): dedicated output buffer. Defaults to True.
 * weight_compress (bool, optional): compress weight to slightly reduce the binary file size. Defaults to False.
 * hardware_cut_opt (bool, optional): optimize the hardware memory usage while processing large inputs. This option might cause the compiling time increase. Currently, only available for 720. Defaults to False.
+* flatbuffer (bool, optional): enable new flatbuffer mode for 720. Defauls to False.
+
 ```python
 ktc.encrypt_compile(model_list, output_dir=None, dedicated_output_buffer=True, mode=None, key="", key_file="", encryption_efuse_key="", weight_compress=False)
 ```
@@ -336,6 +339,8 @@ Args:
 * encryption_efuse_key (str, optional): a hex code. Required in mode 2 and optional in mode 1. Defaults to "".
 * weight_compress (bool, optional): compress weight to slightly reduce the binary file size. Defaults to False.
 * hardware_cut_opt (bool, optional): optimize the hardware memory usage while processing large inputs. This option might cause the compiling time increase. Currently, only available for 720. Defaults to False.
+* flatbuffer (bool, optional): enable new flatbuffer mode for 720. Defauls to False.
+
 ### 2.5 Combine NEF Files
 
 ```python

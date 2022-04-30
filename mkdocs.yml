@@ -132,6 +132,7 @@ nav:
     - ONNX Converter:                             toolchain/converters.md
     - Script Tools:                               toolchain/command_line.md
     - Python API:                                 toolchain/python_api.md
+    - Web GUI:                                    toolchain/toolchain_webgui.md
     - Toolchain Common Exceptions:                toolchain/errors.md
     - History Versions:                           toolchain/history.md
   - Model Training:
