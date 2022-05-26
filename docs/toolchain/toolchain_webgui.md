@@ -96,9 +96,9 @@ Below is the command to stop and to restart the docker service:
 
 ```bash
 # Stop the service
-docker stop kneron_webgui
+docker stop toolchain_webgui
 # Restart the service
-docker start kneron_webgui
+docker start toolchain_webgui
 ```
 
 When you want to update the service and restart the a branch new container, you may need the following command to delete
@@ -106,5 +106,5 @@ the current docker container.
 
 ```bash
 # Delete the service container.
-docker container rm kneron_webgui
+docker container rm toolchain_webgui
 ```
