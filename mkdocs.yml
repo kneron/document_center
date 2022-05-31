@@ -101,7 +101,7 @@ nav:
 
   - Firmware SDK:
     - KL520 SDK:
-      - v2.0.x:                                   520_1.7.0/introduction.md
+      - v2.0.x:                                   520_2.0.0/introduction.md
       - Archive:
         - v1.7.x:                                 520_1.7.0/introduction.md
         - v1.6.x:                                 520_1.6.0/introduction.md
@@ -109,7 +109,7 @@ nav:
         - v1.4.0.0:                               520_1.4.0.0/getting_start.md
         - v1.3.0.0:                               520_1.3.0.0/getting_start.md
     - KL720 SDK:
-      - v2.0.x:                                   720_1.5.0/introduction.md
+      - v2.0.x:                                   720_2.0.0/introduction.md
       - Archive:
         - v1.5.x:                                 720_1.5.0/introduction.md
         - v1.4.x:                                 720_1.4.0/introduction.md
