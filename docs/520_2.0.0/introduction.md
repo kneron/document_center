@@ -178,11 +178,11 @@ ASIC-KL520 is composed of 2 cores:
 
 This SDK provides the following solution project examples.
 
-| Solution Project        | Required Chip | Peripherals                                | Description                                                  |
-| ----------------------- | ------------- | ------------------------------------------ | ------------------------------------------------------------ |
-| solution_kdp2_user_ex   | kl520         | none                                       | data input and result output via Kneron PLUS API and customized model inference flow |
-| solution_kdp2_hico_mipi | kl520         | Kneron KL520 series AI SoC Development Kit | image from MIPI sensor and output to connected PC via USB    |
-| solution_kdp2_host_mipi | kl520         | Kneron KL520 series AI SoC Development Kit | image from MIPI sensor and output on display                 |
+| Solution Project        | Required Chip | Peripherals                                | Description                                                  | Document Link
+| ----------------------- | ------------- | ------------------------------------------ | ------------------------------------------------------------ | --------------------------------
+| solution_kdp2_user_ex   | kl520         | none                                       | data input and result output via Kneron PLUS API and customized model inference flow | [README](sdk/solution_kdp2_user_ex.md)
+| solution_kdp2_hico_mipi | kl520         | Kneron KL520 series AI SoC Development Kit | image from MIPI camera sensor and output to connected PC via USB    | [README](sdk/solution_kdp2_hico_mipi.md)
+| solution_kdp2_host_mipi | kl520         | Kneron KL520 series AI SoC Development Kit | image from MIPI camera sensor and output on display                 | [README](sdk/solution_kdp2_host_mipi.md)
 
 General common files:
 

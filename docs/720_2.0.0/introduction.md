@@ -183,12 +183,12 @@ ASIC-KL720 is composed of 2 cores:
 ## 3. Solution Project Examples
 This SDK provides the following solution project examples.
 
-| Solution Project               | Required Chip | Peripherals         | Description                                                  |
-| ------------------------------ | ------------- | ------------------- | ------------------------------------------------------------ |
-| solution_kdp2_user_ex          | kl720_9x9     | none                | data input and result output via Kneron PLUS API and customized model inference flow |
-| solution_kdp2_hico_mipi        | kl720_11x11   | Kneron LW 3D module | image from MIPI sensor and output to connected PC via USB    |
-| solution_kdp2_hico_tof         | kl720_11x11   | ToF_ISR module      | image from MIPI ToF sensor and output to connected PC via USB |
-| solution_kdp2_host_in_uart_out | kl720_11x11   | Kneron LW 3D module | image from MIPI sensor and output to connected PC via UART   |
+| Solution Project               | Required Chip | Peripherals         | Description                                                  | Document Link
+| ------------------------------ | ------------- | ------------------- | ------------------------------------------------------------ | --------------------------------
+| solution_kdp2_user_ex          | kl720_9x9     | none                | data input and result output via Kneron PLUS API and customized model inference flow | [README](sdk/solution_kdp2_user_ex.md)
+| solution_kdp2_hico_mipi        | kl720_11x11   | Kneron LW 3D module | image from MIPI camera sensor and output to connected PC via USB    | [README](sdk/solution_kdp2_hico_mipi.md)
+| solution_kdp2_hico_tof         | kl720_11x11   | ToF_ISR module      | image from MIPI ToF module and output to connected PC via USB | [README](sdk/solution_kdp2_hico_tof.md)
+| solution_kdp2_host_in_uart_out | kl720_11x11   | Kneron LW 3D module | image from MIPI camera sensor and output to connected PC via UART   | [README](sdk/solution_kdp2_host_in_uart_out.md)
 
 General common files:
 
