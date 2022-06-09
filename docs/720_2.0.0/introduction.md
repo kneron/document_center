@@ -169,9 +169,9 @@ ASIC-KL720 is composed of 2 cores:
 
 | Utility               | Description | References |
 | --------------------- | ----------- |---------------------|
-| bin_gen / bin_gen_nor | To generate single image from several image components | ch 3.1 in [README](flash_management/flash_management.md#3-program-flash-via-uart0-interface) |
+| bin_gen / bin_gen_nor | To generate single image from several image components | ch 3.3 in [README](flash_management/flash_management.md) |
 | dfu                   | To satisfy flash address alignment. It is called by post_build.bat in each Keil project | utils/dfu/readme.txt |
-| flash_programmer      | Tool to program firmware/model/data via UART interface | ch 3.3 in [README](flash_management/flash_management.md#3-program-flash-via-uart0-interface) |
+| flash_programmer      | Tool to program firmware/model/data via UART interface | ch 3.4 in [README](flash_management/flash_management.md#3-program-flash-via-uart0-interface) |
 | JLink_programmer      | Script to program firmware/model/data via JLink | ch 4 in [README](flash_management/flash_management.md#4-program-flash-via-jtagswd-interface) |
 | nef_utility           | utility for model(NEF file) | execute "nef_utility -h" |
 | pinmux_config         | pinmux table | see the excel file |
