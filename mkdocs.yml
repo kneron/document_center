@@ -154,5 +154,5 @@ nav:
 extra:
     logo: 'imgs/logo.png'
 plugins:
-  #- pdf-export
+  - pdf-export
   - search
