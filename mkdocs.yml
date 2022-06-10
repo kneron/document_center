@@ -39,11 +39,17 @@ nav:
       - Object Detection(Fcos):                   plus_c/modelzoo/kn-model-zoo_generic_inference_post_fcos.md
       - Object Detection(Yolo v5):                plus_c/modelzoo/kn-model-zoo_generic_inference_post_yolov5.md
     - API Reference:
-      - v1.3.x:
-        - Data Structure:                         plus_c_api/api_reference_1.3.x/kp_struct.h.md
-        - Core API:                               plus_c_api/api_reference_1.3.x/kp_core.h.md
-        - Inference API:                          plus_c_api/api_reference_1.3.x/kp_inference.h.md
+      - v2.0.x:
+        - Data Structure:                         plus_c_api/api_reference_2.0.x/kp_struct.h.md
+        - Core API:                               plus_c_api/api_reference_2.0.x/kp_core.h.md
+        - Inference API:                          plus_c_api/api_reference_2.0.x/kp_inference.h.md
+        - (legacy)Data Structure:                 plus_c_api/api_reference_2.0.x/kp_struct_v1.h.md
+        - (legacy)Inference API:                  plus_c_api/api_reference_2.0.x/kp_inference_v1.h.md
       - Archive:
+        - v1.3.x:
+          - Data Structure:                       plus_c_api/api_reference_1.3.x/kp_struct.h.md
+          - Core API:                             plus_c_api/api_reference_1.3.x/kp_core.h.md
+          - Inference API:                        plus_c_api/api_reference_1.3.x/kp_inference.h.md
         - v1.2.x:
           - Data Structure:                       plus_c_api/api_reference_1.2.x/kp_struct.h.md
           - Core API:                             plus_c_api/api_reference_1.2.x/kp_core.h.md
@@ -148,5 +154,5 @@ nav:
 extra:
     logo: 'imgs/logo.png'
 plugins:
-  - pdf-export
+  #- pdf-export
   - search
