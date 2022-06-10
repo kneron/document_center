@@ -1,6 +1,6 @@
 ﻿# Introduction
 
-**note:** SDK v2.0.x is compatible with Kneron PLUS v2.0.x
+**note:** SDK v2.0.x is compatible with Kneron PLUS v2.0.x   
 **note:** SDK v2.0.x is **NOT COMPATIBLE** to v1.x.x
 
 ---
@@ -9,7 +9,7 @@ This document mentions the usage of prebuilt features, how to customize a model 
 
 
 
-## 1. Requirements
+## 1. Prerequisite
 
 **Hardware**:
 
@@ -27,9 +27,7 @@ licensed software: [ARM Keil MDK](https://www.keil.com)        [ARM Keil/MDK doc
 
 licensed software: [Cadence Tensilica Xtensa SDK](https://ip.cadence.com/swdev) 
 
-
-
-> [Xtensa IDE installation and configuration for KL720](sdk/xtensa.md)
+Initialize Xtensa environment: [Xtensa IDE installation and configuration for KL720](sdk/xtensa.md)
 
 
 
@@ -70,7 +68,7 @@ The firmware folder structure is architected with modularize and stratification 
     └── utils
         ├── bin_gen
         ├── dfu
-        ├── dfw_boot
+        ├── minion
         ├── flash_programmer
         ├── FLM
         ├── JLink_programmer
@@ -170,13 +168,13 @@ ASIC-KL720 is composed of 2 cores:
 | Utility               | Description | References |
 | --------------------- | ----------- |---------------------|
 | bin_gen / bin_gen_nor | To generate single image from several image components | ch 3.3 in [README](flash_management/flash_management.md) |
-| dfu                   | To satisfy flash address alignment. It is called by post_build.bat in each Keil project | utils/dfu/readme.txt |
+| dfu                   | To satisfy flash address alignment. It is called by post_build.bat in each Keil project | see readme.txt |
 | flash_programmer      | Tool to program firmware/model/data via UART interface | ch 3.4 in [README](flash_management/flash_management.md#3-program-flash-via-uart0-interface) |
 | JLink_programmer      | Script to program firmware/model/data via JLink | ch 4 in [README](flash_management/flash_management.md#4-program-flash-via-jtagswd-interface) |
 | nef_utility           | utility for model(NEF file) | execute "nef_utility -h" |
-| pinmux_config         | pinmux table | see the excel file |
+| pinmux_config         | pinmux table | see Kneron_pinmux_config.xlsm |
 | setenc                | KL720 provides secure boot protected with AES and SHA | [README](sdk/secure_boot.md) |
-| minion            | Allows device to boot from uart or usb without external flash | utils/minion/app/readme.txt |
+| minion            | Allows device to boot from uart or usb without external flash | see readme.txt |
 
 
 
@@ -195,10 +193,6 @@ General common files:
 - Keil project path: *./firmware/build/soluiton_XXX*
 - version info file: *./firmware/include/version.h*
 - project configuration: *./firmware/build/solution_xxx/sn720xxx/project.h*
-
-
-
-> Step by step to create new application, please refer to the section **Kneron PLUS / Customized API** (reference: solution_kdp2_user_ex)
 
 
 

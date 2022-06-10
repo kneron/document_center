@@ -7,7 +7,7 @@ Xtensa Xplorer (including both GUI and command-line environment) is the only ava
 
 
 
-# Install Xtensa Toolchain
+## Install Xtensa Toolchain
 
 For details on installation guidelines, see the ***Xtensa Development Tools Installation Guide*** which is available from Cadence Support.
 
@@ -16,18 +16,18 @@ Xtensa Software Tools are officially supported on the following platforms:
 - Windows: Win 10 64-bit, Win 8 64-bit, Win 7 64-bit
 - Linux: RHEL 6 64-bit (with ‘Desktop’ package installed)
 
-There may be compatibility issues with other versions of Linux or Windows. Security-enhanced Linux (SELinux) is not a supported platform because the OS can prevent different shared libraries (including Xtensa Tools) from loading.
+There may be compatibility issues with other versions of Linux or Windows. Security-enhanced Linux (SELinux) is not a supported platform because the OS can prevent different shared libraries (including Xtensa Tools) from loading.  
+
+
+Note:  
+  1. This document only shows the usage on **windows 10 64-bit** platform.  
+  2. This document is writen for **Xtensa Xplorer 0.8.11** and toolchain **RI-2019.2**
 
 
 
-> Note:
->
-> 1. This document only shows the usage on **windows 10 64-bit** platform.
-> 2. This document is writen for **Xtensa Xplorer 0.8.11** and toolchain **RI-2019.2**
 
 
-
-# Install KL720 DSP Build Configuration
+## Install KL720 DSP Build Configuration
 
 ***Build Configuration*** describes all parameters and build includes for the Tensilica processor implementation you are developing with. Before starting development for Kneron KL720 DSP core, a specific build configuration must to be installed first.
 
@@ -48,13 +48,13 @@ And then, click **Install Tools ...** to install the specific Configuration Buil
 
 
 
-# Compile Reference Design
+## Compile Reference Design
 
 We provide two approches to compile DSP design. One is using Xtensa Xplorer IDE and another is from command line environment. 
 
 
 
-## Using Xtensa Xplorer IDE
+### Using Xtensa Xplorer IDE
 
 1. Select workspace, ex. **<path_to_720_SDK>\KL720_SDK\firmware\build\ncpu_bin\kl720_ncpu**  
    ![](../imgs/xtensa/select_a_workspace.png)
@@ -86,37 +86,34 @@ The 'main’ project appears in the Project Explorer.
 
 
 
->  Note:
->  
-> 1. Xtensa Xplorer is Eclipse-based IDE, some personal workspace settings will be created at the first run. 
-> If not in the first run, **step2 - step6** can be skip
-> 2. Check **Help-> Help Contents -> Xtensa Xplorer -> Tutorials -> Xtensa Software Quick Start** for basic usage
+Note:  
+  1. Xtensa Xplorer is Eclipse-based IDE, some personal workspace settings will be created at the first run.   (If not in the first run, **step2 - step6** can be skip)  
+  2. Check **Help-> Help Contents -> Xtensa Xplorer -> Tutorials -> Xtensa Software Quick Start** for basic usage
 
 
 
-## From Command Line Environment
+### From Command Line Environment
 
-### **Prerequisite**
+#### **Prerequisite**
 
 - MSYS2/MINGW64 environment in winodws10 64-bit
 - **cmake** and develop essential modules installed
 
 
 
-> Note: 
-> 	see **Kneron PLUS - C -> Instroduction -> Install Dependency -> Windows 10**   for installation instructions
+**Note:**
+  see **Kneron PLUS - C -> Instroduction -> Install Dependency -> Windows 10**   for installation instructions
 
 
 
-### **To Initialize Toolchain Environment**
+#### **To Initialize Toolchain Environment**
 
 In SDK folder, ***envtool.sh*** is provided to setup toolchain environment. 
 
 
->  Note
->
-> 1. All settings are for Xtensa installation with default path settings. 
-> 2. LM_LICENSE_FILE must be configured to correct setting
+Note:  
+  1. All settings are for Xtensa installation with default path settings.   
+  2. LM_LICENSE_FILE must be configured
 
 
 
@@ -129,7 +126,7 @@ $ source envtool.sh
 
 
 
-### **To Compile Design**
+#### **To Compile Design**
 
 We use **cmake** to generate build files and then do compilzation accordingly. 
 

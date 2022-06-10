@@ -20,8 +20,10 @@ This solution is an application which KL720 chip plays as a host chip with conne
 - **Program SCPU/NCPU firmware**  
     Reference:  [Jlink programming](../flash_management/flash_management.md#4-program-flash-via-jtagswd-interface)  
     ```bash
+    # program fw_scpu.bin and fw_ncpu.bin to the device
     cd [KL720_SDK]/firmware/utils/JLink_programmer  
-    flash_prog.bat # program fw_scpu.bin and fw_ncpu.bin to the device  
+    flash_prog.bat   
+    
     # follow the instructions to finish JLink programming
     # Note that you may need to substitute '/' for '\' in the path
     ```
@@ -29,15 +31,17 @@ This solution is an application which KL720 chip plays as a host chip with conne
 - **Program model**  
     Reference:  [Jlink programming](../flash_management/flash_management.md#4-program-flash-via-jtagswd-interface)  
     ```bash
+    # program models_720.bin to the device 
     cd [KL720_SDK]/firmware/utils/JLink_programmer  
     move [KL720_SDK]/firmware/utils/bin_gen/flash_bin/models_720.nef  ./bin/  
-    flash_prog.bat # program models_720.bin to the device  
+    flash_model.bat  
+    
     # follow the instructions to finish JLink programming
     # Note that you may need to substitute '/' for '\' in the path
     ```
 
 - **Run example**  
-    1.  Connect to KL720 through serial port
+    1.  Connect to KL720 through serial port. [How to connect](../flash_management/flash_management.md#2-hardware-setting)
 	2.  See command menu and type command (0) - (4) for functions in UART console window (ex. Putty)
 
 ### Commands

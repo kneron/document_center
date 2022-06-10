@@ -1,5 +1,11 @@
 # Solution User Example
 
-This solution demonstrates how to create your own application from Kneron PLUS software to KL720 SDK. It is used to generate the solution under [kneron_plus]/firmware_development/KL720/firmware/build/solution_kdp2_user_ex
+This solution demonstrates how to create your own application controlled by a Host via **Kneron PLUS**.  
+You can define a customized model set and corresponding pre-/post-process functions for them.
 
-Please refer to Kneron Document Center -> Kneron AI -> Kneron PLUS - C -> **Customized API**  
+See **Kneron Document Center -> Kneron AI -> Kneron PLUS - C -> Customized API** for the details   
+    
+Note:
+
+- Reference:  Kneron Document Center -> Kneron AI -> Kneron PLUS - C -> Getting Started
+- Example Path: *[kneron_plus]/firmware_development/KL720/firmware/build/solution_kdp2_user_ex*

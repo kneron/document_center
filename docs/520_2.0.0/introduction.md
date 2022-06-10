@@ -1,6 +1,6 @@
 # Introduction
 
-**note:** SDK v2.0.x is compatible with Kneron PLUS v2.0.x
+**note:** SDK v2.0.x is compatible with Kneron PLUS v2.0.x  
 **note:** SDK v2.0.x is **NOT COMPATIBLE** to v1.x.x
 
 ---
@@ -9,7 +9,7 @@ This document mentions the usage of prebuilt features, how to customize a model 
 
 
 
-## 1. Requirements
+## 1. Prerequisite
 
 **Hardware**:
 
@@ -62,7 +62,7 @@ The firmware folder structure is architected with modularize and stratification 
     └── utils
         ├── bin_gen
         ├── dfu
-        ├── dfw_boot
+        ├── minion
         ├── flash_programmer
         ├── FLM
         ├── JLink_programmer
@@ -168,9 +168,9 @@ ASIC-KL520 is composed of 2 cores:
 | flash_programmer | Tool to program firmware/model/data via UART interface       | ch 3.4 in [README](flash_management/flash_management.md#3-program-flash-via-uart0-interface) |
 | JLink_programmer | Script to program firmware/model/data via JLink              | ch 4 in [README](flash_management/flash_management.md#4-program-flash-via-jtagswd-interface) |
 | nef_utility      | utility for model(NEF file)                                  | execute "nef_utility -h"                                     |
-| pinmux_config    | pinmux table                                                 | see the excel file                                           |
-| FLM              | To enable 'load' icon to program flash via JLink in Keil MDK | utils/FLM/README.md                                          |
-| minion           | Allows device to boot from uart  without external flash      | utils/minion/README.txt                                      |
+| pinmux_config    | pinmux table                                                 | see Kneron_pinmux_config.xlsm                                |
+| FLM              | To enable 'load' icon to program flash via JLink in Keil MDK | see README.md                                                |
+| minion           | Allows device to boot from uart  without external flash      | see README.txt                                               |
 
 
 
@@ -192,10 +192,6 @@ General common files:
 
 
 
-> Step by step to create new application, please refer to the section **Kneron PLUS / Customized API** (reference: solution_kdp2_user_ex)
-
-
-
 ## 4. SoC Peripheral Drivers
 
 In KL520 also provides some simple examples to show how to use basic peripherals such as, I2C, PWM, DMA, GPIO...
@@ -207,19 +203,23 @@ There is also a PDF file to briefly describe the peripheral APIs
 
 ### Supported/Unsupported Peripheral Table
 
+> **Companion** means controlled by a host PC through USB by Kneron PLUS APIs
+
+
+
 **Image Input**
 
-| Peripherals           | Companion     | Host Mode         |
-| --------------------- | ------------- | ----------------- |
-| MIPI CSI RX           | x             | O                 |
-| DVP                   | x             | driver/example    |
-| UVC Host              | x             | specified cameras |
-| USB(proprietary)      | O             | x                 |
-| SPI Master, non-DMA   | x             | driver/example    |
-| SPI Slave, non-DMA    | x             | driver/example    |
-| SPI Master, DMA       | x             | x                 |
-| SPI Slave, DMA        | x             | x                 |
-| UART                  | x             | x                 |
+| Peripherals         | Companion | Host Mode         |
+| ------------------- | --------- | ----------------- |
+| MIPI CSI RX         | x         | O                 |
+| DVP                 | x         | driver/example    |
+| UVC Host            | x         | specified cameras |
+| USB(proprietary)    | O         | x                 |
+| SPI Master, non-DMA | x         | driver/example    |
+| SPI Slave, non-DMA  | x         | driver/example    |
+| SPI Master, DMA     | x         | x                 |
+| SPI Slave, DMA      | x         | x                 |
+| UART                | x         | x                 |
 
 
 **Image/Result Output**
