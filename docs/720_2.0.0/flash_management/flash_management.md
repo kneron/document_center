@@ -22,7 +22,7 @@ UART0: Command Port (either CN10 or J8)
 
     ![](../imgs/flash_management/96board_a_connect.png)
 
-* **Board 96-B**
+* **Board 96-B-9x9 / 96-B-11x11**
 
     ![](../imgs/flash_management/96board_b_connect.png)
 
@@ -30,16 +30,50 @@ UART0: Command Port (either CN10 or J8)
 
 ### 2.3. Connecting USB3.0 for 5V power supply
 
+### 2.4. Bootstrap Settings
+
+**Board 96-A**
+
+| bootstrap      | graphical                                  |
+| -------------- | ------------------------------------------ |
+| 00: UART       | ![](../imgs/flash_management/a_uart00.jpg) |
+| 01: NOR FLASH  | ![](../imgs/flash_management/a_nor01.jpg)  |
+| 10: NAND FLASH | ![](../imgs/flash_management/a_nand10.jpg) |
+| 11: USB        | ![](../imgs/flash_management/a_usb11.jpg)  |
+
+
+
+**Board 96-B-9x9**
+
+| bootstrap      | graphical                                  |
+| -------------- | ------------------------------------------ |
+| 00: UART       | ![](../imgs/flash_management/99_uart00.jpg)|
+| 01: NOR FLASH  | ![](../imgs/flash_management/99_nor01.jpg) |
+| 10: NAND FLASH | ![](../imgs/flash_management/99_nand10.jpg)|
+| 11: USB        | ![](../imgs/flash_management/99_usb11.jpg) |
+
+
+
+**Board 96-B-11x11**
+
+| bootstrap      | graphical                                  |
+| -------------- | ------------------------------------------ |
+| 00: UART       | ![](../imgs/flash_management/11_uart00.jpg)|
+| 01: NOR FLASH  | ![](../imgs/flash_management/11_nor01.jpg) |
+| 10: NAND FLASH | ![](../imgs/flash_management/11_nand10.jpg)|
+| 11: USB        | ![](../imgs/flash_management/11_usb11.jpg) |
+
 
 
 ## 3. Program Flash via UART0 Interface
 
 ### 3.1. Flash programmer necessaries
 
-1. Open command terminal for flash programmer execution
+1. set bootstrap as "UART"
+2. Open command terminal for flash programmer execution
     Tool path: `kl720_sdk\firmware\utils\flash_programmer\nand\flash_programmer.py`
-2. install Necessary python modules: kl720_sdk\firmware\utils\requirements.txt
-3.  Limitations: Only the listed argument combinations below are allowed.
+3. install Necessary python modules: kl720_sdk\firmware\utils\requirements.txt
+4. Limitations: Only the listed argument combinations below are allowed.
 
 ### 3.2. Edit python verification setting
 
