@@ -37,38 +37,38 @@ For better environment compatibility, we provide a docker which include all the 
 
 | Model                | Size    | FPS (npu only) | Time(npu only) | Has CPU node(s)? |
 | -------------------- | ------- | -------------- | -------------- | ---------------- |
-| Inception v3         | 224x224 |    82.3        | 12.1 ms        |        No        |
-| Inception v4         | 299x299 |    20.0        | 50.1 ms        |        No        |
-| Mobilenet v1         | 224x224 |    404         | 2.48 ms        |        No        |
-| Mobilenet v2         | 224x224 |    638         | 1.57 ms        |        No        |
-| Mobilenet v2 ssdlite | 300x300 |    286         | 3.50 ms        |        No        |
-| Resnet50 v1.5        | 224x224 |    51.7        | 19.3 ms        |        No        |
-| OpenPose             | 256x256 |    5.29        | 189 ms         |        No        |
-| SRCNN                | 384x384 |    127         | 7.87 ms        |        No        |
-| Tiny YOLOv3          | 416x416 |    148         | 6.75 ms        |        No        |
-| YOLOv3               | 416x416 |    9.87        | 101 ms         |        No        |
-| YOLOv5s              | 640x640 |    24.3        | 41.1 ms        |        No        |
-| Centernet res101     | 512x512 |    2.76        | 362 ms         |        No        |
-| Lite-HRNet           | 256x192 |    120         | 8.36 ms        |        No        |
+| Inception v3         | 224x224 |    86.2        | 11.6 ms        |        No        |
+| Inception v4         | 299x299 |    20.4        | 49.0 ms        |        No        |
+| Mobilenet v1         | 224x224 |    437         | 2.29 ms        |        No        |
+| Mobilenet v2         | 224x224 |    677         | 1.48 ms        |        No        |
+| Mobilenet v2 ssdlite | 300x300 |    310         | 3.22 ms        |        No        |
+| Resnet50 v1.5        | 224x224 |    55.6        | 18.0 ms        |        No        |
+| OpenPose             | 256x256 |    5.30        | 187 ms         |        No        |
+| SRCNN                | 384x384 |    134         | 7.48 ms        |        No        |
+| Tiny YOLOv3          | 416x416 |    151         | 6.61 ms        |        No        |
+| YOLOv3               | 416x416 |    10.1        | 98.6 ms        |        No        |
+| YOLOv5s              | 640x640 |    25.7        | 38.9 ms        |        No        |
+| Centernet res101     | 512x512 |    2.84        | 352 ms         |        No        |
+| Lite-HRNet           | 256x192 |    136         | 7.38 ms        |        No        |
 
 *Performance simulation result on NPU KDP530:*
 
 | Model                | Size    | FPS (npu only) | Time(npu only) | Has CPU node(s)? |
 | -------------------- | ------- | -------------- | -------------- | ---------------- |
-| Inception v3         | 224x224 |    77.3        | 12.9 ms        |        No        |
-| Inception v4         | 299x299 |    18.0        | 55.4 ms        |        No        |
-| Mobilenet v1         | 224x224 |    352         | 2.84 ms        |        No        |
-| Mobilenet v2         | 224x224 |    478         | 2.09 ms        |        No        |
-| Mobilenet v2 ssdlite | 300x300 |    276         | 3.62 ms        |        No        |
-| Resnet50 v1.5        | 224x224 |    43.7        | 22.9 ms        |        No        |
-| OpenPose             | 256x256 |    3.62        | 276 ms         |        No        |
-| SRCNN                | 384x384 |    58.3        | 17.1 ms        |        No        |
-| Tiny YOLOv3          | 416x416 |    73.6        | 13.6 ms        |        No        |
-| YOLOv3               | 416x416 |    6.38        | 157 ms         |        No        |
-| YOLOv5s              | 640x640 |    20.1        | 49.8 ms        |        No        |
-| Centernet res101     | 512x512 |    2.54        | 394 ms         |        No        |
-| Unet                 | 384x384 |    1.00        | 997 ms         |        No        |
-| Lite-HRNet           | 256x192 |    65.6        | 15.2 ms        |        No        |
+| Inception v3         | 224x224 |    64.3        | 15.5 ms        |        No        |
+| Inception v4         | 299x299 |    16.5        | 60.5 ms        |        No        |
+| Mobilenet v1         | 224x224 |    289         | 3.46 ms        |        No        |
+| Mobilenet v2         | 224x224 |    340         | 2.94 ms        |        No        |
+| Mobilenet v2 ssdlite | 300x300 |    205         | 4.88 ms        |        No        |
+| Resnet50 v1.5        | 224x224 |    35.7        | 28.0 ms        |        No        |
+| OpenPose             | 256x256 |    3.61        | 277 ms         |        No        |
+| SRCNN                | 384x384 |    54.5        | 18.3 ms        |        No        |
+| Tiny YOLOv3          | 416x416 |    72.0        | 13.9 ms        |        No        |
+| YOLOv3               | 416x416 |    5.93        | 169 ms         |        No        |
+| YOLOv5s              | 640x640 |    16.9        | 59.3 ms        |        No        |
+| Centernet res101     | 512x512 |    2.19        | 457 ms         |        No        |
+| Unet                 | 384x384 |    0.950       | 1050 ms         |        No        |
+| Lite-HRNet           | 256x192 |    52.7        | 19.0 ms        |        No        |
 
 In this document, you'll learn:
 
@@ -81,6 +81,7 @@ In this document, you'll learn:
 * **[v0.18.0]**
     * ONNX is updated to 1.7.0.
     * Introduce WebGUI.
+    * Adjust 720 and 530 IP Evaluator default hardware specification.
 * **[v0.17.0]**
     * Optimize analysis API. Now we verify the model while analysing the fixed point performance.
     * E2E simulator no longer requires `radix` parameter.
