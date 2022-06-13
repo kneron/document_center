@@ -4,8 +4,8 @@
 
 # Kneron Linux Toolchain Manual
 
-**2022 Apr**
-**Toolchain v0.17.2**
+**2022 Jun**
+**Toolchain v0.18.0**
 
 [PDF Downloads](manual.pdf)
 
@@ -14,7 +14,7 @@
 KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 520, KDP 720 and KDP 530.
 For better environment compatibility, we provide a docker which include all the dependencies as well as the toolchain software.
 
-**This document is compatible with `kneron/toolchain:v0.17.2`.**
+**This document is compatible with `kneron/toolchain:v0.18.0`.**
 
  *Performance simulation result on NPU KDP520:*
 
@@ -78,6 +78,9 @@ In this document, you'll learn:
 
 ** Major changes of past versions**
 
+* **[v0.18.0]**
+    * ONNX is updated to 1.7.0.
+    * Introduce WebGUI.
 * **[v0.17.0]**
     * Optimize analysis API. Now we verify the model while analysing the fixed point performance.
     * E2E simulator no longer requires `radix` parameter.
@@ -145,8 +148,8 @@ You can use the following command to pull the latest toolchain docker.
 docker pull kneron/toolchain:latest
 ```
 
-Note that this document is compatible with toolchain v0.17.2. You can find the version of the toolchain in
-`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.17.2, you may need to find the
+Note that this document is compatible with toolchain v0.18.0. You can find the version of the toolchain in
+`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.18.0, you may need to find the
 latest document from the [online document center](http://doc.kneron.com/docs).
 
 ## 2. Toolchain Docker Overview
@@ -699,6 +702,7 @@ ktc.combine_nef(['/data1/model_32769.nef', '/data1/model_32770.nef', '/data1/mod
 * Check the [Toolchain Python API](http://doc.kneron.com/docs/toolchain/python_api/) document for more detailed Python API usage.
 * Check the [Command Line Script Tools](http://doc.kneron.com/docs/toolchain/command_line/) for command line script usage.
 * Check the [ONNX Converter](http://doc.kneron.com/docs/toolchain/converters/) for the usage of underlying project <https://github.com/kneron/ONNX_Convertor>.
+* Check the [Web GUI](http://doc.kneron.com/docs/toolchain/toolchain_webgui/) for a simple web interface.
 
 ## FAQ
 
