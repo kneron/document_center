@@ -35,9 +35,10 @@ nav:
       - Run Customized Examples:                  plus_c/customized_api/run_customized_examples.md
     - Model Zoo:
       - Introduction:                             plus_c/modelzoo/index.md
-      - Classification:                           plus_c/modelzoo/kn-model-zoo_generic_inference_classification.md
-      - Object Detection(Fcos):                   plus_c/modelzoo/kn-model-zoo_generic_inference_post_fcos.md
-      - Object Detection(Yolo v5):                plus_c/modelzoo/kn-model-zoo_generic_inference_post_yolov5.md
+      - Legacy:
+        - Classification:                           plus_c/modelzoo/kn-model-zoo_generic_inference_classification.md
+        - Object Detection(Fcos):                   plus_c/modelzoo/kn-model-zoo_generic_inference_post_fcos.md
+        - Object Detection(Yolo v5):                plus_c/modelzoo/kn-model-zoo_generic_inference_post_yolov5.md
     - API Reference:
       - v2.0.x:
         - Data Structure:                         plus_c_api/api_reference_2.0.x/kp_struct.h.md
@@ -94,9 +95,15 @@ nav:
         - Inference without Pre-Processing:       plus_python/tutorial/chapter/model_inference_with_inference_without_pre_processing.md
     - Model Zoo:
       - Index:                                    plus_python/modelzoo/index.md
-      - Classification:                           plus_python/modelzoo/chapter/kn-model-zoo_generic_inference_classification.md
-      - Object Detection(Fcos):                   plus_python/modelzoo/chapter/kn-model-zoo_generic_inference_post_fcos.md
-      - Object Detection(Yolo v5):                plus_python/modelzoo/chapter/kn-model-zoo_generic_inference_post_yolov5.md
+      - OpenMMLab Kneron Edition:
+        - mmdetection:
+          - YoloX:                                      plus_python/modelzoo/mmdet-yolox.md
+        - mmsegmentation:
+          - STDC:                                      plus_python/modelzoo/mmseg-stdc.md
+      - Legacy:
+        - Classification:                           plus_python/modelzoo/chapter/kn-model-zoo_generic_inference_classification.md
+        - Object Detection(Fcos):                   plus_python/modelzoo/chapter/kn-model-zoo_generic_inference_post_fcos.md
+        - Object Detection(Yolo v5):                plus_python/modelzoo/chapter/kn-model-zoo_generic_inference_post_yolov5.md
     - API Document:
       - Index:                                    plus_python/api_document/index.md
       - kp.core:                                  plus_python/api_document/kp/core.md
@@ -143,12 +150,24 @@ nav:
     - Web GUI:                                    toolchain/toolchain_webgui.md
     - Toolchain Common Exceptions:                toolchain/errors.md
     - History Versions:                           toolchain/history.md
-  - Model Training:
-    - Image Classification:                       model_training/classification.md
-    - Object Detection (fcos):                    model_training/object_detection_fcos.md
-    - Object Detection (YOLOv5):                  model_training/object_detection_yolov5.md
-    - Pose Estimation (Lite-HRNet):               model_training/regression.md
-    - Evaluation Result:                          model_training/evaluation.md
+  - Model Training Material:
+    - OpenMMLab Kneron Edition:
+      - mmdetection :
+        - YoloX:               OpenMMLab/yolox_step_by_step.md
+      - mmsegmentation:
+        - STDC:               OpenMMLab/stdc_step_by_step.md
+      - mmpose:
+        - RSN18 (Hand):         OpenMMLab/rsn18_hand_pose_step_by_step.md
+      - mmtracking:
+        - ByteTrack:         OpenMMLab/bytetrack_step_by_step.md
+      - mmclassification: 
+        - RegNetX:            OpenMMLab/regnet_step_by_step.md
+    - Legacy:
+      - Image Classification:                       model_training/classification.md
+      - Object Detection (fcos):                    model_training/object_detection_fcos.md
+      - Object Detection (YOLOv5):                  model_training/object_detection_yolov5.md
+      - Pose Estimation (Lite-HRNet):               model_training/regression.md
+      - Evaluation Result:                          model_training/evaluation.md
 
 
 extra:
