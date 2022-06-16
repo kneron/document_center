@@ -9,23 +9,22 @@ In addition, the  **Kneron PLUS** provides `Generic Image Inference`  and `Gener
 ### Verified category/models:
 |  Category |  Model Type & Document |  PLUS example  | 
 |---|---|---|
-|  kneron-mmdetection  |  [YoloX](../../model_training/OpenMMLab/YoloX.md) |  Not Implement |  
-|  kneron-mmpose | [RSN18](../../model_training/OpenMMLab/RSN18.md)   |  Not Implement |
-|  kneron-mmsegmentation  | [STDC](../../model_training/OpenMMLab/STDC.md)  |  Not Implement |
-|  kneron-mmtracking  | [ByteTrack](../../model_training/OpenMMLab/ByteTrack.md)  |  Not Implement |
-|  kneron-mmclassification | [RegNet](../../model_training/OpenMMLab/RegNet.md)  |  Not Implement |
+|  kneron-mmdetection  |  [YoloX](./OpenMMLab/YoloX.md) |  [Python example](../plus_python/modelzoo/chapter/YoloX.md) |  
+|  kneron-mmpose | [RSN18](./OpenMMLab/RSN18.md)   |  [Python example](../plus_python/modelzoo/chapter/RSN18.md) |
+|  kneron-mmsegmentation  | [STDC](./OpenMMLab/STDC.md)  |  [Python example](../plus_python/modelzoo/chapter/STDC.md) |
+|  kneron-mmtracking  | [ByteTrack](./OpenMMLab/ByteTrack.md)  |  [Python example](../plus_python/modelzoo/chapter/ByteTrack.md) |
+|  kneron-mmclassification | [RegNet](./OpenMMLab/RegNet.md)  |  [Python example](../plus_python/modelzoo/chapter/RegNet.md) |
 |
 
 ### Legacy:
 
 |  Category |  Model Type & Document |  PLUS example  | 
 |---|---|---|
-|  Popular Object  Detection|  [YoloV5s](../../model_training/object_detection_yolov5.md) | [C example](./kn-model-zoo_generic_inference_post_yolov5.md)   |
-|   | [FCOS](../../model_training/object_detection_fcos.md)  |  [C example](./kn-model-zoo_generic_inference_post_fcos.md)  |
-| Popular Classification  | [Popular backbones](../../model_training/classification.md)  | [C example](./kn-model-zoo_generic_inference_classification.md)   |
+|  Popular Object  Detection|  [YoloV5s](./object_detection_yolov5.md) | [Python example](../plus_python/modelzoo/chapter/kn-model-zoo_generic_inference_post_yolov5.md)   |
+|   | [FCOS](./object_detection_fcos.md)  |  [Python example](../plus_python/modelzoo/chapter/kn-model-zoo_generic_inference_post_fcos.md)  |
+| Popular Classification  | [Popular backbones](./classification.md)  | [Python example](../plus_python/modelzoo/chapter/kn-model-zoo_generic_inference_classification.md)   |
 |
 
 ### Reference
 
 - [Toolchain Docker](http://doc.kneron.com/docs/#toolchain/manual/#2-toolchain-docker-overview)
-- [Model Training](../../model_training//index.md)
