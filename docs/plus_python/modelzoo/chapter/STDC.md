@@ -28,6 +28,6 @@ to learn how to train a the example model, and convert the trained model to NEF 
 
 ## Detail Information:  
 
-Platform      |  backbone  | FPS(npu only)  | Input format |         Preprocess       |  Normalize  |  
+Platform      |  Model Type  | FPS(npu only)  | Input format |         Preprocess       |  Normalize  |  
 --------------|:---------:|----------------:| ------------:| ------------------------:| -----------:|  
-KL720         |  STDC  |     N/A    |    raw    |     bypass (on host)     | bypass mode |  
+KL720         |  STDC  |     17.7414    |    raw    |     bypass (on host)     | bypass mode |  
