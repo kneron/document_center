@@ -1,4 +1,4 @@
-# Create Multiple Models Example
+# Create KL520 Multiple Models Example
 
 
 ---
@@ -15,11 +15,11 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
 
 ## 2. PLUS (Software) Development
 
-1. Create my_mul_example folder
+1. Create my_kl520_mul_example folder
 
     ```bash
     $ cd {PLUS_FOLDER_PATH}/examples/
-    $ mkdir my_mul_example
+    $ mkdir my_kl520_mul_example
     ```
 
 2. Add *CMakelists.txt*
@@ -47,13 +47,13 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
     target_link_libraries(${app_name} ${KPLUS_LIB_NAME} ${USB_LIB} ${MATH_LIB} pthread)
     ```
 
-3. Add *my_mul_example.h*
+3. Add *my_kl520_mul_example.h*
 
     - Please define the customized **header** structure and customized **result** structure in this file.
 
-    - Header (my_mul_example_header_t) is used for **sending** data to SCPU firmware. What kind of data should be contained can be customized based on the your requirement.
+    - Header (my_kl520_mul_example_header_t) is used for **sending** data to SCPU firmware. What kind of data should be contained can be customized based on the your requirement.
 
-    - Result (my_mul_example_result_t) is used for **receiving** data from SCPU firmware. What kind of data should be contained can be customized based on the output of model inference.
+    - Result (my_kl520_mul_example_result_t) is used for **receiving** data from SCPU firmware. What kind of data should be contained can be customized based on the output of model inference.
 
     - **kp_inference_header_stamp_t** must be contained in both header and result structures.
 
@@ -64,7 +64,7 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
     ```cpp
     #pragma once
 
-    #define MY_MUL_EXAMPLE_JOB_ID       1003
+    #define MY_KL520_MUL_EXAMPLE_JOB_ID 1003
     #define FD_MAX                      10
 
     typedef struct
@@ -80,7 +80,7 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
 
         uint32_t img_width;
         uint32_t img_height;
-    } __attribute__((aligned(4))) my_mul_example_header_t;
+    } __attribute__((aligned(4))) my_kl520_mul_example_header_t;
 
     typedef struct
     {
@@ -89,10 +89,10 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
 
         uint32_t face_count;
         one_face_data_t faces[FD_MAX];
-    } __attribute__((aligned(4))) my_mul_example_result_t;
+    } __attribute__((aligned(4))) my_kl520_mul_example_result_t;
     ```
 
-4. Add *my_mul_example.c*
+4. Add *my_kl520_mul_example.c*
 
     - There are 6 steps for inferencing in Kneron AI device:
 
@@ -122,10 +122,10 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
     #include "kp_inference.h"
     #include "helper_functions.h"
 
-    #include "my_mul_example.h"
+    #include "my_kl520_mul_example.h"
 
-    static char _scpu_fw_path[128] = "../../res/firmware/KL520/kdp2_fw_scpu.bin";
-    static char _ncpu_fw_path[128] = "../../res/firmware/KL520/kdp2_fw_ncpu.bin";
+    static char _scpu_fw_path[128] = "../../res/firmware/KL520/fw_scpu.bin";
+    static char _ncpu_fw_path[128] = "../../res/firmware/KL520/fw_ncpu.bin";
     static char _model_file_path[128] = "../../res/models/KL520/ssd_fd_lm/models_520.nef";
     static char _image_file_path[128] = "../../res/images/a_woman_640x480.bmp";
     static int _loop = 10;
@@ -194,16 +194,18 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
         printf("\nstarting inference loop %d times:\n", _loop);
 
         /******* prepare input and output header/buffers *******/
-        my_mul_example_header_t input_header;
-        my_mul_example_result_t output_result;
+        my_kl520_mul_example_header_t input_header;
+        my_kl520_mul_example_result_t output_result;
 
-        input_header.header_stamp.job_id = MY_MUL_EXAMPLE_JOB_ID;
+        input_header.header_stamp.job_id = MY_KL520_MUL_EXAMPLE_JOB_ID;
+        input_header.header_stamp.total_image = 1;
+        input_header.header_stamp.image_index = 0;
         input_header.img_width = img_width;
         input_header.img_height = img_height;
 
-        int header_size = sizeof(my_mul_example_header_t);
+        int header_size = sizeof(my_kl520_mul_example_header_t);
         int image_size = img_width * img_height * 2; // RGB565
-        int result_size = sizeof(my_mul_example_result_t);
+        int result_size = sizeof(my_kl520_mul_example_result_t);
         int recv_size = 0;
 
         /******* starting inference work *******/
@@ -254,16 +256,16 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
 
 ## 3. SCPU Firmware Development for Face Detect + Landmark
 
-1. Go to SCPU App Folder {PLUS_FOLDER_PATH}/firmware_development/KL520/scpu_kdp2/app
+1. Go to SCPU App Folder {PLUS_FOLDER_PATH}/firmware_development/KL520/firmware/app
 
-2. Add *my_mul_example_inf.h*
+2. Add *my_kl520_mul_example_inf.h*
 
-    - The content of this file should be synchronized with **my_mul_example.h** in PLUS.
+    - The content of this file should be synchronized with **my_kl520_mul_example.h** in PLUS.
 
     ```cpp
     #pragma once
 
-    #define MY_MUL_EXAMPLE_JOB_ID       1003
+    #define MY_KL520_MUL_EXAMPLE_JOB_ID 1003
     #define FD_MAX                      10
 
     typedef struct
@@ -279,7 +281,7 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
 
         uint32_t img_width;
         uint32_t img_height;
-    } __attribute__((aligned(4))) my_mul_example_header_t;
+    } __attribute__((aligned(4))) my_kl520_mul_example_header_t;
 
     typedef struct
     {
@@ -288,12 +290,12 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
 
         uint32_t face_count;
         one_face_data_t faces[FD_MAX];
-    } __attribute__((aligned(4))) my_mul_example_result_t;
+    } __attribute__((aligned(4))) my_kl520_mul_example_result_t;
 
-    void my_mul_example_inf(uint32_t job_id, void *inf_input_buf);
+    void my_kl520_mul_example_inf(uint32_t job_id, void *inf_input_buf);
     ```
 
-3. Add *my_mul_example_inf.c*
+3. Add *my_kl520_mul_example_inf.c*
 
     - There are 8 steps for inferencing in face detect model and landmark model:
 
@@ -311,7 +313,7 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
 
         7. Activate NCPU firmware for landmark model via **kmdw_inference_app_execute()**.
 
-        8. Send the result to PLUS via **kmdw_inference_app_result_enqueue()**.
+        8. Send the result to PLUS via **kmdw_fifoq_manager_result_enqueue()**.
 
     - For the customized model, **model_id** of **kmdw_inference_app_config_t** should be set to the id of the customized model.
 
@@ -329,7 +331,8 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
     #include "kmdw_console.h"
 
     #include "kmdw_inference_app.h"
-    #include "my_mul_example_inf.h"
+    #include "kmdw_fifoq_manager.h"
+    #include "my_kl520_mul_example_inf.h"
 
     #define TY_MAX_BOX_NUM (50)
     #define FACE_SCORE_THRESHOLD 0.8f
@@ -337,7 +340,7 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
     // for face detection result, should be in DDR
     static struct yolo_result_s *fd_result = NULL;
 
-    static int inference_face_detection(my_mul_example_header_t *input_header,
+    static int inference_face_detection(my_kl520_mul_example_header_t *input_header,
                                         struct yolo_result_s *fd_result /* output */)
     {
         /******* Prepare the configuration *******/
@@ -348,16 +351,16 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
         memset(&inf_config, 0, sizeof(kmdw_inference_app_config_t));
 
         // image buffer address should be just after the header
-        inf_config.image_buf = (void *)((uint32_t)input_header + sizeof(my_mul_example_header_t));
-        inf_config.image_width = input_header->img_width;
-        inf_config.image_height = input_header->img_height;
-        inf_config.image_channel = 3;                                       // assume RGB565
-        inf_config.image_format = KP_IMAGE_FORMAT_RGB565;                   // assume RGB565
-        inf_config.image_resize = KP_RESIZE_ENABLE;                         // enable resize
-        inf_config.image_padding = KP_PADDING_CORNER;                       // enable padding on corner
-        inf_config.image_norm = KP_NORMALIZE_KNERON;                        // this depends on model
-        inf_config.model_id = KNERON_FD_MASK_MBSSD_200_200_3;               // this depends on model
-
+        inf_config.num_image = 1;
+        inf_config.image_list[0].image_buf = (void *)((uint32_t)input_header + sizeof(demo_customize_inf_multiple_models_header_t));
+        inf_config.image_list[0].image_width = input_header->width;
+        inf_config.image_list[0].image_height = input_header->height;
+        inf_config.image_list[0].image_channel = 3;                             // assume RGB565
+        inf_config.image_list[0].image_format = KP_IMAGE_FORMAT_RGB565;         // assume RGB565
+        inf_config.image_list[0].image_resize = KP_RESIZE_ENABLE;               // enable resize
+        inf_config.image_list[0].image_padding = KP_PADDING_CORNER;             // enable padding on corner
+        inf_config.image_list[0].image_norm = KP_NORMALIZE_KNERON;              // this depends on model
+        inf_config.model_id = KNERON_FD_MASK_MBSSD_200_200_3;                   // this depends on model
         // set up fd result output buffer for ncpu/npu
         inf_config.ncpu_result_buf = (void *)fd_result;
 
@@ -366,7 +369,7 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
         return kmdw_inference_app_execute(&inf_config);
     }
 
-    static int inference_face_landmarks(my_mul_example_header_t *input_header,
+    static int inference_face_landmarks(my_kl520_mul_example_header_t *input_header,
                                         struct bounding_box_s *face_box,
                                         kp_landmark_result_t *lm_result /* output */)
     {
@@ -383,23 +386,24 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
         int32_t bottom = (int32_t)(face_box->y2);
 
         // image buffer address should be just after the header
-        inf_config.image_buf = (void *)((uint32_t)input_header + sizeof(my_mul_example_header_t));
-        inf_config.image_width = input_header->img_width;
-        inf_config.image_height = input_header->img_height;
-        inf_config.image_channel = 3;                                       // assume RGB565
-        inf_config.image_format = KP_IMAGE_FORMAT_RGB565;                   // assume RGB565
-        inf_config.image_norm = KP_NORMALIZE_KNERON;                        // this depends on model
-        inf_config.image_resize = KP_RESIZE_ENABLE;                         // enable resize
-        inf_config.image_padding = KP_PADDING_CORNER;                       // enable padding on corner
-        inf_config.model_id = KNERON_LM_5PTS_ONET_56_56_3;                  // this depends on model
-        inf_config.enable_crop = true;                                      // enable crop image in ncpu/npu
+        inf_config.model_id = KNERON_LM_5PTS_ONET_56_56_3;                              // this depends on model
+        inf_config.num_image = 1;
+        inf_config.image_list[0].image_buf = (void *)((uint32_t)input_header + sizeof(demo_customize_inf_multiple_models_header_t));
+        inf_config.image_list[0].image_width = input_header->width;
+        inf_config.image_list[0].image_height = input_header->height;
+        inf_config.image_list[0].image_channel = 3;                                     // assume RGB565
+        inf_config.image_list[0].image_format = KP_IMAGE_FORMAT_RGB565;                 // assume RGB565
+        inf_config.image_list[0].image_norm = KP_NORMALIZE_KNERON;                      // this depends on model
+        inf_config.image_list[0].image_resize = KP_RESIZE_ENABLE;                       // enable resize
+        inf_config.image_list[0].image_padding = KP_PADDING_CORNER;                     // enable padding on corner
+        inf_config.image_list[0].enable_crop = true;                                    // enable crop image in ncpu/npu
 
         // set crop box
-        inf_config.crop_area.crop_number = 0;
-        inf_config.crop_area.x1 = left;
-        inf_config.crop_area.y1 = top;
-        inf_config.crop_area.width = right - left;
-        inf_config.crop_area.height = bottom - top;
+        inf_config.image_list[0].crop_area.crop_number = 0;
+        inf_config.image_list[0].crop_area.x1 = left;
+        inf_config.image_list[0].crop_area.y1 = top;
+        inf_config.image_list[0].crop_area.width = right - left;
+        inf_config.image_list[0].crop_area.height = bottom - top;
 
         // set up landmark result output buffer for ncpu/npu
         inf_config.ncpu_result_buf = (void *)lm_result;
@@ -421,20 +425,25 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
         return true;
     }
 
-    void my_mul_example_inf(uint32_t job_id, void *inf_input_buf)
+    void my_kl520_mul_example_inf(uint32_t job_id, int num_input_buf, void **inf_input_buf_list)
     {
-        my_mul_example_header_t *input_header = (my_mul_example_header_t *)inf_input_buf;
+        if (1 != num_input_buf) {
+            kmdw_inference_app_send_status_code(job_id, KP_FW_WRONG_INPUT_BUFFER_COUNT_110);
+            return;
+        }
+
+        my_kl520_mul_example_header_t *input_header = (my_kl520_mul_example_header_t *)inf_input_buf_list[0];
 
         /******* Prepare the memory space of result *******/
 
         int result_buf_size;
-        void *inf_result_buf = kmdw_inference_app_result_get_free_buffer(&result_buf_size);
-        my_mul_example_result_t *output_result = (my_mul_example_result_t *)inf_result_buf;
+        void *inf_result_buf = kmdw_fifoq_manager_result_get_free_buffer(&result_buf_size);
+        my_kl520_mul_example_result_t *output_result = (my_kl520_mul_example_result_t *)inf_result_buf;
 
         /******* Prepare header of output result *******/
 
         output_result->header_stamp.magic_type = KDP2_MAGIC_TYPE_INFERENCE;
-        output_result->header_stamp.total_size = sizeof(my_mul_example_result_t);
+        output_result->header_stamp.total_size = sizeof(my_kl520_mul_example_result_t);
         output_result->header_stamp.job_id = job_id;
 
         /******* Prepare the temporary memory space for the result of middle model *******/
@@ -446,7 +455,7 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
             if (!status) {
                 // notify host error !
                 output_result->header_stamp.status_code = KP_FW_DDR_MALLOC_FAILED_102;
-                kmdw_inference_app_result_enqueue((void *)output_result, result_buf_size, false);
+                kmdw_fifoq_manager_result_enqueue((void *)output_result, result_buf_size, false);
                 return;
             }
 
@@ -460,7 +469,7 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
         if (inf_status != KP_SUCCESS) {
             // notify host error !
             output_result->header_stamp.status_code = inf_status;
-            kmdw_inference_app_result_enqueue((void *)output_result, result_buf_size, false);
+            kmdw_fifoq_manager_result_enqueue((void *)output_result, result_buf_size, false);
             return;
         }
 
@@ -480,7 +489,7 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
                 if (KP_SUCCESS != inf_status) {
                     // notify host error !
                     output_result->header_stamp.status_code = inf_status;
-                    kmdw_inference_app_result_enqueue((void *)output_result);
+                    kmdw_fifoq_manager_result_enqueue((void *)output_result);
                     return;
                 }
 
@@ -499,69 +508,90 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
         output_result->face_count = face_cnt;
         output_result->header_stamp.status_code = KP_SUCCESS;
 
-        kmdw_inference_app_result_enqueue((void *)output_result, result_buf_size, false);
+        kmdw_fifoq_manager_result_enqueue((void *)output_result, result_buf_size, false);
     }
     ```
 
-4. Go to SCPU Project Main Folder {PLUS_FOLDER_PATH}/firmware_development/KL520/scpu_kdp2/project/scpu_companion_user_ex/main
+4. Go to SCPU Project Main Folder {PLUS_FOLDER_PATH}/firmware_development/KL520/firmware/build/solution_kdp2_user_ex/main_scpu
 
-5. Edit *main.c*
+5. Edit *application_init.c*
 
-    - **_app_entry_func** is the entry interface for all inference request.
+    - **_app_func** is the entry interface for all inference request.
 
     - Inference jobs will be dispatched to the coresponding function based on the **job_id** in **kp_inference_header_stamp_t** in the header.
 
-    - You need to establish a switch case for **MY_MUL_EXAMPLE_JOB_ID** and corespond the switch case to **my_mul_example_inf()**.
+    - You need to establish a switch case for **MY_KL520_MUL_EXAMPLE_JOB_ID** and corespond the switch case to **my_kl520_mul_example_inf()**.
 
     ```cpp
-    #include "cmsis_os2.h" // ARM::CMSIS:RTOS2:Keil RTX5
+    #include <stdio.h>
+    #include "cmsis_os2.h"
 
-    #include <stdint.h>
-    #include <stdlib.h>
-    #include <string.h>
+    // power manager
+    #include "power_manager.h"
 
+    // inference core
     #include "kp_struct.h"
+    #include "kmdw_console.h"
     #include "kmdw_inference_app.h"
-    #include "kdp2_usb_companion.h"
 
+    // inference app
     #include "kdp2_inf_app_yolo.h"
     #include "demo_customize_inf_single_model.h"
     #include "demo_customize_inf_multiple_models.h"
     /* ======================================== */
     /*              Add Line Begin              */
     /* ======================================== */
-    #include "my_mul_example_inf.h"
+    #include "my_kl520_mul_example_inf.h"
     /* ======================================== */
     /*               Add Line End               */
     /* ======================================== */
 
-    extern void SystemCoreClockUpdate(void);
+    // inference client
+    #include "kdp2_usb_companion.h"
 
-    /* Kneron usb companion interface implementation to work with PLUS host SW */
-    extern void main_init_usboot(void);
+    #define MAX_IMAGE_COUNT   10          /**< MAX inference input  queue slot count */
+    #define MAX_RESULT_COUNT  10          /**< MAX inference output queue slot count */
 
-    static void app_func(void *inf_input_buf)
+
+    /**
+    * @brief To register AI applications
+    * @param[in] num_input_buf number of data inputs in list
+    * @param[in] inf_input_buf_list list of data input for inference task
+    * @return N/A
+    * @note Add a switch case item for a new inf_app application
+    */
+    static void _app_func(int num_input_buf, void** inf_input_buf_list);
+
+    static void _app_func(int num_input_buf, void** inf_input_buf_list)
     {
         // check header stamp
-        kp_inference_header_stamp_t *header_stamp = (kp_inference_header_stamp_t *)inf_input_buf;
+        if (0 >= num_input_buf) {
+            kmdw_printf("No input buffer for app function\n");
+            return;
+        }
+
+        kp_inference_header_stamp_t *header_stamp = (kp_inference_header_stamp_t *)inf_input_buf_list[0];
         uint32_t job_id = header_stamp->job_id;
 
         switch (job_id)
         {
         case KDP2_INF_ID_APP_YOLO:
-            kdp2_app_yolo_inference(job_id, inf_input_buf);
+            kdp2_app_yolo_inference(job_id, num_input_buf, inf_input_buf_list);
             break;
-        case DEMO_CUSTOMIZE_INF_SINGLE_MODEL_JOB_ID: // a demo code implementation in SCPU for user-defined/customized infernece from one model
-            demo_customize_inf_single_model(job_id, inf_input_buf);
+        case KDP2_JOB_ID_APP_YOLO_CONFIG_POST_PROC:
+            kdp2_app_yolo_config_post_process_parameters(job_id, num_input_buf, inf_input_buf_list);
             break;
-        case DEMO_CUSTOMIZE_INF_MULTIPLE_MODEL_JOB_ID: // a demo code implementation in SCPU for user-defined/customized infernece from two models
-            demo_customize_inf_multiple_models(job_id, inf_input_buf);
+        case DEMO_KL520_CUSTOMIZE_INF_SINGLE_MODEL_JOB_ID: // a demo code implementation in SCPU for user-defined/customized infernece from one model
+            demo_customize_inf_single_model(job_id, num_input_buf, inf_input_buf_list);
+            break;
+        case DEMO_KL520_CUSTOMIZE_INF_MULTIPLE_MODEL_JOB_ID: // a demo code implementation in SCPU for user-defined/customized infernece from two models
+            demo_customize_inf_multiple_models(job_id, num_input_buf, inf_input_buf_list);
             break;
         /* ======================================== */
         /*              Add Line Begin              */
         /* ======================================== */
-        case MY_MUL_EXAMPLE_JOB_ID:
-            my_mul_example_inf(inf_input_buf);
+        case MY_KL520_MUL_EXAMPLE_JOB_ID:
+            my_kl520_mul_example_inf(job_id, num_input_buf, inf_input_buf_list);
             break;
         /* ======================================== */
         /*               Add Line End               */
@@ -572,35 +602,22 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
         }
     }
 
-    /**
-    * @brief main, main function
-    */
-    int main(void)
+    void app_initialize(void)
     {
-        SystemCoreClockUpdate(); // System Initialization
-        osKernelInitialize();    // Initialize CMSIS-RTOS
+        info_msg(">> Start running KL520 KDP2 companion mode ...\n");
 
-        /* SDK main init for companion mode */
-        main_init_usboot();
+        /* for shutdown command */
+        power_manager_init();
 
         /* initialize inference app */
         /* register APP functions */
         /* specify depth of inference queues */
-        kmdw_inference_app_init(app_func, 10, 10);
+        kmdw_inference_app_init(_app_func, MAX_IMAGE_COUNT, MAX_RESULT_COUNT);
 
-        /* start an interface implementation as input/ouput to co-work with inference framework */
-        // this can be changed by other interface implementation
+        /* companion mode init */
         kdp2_usb_companion_init();
 
-        /* Start RTOS Kernel */
-        if (osKernelGetState() == osKernelReady)
-        {
-            osKernelStart();
-        }
-
-        while (1)
-        {
-        }
+        return;
     }
     ```
 
@@ -611,17 +628,17 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
 
 If the customized models need a customized pre-process or post-process on Kneron AI device, you can add the pre-process and post-process in the following files.
 
-1. Go to NCPU Project Main Folder {PLUS_FOLDER_PATH}/firmware_development/KL520/ncpu_kdp2/project/ncpu_companion_user_ex/main/
+1. Go to NCPU Project Main Folder {PLUS_FOLDER_PATH}/firmware_development/KL520/firmware/build/solution_kdp2_user_ex/main_ncpu
 
 2. Add your customized pre-process function into **user_pre_process.c**
 
 3. Add your customized post-process function into **user_post_process.c**
 
-4. Edit **main.c**
+4. Edit **model_ftr_table.c**
 
-    - Register your customized pre-process by **kdpio_pre_processing_register()**.
+    - Add your customized pre-process into **model_pre_proc_fns** table with the ID of your model.
 
-    - Register your customized post-process by **kdpio_post_processing_register()**.
+    - Add your customized post-process into **model_post_proc_fns** talbe with the ID of your model.
 
     - Once pre-process and post-process are registered, they will automatically execute before and after the inference of model.
 
@@ -629,10 +646,4 @@ If the customized models need a customized pre-process or post-process on Kneron
 
 **Note**: During developing the post-processing, you must be aware of what pre-process has done, including image resize, image padding, and image cropping.
 
-**Note**: In post-processing, the memory layout of data in **raw_cnn_res_t** for KL520 and KL720 are different.
-
-1. For KL520, the data values are in (height, channel, width_align) format, where width_align is the width aligned to the nearest 16 bytes.
-
-2. For KL720, the data values are in (channel, height, width_align) format, where width_align is the width aligned to the nearest 16 bytes.
-
-    ![](../imgs/customized_api_post_proc_mem_layout.png)
+**Note**: In post-processing, the memory layout of data in **raw_cnn_res_t** for KL520 and KL720 are different. Please reference [Kneron NPU Raw Output Channel Order](../../appendix/npu_raw_output_memory_layout.md).

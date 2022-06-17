@@ -1,9 +1,11 @@
-# Yolo Object Name Mapping
+## Yolo Object Name Mapping
 
 After executing yolo related examples, there will be a class number shown in every bounding boxes.
 
+### C example  
+
 ```bash
-sudo ./kl520_demo_app_yolo_inference
+sudo ./kl520_demo_generic_image_inference_post_yolo
 ```
 
 ```bash
@@ -13,18 +15,103 @@ upload model ... OK
 read image ... OK
 
 starting inference loop 100 times:
-.........................................
+....................................................................................................
+
+inference loop is done, starting post-processing ...
+
+doing tiny yolo v3 post-processing ...
 
 detectable class count : 80
 box count : 6
-Box 0 (x1, y1, x2, y2, score, class) = 75.0, 106.0, 181.0, 363.0, 0.965001, 0
-Box 1 (x1, y1, x2, y2, score, class) = 78.0, 192.0, 184.0, 373.0, 0.485309, 1
-Box 2 (x1, y1, x2, y2, score, class) = 226.0, 127.0, 405.0, 343.0, 0.998286, 2
-Box 3 (x1, y1, x2, y2, score, class) = 174.0, 159.0, 256.0, 222.0, 0.410430, 2
-Box 4 (x1, y1, x2, y2, score, class) = 53.0, 142.0, 104.0, 184.0, 0.367214, 2
-Box 5 (x1, y1, x2, y2, score, class) = 17.0, 153.0, 75.0, 335.0, 0.266250, 2
+Box 0 (x1, y1, x2, y2, score, class) = 45.0, 57.0, 93.0, 196.0, 0.965018, 0
+Box 1 (x1, y1, x2, y2, score, class) = 43.0, 95.0, 100.0, 211.0, 0.465116, 1
+Box 2 (x1, y1, x2, y2, score, class) = 122.0, 68.0, 218.0, 185.0, 0.997959, 2
+Box 3 (x1, y1, x2, y2, score, class) = 87.0, 84.0, 131.0, 118.0, 0.499075, 2
+Box 4 (x1, y1, x2, y2, score, class) = 28.0, 77.0, 55.0, 100.0, 0.367952, 2
+Box 5 (x1, y1, x2, y2, score, class) = 1.0, 84.0, 50.0, 181.0, 0.229727, 2
 
-output bounding boxes on 'output_bike_cars_street_416x416.bmp'
+output bounding boxes on 'output_bike_cars_street_224x224.bmp'
+```
+
+### Python example  
+
+```bash
+$ python3 KL520DemoGenericInferencePostYolo.py
+
+[Connect Device]
+ - Success
+[Set Device Timeout]
+ - Success
+[Upload Firmware]
+ - Success
+[Upload Model]
+ - Success
+[Read Image]
+ - Success
+[Starting Inference Work]
+ - Starting inference loop 50 times
+ - ..................................................
+[Retrieve Inference Node Output ]
+ - Success
+[Tiny Yolo V3 Post-Processing]
+ - Success
+[Result]
+{
+    "class_count": 80,
+    "box_count": 6,
+    "box_list": {
+        "0": {
+            "x1": 46,
+            "y1": 62,
+            "x2": 91,
+            "y2": 191,
+            "score": 0.965,
+            "class_num": 0
+        },
+        "1": {
+            "x1": 44,
+            "y1": 96,
+            "x2": 99,
+            "y2": 209,
+            "score": 0.4651,
+            "class_num": 1
+        },
+        "2": {
+            "x1": 122,
+            "y1": 70,
+            "x2": 218,
+            "y2": 183,
+            "score": 0.998,
+            "class_num": 2
+        },
+        "3": {
+            "x1": 87,
+            "y1": 85,
+            "x2": 131,
+            "y2": 117,
+            "score": 0.4991,
+            "class_num": 2
+        },
+        "4": {
+            "x1": 28,
+            "y1": 77,
+            "x2": 55,
+            "y2": 100,
+            "score": 0.368,
+            "class_num": 2
+        },
+        "5": {
+            "x1": 3,
+            "y1": 84,
+            "x2": 48,
+            "y2": 181,
+            "score": 0.2297,
+            "class_num": 2
+        }
+    }
+}
+[Output Result Image]
+ - Output bounding boxes on 'output_bike_cars_street_224x224.bmp'
 ```
 
 The table listed below provides the corresponding object name for each class number.

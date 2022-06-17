@@ -14,132 +14,178 @@ markdown_extensions:
   - pymdownx.tilde
 
 nav:
-  - Kneron AI:                                    index.md
+  - Kneron AI:                                                      index.md
   - Kneron PLUS - C:
-    - Getting Started:                            plus_c/getting_started.md
+    - Index:                                                        plus_c/README.md
+    - Getting Started:                                              plus_c/getting_started.md
     - Introduction:
-      - Introduction:                             plus_c/introduction/introduction.md
-      - Install Dependency:                       plus_c/introduction/install_dependency.md
-      - Upgrade AI Device To KDP2:                plus_c/introduction/upgrade_ai_device_to_kdp2.md
-      - Write Model To Flash:                     plus_c/introduction/write_model_to_flash.md
-      - Build Kneron PLUS:                        plus_c/introduction/build_plus.md
-      - Run Examples:                             plus_c/introduction/run_examples.md
-      - Run Examples for Enterprise:              plus_c/introduction/run_examples_enterprise.md
-      - Appendix:                                 plus_c/introduction/yolo_object_name_mapping.md
+      - Index:                                                      plus_c/introduction/index.md
+      - Introduction:                                               plus_c/introduction/introduction.md
+      - Install Dependency:                                         plus_c/introduction/install_dependency.md
+      - Upgrade AI Device To KDP2:                                  plus_c/introduction/upgrade_ai_device_to_kdp2.md
+      - Write Model To Flash:                                       plus_c/introduction/write_model_to_flash.md
+      - Build Kneron PLUS:                                          plus_c/introduction/build_plus.md
+      - Run Examples:                                               plus_c/introduction/run_examples.md
+      - Run Examples for Enterprise:                                plus_c/introduction/run_examples_enterprise.md
+    - Feature Guide:
+      - Index:                                                      plus_c/feature_guide/index.md
+      - Generic Inference API:                                      plus_c/feature_guide/generic_inference.md
     - Customized API:
-      - Introduction:                             plus_c/customized_api/introduction.md
-      - Install Dependency:                       plus_c/customized_api/install_dependency.md
-      - Create Single Model Example:              plus_c/customized_api/create_single_model_example.md
-      - Create Multiple Models Example:           plus_c/customized_api/create_multiple_models_example.md
-      - NCPU Firmware Configuration:              plus_c/customized_api/ncpu_firmware_configuration.md
-      - Run Customized Examples:                  plus_c/customized_api/run_customized_examples.md
+        - Index:                                                    plus_c/feature_guide/customized_api/index.md
+        - Introduction:                                             plus_c/feature_guide/customized_api/introduction.md
+        - Install Dependency:                                       plus_c/feature_guide/customized_api/install_dependency.md
+        - Create Single Model Example for KL520:                    plus_c/feature_guide/customized_api/create_kl520_single_model_example.md
+        - Create Multiple Models Example for KL520:                 plus_c/feature_guide/customized_api/create_kl520_multiple_models_example.md
+        - Create Single Model Example for KL720:                    plus_c/feature_guide/customized_api/create_kl720_single_model_example.md
+        - Create Multiple Model Example for KL720:                  plus_c/feature_guide/customized_api/create_kl720_multiple_models_example.md
+        - NCPU Firmware Configuration:                              plus_c/feature_guide/customized_api/ncpu_firmware_configuration.md
+        - Run Customized Examples:                                  plus_c/feature_guide/customized_api/run_customized_examples.md
+      - Device DDR Management:                                      plus_c/feature_guide/device_ddr_management.md
     - Model Zoo:
-      - Introduction:                             plus_c/modelzoo/index.md
+      - Introduction:                                               plus_c/modelzoo/index.md
+    - Migrate to Kneron PLUS 2:
+      - Index:                                                      plus_c/api_migration/index.md
+      - V1.x and V2 APIs Mapping Table:                             plus_c/api_migration/api_migration_mapping_table.md
+      - Migrate to Kneron PLUS 2:                                   plus_c/api_migration/api_migration.md
+      - Compatible with V1.x API:                                   plus_c/api_migration/api_compatible_legacy.md
+    - Appendix:
+      - Index:                                                      plus_c/appendix/index.md
+      - Supported NPU Data Layout Format:                           plus_c/appendix/supported_npu_data_layout_format.md
+      - Supported Image Format:                                     plus_c/appendix/supported_image_format.md
+      - NPU Raw Output Memory Layout:                               plus_c/appendix/npu_raw_output_memory_layout.md
+      - Yolo Object Name Mapping:                                   plus_c/appendix/yolo_object_name_mapping.md
     - API Reference:
       - v2.0.x:
-        - Data Structure:                         plus_c_api/api_reference_2.0.x/kp_struct.h.md
-        - Core API:                               plus_c_api/api_reference_2.0.x/kp_core.h.md
-        - Inference API:                          plus_c_api/api_reference_2.0.x/kp_inference.h.md
-        - (legacy)Data Structure:                 plus_c_api/api_reference_2.0.x/kp_struct_v1.h.md
-        - (legacy)Inference API:                  plus_c_api/api_reference_2.0.x/kp_inference_v1.h.md
+        - Data Structure:                                           plus_c_api/api_reference_2.0.x/kp_struct.h.md
+        - Core API:                                                 plus_c_api/api_reference_2.0.x/kp_core.h.md
+        - Inference API:                                            plus_c_api/api_reference_2.0.x/kp_inference.h.md
+        - (legacy)Data Structure:                                   plus_c_api/api_reference_2.0.x/kp_struct_v1.h.md
+        - (legacy)Inference API:                                    plus_c_api/api_reference_2.0.x/kp_inference_v1.h.md
       - Archive:
         - v1.3.x:
-          - Data Structure:                       plus_c_api/api_reference_1.3.x/kp_struct.h.md
-          - Core API:                             plus_c_api/api_reference_1.3.x/kp_core.h.md
-          - Inference API:                        plus_c_api/api_reference_1.3.x/kp_inference.h.md
+          - Data Structure:                                         plus_c_api/api_reference_1.3.x/kp_struct.h.md
+          - Core API:                                               plus_c_api/api_reference_1.3.x/kp_core.h.md
+          - Inference API:                                          plus_c_api/api_reference_1.3.x/kp_inference.h.md
         - v1.2.x:
-          - Data Structure:                       plus_c_api/api_reference_1.2.x/kp_struct.h.md
-          - Core API:                             plus_c_api/api_reference_1.2.x/kp_core.h.md
-          - Inference API:                        plus_c_api/api_reference_1.2.x/kp_inference.h.md
+          - Data Structure:                                         plus_c_api/api_reference_1.2.x/kp_struct.h.md
+          - Core API:                                               plus_c_api/api_reference_1.2.x/kp_core.h.md
+          - Inference API:                                          plus_c_api/api_reference_1.2.x/kp_inference.h.md
         - v1.1.x:
-          - Data Structure:                       plus_c_api/api_reference_1.1.x/kp_struct.h.md
-          - Core API:                             plus_c_api/api_reference_1.1.x/kp_core.h.md
-          - Inference API:                        plus_c_api/api_reference_1.1.x/kp_inference.h.md
+          - Data Structure:                                         plus_c_api/api_reference_1.1.x/kp_struct.h.md
+          - Core API:                                               plus_c_api/api_reference_1.1.x/kp_core.h.md
+          - Inference API:                                          plus_c_api/api_reference_1.1.x/kp_inference.h.md
         - v1.0.x:
-          - Data Structure:                       plus_c_api/api_reference_1.0.x/kp_struct.h.md
-          - Core API:                             plus_c_api/api_reference_1.0.x/kp_core.h.md
-          - Inference API:                        plus_c_api/api_reference_1.0.x/kp_inference.h.md
+          - Data Structure:                                         plus_c_api/api_reference_1.0.x/kp_struct.h.md
+          - Core API:                                               plus_c_api/api_reference_1.0.x/kp_core.h.md
+          - Inference API:                                          plus_c_api/api_reference_1.0.x/kp_inference.h.md
   - Kneron PLUS - Python:
-    - Index:                                      plus_python/README.md
-    - Getting Started:                            plus_python/getting_start.md
+    - Index:                                                        plus_python/README.md
+    - Getting Started:                                              plus_python/getting_start.md
     - Introduction:
-      - Index:                                    plus_python/introduction/index.md
-      - Introduction:                             plus_python/introduction/introduction.md
-      - Install Dependency:                       plus_python/introduction/install_dependency.md
-      - Upgrade AI Device To KDP2:                plus_python/introduction/upgrade_ai_device_to_kdp2.md
-      - Write Model To Flash:                     plus_python/introduction/write_model_to_flash.md
-      - Run Examples:                             plus_python/introduction/run_examples.md
-      - Run Examples for Enterprise:              plus_python/introduction/run_examples_enterprise.md
-      - Python API Support List:                  plus_python/introduction/python_api_support_list.md
-      - Appendix:                                 plus_python/introduction/yolo_object_name_mapping.md
+      - Index:                                                      plus_python/introduction/index.md
+      - Introduction:                                               plus_python/introduction/introduction.md
+      - Install Dependency:                                         plus_python/introduction/install_dependency.md
+      - Upgrade AI Device To KDP2:                                  plus_python/introduction/upgrade_ai_device_to_kdp2.md
+      - Write Model To Flash:                                       plus_python/introduction/write_model_to_flash.md
+      - Run Examples:                                               plus_python/introduction/run_examples.md
+      - Run Examples for Enterprise:                                plus_python/introduction/run_examples_enterprise.md
+    - Feature Guide:
+      - Index:                                                      plus_python/feature_guide/index.md
+      - Generic Inference:                                          plus_python/feature_guide/chapter/generic_inference.md
+      - Device DDR Management:                                      plus_python/feature_guide/chapter/device_ddr_management.md
     - Tutorial:
-      - Index:                                    plus_python/tutorial/index.md
-      - Quick Start:                              plus_python/tutorial/chapter/quickstart.md
-      - Get Kneron PLUS Version:                  plus_python/tutorial/chapter/get_kneron_plus_version.md
-      - Scan All Kneron Device:                   plus_python/tutorial/chapter/scan_all_kneron_device.md
-      - Connect to Kneron device:                 plus_python/tutorial/chapter/connect_device.md
-      - Upload SCPU/NCPU Firmware:                plus_python/tutorial/chapter/upload_firmware.md
-      - Load NEF Model:                           plus_python/tutorial/chapter/load_nef_model.md
-      - Get System Information on Kneron Device:  plus_python/tutorial/chapter/get_system_information.md
-      - Get Model Information on Kneron Device:   plus_python/tutorial/chapter/get_model_information.md
+      - Index:                                                      plus_python/tutorial/index.md
+      - Quick Start:                                                plus_python/tutorial/chapter/quickstart.md
+      - Get Kneron PLUS Version:                                    plus_python/tutorial/chapter/get_kneron_plus_version.md
+      - Scan All Kneron Device:                                     plus_python/tutorial/chapter/scan_all_kneron_device.md
+      - Connect to Kneron device:                                   plus_python/tutorial/chapter/connect_device.md
+      - Upload SCPU/NCPU Firmware:                                  plus_python/tutorial/chapter/upload_firmware.md
+      - Load NEF Model:                                             plus_python/tutorial/chapter/load_nef_model.md
+      - Get System Information on Kneron Device:                    plus_python/tutorial/chapter/get_system_information.md
+      - Get Model Information on Kneron Device:                     plus_python/tutorial/chapter/get_model_information.md
       - Model Inference:
-        - Image Types:                            plus_python/tutorial/chapter/model_inference_with_different_image_types.md
-        - Retrieve Node Mode:                     plus_python/tutorial/chapter/model_inference_with_different_retrieve_node_mode.md
+        - Image Inference:                                          plus_python/tutorial/chapter/model_inference_with_image_inference.md
+        - Data Inference:                                           plus_python/tutorial/chapter/model_inference_with_data_inference.md
+        - Retrieve Node Mode:                                       plus_python/tutorial/chapter/model_inference_with_different_retrieve_node_mode.md
       - Advance:
-        - Inference on Cropped Regions:           plus_python/tutorial/chapter/model_inference_with_inference_on_cropped_regions.md
-        - Inference with Drop Frame:              plus_python/tutorial/chapter/model_inference_with_inference_with_drop_frame.md
-        - Inference without Pre-Processing:       plus_python/tutorial/chapter/model_inference_with_inference_without_pre_processing.md
+        - Inference on Cropped Regions:                             plus_python/tutorial/chapter/model_inference_with_inference_on_cropped_regions.md
+        - Inference with Drop Frame:                                plus_python/tutorial/chapter/model_inference_with_inference_with_drop_frame.md
     - Model Zoo:
-      - Index:                                    plus_python/modelzoo/index.md
+      - Index:                                                      plus_python/modelzoo/index.md
+    - Migrate to Kneron PLUS 2:
+      - Index:                                                      plus_python/api_migration/index.md
+      - V1.x and V2 APIs Mapping Table:                             plus_python/api_migration/chapter/api_migration_mapping_table.md
+      - Migrate to Kneron PLUS 2:                                   plus_python/api_migration/chapter/api_migration.md
+      - Compatible with V1.x API:                                   plus_python/api_migration/chapter/api_compatible_legacy.md
     - API Document:
-      - Index:                                    plus_python/api_document/index.md
-      - kp.core:                                  plus_python/api_document/kp/core.md
-      - kp.inference:                             plus_python/api_document/kp/inference.md
-      - kp value:                                 plus_python/api_document/kp/value.md
-      - kp enum:                                  plus_python/api_document/kp/enum.md
-      - kp exception:                             plus_python/api_document/kp/exception.md
+      - Index:                                                      plus_python/api_document/index.md
+      - V2.0.0 (Latest Version):
+        - Index:                                                    plus_python/api_document/V2.0.0/index.md
+        - kp.core:                                                  plus_python/api_document/V2.0.0/kp/core.md
+        - kp.inference:                                             plus_python/api_document/V2.0.0/kp/inference.md
+        - kp value:                                                 plus_python/api_document/V2.0.0/kp/value.md
+        - kp enum:                                                  plus_python/api_document/V2.0.0/kp/enum.md
+        - kp exception:                                             plus_python/api_document/V2.0.0/kp/exception.md
+        - kp const:                                                 plus_python/api_document/V2.0.0/kp/const.md
+        - kp.v1 (Legacy Module):
+          - kp.v1.inference:                                        plus_python/api_document/V2.0.0/kp/v1/inference.md
+          - kp.v1 value:                                            plus_python/api_document/V2.0.0/kp/v1/value.md
+      - V1.3.0:
+        - Index:                                                    plus_python/api_document/V1.3.0/index.md
+        - kp.core:                                                  plus_python/api_document/V1.3.0/kp/core.md
+        - kp.inference:                                             plus_python/api_document/V1.3.0/kp/inference.md
+        - kp value:                                                 plus_python/api_document/V1.3.0/kp/value.md
+        - kp enum:                                                  plus_python/api_document/V1.3.0/kp/enum.md
+        - kp exception:                                             plus_python/api_document/V1.3.0/kp/exception.md
+        - kp const:                                                 plus_python/api_document/V1.3.0/kp/const.md
+    - Appendix:
+      - Index:                                                      plus_c/appendix/index.md
+      - API Support List:                                           plus_c/appendix/api_support_list.md
+      - Supported NPU Data Layout Format:                           plus_c/appendix/supported_npu_data_layout_format.md
+      - Supported Image Format:                                     plus_c/appendix/supported_image_format.md
+      - Yolo Object Name Mapping:                                   plus_c/appendix/yolo_object_name_mapping.md
 
   - Firmware SDK:
     - KL520 SDK:
-      - v2.0.x:                                   520_2.0.0/introduction.md
+      - v2.0.x:                                                     520_2.0.0/introduction.md
       - Archive:
-        - v1.7.x:                                 520_1.7.0/introduction.md
-        - v1.6.x:                                 520_1.6.0/introduction.md
-        - v1.5.0.0:                               520_1.5.0.0/getting_start.md
-        - v1.4.0.0:                               520_1.4.0.0/getting_start.md
-        - v1.3.0.0:                               520_1.3.0.0/getting_start.md
+        - v1.7.x:                                                   520_1.7.0/introduction.md
+        - v1.6.x:                                                   520_1.6.0/introduction.md
+        - v1.5.0.0:                                                 520_1.5.0.0/getting_start.md
+        - v1.4.0.0:                                                 520_1.4.0.0/getting_start.md
+        - v1.3.0.0:                                                 520_1.3.0.0/getting_start.md
     - KL720 SDK:
-      - v2.0.x:                                   720_2.0.0/introduction.md
+      - v2.0.x:                                                     720_2.0.0/introduction.md
       - Archive:
-        - v1.5.x:                                 720_1.5.0/introduction.md
-        - v1.4.x:                                 720_1.4.0/introduction.md
-        - v1.3.0:                                 720_1.3.0/getting_start_720.md
-        - v1.1.0:                                 720_1.1.0/getting_start_720.md
+        - v1.5.x:                                                   720_1.5.0/introduction.md
+        - v1.4.x:                                                   720_1.4.0/introduction.md
+        - v1.3.0:                                                   720_1.3.0/getting_start_720.md
+        - v1.1.0:                                                   720_1.1.0/getting_start_720.md
     - Archived-Host API Reference:
       - v1.0.0:
-        - Host API Reference:                     host_lib_1.0.0/kdp_host.h.md
+        - Host API Reference:                                       host_lib_1.0.0/kdp_host.h.md
       - v0.9.0:
-        - Host API reference:                     host_lib_0.9.0/host_api_reference.md
+        - Host API reference:                                       host_lib_0.9.0/host_api_reference.md
       - v0.8.0:
-        - Host API Intro:                         host_lib_0.8.0/host_api_reference.md
-        - Host API reference:                     host_lib_0.8.0/host_api/app_api.md
-        - DME API reference:                      host_lib_0.8.0/host_api/dme_api.md
-        - ISI API reference:                      host_lib_0.8.0/host_api/isi_api.md
-        - System API reference:                   host_lib_0.8.0/host_api/system.md
+        - Host API Intro:                                           host_lib_0.8.0/host_api_reference.md
+        - Host API reference:                                       host_lib_0.8.0/host_api/app_api.md
+        - DME API reference:                                        host_lib_0.8.0/host_api/dme_api.md
+        - ISI API reference:                                        host_lib_0.8.0/host_api/isi_api.md
+        - System API reference:                                     host_lib_0.8.0/host_api/system.md
   - Toolchain Docker:
-    - Toolchain Manual:                           toolchain/manual.md
-    - Yolo Example:                               toolchain/yolo_example.md
-    - Yolo Example (With In-Model Preprocess):    toolchain/yolo_example_InModelPreproc_trick.md
-    - End to End Simulator:                       toolchain/python_app/app_flow_manual.md
-    - ONNX Converter:                             toolchain/converters.md
-    - Script Tools:                               toolchain/command_line.md
-    - Python API:                                 toolchain/python_api.md
-    - Web GUI:                                    toolchain/toolchain_webgui.md
-    - Toolchain Common Exceptions:                toolchain/errors.md
-    - History Versions:                           toolchain/history.md
+    - Toolchain Manual:                                             toolchain/manual.md
+    - Yolo Example:                                                 toolchain/yolo_example.md
+    - Yolo Example (With In-Model Preprocess):                      toolchain/yolo_example_InModelPreproc_trick.md
+    - End to End Simulator:                                         toolchain/python_app/app_flow_manual.md
+    - ONNX Converter:                                               toolchain/converters.md
+    - Script Tools:                                                 toolchain/command_line.md
+    - Python API:                                                   toolchain/python_api.md
+    - Web GUI:                                                      toolchain/toolchain_webgui.md
+    - Toolchain Common Exceptions:                                  toolchain/errors.md
+    - History Versions:                                             toolchain/history.md
   - Model Training Material:
-    - Model List:                       model_training/index.md
-    - Evaluation Result:                          model_training/evaluation.md
+    - Model List:                                                   model_training/index.md
+    - Evaluation Result:                                            model_training/evaluation.md
 
 
 extra:

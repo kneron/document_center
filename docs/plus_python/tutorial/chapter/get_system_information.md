@@ -29,7 +29,7 @@ print(system_infos)
 '''
 [{
     "kn_number": "0xC8062D2C",
-    "firmware_version": "1.5.0-build.113"
+    "firmware_version": "2.0.0-build.517"
 }]
 '''
 ```

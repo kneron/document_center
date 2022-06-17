@@ -2,11 +2,11 @@
 
 Verified platforms, OS and Python Version to run Kneron PLUS API:
 
-| OS                       | Platform      | Python Version          |
-|--------------------------|---------------|-------------------------|
-| Windows 10               | x86_64 64-bit | 3.5-3.9 (x86_64 64-bit) |
-| Ubuntu 18.04             | x86_64 64-bit | 3.5-3.9 (x86_64 64-bit) |
-| Raspberry Pi OS - Buster | armv7l 32-bit | 3.5-3.9 (armv7l 32-bit) |
+| OS                            | Platform      | Python Version          |
+|-------------------------------|---------------|-------------------------|
+| Windows 10                    | x86_64 64-bit | 3.5-3.9 (x86_64 64-bit) |
+| Ubuntu 18.04                  | x86_64 64-bit | 3.5-3.9 (x86_64 64-bit) |
+| Raspberry Pi OS - Buster 10   | armv7l 32-bit | 3.5-3.9 (armv7l 32-bit) |
 
 And the following sections in this chapter will provide the instructions for installing the tools and dependency python packages to the corresponding platform.
 

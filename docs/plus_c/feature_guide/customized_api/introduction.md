@@ -20,4 +20,4 @@ In order to run customized models on Kneron AI device, there are four stages are
 
 The diagram below demonstrates the inference flow for every models runnig on Kneron AI device, and how the PLUS, SCPU, and NCPU interact with each other.
 
-![](../imgs/customized_api_develop_flow.png)
+![](../../imgs/customized_api_develop_flow.png)

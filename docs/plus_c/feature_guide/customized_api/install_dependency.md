@@ -23,3 +23,8 @@ the developing of customized api must be proceeded under OS Windows 10.
     - Download and install Keil MDK version 5 (at least MDK-Essential) from https://www2.keil.com/mdk5
 
     - This is used for building the firmware.
+
+3. **Xtensa Xplorer**
+
+    - Only required when developing ncpu firmware for KL720
+    - Please refer [Xtensa Xplorer Overview](../../../720_2.0.0/sdk/xtensa.md) for the instruction of installation.

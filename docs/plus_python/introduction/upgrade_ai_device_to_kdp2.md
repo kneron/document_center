@@ -51,12 +51,13 @@ Download the KneronDFUT_ubuntu.zip into Ubuntu from  https://www.kneron.com/tw/s
 
 ```bash
 $ unzip KneronDFUT_ubuntu.zip
-$ cd Kneron_DFUT/bin/
+$ cd Kneron_DFUT/
+$ chmod +x bin/KneronDFUT # optional
 ```
 
 Command line usage
 ```bash
-$ sudo ./KneronDFUT --help
+$ sudo sh KneronDFUT.sh --help
 ```
 
 ```bash
@@ -131,7 +132,7 @@ Note: This feature and example are only provided in Kneron DFUT v1.3.0 and above
 ### 3.1 Use GUI to Update AI Device
 
 ```bash
-$ sudo ./KneronDFUT
+$ sudo sh KneronDFUT.sh
 ```
 
 1. Select **KL520** Tab.
@@ -150,7 +151,7 @@ $ sudo ./KneronDFUT
 1. List all devices
 
     ```bash
-    $ sudo ./KneronDFUT --list
+    $ sudo sh KneronDFUT.sh --list
     ```
 
     ```bash
@@ -168,7 +169,7 @@ $ sudo ./KneronDFUT
 2. Upgrade the selected KL520 devices using the port id
 
     ```bash
-    $ sudo ./KneronDFUT --kl520-usb-boot --port 133
+    $ sudo sh KneronDFUT.sh --kl520-usb-boot --port 133
     ```
 
     ```bash
@@ -185,7 +186,7 @@ $ sudo ./KneronDFUT
 
 ### 4.1 Use GUI to Update AI Device
 ```bash
-$ sudo ./KneronDFUT
+$ sudo sh KneronDFUT.sh
 ```
 
 1. Select **KL520** Tab.
@@ -207,7 +208,7 @@ $ sudo ./KneronDFUT
 1. List all devices
 
     ```bash
-    $ sudo ./KneronDFUT --list
+    $ sudo sh KneronDFUT.sh --list
     ```
 
     ```bash
@@ -225,7 +226,7 @@ $ sudo ./KneronDFUT
 2. Upgrade the selected KL520 devices using the port id
 
     ```bash
-    $ sudo ./KneronDFUT --kl520-flash-boot --port 133 --scpu ${SCPU_FILE_PATH} --ncpu ${NCPU_FILE_PATH}
+    $ sudo sh KneronDFUT.sh --kl520-flash-boot --port 133 --scpu ${SCPU_FILE_PATH} --ncpu ${NCPU_FILE_PATH}
     ```
 
     ```bash
@@ -246,7 +247,7 @@ $ sudo ./KneronDFUT
 ### 5.1 Use GUI to Update AI Device
 
 ```bash
-$ sudo ./KneronDFUT
+$ sudo sh KneronDFUT.sh
 ```
 
 1. Select **KL720** Tab.
@@ -268,7 +269,7 @@ $ sudo ./KneronDFUT
 1. List all devices
 
     ```bash
-    $ sudo ./KneronDFUT --list
+    $ sudo sh KneronDFUT.sh --list
     ```
 
     ```bash
@@ -286,7 +287,7 @@ $ sudo ./KneronDFUT
 2. Upgrade the selected KL720 devices using the port id
 
     ```bash
-    $ sudo ./KneronDFUT --kl720-update --port 262 --scpu ${SCPU_FILE_PATH} --ncpu ${NCPU_FILE_PATH}
+    $ sudo sh KneronDFUT.sh --kl720-update --port 262 --scpu ${SCPU_FILE_PATH} --ncpu ${NCPU_FILE_PATH}
     ```
 
     ```bash
