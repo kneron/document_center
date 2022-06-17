@@ -23,6 +23,8 @@ Board with KL720 chip, like dongle, 96board, m.2 board.
 
 **Software:**
 
+required OS: native Windows 10-x86_64 64-bit
+
 licensed software: [ARM Keil MDK](https://www.keil.com)        [ARM Keil/MDK docs](https://www2.keil.com/mdk5/docs)
 
 licensed software: [Cadence Tensilica Xtensa SDK](https://ip.cadence.com/swdev) 

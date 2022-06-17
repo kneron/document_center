@@ -19,6 +19,8 @@ Board with KL520 chip. Ex. 520 dongle, 96board, m.2 board
 
 **Software:**
 
+required OS: native Windows 10-x86_64 64-bit
+
 licensed software: [ARM Keil MDK](https://www.keil.com)    /   [ARM Keil/MDK docs](https://www2.keil.com/mdk5/docs)  
 
 
