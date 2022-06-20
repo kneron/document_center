@@ -4,8 +4,8 @@
 
 # Kneron Linux Toolchain Manual
 
-**2022 Apr**
-**Toolchain v0.17.2**
+**2022 Jun**
+**Toolchain v0.18.0**
 
 [PDF Downloads](manual.pdf)
 
@@ -14,56 +14,61 @@
 KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 520, KDP 720 and KDP 530.
 For better environment compatibility, we provide a docker which include all the dependencies as well as the toolchain software.
 
-**This document is compatible with `kneron/toolchain:v0.17.2`.**
+**This document is compatible with `kneron/toolchain:v0.18.0`.**
 
  *Performance simulation result on NPU KDP520:*
 
 | Model                | Size    | FPS (npu only) | Time(npu only) | Has CPU node(s)? |
 | -------------------- | ------- | -------------- | -------------- | ---------------- |
-| Inception v3         | 224x224 |    6.3         | 160 ms         |        No        |
+| Inception v3         | 224x224 |    6.27        | 160 ms         |        No        |
 | Inception v4         | 299x299 |    1.45        | 687 ms         |        No        |
 | Mobilenet v1         | 224x224 |    57.3        | 17.4 ms        |        No        |
 | Mobilenet v2         | 224x224 |    54.7        | 18.3 ms        |        No        |
 | Mobilenet v2 ssdlite | 300x300 |    28.5        | 35.1 ms        |        No        |
-| Resnet50 v1.5        | 224x224 |    6.94        | 144.1 ms       |        No        |
-| OpenPose             | 256x256 |    0.64        | 1569 ms        |        No        |
-| SRCNN                | 384x384 |    11.0        | 91 ms          |        No        |
-| Tiny yolo v3         | 416x416 |    21.8        | 45.8 ms        |        Yes       |
-| Yolo v3              | 416x416 |    1.44        | 692.8 ms       |        Yes       |
+| Resnet50 v1.5        | 224x224 |    6.94        | 144 ms         |        No        |
+| OpenPose             | 256x256 |    0.637       | 1569 ms        |        No        |
+| SRCNN                | 384x384 |    11.0        | 90.9 ms        |        No        |
+| Tiny YOLOv3          | 416x416 |    21.8        | 45.9 ms        |        Yes       |
+| YOLOv3               | 416x416 |    1.44        | 693 ms         |        Yes       |
+| YOLOv5s              | 640x640 |    3.67        | 272 ms         |        Yes       |
+| Lite-HRNet           | 256x192 |    8.82        | 113 ms         |        Yes       |
 
 *Performance simulation result on NPU KDP720:*
 
 | Model                | Size    | FPS (npu only) | Time(npu only) | Has CPU node(s)? |
 | -------------------- | ------- | -------------- | -------------- | ---------------- |
-| Inception v3         | 224x224 |    82.3        | 12.1 ms        |        No        |
-| Inception v4         | 299x299 |    19.9        | 50.1 ms        |        No        |
-| Mobilenet v1         | 224x224 |    404         | 2.48 ms        |        No        |
-| Mobilenet v2         | 224x224 |    637         | 1.60 ms        |        No        |
-| Mobilenet v2 ssdlite | 300x300 |    286         | 3.50 ms        |        No        |
-| Resnet50 v1.5        | 224x224 |    51.7        | 19.3 ms        |        No        |
-| OpenPose             | 256x256 |    5.3         | 189 ms         |        No        |
-| SRCNN                | 384x384 |    127         | 7.87 ms        |        No        |
-| Tiny yolo v3         | 416x416 |    148         | 6.75 ms        |        No        |
-| Yolo v3              | 416x416 |    9.9         | 101 ms         |        No        |
-| Centernet res101     | 512x512 |    2.76        | 362 ms         |        No        |
-| Unet                 | 384x384 |    2.56        | 391 ms         |        No        |
+| Inception v3         | 224x224 |    86.2        | 11.6 ms        |        No        |
+| Inception v4         | 299x299 |    20.4        | 49.0 ms        |        No        |
+| Mobilenet v1         | 224x224 |    437         | 2.29 ms        |        No        |
+| Mobilenet v2         | 224x224 |    677         | 1.48 ms        |        No        |
+| Mobilenet v2 ssdlite | 300x300 |    310         | 3.22 ms        |        No        |
+| Resnet50 v1.5        | 224x224 |    55.6        | 18.0 ms        |        No        |
+| OpenPose             | 256x256 |    5.30        | 187 ms         |        No        |
+| SRCNN                | 384x384 |    134         | 7.48 ms        |        No        |
+| Tiny YOLOv3          | 416x416 |    151         | 6.61 ms        |        No        |
+| YOLOv3               | 416x416 |    10.1        | 98.6 ms        |        No        |
+| YOLOv5s              | 640x640 |    25.7        | 38.9 ms        |        No        |
+| Centernet res101     | 512x512 |    2.84        | 352 ms         |        No        |
+| Lite-HRNet           | 256x192 |    136         | 7.38 ms        |        No        |
 
 *Performance simulation result on NPU KDP530:*
 
 | Model                | Size    | FPS (npu only) | Time(npu only) | Has CPU node(s)? |
 | -------------------- | ------- | -------------- | -------------- | ---------------- |
-| Inception v3         | 224x224 |    77.2        | 12.9 ms        |        No        |
-| Inception v4         | 299x299 |    18.0        | 55.4 ms        |        No        |
-| Mobilenet v1         | 224x224 |    352         | 2.84 ms        |        No        |
-| Mobilenet v2         | 224x224 |    478         | 2.09 ms        |        No        |
-| Mobilenet v2 ssdlite | 300x300 |    276         | 3.54 ms        |        No        |
-| Resnet50 v1.5        | 224x224 |    43.6        | 22.9 ms        |        No        |
-| OpenPose             | 256x256 |    3.62        | 276 ms         |        No        |
-| SRCNN                | 384x384 |    58.3        | 17.1 ms        |        No        |
-| Tiny yolo v3         | 416x416 |    73.6        | 13.6 ms        |        No        |
-| Yolo v3              | 416x416 |    6.37        | 157 ms         |        No        |
-| Centernet res101     | 512x512 |    2.53        | 394 ms         |        No        |
-| Unet                 | 384x384 |    1.00        | 997 ms         |        No        |
+| Inception v3         | 224x224 |    64.3        | 15.5 ms        |        No        |
+| Inception v4         | 299x299 |    16.5        | 60.5 ms        |        No        |
+| Mobilenet v1         | 224x224 |    289         | 3.46 ms        |        No        |
+| Mobilenet v2         | 224x224 |    340         | 2.94 ms        |        No        |
+| Mobilenet v2 ssdlite | 300x300 |    205         | 4.88 ms        |        No        |
+| Resnet50 v1.5        | 224x224 |    35.7        | 28.0 ms        |        No        |
+| OpenPose             | 256x256 |    3.61        | 277 ms         |        No        |
+| SRCNN                | 384x384 |    54.5        | 18.3 ms        |        No        |
+| Tiny YOLOv3          | 416x416 |    72.0        | 13.9 ms        |        No        |
+| YOLOv3               | 416x416 |    5.93        | 169 ms         |        No        |
+| YOLOv5s              | 640x640 |    16.9        | 59.3 ms        |        No        |
+| Centernet res101     | 512x512 |    2.19        | 457 ms         |        No        |
+| Unet                 | 384x384 |    0.950       | 1050 ms         |        No        |
+| Lite-HRNet           | 256x192 |    52.7        | 19.0 ms        |        No        |
 
 In this document, you'll learn:
 
@@ -73,6 +78,10 @@ In this document, you'll learn:
 
 ** Major changes of past versions**
 
+* **[v0.18.0]**
+    * ONNX is updated to 1.7.0.
+    * Introduce WebGUI.
+    * Adjust 720 and 530 IP Evaluator default hardware specification.
 * **[v0.17.0]**
     * Optimize analysis API. Now we verify the model while analysing the fixed point performance.
     * E2E simulator no longer requires `radix` parameter.
@@ -140,8 +149,8 @@ You can use the following command to pull the latest toolchain docker.
 docker pull kneron/toolchain:latest
 ```
 
-Note that this document is compatible with toolchain v0.17.2. You can find the version of the toolchain in
-`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.17.2, you may need to find the
+Note that this document is compatible with toolchain v0.18.0. You can find the version of the toolchain in
+`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.18.0, you may need to find the
 latest document from the [online document center](http://doc.kneron.com/docs).
 
 ## 2. Toolchain Docker Overview
@@ -694,6 +703,7 @@ ktc.combine_nef(['/data1/model_32769.nef', '/data1/model_32770.nef', '/data1/mod
 * Check the [Toolchain Python API](http://doc.kneron.com/docs/toolchain/python_api/) document for more detailed Python API usage.
 * Check the [Command Line Script Tools](http://doc.kneron.com/docs/toolchain/command_line/) for command line script usage.
 * Check the [ONNX Converter](http://doc.kneron.com/docs/toolchain/converters/) for the usage of underlying project <https://github.com/kneron/ONNX_Convertor>.
+* Check the [Web GUI](http://doc.kneron.com/docs/toolchain/toolchain_webgui/) for a simple web interface.
 
 ## FAQ
 
