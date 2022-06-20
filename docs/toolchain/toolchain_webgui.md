@@ -2,13 +2,13 @@
 
 ## 0. Overview
 
-Since `kneron/toolchain:v0.17.2`, we provide a web GUI of the docker toolchain. In this document, you will learn
+Since `kneron/toolchain:v0.18.0`, we provide a web GUI of the docker toolchain. In this document, you will learn
 how to start the webgui service and how to use it to generate nef file for the Kneron hardware.
 
 ## 1. Installation
 
 The installation is the same as in the [toolchain manual](http://doc.kneron.com/docs/#toolchain/manual/).
-If you already have the kneron toolchain docker later than v0.17.2. You can just skip this section.
+If you already have the kneron toolchain docker later than v0.18.0. You can just skip this section.
 
 **Review the system requirements below before start installing and using the toolchain.**
 
@@ -47,7 +47,7 @@ You can use the following command to pull the latest toolchain docker.
 docker pull kneron/toolchain:latest
 ```
 
-Note that this document is compatible with toolchain v0.17.2. You can find the version of the toolchain in
+Note that this document is compatible with toolchain v0.18.0. You can find the version of the toolchain in
 `/workspace/version.txt` inside the docker.
 
 ## 2. Start the service
