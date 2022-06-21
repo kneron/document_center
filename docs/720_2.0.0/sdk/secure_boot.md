@@ -29,8 +29,16 @@ sbtenc.exe optional arguments:
     -s SBTKEYFILE, --sbtkeyfile SBTKEYFILE
                         Secure boot key file(sbtkey.bin)
 Example Command:
-Encrypt firmware with user's sbtkey file(sbtkey.bin).
-​    sbtenc.exe -e -i fw_scpu_tmp.bin -o fw_scpu_enc.bin -s keys\sbtkey.bin.
+Encrypt firmware with user's sbtkey file(sbtkey.bin) and generate to DFU binary format.
+SPL:
+​    sbtenc.exe -e -i boot_spl.bin -o boot_spl_enc.bin -s keys\sbtkey.bin
+SCPU:
+​    sbtenc.exe -e -i fw_scpu.bin -o fw_scpu_enc_tmp.bin -s keys\sbtkey.bin
+​    gen_dfu_binary_for_win.exe -scpu fw_scpu_enc_tmp.bin fw_scpu_enc.bin
+NCPU:
+​    sbtenc.exe -e -i fw_ncpu.bin -o fw_ncpu_enc_tmp.bin -s keys\sbtkey.bin
+​    gen_dfu_binary_for_win.exe -ncpu fw_ncpu_enc_tmp.bin fw_ncpu_enc.bin
+
 ```
 
 
