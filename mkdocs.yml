@@ -30,7 +30,7 @@ nav:
     - Feature Guide:
       - Index:                                                      plus_c/feature_guide/index.md
       - Generic Inference API:                                      plus_c/feature_guide/generic_inference.md
-    - Customized API:
+      - Customized API:
         - Index:                                                    plus_c/feature_guide/customized_api/index.md
         - Introduction:                                             plus_c/feature_guide/customized_api/introduction.md
         - Install Dependency:                                       plus_c/feature_guide/customized_api/install_dependency.md
