@@ -11,7 +11,7 @@ Kneron AI consists the following components:
 
 1. **Kneron AI Development Kit - Kneron PLUS**  
 	It is Platform Libraries Unified Software to control Kneron Chip via USB interface  
-	*KL520 SDK v1.6.0 / KL720 SDK v1.4.1, or higher verion is required*
+	*KL520 SDK v1.6.0 / KL720 SDK v1.4.1, or higher version is required*
 
 2. **Kneron AI Development Kit - Firmware SDK**  
 	Open source for peripheral drivers, middleware and application code can be optimized to meet the needs for different applications  

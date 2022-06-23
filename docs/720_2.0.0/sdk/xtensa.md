@@ -31,7 +31,7 @@ Note:
 
 ***Build Configuration*** describes all parameters and build includes for the Tensilica processor implementation you are developing with. Before starting development for Kneron KL720 DSP core, a specific build configuration must to be installed first.
 
-The build configuration is provided by Kneron as a binary file that can be imported into your Xtensa Xplorer IDE environment. This file can be downloaded from [Kneron Develop Center](https://www.kneron.com/tw/support/developers/) -> **KL720 SDK** -> **kl720_vp6_asic_win32.tgz** 
+The build configuration is provided by Kneron as a binary file that can be imported into your Xtensa Xplorer IDE environment. This file can be downloaded from [Kneron Develop Center](https://www.kneron.com/tw/support/developers/) -> **KL720 SDK** -> **kl720_vp6_asic_win32.tgz**  [[link]](https://www.kneron.com/tw/support/developers/?folder=KL720%20SDK/&download=971)
 
 The build configuration can be installed into Xplorer IDE using the **System Overview** panel which is in the lower left corner by default, or it can be toggled using menu item **Window > Show View - System Overview**.
 

@@ -175,8 +175,8 @@ ASIC-KL720 is composed of 2 cores:
 | JLink_programmer      | Script to program firmware/model/data via JLink | ch 4 in [README](flash_management/flash_management.md#4-program-flash-via-jtagswd-interface) |
 | nef_utility           | utility for model(NEF file) | execute "nef_utility -h" |
 | pinmux_config         | pinmux table | see Kneron_pinmux_config.xlsm |
-| setenc                | KL720 provides secure boot protected with AES and SHA | [README](sdk/secure_boot.md) |
-| minion            | Allows device to boot from uart or usb without external flash | see readme.txt |
+| sbtenc                | KL720 provides secure boot protected with AES and SHA | [README](sdk/secure_boot.md) |
+| minion                | Allows device to boot from uart or usb without external flash | see readme.txt |
 
 
 
