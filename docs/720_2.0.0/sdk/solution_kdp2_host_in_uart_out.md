@@ -1,4 +1,4 @@
-# Solution Host input UART output
+# Solution Host input UART Output Example
 
 This solution is an application which KL720 chip plays as a host chip with connected MIPI camera sensors for object detection. The detection result is output to UART. You will need to program the flash image to the device first. The flash image includes SCPU/NCPU firmware and model. Then, you can start/stop object detection by simple command via UART. 
 

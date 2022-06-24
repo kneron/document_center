@@ -1,4 +1,4 @@
-# Solution HICO ToF
+# Solution HICO ToF Example
 
 This solution is an application which KL720 chip plays as a host chip with connected MIPI ToF (Time of Flight) module (**host input**) for object detection and depth measurement while sending images and detection results to host PC (**companion output**). Host input and companion output is abbreviated as **HICO**. You will need to program the SCPU/NCPU firmware to the device first. Then, you can start object detection and depth measurement by running `[kneron_plus]/examples_enterprise/kl720_demo_hico_tof_inference/kl720_demo_hico_tof_inference.cpp`.
 

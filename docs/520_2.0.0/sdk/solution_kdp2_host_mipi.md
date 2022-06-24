@@ -1,4 +1,4 @@
-# Solution Host MIPI
+# Solution Host MIPI Example
 
 This solution is an application which KL520 chip plays as a host chip with connected display and MIPI camera sensors for object detection. You will need to program the flash image to the device first. The flash image includes SCPU/NCPU firmware and model. Then, you can start/stop object detection by simple command via UART. 
 

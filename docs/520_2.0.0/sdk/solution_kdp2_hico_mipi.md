@@ -1,6 +1,6 @@
-# Solution HICO MIPI
+# Solution HICO MIPI Example
 
-This solution is an application which KL520 chip plays as a host chip with connected MIPI camera sensors (**host input**) for object detection while sending images by a host PC and receiving detection results from it (**companion output**). Host input and companion output is abbreviated as **HICO**. You will need to program the SCPU/NCPU firmware to the device first. Then, you can start object detection by running an application at host with Kneron PLUS.
+This solution is an application which KL520 chip plays as a host chip with connected MIPI camera sensors (**host input**) for object detection while sending images by a host PC and receiving detection results from it (**companion output through USB**). Host input and companion output is abbreviated as **HICO**. You will need to program the SCPU/NCPU firmware to the device first. Then, you can start object detection by running an application at host with **Kneron PLUS**.
 
 
 
