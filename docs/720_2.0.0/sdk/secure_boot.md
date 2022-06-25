@@ -52,12 +52,12 @@ Example key.
         
 Example projects for SPL, SCPU and NCPU.
 ​    SPL 
-​        .\firmware\platform\kl720\scpu\spl\sn72096_9x9\scpu_keil\spl_enc.uvprojx
+         sbtenc.exe -e -i boot_spl.bin -o boot_spl_enc.bin -s keys\sbtkey.bin
 ​    SCPU 
-        .\firmware\build\example_sbt\scpu\sn72096_9x9\scpu_keil\scpu_enc.uvprojx
+         .\firmware\build\example_sbt\scpu\sn72096_9x9\scpu_keil\scpu.uvprojx
 ​    NCPU 
-        Xtensa workspace and import HelloWorld project
-​        .\firmware\build\example_sbt\ncpu\
+         Xtensa workspace and import HelloWorld project
+         .\firmware\build\example_sbt\ncpu\
 ```
 After the project is built, please run flash programming to update the flash data.
 ```
