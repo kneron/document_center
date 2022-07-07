@@ -169,11 +169,11 @@ ASIC-KL720 is composed of 2 cores:
 
 | Utility               | Description | References |
 | --------------------- | ----------- |---------------------|
-| bin_gen / bin_gen_nor | To generate single image from several image components | ch 3.3 in [README](flash_management/flash_management.md) |
-| dfu                   | To satisfy flash address alignment. It is called by post_build.bat in each Keil project | see readme.txt |
+| bin_gen / bin_gen_nor | To generate single image from several image components | ch 3.3 in [README](flash_management/flash_management.md#3-program-flash-via-uart0-interface) |
+| dfu                   | To satisfy flash address alignment. It is called by post_build.bat in each Keil project<br /><br />**Note:** <br />Need to `chmod +x gen_dfu_binary_for_linux` if in linux | see readme.txt |
 | flash_programmer      | Tool to program firmware/model/data via UART interface | ch 3.4 in [README](flash_management/flash_management.md#3-program-flash-via-uart0-interface) |
 | JLink_programmer      | Script to program firmware/model/data via JLink | ch 4 in [README](flash_management/flash_management.md#4-program-flash-via-jtagswd-interface) |
-| nef_utility           | utility for model(NEF file) | execute "nef_utility -h" |
+| nef_utility           | utility for model(NEF file)<br /><br />**Note:** <br />Need to `chmod +x nef_utility_linux` if in linux | execute "nef_utility -h" |
 | pinmux_config         | pinmux table | see Kneron_pinmux_config.xlsm |
 | sbtenc                | KL720 provides secure boot protected with AES and SHA | [README](sdk/secure_boot.md) |
 | minion                | Allows device to boot from uart or usb without external flash | see readme.txt |

@@ -105,7 +105,10 @@ $ python3 bin_gen.py <options>
 `flash_image.bin`
 
 **Note**
-The following bin files are must
+
+1. Component, **nef_utility**, is used by bin_gen.  If in Linux, must `chmod +x ../nef_utility/nef_utility_linux` first
+
+2. The following bin files are must
 
 ```bash
 flash_bin
