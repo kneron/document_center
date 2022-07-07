@@ -117,8 +117,8 @@ $ sudo ./kl520_uart_boot_firmware ${COM_PORT_IDX}
 ```bash
 com port number \\.\COM5 !!......
 To program
- > SCPU FW: ../../res/firmware/KL520/kdp2_fw_scpu.bin
- > NCPU FW: ../../res/firmware/KL520/kdp2_fw_ncpu.bin
+ > SCPU FW: ../../res/firmware/KL520/fw_scpu.bin
+ > NCPU FW: ../../res/firmware/KL520/fw_ncpu.bin
 
 opening serial port successfulGetCommState successful!
 SetCommState 115200 successful!
@@ -150,7 +150,26 @@ CloseHandle...
 
 ---
 
-## 7. Read / Write Device Memory
+## 7. Load Firmware through Usb for No-Flash Device
+
+
+This example is to show the usage of `kp_load_firmware_from_file()` for loading firmware via Usb to Kneron AI device without extern flash.
+
+```bash
+$ sudo ./kl720_usb_boot_firmware
+```
+
+```bash
+connect device ... OK
+upload firmware ... OK
+
+kn_number:    0x2504142C
+FW_version:   2.0.0-build.517
+```
+
+---
+
+## 8. Read / Write Device Memory
 
 This example is to show the usage of `kp_memory_read()` and `kp_memory_write()` for reading or writing a given size of data in Kneron AI device memory.
 
@@ -211,12 +230,12 @@ This example is to show the usage of `kp_memory_read()` and `kp_memory_write()` 
 
 ---
 
-## 8. Access Firmware Log via USB
+## 9. Access Firmware Log via USB
 
 This example is to show the usage of `kp_enable_firmware_log()` and `kp_disable_firmware_log()` for enabling and disabling the firmware log via USB.
 
 ```bash
-$ ./kl720_demo_generic_inference_print_log.exe
+$ ./kl720_demo_generic_image_inference_print_log.exe
 ```
 
 ```bash
@@ -234,7 +253,7 @@ inference loop is done
 
 ---
 
-## 9. HICO Camera Inference (KL720 only)
+## 10. HICO Camera Inference (KL720 only)
 
 **Note**: (hardware)96-Board with KL720 11x11 chip is required.
 
@@ -256,7 +275,7 @@ $ sudo ./kl720_demo_hico_cam_inference
 
 ---
 
-## 10. HICO TOF Camera Inference (KL720 only)
+## 11. HICO TOF Camera Inference (KL720 only)
 
 **Note**: This feature and example are only provided in Kneron PLUS v1.3.0 and above.
 

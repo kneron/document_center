@@ -30,14 +30,14 @@ to learn how to convert the trained model to NEF model
 
 ```bash
     cd python/example_model_zoo
-    python KL520KnModelZooGenericInferenceYolov5.py 
+    python KL520KnModelZooGenericImageInferenceYolov5.py 
 ```
 
 ### step 2-2. run KL720 example:  
 
 ```bash
     cd python/example_model_zoo
-    python KL720KnModelZooGenericInferenceYolov5.py 
+    python KL720KnModelZooGenericImageInferenceYolov5.py 
 ```
 
 ---

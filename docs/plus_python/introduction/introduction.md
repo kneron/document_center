@@ -54,26 +54,28 @@ Index   | Category              | Supported Item                                
 19      |                       | Get Model CRC                                                             |                   |       |
 20      |                       | Get Model Info                                                            |                   |       |
 21      |                       | Install Device Driver for Windows                                         | v1.3.0            |       |
-22      | Application API       | Generic Inference                                                         |                   |       |
-23      |                       | Customized Inference (C code only)                                        |                   |       |
-24      |                       | User Define API (C code only)                                             |                   |       |
-25      | System Examples       | Get Firmware Info                                                         |                   |       |
-26      |                       | Get Model Info                                                            |                   |       |
-27      |                       | Reboot Device                                                             |                   |       |
-28      |                       | Shutdown Device                                                           |                   |       | X
-29      | Inference Examples    | Generic Inference (Raw Output)                                            |                   |       |
-30      |                       | Generic Inference (with Crop)                                             |                   |       |
-31      |                       | Generic Inference (with Post Process on Host Side)                        |                   |       |
-32      |                       | Generic Inference (Bypass Pre Process)                                    |                   |       |
-33      |                       | Generic Inference (Multiple Threads)                                      | v1.3.0            |       |
-34      |                       | Generic Inference (Model in Flash)                                        | v1.3.0            |       |
-35      |                       | Generic Inference (Web Cam with Drop Frame)                               | v1.3.0            |       |
-36      |                       | User Define API Inference (Yolo with Config Post Process) (C code only)   | v1.3.0            |       |
-37      |                       | Customized Inference with Single Model (C code only)                      |                   |       | X
-38      |                       | Customized Inference with Multiple Models (C code only)                   |                   |       | X
-39      | Debug Examples        | Debug Checkpoints Example                                                 | v1.3.0            |       | X
-40      |                       | Execution Time Profiling Example                                          | v1.3.0            |       | X
-41      | Model Zoo Examples    | Simple examples for pre-trained models                                    |                   |       |
+22      | Application API       | Generic Image Inference                                                   | v2.0.0            |       |
+23      |                       | Generic Data Inference                                                    | v2.0.0            |       |
+24      |                       | Customized Inference (C code only)                                        |                   |       |
+25      |                       | User Define API (C code only)                                             |                   |       |
+26      | System Examples       | Get Firmware Info                                                         |                   |       |
+27      |                       | Get Model Info                                                            |                   |       |
+28      |                       | Reboot Device                                                             |                   |       |
+29      |                       | Shutdown Device                                                           |                   |       | X
+30      |                       | Device Memory Usage Control                                               | v2.0.0            |       |
+31      | Inference Examples    | Generic Image Inference (Raw Output)                                      | v2.0.0            |       |
+32      |                       | Generic Image Inference (with Crop)                                       | v2.0.0            |       |
+33      |                       | Generic Image Inference (with Post Process on Host Side)                  | v2.0.0            |       |
+34      |                       | Generic Image Inference (Multiple Threads)                                | v2.0.0            |       |
+35      |                       | Generic Image Inference (Model in Flash)                                  | v2.0.0            |       |
+36      |                       | Generic Image Inference (Web Cam with Drop Frame)                         | v2.0.0            |       |
+37      |                       | Generic Data Inference (with Pre Process on Host Side)                    | v2.0.0            |       |
+38      |                       | User Define API Inference (Yolo with Config Post Process) (C code only)   | v1.3.0            |       |
+39      |                       | Customized Inference with Single Model (C code only)                      | v2.0.0 for KL720  |       |
+40      |                       | Customized Inference with Multiple Models (C code only)                   | v2.0.0 for KL720  |       |
+41      | Debug Examples        | Debug Checkpoints Example                                                 | v1.3.0            |       | X
+42      |                       | Execution Time Profiling Example                                          | v1.3.0            |       | X
+43      | Model Zoo Examples    | Simple examples for pre-trained models                                    |                   |       |
 
 
 The following components are contained in Kneron PLUS:
@@ -104,7 +106,8 @@ Index   | Category              | Supported Item                                
 5       |                       | Update Kdp2 to Kdp2 Flash Boot                            |                   |       |
 6       |                       | Update Model to Flash                                     |                   |       |
 7       |                       | Upload Firmware via UART                                  |                   |       | X
-8       |                       | Read / Write Device Memory                                |                   |       |
-9       |                       | Access Firmware Log via USB                               |                   |   X   |
-10      |                       | Hico Cam Inference (Kneron LW 3D module is required)      |                   |   X   |
-11      |                       | Hico ToF Inference (Kneron ToF module is required)        | v1.3.0            |   X   |
+8       |                       | Upload Firmware via Usb for No-Flash Device               | v2.0.0            |   X   |
+9       |                       | Read / Write Device Memory                                |                   |       |
+10      |                       | Access Firmware Log via USB                               |                   |   X   |
+11      |                       | Hico Cam Inference (Kneron LW 3D module is required)      |                   |   X   |
+12      |                       | Hico ToF Inference (Kneron ToF module is required)        | v1.3.0            |   X   |

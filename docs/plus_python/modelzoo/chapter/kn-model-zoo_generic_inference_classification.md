@@ -28,13 +28,13 @@ to learn how to convert the trained model to NEF model
 
 ```bash
     cd python/example_model_zoo
-    python KL520KnModelZooGenericInferenceClassification.py  
+    python KL520KnModelZooGenericImageInferenceClassification.py  
 ```
 ### step 2-2. run KL720 example:  
 
 ```bash
     cd python/example_model_zoo
-    python KL720KnModelZooGenericInferenceClassification.py  
+    python KL720KnModelZooGenericImageInferenceClassification.py  
 ```
 
 ---

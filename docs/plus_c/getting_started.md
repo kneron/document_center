@@ -22,7 +22,7 @@ This **Getting Started** document only focuses on host software usage with the A
 
 For **model development**, please refer the [Toolchain Docker](../toolchain/manual.md) part.
 
-For **firmware development**, please refer the documents in [Customized API](./customized_api/introduction.md).
+For **firmware development**, please refer the documents in [Customized API](./feature_guide/customized_api/introduction.md).
 
 ---
 
@@ -40,13 +40,14 @@ Download the *KneronDFUT_ubuntu.zip* into Ubuntu in from https://www.kneron.com/
 
 ```bash
 $ unzip KneronDFUT_ubuntu.zip
-$ cd Kneron_DFUT/bin/
+$ cd Kneron_DFUT/
+$ chmod +x bin/KneronDFUT # optional
 ```
 
 Use Command Line
 
 ```bash
-$ sudo ./KneronDFUT --help
+$ sudo sh KneronDFUT.sh --help
 ```
 
 ```bash
@@ -89,7 +90,7 @@ $ sudo ./KneronDFUT --help
 1. Use GUI to Update AI Device
 
     ```bash
-    $ sudo ./KneronDFUT
+    $ sudo sh KneronDFUT.sh
     ```
 
     * Select the AI device to be update to KDP2 firmware
@@ -102,7 +103,7 @@ $ sudo ./KneronDFUT --help
 2. Use Command Line to Update AI Device
 
     ```bash
-    $ sudo ./KneronDFUT --list
+    $ sudo sh KneronDFUT.sh --list
     ```
 
     ```bash
@@ -118,7 +119,7 @@ $ sudo ./KneronDFUT --help
     ```
 
     ```bash
-    $ sudo ./KneronDFUT --kl520-usb-boot --port 133
+    $ sudo sh KneronDFUT.sh --kl520-usb-boot --port 133
     ```
 
     ```bash
@@ -132,7 +133,7 @@ $ sudo ./KneronDFUT --help
 1. Use GUI to Update AI Device
 
     ```bash
-    $ sudo ./KneronDFUT
+    $ sudo sh KneronDFUT.sh
     ```
 
     * Select **KL720** Tab.
@@ -152,7 +153,7 @@ $ sudo ./KneronDFUT --help
 2. Use Command Line to Update AI Device
 
     ```bash
-    $ sudo ./KneronDFUT --list
+    $ sudo sh KneronDFUT.sh --list
     ```
 
     ```bash
@@ -168,7 +169,7 @@ $ sudo ./KneronDFUT --help
     ```
 
     ```bash
-    $ sudo ./KneronDFUT --kl720-update --port 262 --scpu ${SCPU_FILE_PATH} --ncpu ${NCPU_FILE_PATH}
+    $ sudo sh KneronDFUT.sh --kl720-update --port 262 --scpu ${SCPU_FILE_PATH} --ncpu ${NCPU_FILE_PATH}
     ```
 
     ```bash
@@ -217,7 +218,7 @@ $ ls bin/
 
     kl520_demo_customize_inf_multiple_models
     kl520_demo_customize_inf_single_model
-    kl520_demo_generic_inference
+    kl520_demo_generic_image_inference
     ...
 ```
 
@@ -259,13 +260,13 @@ $ ls bin/
     kl520_demo_app_yolo_inference_multithread
     kl520_demo_customize_inf_multiple_models
     kl520_demo_customize_inf_single_model
-    kl520_demo_generic_inference
+    kl520_demo_generic_image_inference
     ...
 ```
 
 ---
 
-## 4. Run Generic Inference With Post-process
+## 4. Run Generic Image Inference With Post-process
 
 **Note**: If you are using Windows, please run example in **MSYS2 MinGW 64-bit**.
 
@@ -274,7 +275,7 @@ $ ls bin/
 ### 4.1 KL520
 
 ```bash
-$ sudo ./kl520_demo_generic_inference_post_yolo
+$ sudo ./kl520_demo_generic_image_inference_post_yolo
 ```
 
 ```bash
@@ -304,7 +305,7 @@ Besides output results in the screen console, it also draws detected objects in 
 ### 4.2 KL720
 
 ```bash
-sudo ./kl720_demo_generic_inference_post_yolo
+sudo ./kl720_demo_generic_image_inference_post_yolo
 ```
 
 ```bash

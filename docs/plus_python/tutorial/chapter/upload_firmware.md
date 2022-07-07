@@ -12,11 +12,11 @@ This tutorial shows how to upload SCPU nad NCPU Frimware to Kneron devices in fo
 ](../../introduction/upgrade_ai_device_to_kdp2.md) for details.  
 
 ### Upload firmware by file path
-> Please replace `SCPU_FW_PATH`, `NCPU_FW_PATH` by kdp2_fw_scpu.bin and kdp2_fw_ncpu.bin path (Please find target device firmware under `res/firmware` folder)  
+> Please replace `SCPU_FW_PATH`, `NCPU_FW_PATH` by fw_scpu.bin and fw_ncpu.bin path (Please find target device firmware under `res/firmware` folder)  
 
 ```python
-SCPU_FW_PATH = 'res/firmware/KL520/kdp2_fw_scpu.bin'
-NCPU_FW_PATH = 'res/firmware/KL520/kdp2_fw_ncpu.bin'
+SCPU_FW_PATH = 'res/firmware/KL520/fw_scpu.bin'
+NCPU_FW_PATH = 'res/firmware/KL520/fw_ncpu.bin'
 
 kp.core.load_firmware_from_file(device_group=device_group,
                                 scpu_fw_path=SCPU_FW_PATH,
@@ -24,11 +24,11 @@ kp.core.load_firmware_from_file(device_group=device_group,
 ```
 
 ### Upload firmware by binary data
-> Please replace `SCPU_FW_PATH`, `NCPU_FW_PATH` by kdp2_fw_scpu.bin and kdp2_fw_ncpu.bin path (Please find target device firmware under `res/firmware` folder)  
+> Please replace `SCPU_FW_PATH`, `NCPU_FW_PATH` by fw_scpu.bin and fw_ncpu.bin path (Please find target device firmware under `res/firmware` folder)  
 
 ```python
-SCPU_FW_PATH = 'res/firmware/KL520/kdp2_fw_scpu.bin'
-NCPU_FW_PATH = 'res/firmware/KL520/kdp2_fw_ncpu.bin'
+SCPU_FW_PATH = 'res/firmware/KL520/fw_scpu.bin'
+NCPU_FW_PATH = 'res/firmware/KL520/fw_ncpu.bin'
 
 with open(SCPU_FW_PATH, 'rb') as file:
     scpu_fw_buffer = file.read()

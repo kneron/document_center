@@ -11,7 +11,7 @@ Kneron AI consists the following components:
 
 1. **Kneron AI Development Kit - Kneron PLUS**  
 	It is Platform Libraries Unified Software to control Kneron Chip via USB interface  
-	*KL520 SDK v1.6.0 / KL720 SDK v1.4.1, or higher verion is required*
+	*KL520 SDK v1.6.0 / KL720 SDK v1.4.1, or higher version is required*
 
 2. **Kneron AI Development Kit - Firmware SDK**  
 	Open source for peripheral drivers, middleware and application code can be optimized to meet the needs for different applications  
@@ -38,6 +38,7 @@ Kneron AI consists the following components:
 
 Versions           | KL520 SDK version | KL720 SDK version 
 :------------------|:------------------|:--------------
+Kneron PLUS v2.0.x | 2.0.x             | 2.0.x         
 Kneron PLUS v1.3.x | 1.7.x             | 1.5.x         
 Kneron PLUS v1.2.x | 1.6.x             | 1.4.x         
 host_lib    v1.0.0 | 1.5.0.0           | 1.3.0         
@@ -57,8 +58,8 @@ Please see [Kneron PLUS-C - Getting Started](./plus_c/getting_started.md) \(or [
 ## References
 
  - [Kneron PLUS-C](./plus_c/introduction/introduction.md) / [Kneron PLUS-Python](./plus_python/introduction/index.md) 
- - [Firmware KL520 SDK](./520_1.7.0/introduction.md)
- - [Firmware KL720 SDK](./720_1.5.0/introduction.md)
+ - [Firmware KL520 SDK](./520_2.0.0/introduction.md)
+ - [Firmware KL720 SDK](./720_2.0.0/introduction.md)
  - [Kneron Model Toolchain](./toolchain/manual.md)
  - [Model Zoo - C-examples](./plus_c/modelzoo/index.md) / [Python-examples](./plus_python/modelzoo/index.md)
  - [Model Zoo - retraining](./model_training/classification.md)

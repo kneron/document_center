@@ -7,12 +7,13 @@ Kneron PLUS stands for Platform Library Unified Software which is a framework co
 - [Upgrade AI Device to KDP2](./upgrade_ai_device_to_kdp2.md)
 - [Write Model To Flash](./write_model_to_flash.md)
 - [Run Examples](./run_examples.md)
-  - [Yolo Object Name Mapping](./yolo_object_name_mapping.md)
 - [Run Enterprise Examples](./run_examples_enterprise.md)
-- [Python API Support List](./python_api_support_list.md)
 
 ### Reference
 
+- [Feature Guide](../feature_guide/index.md)
 - [Tutorial](../tutorial/index.md)
 - [Kneron ModelZoo](../modelzoo/index.md)
-- [kp API Document](../api_document/index.md)
+- [Migrate to Kneron PLUS 2](../api_migration/index.md)
+- [API Document](http://doc.kneron.com/docs/#plus_python/api_document/)
+- [Appendix](../../plus_c/appendix/index.md)

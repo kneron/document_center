@@ -48,12 +48,13 @@ Download the KneronDFUT_ubuntu.zip into Ubuntu from  https://www.kneron.com/tw/s
 
 ```bash
 $ unzip KneronDFUT_ubuntu.zip
-$ cd Kneron_DFUT/bin/
+$ cd Kneron_DFUT/
+$ chmod +x bin/KneronDFUT # optional
 ```
 
 Show help message
 ```bash
-$ sudo ./KneronDFUT --help
+$ sudo sh KneronDFUT.sh --help
 ```
 
 ---
@@ -63,7 +64,7 @@ $ sudo ./KneronDFUT --help
 ### 3.1 Use GUI to Write Model into AI Device
 
 ```bash
-$ sudo ./KneronDFUT
+$ sudo sh KneronDFUT.sh
 ```
 
 1. Select **KL520** Tab.
@@ -83,7 +84,7 @@ $ sudo ./KneronDFUT
 1. List all devices
 
     ```bash
-    $ sudo ./KneronDFUT --list
+    $ sudo sh KneronDFUT.sh --list
     ```
 
     ```bash
@@ -101,7 +102,7 @@ $ sudo ./KneronDFUT
 3. Write model into the selected KL520 devices using the port id
 
     ```bash
-    $ sudo ./KneronDFUT --model-to-flash ${MODEL_FILE_PATH} --port 133 -- type KL520
+    $ sudo sh KneronDFUT.sh --model-to-flash ${MODEL_FILE_PATH} --port 133 -- type KL520
     ```
 
     ```bash
@@ -117,7 +118,7 @@ $ sudo ./KneronDFUT
 ### 4.1 Use GUI to Write Model into AI Device
 
 ```bash
-$ sudo ./KneronDFUT
+$ sudo sh KneronDFUT.sh
 ```
 
 1. Select **KL720** Tab.
@@ -137,7 +138,7 @@ $ sudo ./KneronDFUT
 1. List all devices
 
     ```bash
-    $ sudo ./KneronDFUT --list
+    $ sudo sh KneronDFUT.sh --list
     ```
 
     ```bash
@@ -155,7 +156,7 @@ $ sudo ./KneronDFUT
 2. Write model into the selected KL720 devices using the port id
 
     ```bash
-    $ sudo ./KneronDFUT --model-to-flash ${MODEL_FILE_PATH} --port 262 --type KL720
+    $ sudo sh KneronDFUT.sh --model-to-flash ${MODEL_FILE_PATH} --port 262 --type KL720
     ```
 
     ```bash

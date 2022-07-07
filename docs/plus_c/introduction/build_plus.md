@@ -121,6 +121,6 @@ $ ls bin/
 
     kl520_demo_customize_inf_multiple_models
     kl520_demo_customize_inf_single_model
-    kl520_demo_generic_inference
+    kl520_demo_generic_image_inference
     ...
 ```

@@ -98,24 +98,78 @@ Note: This feature is only provided in Kneron PLUS v1.3.0 and above.
 Kneron Plus provides few examples which are using OpenCV to demonstrate the inference usage with the input of web camera.
 To build and run these examples, you need to install OpenCV.
 
+#### 2.3.1 Install Pre-build OpenCV
+
+This section will show how to install the pre-build opencv downloaded from [OpenCV-MinGW-Build](https://github.com/huihut/OpenCV-MinGW-Build).
+
+- Execute **MSYS2 MinGW 64-bit** to build OpenCV
+
+    Note: To execute **MSYS2 MinGW 64-bit**, please use the shortcut or `c:\msys64\msys2_shell.cmd -mingw64` instead of `c:\msys64\mingw64.exe`.
+
+    ```bash
+    $ wget https://github.com/huihut/OpenCV-MinGW-Build/archive/refs/tags/OpenCV-3.4.8-x64.zip
+    $ unzip OpenCV-3.4.8-x64.zip
+    $ mv OpenCV-MinGW-Build-OpenCV-3.4.8-x64 /c/opencv_348
+    $ rm OpenCV-3.4.8-x64.zip
+    ```
+
+- Add OpenCV into environment value
+
+    - Open "this computer", right click on blank, and choose "Properties".
+    ![](../imgs/windows_this_computer.png)
+
+    - Click "Advanced system settings" on the left panel.
+    ![](../imgs/windows_system.png)
+
+    - Click "Environment Variables".
+    ![](../imgs/windows_system_properties.png)
+
+    - Add "OpenCV_DIR" and set the value to "C:\opencv_348".
+    ![](../imgs/windows_add_opencv_path_for_pre_build.png)
+
+    - Edit "Path", and add "%OpenCV_DIR%\x64\mingw\bin" and "%OpenCV_DIR%".
+    ![](../imgs/windows_add_opencv_lib_path.png)
+
+- Change properties of MSYS2
+    ```bash
+    $ cd /
+    $ vim msys2_shell.cmd
+    ```
+
+    On line 17, change
+    ```bash
+    rem set MSYS2_PATH_TYPE=inherit
+    ```
+    to
+    ```bash
+    set MSYS2_PATH_TYPE=inherit
+    ```
+
+- Close and execute **MSYS2 MinGW 64-bit**
+
+
+#### 2.3.2 Self Build OpenCV
+
+This section will show how to build and install OpenCV from source code.
+
 - Execute **MSYS2 MinGW 64-bit** to build OpenCV
 
     Note: To execute **MSYS2 MinGW 64-bit**, please use the shortcut or `c:\msys64\msys2_shell.cmd -mingw64` instead of `c:\msys64\mingw64.exe`.
 
     ```bash
     $ cd /c/
-    $ mkdir opencv_347
-    $ cd opencv_347
+    $ mkdir opencv_348
+    $ cd opencv_348
 
-    $ wget https://github.com/opencv/opencv/archive/3.4.7.zip
-    $ unzip 3.4.7.zip
-    $ rm 3.4.7.zip
-    $ mv opencv-3.4.7 opencv
+    $ wget https://github.com/opencv/opencv/archive/3.4.8.zip
+    $ unzip 3.4.8.zip
+    $ rm 3.4.8.zip
+    $ mv opencv-3.4.8 opencv
 
-    $ wget https://github.com/opencv/opencv_contrib/archive/3.4.7.zip
-    $ unzip 3.4.7.zip
-    $ rm 3.4.7.zip
-    $ mv opencv_contrib-3.4.7 opencv_contrib
+    $ wget https://github.com/opencv/opencv_contrib/archive/3.4.8.zip
+    $ unzip 3.4.8.zip
+    $ rm 3.4.8.zip
+    $ mv opencv_contrib-3.4.8 opencv_contrib
 
     $ cd opencv
     $ mkdir build
@@ -136,7 +190,7 @@ To build and run these examples, you need to install OpenCV.
     - Click "Environment Variables".
     ![](../imgs/windows_system_properties.png)
 
-    - Add "OpenCV_DIR" and set the value to "C:\opencv_347\opencv\build\install".
+    - Add "OpenCV_DIR" and set the value to "C:\opencv_348\opencv\build\install".
     ![](../imgs/windows_add_opencv_path.png)
 
     - Edit "Path", and add "%OpenCV_DIR%\x64\mingw\bin" and "%OpenCV_DIR%".

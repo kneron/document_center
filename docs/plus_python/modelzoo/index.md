@@ -1,20 +1,31 @@
 ## Kneron ModelZoo
 
-The **`Kneron ModelZoo`** provides pre-trained model weight for you to easily retrain the model to fit the custom applications. You can retrain the model and convert it to NEF model by scripts provided in [**`Kneron Toolchain Docker`**](http://doc.kneron.com/docs/#toolchain/manual/).
+The **Kneron ModelZoo** provides verified model architecture and training code for user to easily retrain model and put it on Kneron hardware platform. You can convert the retrained model to NEF model by our toolchain provided in section **Kneron Toolchain Docker**
 
-In addition, the  **`Kneron PLUS`** provides `Generic Inference` APIs for you to quickly build the prototype application. You can learn how to leverage `Generic Inference` APIs to do `inference` and `post-processing` by the following ModelZoo examples:
+In addition, the  **Kneron PLUS** provides `Generic Image Inference`  and `Generic Data Inference`APIs for you to quickly build the prototype application. You can learn how to leverage `Generic Image Inference` and `Generic Data Inference` APIs to do `inference`, `pre-processing` and `post-processing` by the following ModelZoo examples.
 
-* KL520 ModelZoo Example
-    - [KL520KnModelZooGenericInferenceClassification.py](./chapter/kn-model-zoo_generic_inference_classification.md)
-    - [KL520KnModelZooGenericInferenceFcos.py](./chapter/kn-model-zoo_generic_inference_post_fcos.md)
-    - [KL520KnModelZooGenericInferenceYolov5.py](./chapter/kn-model-zoo_generic_inference_post_yolov5.md)
-* KL720 ModelZoo Example
-    - [KL720KnModelZooGenericInferenceClassification.py](./chapter/kn-model-zoo_generic_inference_classification.md)
-    - [KL720KnModelZooGenericInferenceFcos.py](./chapter/kn-model-zoo_generic_inference_post_fcos.md)
-    - [KL720KnModelZooGenericInferenceYolov5.py](./chapter/kn-model-zoo_generic_inference_post_yolov5.md)
+(*Note) There are two type of examples (Verified category/models, Legacy), recommend user can try ` Verified category/models` first,  `Legacy` version is planned to be removed.
+
+### Verified category/models:
+|  Category |  Model Type & Document |  PLUS example  | 
+|---|---|---|
+|  kneron-mmdetection  |  [YoloX](../../model_training/OpenMMLab/YoloX.md) |  [Python example](./chapter/YoloX.md) |  
+|  kneron-mmpose | [RSN18](../../model_training/OpenMMLab/RSN18.md)   |  [Python example](./chapter/RSN18.md) |
+|  kneron-mmsegmentation  | [STDC](../../model_training/OpenMMLab/STDC.md)  |  [Python example](./chapter/STDC.md) |
+|  kneron-mmtracking  | [ByteTrack](../../model_training/OpenMMLab/ByteTrack.md)  |  [Python example](./chapter/ByteTrack.md) |
+|  kneron-mmclassification | [RegNet](../../model_training/OpenMMLab/RegNet.md)  |  [Python example](./chapter/RegNet.md) |
+|
+
+### Legacy:
+
+|  Category |  Model Type & Document |  PLUS example  | 
+|---|---|---|
+|  Popular Object  Detection|  [YoloV5s](../../model_training/object_detection_yolov5.md) | [Python example](./chapter/kn-model-zoo_generic_inference_post_yolov5.md)   |
+|   | [FCOS](../../model_training/object_detection_fcos.md)  |  [Python example](./chapter/kn-model-zoo_generic_inference_post_fcos.md)  |
+| Popular Classification  | [Popular backbones](../../model_training/classification.md)  | [Python example](./chapter/kn-model-zoo_generic_inference_classification.md)   |
+|
 
 ### Reference
 
-- [Introduction](../introduction/index.md)
-- [Tutorial](../tutorial/index.md)
-- [kp API Document](../api_document/index.md)
+- [Toolchain Docker](http://doc.kneron.com/docs/#toolchain/manual/#2-toolchain-docker-overview)
+- [Model Training](../../model_training//index.md)

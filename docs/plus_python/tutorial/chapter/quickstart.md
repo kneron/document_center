@@ -56,11 +56,11 @@ kp.core.set_timeout(device_group=device_group,
 ---
 
 ### Upload firmware to Kneron device:
-> Please replace `SCPU_FW_PATH`, `NCPU_FW_PATH` by kdp2_fw_scpu.bin and kdp2_fw_ncpu.bin path (Please find target device firmware under `res/firmware` folder)  
+> Please replace `SCPU_FW_PATH`, `NCPU_FW_PATH` by fw_scpu.bin and fw_ncpu.bin path (Please find target device firmware under `res/firmware` folder)  
 
 ```python
-SCPU_FW_PATH = 'res/firmware/KL520/kdp2_fw_scpu.bin'
-NCPU_FW_PATH = 'res/firmware/KL520/kdp2_fw_ncpu.bin'
+SCPU_FW_PATH = 'res/firmware/KL520/fw_scpu.bin'
+NCPU_FW_PATH = 'res/firmware/KL520/fw_ncpu.bin'
 kp.core.load_firmware_from_file(device_group=device_group,
                                 scpu_fw_path=SCPU_FW_PATH,
                                 ncpu_fw_path=NCPU_FW_PATH)
@@ -80,7 +80,8 @@ model_nef_descriptor = kp.core.load_model_from_file(device_group=device_group,
 ---
 
 ### Inference image:
-- Read image from disk
+- Read image from disk  
+
     > Please replace `IMAGE_FILE_PATH` by image path (Example image can be found under `res/images` folder)
     ```python
     IMAGE_FILE_PATH = 'res/images/bike_cars_street_224x224.bmp'
@@ -89,27 +90,28 @@ model_nef_descriptor = kp.core.load_model_from_file(device_group=device_group,
     img_bgr565 = cv2.cvtColor(src=img, code=cv2.COLOR_BGR2BGR565)
     ```
 
-- Prepare generic inference configuration
+- Prepare generic image inference input descriptor
     ```python
-    generic_raw_image_header = kp.GenericRawImageHeader(
+    generic_inference_input_descriptor = kp.GenericImageInferenceDescriptor(
         model_id=model_nef_descriptor.models[0].id,
-        resize_mode=kp.ResizeMode.KP_RESIZE_ENABLE,
-        padding_mode=kp.PaddingMode.KP_PADDING_CORNER,
-        normalize_mode=kp.NormalizeMode.KP_NORMALIZE_KNERON,
-        inference_number=0
+        inference_number=0,
+        input_node_image_list=[
+            kp.GenericInputNodeImage(
+                image=img_bgr565,
+                image_format=kp.ImageFormat.KP_IMAGE_FORMAT_RGB565,
+                resize_mode=kp.ResizeMode.KP_RESIZE_ENABLE,
+                padding_mode=kp.PaddingMode.KP_PADDING_CORNER,
+                normalize_mode=kp.NormalizeMode.KP_NORMALIZE_KNERON
+            )
+        ]
     )
     ```
 
 - Start inference work
     ```python
-    kp.inference.generic_raw_inference_send(device_group=device_group,
-                                            generic_raw_image_header=generic_raw_image_header,
-                                            image=img_bgr565,
-                                            image_format=kp.ImageFormat.KP_IMAGE_FORMAT_RGB565)
-
-    generic_raw_result = kp.inference.generic_raw_inference_receive(device_group=device_group,
-                                                                    generic_raw_image_header=generic_raw_image_header,
-                                                                    model_nef_descriptor=model_nef_descriptor)
+    kp.inference.generic_image_inference_send(device_group=device_group,
+                                              generic_inference_input_descriptor=generic_inference_input_descriptor)
+    generic_raw_result = kp.inference.generic_image_inference_receive(device_group=device_group)
     ```
 
 - Retrieve inference node output
@@ -132,35 +134,19 @@ model_nef_descriptor = kp.core.load_model_from_file(device_group=device_group,
         "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
         "num_data": 12495,
         "ndarray": [
-            "[[[[  1.3589103    0.33972758   0.50959134 ...   0.16986379",
+            "[[[[  1.3589103    0.33972758   0.5095914  ...   0.16986379",
             "      0.33972758  -0.849319  ]",
-            "   [  1.698638    -0.50959134   0.50959134 ...  -0.16986379",
+            "   [  1.698638    -0.5095914    0.5095914  ...  -0.16986379",
             "     -0.16986379  -0.849319  ]",
-            "   [  1.5287741    0.50959134   0.16986379 ...   0.",
-            "     -0.33972758  -0.50959134]",
+            "   [  1.5287741    0.5095914    0.16986379 ...   0.",
+            "     -0.33972758  -0.5095914 ]",
             "   ...",
-            "   [  1.3589103    1.5287741   -1.0191827  ...   2.547957",
-            "     -1.1890465   -0.67945516]",
-            "   [  1.3589103    1.8685017   -1.0191827  ...   1.0191827",
-            "     -0.67945516  -0.33972758]",
-            "   [  0.849319     0.849319    -0.16986379 ...   0.16986379",
-            "      0.16986379  -0.33972758]]",
-            "",
-            "  ...",
-            "",
-            "  [[ -8.49319     -9.342508   -10.021964   ... -10.191828",
-            "     -9.002781    -7.6438704 ]",
-            "   [ -7.983598   -10.021964    -9.852099   ...  -9.172645",
-            "     -8.323326    -6.6246877 ]",
-            "   [ -7.983598   -10.191828   -10.021964   ...  -8.153461",
-            "     -7.983598    -7.304143  ]",
-            "   ...",
-            "   [ -7.6438704   -9.682236   -10.361691   ...  -9.002781",
+            "   [ -7.643871    -9.682237   -10.361691   ...  -9.002781",
             "    -10.021964    -9.172645  ]",
-            "   [ -7.304143   -10.701419   -12.400057   ...  -9.682236",
-            "     -9.682236    -9.002781  ]",
-            "   [ -6.1150966   -8.153461    -9.342508   ...  -7.983598",
-            "     -8.153461    -8.49319   ]]]]"
+            "   [ -7.304143   -10.701419   -12.400057   ...  -9.682237",
+            "     -9.682237    -9.002781  ]",
+            "   [ -6.1150966   -8.153462    -9.342508   ...  -7.983598",
+            "     -8.153462    -8.49319   ]]]]"
         ]
     }, {
         "width": 14,
@@ -169,35 +155,19 @@ model_nef_descriptor = kp.core.load_model_from_file(device_group=device_group,
         "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
         "num_data": 49980,
         "ndarray": [
-            "[[[[  0.8736945  -0.3494778  -0.1747389 ...   0.         -0.1747389",
-            "     -0.6989556]",
-            "   [  0.6989556  -0.8736945  -0.6989556 ...  -0.5242167  -0.1747389",
-            "     -0.5242167]",
-            "   [  0.5242167  -0.8736945  -0.6989556 ...  -0.1747389   0.1747389",
-            "     -0.8736945]",
+            "[[[[  0.87369454  -0.3494778   -0.1747389  ...   0.",
+            "     -0.1747389   -0.6989556 ]",
+            "   [  0.6989556   -0.87369454  -0.6989556  ...  -0.5242167",
+            "     -0.1747389   -0.5242167 ]",
+            "   [  0.5242167   -0.87369454  -0.6989556  ...  -0.1747389",
+            "      0.1747389   -0.87369454]",
             "   ...",
-            "   [ -1.0484334   0.          0.        ...   0.3494778   0.3494778",
-            "      0.1747389]",
-            "   [ -0.6989556  -0.5242167  -0.1747389 ...   0.5242167   0.3494778",
-            "      0.1747389]",
-            "   [  0.1747389   0.          0.1747389 ...   0.5242167   0.3494778",
-            "      0.       ]]",
-            "",
-            "  ...",
-            "",
-            "  [[ -7.5137725  -9.261162   -9.785378  ... -10.659073  -10.484334",
-            "     -8.562206 ]",
-            "   [-10.484334  -13.280156  -14.678067  ... -15.202284  -15.202284",
-            "    -11.008551 ]",
-            "   [-11.18329   -14.678067  -15.202284  ... -16.07598   -15.027545",
-            "    -12.231723 ]",
-            "   ...",
-            "   [-11.18329   -15.377023  -18.172846  ... -13.105417  -12.581201",
-            "    -10.833812 ]",
-            "   [-10.134856  -14.153851  -16.774935  ... -10.659073   -9.61064",
-            "     -8.387467 ]",
-            "   [ -9.086423  -12.231723  -12.930678  ... -10.134856   -9.261162",
-            "     -7.3390336]]]]"
+            "   [-11.18329    -15.377024   -18.172846   ... -13.105417",
+            "    -12.581201   -10.833812  ]",
+            "   [-10.134856   -14.1538515  -16.774935   ... -10.659073",
+            "     -9.61064     -8.387467  ]",
+            "   [ -9.086423   -12.231723   -12.930678   ... -10.134856",
+            "     -9.261162    -7.339034  ]]]]"
         ]
     }]
     '''

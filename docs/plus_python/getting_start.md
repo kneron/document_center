@@ -22,7 +22,7 @@ This **Getting Started** document only focuses on host software usage with the A
 
 For **model development**, please refer the [Toolchain Docker](../toolchain/manual.md) part.
 
-For **firmware development**, please refer the documents in [Customized API **(C language documents)** .](./../plus_c/customized_api/introduction.md)
+For **firmware development**, please refer the documents in [Customized API **(C language documents)** .](./../plus_c/feature_guide/customized_api/introduction.md)
 
 
 ## 2. Update AI Device to KDP2 Firmware
@@ -39,13 +39,14 @@ Download the *KneronDFUT_ubuntu.zip* into Ubuntu in from https://www.kneron.com/
 
 ```bash
 $ unzip KneronDFUT_ubuntu.zip
-$ cd Kneron_DFUT/bin/
+$ cd Kneron_DFUT/
+$ chmod +x bin/KneronDFUT # optional
 ```
 
 Use Command Line
 
 ```bash
-$ sudo ./KneronDFUT --help
+$ sudo sh KneronDFUT.sh --help
 ```
 
 ```bash
@@ -88,7 +89,7 @@ $ sudo ./KneronDFUT --help
 1. Use GUI to Update AI Device
 
     ```bash
-    $ sudo ./KneronDFUT
+    $ sudo sh KneronDFUT.sh
     ```
 
     * Select the AI device to be update to KDP2 firmware
@@ -99,7 +100,7 @@ $ sudo ./KneronDFUT --help
 2. Use Command Line to Update AI Device
 
     ```bash
-    $ sudo ./KneronDFUT --list
+    $ sudo sh KneronDFUT.sh --list
     ```
 
     ```bash
@@ -115,7 +116,7 @@ $ sudo ./KneronDFUT --help
     ```
 
     ```bash
-    $ sudo ./KneronDFUT --kl520-usb-boot --port 133
+    $ sudo sh KneronDFUT.sh --kl520-usb-boot --port 133
     ```
 
     ```bash
@@ -129,7 +130,7 @@ $ sudo ./KneronDFUT --help
 1. Use GUI to Update AI Device
 
     ```bash
-    $ sudo ./KneronDFUT
+    $ sudo sh KneronDFUT.sh
     ```
 
     * Select **KL720** Tab.
@@ -149,7 +150,7 @@ $ sudo ./KneronDFUT --help
 2. Use Command Line to Update AI Device
 
     ```bash
-    $ sudo ./KneronDFUT --list
+    $ sudo sh KneronDFUT.sh --list
     ```
 
     ```bash
@@ -165,7 +166,7 @@ $ sudo ./KneronDFUT --help
     ```
 
     ```bash
-    $ sudo ./KneronDFUT --kl720-update --port 262 --scpu ${SCPU_FILE_PATH} --ncpu ${NCPU_FILE_PATH}
+    $ sudo sh KneronDFUT.sh --kl720-update --port 262 --scpu ${SCPU_FILE_PATH} --ncpu ${NCPU_FILE_PATH}
     ```
 
     ```bash
@@ -233,12 +234,12 @@ Below will demonstrate only usage in two examples for **Generic inference**. For
 **Generic inference** API is intended for users who have their own models and applications. It needs the post-process is implemented by users in host side.
 
 #### 4.1.1 KL520 Generic Inference Example
-The **'KL520DemoGenericInferencePostYolo.py'** is an example for showing how it work.
+The **'KL520DemoGenericImageInferencePostYolo.py'** is an example for showing how it work.
 
 By default, it runs with a Tiny Yolo v3 model NEF and takes an BMP image as input and does post-process in host side.
 
 ```bash
-$ python ./KL520DemoGenericInferencePostYolo.py
+$ python KL520DemoGenericImageInferencePostYolo.py
 
 [Connect Device]
  - Success
@@ -318,17 +319,17 @@ $ python ./KL520DemoGenericInferencePostYolo.py
 
 From the console output, it can be observed that the information of models in the NEF is printed, including model ID, raw resolution, input channel, raw image format and raw output size.
 
-Besides output results in the screen console, it also draws detected objects in a new-created **output_one_bike_many_cars_224x224.bmp**.
+Besides output results in the screen console, it also draws detected objects in a new-created **output_bike_cars_street_224x224.bmp**.
 
 ![](./imgs/ex_kdp2_kl520_generic_inference_raw.bmp)
 
 #### 4.1.2 KL720 Generic Inference Example
-The **'KL720DemoGenericInferencePostYolo.py'** is an example for showing how it work.
+The **'KL720DemoGenericImageInferencePostYolo.py'** is an example for showing how it work.
 
 By default, it runs with a YOLO v5s model NEF and takes an BMP image as input and does post-process in host side.
 
 ```bash
-$ python ./KL720DemoGenericInferencePostYolo.py
+$ python KL720DemoGenericImageInferencePostYolo.py
 
 [Connect Device]
  - Success
@@ -374,7 +375,53 @@ $ python ./KL720DemoGenericInferencePostYolo.py
             "score": 0.8715,
             "class_num": 2
         },
-        ...
+        "3": {
+            "x1": 159,
+            "y1": 257,
+            "x2": 198,
+            "y2": 330,
+            "score": 0.6647,
+            "class_num": 2
+        },
+        "4": {
+            "x1": 10,
+            "y1": 264,
+            "x2": 38,
+            "y2": 294,
+            "score": 0.6482,
+            "class_num": 2
+        },
+        "5": {
+            "x1": 0,
+            "y1": 273,
+            "x2": 17,
+            "y2": 301,
+            "score": 0.6206,
+            "class_num": 2
+        },
+        "6": {
+            "x1": 107,
+            "y1": 270,
+            "x2": 134,
+            "y2": 316,
+            "score": 0.5405,
+            "class_num": 2
+        },
+        "7": {
+            "x1": 27,
+            "y1": 280,
+            "x2": 131,
+            "y2": 390,
+            "score": 0.2179,
+            "class_num": 2
+        },
+        "8": {
+            "x1": 121,
+            "y1": 163,
+            "x2": 155,
+            "y2": 221,
+            "score": 0.8449,
+            "class_num": 11
         },
         "9": {
             "x1": 205,
