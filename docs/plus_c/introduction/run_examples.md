@@ -323,7 +323,7 @@ This example is to show how to configure the `kp_ddr_manage_attr_t` and the usag
 Please refer [Device DDR Management](../feature_guide/device_ddr_management.md) for more information.
 
 ```bash
-$ sudo ./kl520_demo_generic_image_inference_customize_fifoq
+$ sudo ./kl520_demo_generic_image_inference_fifoq_config
 ```
 
 ```bash
