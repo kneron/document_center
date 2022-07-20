@@ -2,16 +2,16 @@
 
 This repository is the document center for the documents releasing to customers.
 
-**Please do not upload internal documents into this repository.**
+**This repository is moved to Github: <https://github.com/kneron/document_center>.**
 
-## How to contribute
+## How to migrate
 
-To contribute to this project, you don't need to be a developer of this project. Here are the steps:
+First, you need to set up your Github account.
+The, you just need to run the following command to reset the remote:
 
- 1. Fork this project. ![fork](docs/imgs/readme/fork.png)
- 2. After fork, you will have a repository copy of your own. Do your modification on your own project.
- 3. Submit a merge request in the main project when you finish modifying. Remember to set the assignee to Kidd or Jiyuan. ![merge](docs/imgs/readme/merge_request.png)
-
+```bash
+git remote set-url origin git@github.com:kneron/document_center.git
+```
 
 ## Test environment setup
 
