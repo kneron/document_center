@@ -1,5 +1,7 @@
 # Toolchain Document Center
 
+Build Status: [![Python application](https://github.com/kneron/document_center/actions/workflows/python-app.yml/badge.svg)](https://github.com/kneron/document_center/actions/workflows/python-app.yml)
+
 This repository is the document center for the documents releasing to customers.
 
 **This repository is moved to Github: <https://github.com/kneron/document_center>.**
