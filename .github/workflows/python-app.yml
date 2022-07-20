@@ -36,4 +36,4 @@ jobs:
     - name: Cache
       uses: actions/cache@v3.0.5
       with:
-        path: ["site"]
+        path: site
