@@ -18,7 +18,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        lfs: true
     - name: Set up Python 3.7
       uses: actions/setup-python@v3
       with:
@@ -30,3 +33,7 @@ jobs:
     - name: Build with mkdocs
       run: |
         mkdocs build
+    - name: Cache
+      uses: actions/cache@v3.0.5
+      with:
+        path: ["site"]
