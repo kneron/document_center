@@ -7,7 +7,7 @@
 **2022 Jun**
 **Toolchain v0.18.0**
 
-[PDF Downloads](manual.pdf)
+[PDF Downloads](../res/manual.pdf)
 
 ## 0. Overview
 
