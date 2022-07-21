@@ -1,6 +1,6 @@
 site_name: Document Center
-#repo_url: http://192.168.200.1:8088/jiyuan/toolchain_manual
-#repo_name: GitLab
+repo_url: https://github.com/kneron/document_center
+# repo_name: Github
 
 theme:
     name: 'windmill'
