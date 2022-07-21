@@ -41,8 +41,8 @@ jobs:
       uses: Kaven-Universe/github-action-current-date-time@v1.1.0
       with:
         format: "YYYYMMDD_HH_mm_ss"
-    - name: Cache
-      uses: actions/cache@v3.0.5
+    - name: Artifact
+      uses: actions/upload-artifact@v3
       with:
         path: site
-        key: site-${{ steps.get-date.outputs.time }}
+        name: site-${{ steps.get-date.outputs.time }}
