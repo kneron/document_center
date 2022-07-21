@@ -1,0 +1,48 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: MKDocs build
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        lfs: true
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.7"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Build with mkdocs
+      run: |
+        mkdocs build 2> error.log
+        cat error.log
+        if grep -Fq "ERROR" error.log; then exit 1; fi
+        if [ ! -d site ]; then exit 1; fi
+    - id: get-date
+      name: Get date
+      uses: Kaven-Universe/github-action-current-date-time@v1.1.0
+      with:
+        format: "YYYYMMDD_HH_mm_ss"
+    - name: Cache
+      uses: actions/cache@v3.0.5
+      with:
+        path: site
+        key: site-${{ steps.get-date.outputs.time }}
