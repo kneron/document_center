@@ -21,7 +21,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
       with:
-        lfs: true
+        lfs: false
     - name: Set up Python 3.7
       uses: actions/setup-python@v3
       with:
@@ -33,7 +33,11 @@ jobs:
     - name: Build with mkdocs
       run: |
         mkdocs build
+    - name: Check Results
+      run: |
+        if [ ! -d site ]; then exit 1; fi
     - name: Cache
       uses: actions/cache@v3.0.5
       with:
         path: site
+        key: site-${{ steps.get-date.outputs.date }}

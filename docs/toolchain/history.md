@@ -13,3 +13,4 @@
 * [720 v0.10.0](../history/manual_720_v0.10.0.pdf)
 * [520 v0.9.0](../history/manual_520_v0.9.0.pdf)
 * [720 v0.9.0](../history/manual_720_v0.9.0.pdf)
+* [v0.7.0](../history/manual_v0.7.0.pdf)
