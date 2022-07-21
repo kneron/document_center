@@ -32,9 +32,11 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Build with mkdocs
       run: |
-        mkdocs build
+        mkdocs build 2> error.log
     - name: Check Results
       run: |
+        cat error.log
+        if grep -Fq "ERROR" error.log; then exit 1; fi
         if [ ! -d site ]; then exit 1; fi
     - name: Cache
       uses: actions/cache@v3.0.5
