@@ -76,39 +76,95 @@ In order to infer without hardware image preprocessing, the input data must do t
         ```
 
     - Re-layout data to fit NPU data layout format  
+        - For KL520  
 
-        > More information about *NPU data layout format*,please refer to [Supported NPU Data Layout Format](../../../plus_c/appendix/supported_npu_data_layout_format.md)  
+            > 1. More information about *NPU data layout format*,please refer to [Supported NPU Data Layout Format](../../../plus_c/appendix/supported_npu_data_layout_format.md)  
+            > 2. For the KL520 hardware limitation, the '4W' in '4W4C8B' need to be width aligned to 16  
 
-        ```python
-        # re-layout the data to fit NPU data layout format
-        # KL520 supported NPU input layout format: 4W4C8B
-        # KL720 supported NPU input layout format: 4W4C8B, 1W16C8B, 16W1C8B
-        if kp.ModelTensorDataLayout.KP_MODEL_TENSOR_DATA_LAYOUT_4W4C8B == model_input_data_layout:
-            width_align_base = 4
-            channel_align_base = 4
-        elif kp.ModelTensorDataLayout.KP_MODEL_TENSOR_DATA_LAYOUT_1W16C8B == model_input_data_layout:
-            width_align_base = 1
-            channel_align_base = 16
-        elif kp.ModelTensorDataLayout.KP_MODEL_TENSOR_DATA_LAYOUT_16W1C8B == model_input_data_layout:
-            width_align_base = 16
-            channel_align_base = 1
-        else:
-            print(' - Error: invalid input NPU layout format {}'.format(str(model_input_data_layout)))
-            exit(0)
+            ```python
+            # re-layout the data to fit NPU data layout format
+            # KL520 supported NPU input layout format: 4W4C8B
+            # [Note] For the KL520 hardware limitation, the '4W' need to be width aligned to 16
 
-        # calculate width, channel alignment size
-        model_input_width_align = width_align_base * math.ceil(model_input_width / float(width_align_base))
-        model_input_channel_align = channel_align_base * math.ceil(model_input_channel / float(channel_align_base))
+            if kp.ModelTensorDataLayout.KP_MODEL_TENSOR_DATA_LAYOUT_4W4C8B == model_input_data_layout:
+                width_align_base = 16
+                channel_align_base = 4
+            else:
+                print(' - Error: invalid input NPU layout format {}'.format(str(model_input_data_layout)))
+                exit(0)
 
-        # create re-layout data container
-        re_layout_data = np.zeros((model_input_height, model_input_width_align, model_input_channel_align), dtype=np.int8)
+            # calculate width alignment size, channel block count
+            model_input_width_align = width_align_base * math.ceil(model_input_width / float(width_align_base))
+            model_input_channel_block_num = math.ceil(model_input_channel / float(channel_align_base))
 
-        # fill data in re-layout data container
-        re_layout_data[:img_height, :img_width, :img_channel] = data
+            # create re-layout data container
+            # KL520 dimension order: HxCxW
+            re_layout_data = np.zeros((model_input_height,
+                                    model_input_channel_block_num,
+                                    model_input_width_align,
+                                    channel_align_base), dtype=np.int8)
 
-        # convert re-layout data to npu inference buffer
-        npu_input_buffer = re_layout_data.tobytes()
-        ```
+            # fill data in re-layout data container
+            model_input_channel_block_offset = 0
+            for model_input_channel_block_idx in range(model_input_channel_block_num):
+                model_input_channel_block_offset_end = model_input_channel_block_offset + channel_align_base
+                model_input_channel_block_offset_end = model_input_channel_block_offset_end if model_input_channel_block_offset_end < model_input_channel else model_input_channel
+
+                re_layout_data[:model_input_height, model_input_channel_block_idx, :model_input_width, :(model_input_channel_block_offset_end - model_input_channel_block_offset)] = \
+                    data[:, :, model_input_channel_block_offset:model_input_channel_block_offset_end]
+
+                model_input_channel_block_offset += channel_align_base
+
+            # convert re-layout data to npu inference buffer
+            npu_input_buffer = re_layout_data.tobytes()
+            ```
+
+        - For KL720  
+
+            > More information about *NPU data layout format*,please refer to [Supported NPU Data Layout Format](../../../plus_c/appendix/supported_npu_data_layout_format.md)  
+
+            ```python
+            # re-layout the data to fit NPU data layout format
+            # KL720 supported NPU input layout format: 4W4C8B, 1W16C8B, 16W1C8B
+
+            if kp.ModelTensorDataLayout.KP_MODEL_TENSOR_DATA_LAYOUT_4W4C8B == model_input_data_layout:
+                width_align_base = 4
+                channel_align_base = 4
+            elif kp.ModelTensorDataLayout.KP_MODEL_TENSOR_DATA_LAYOUT_1W16C8B == model_input_data_layout:
+                width_align_base = 1
+                channel_align_base = 16
+            elif kp.ModelTensorDataLayout.KP_MODEL_TENSOR_DATA_LAYOUT_16W1C8B == model_input_data_layout:
+                width_align_base = 16
+                channel_align_base = 1
+            else:
+                print(' - Error: invalid input NPU layout format {}'.format(str(model_input_data_layout)))
+                exit(0)
+
+            # calculate width alignment size, channel block count
+            model_input_width_align = width_align_base * math.ceil(model_input_width / float(width_align_base))
+            model_input_channel_block_num = math.ceil(model_input_channel / float(channel_align_base))
+
+            # create re-layout data container
+            # KL720 dimension order: CxHxW
+            re_layout_data = np.zeros((model_input_channel_block_num,
+                                    model_input_height,
+                                    model_input_width_align,
+                                    channel_align_base), dtype=np.int8)
+
+            # fill data in re-layout data container
+            model_input_channel_block_offset = 0
+            for model_input_channel_block_idx in range(model_input_channel_block_num):
+                model_input_channel_block_offset_end = model_input_channel_block_offset + channel_align_base
+                model_input_channel_block_offset_end = model_input_channel_block_offset_end if model_input_channel_block_offset_end < model_input_channel else model_input_channel
+
+                re_layout_data[model_input_channel_block_idx, :model_input_height, :model_input_width, :(model_input_channel_block_offset_end - model_input_channel_block_offset)] = \
+                    data[:, :, model_input_channel_block_offset:model_input_channel_block_offset_end]
+
+                model_input_channel_block_offset += channel_align_base
+
+            # convert re-layout data to npu inference buffer
+            npu_input_buffer = re_layout_data.tobytes()
+            ```
 
 - Prepare generic data inference input descriptor
     ```python
