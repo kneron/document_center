@@ -90,7 +90,7 @@ Args:
 #### General onnx optimization
 
 ```python
-ktc.onnx_optimizer.onnx2onnx_flow(m, disable_fuse_bn=False, bn_on_skip=False, bn_before_add=False, bgr=False, norm=False, rgba2yynn=False, eliminate_tail=False, opt_matmul=False)
+ktc.onnx_optimizer.onnx2onnx_flow(m, disable_fuse_bn=False, bn_on_skip=False, bn_before_add=False, bgr=False, norm=False, rgba2yynn=False, eliminate_tail=False, opt_matmul=False, duplicate_shared_weights=True)
 ```
 
 Return the optimized model. Optimize the onnx model.
@@ -106,6 +106,7 @@ Args:
 * rgba2yynn (bool, optional): add an Conv layer to convert rgb input to yynn . Defaults to False.
 * eliminate_tail (bool, optional): remove the trailing NPU unsupported nodes. Defaults to False.
 * opt_matmul (bool, optional): optimize the MatMul layers according to the NPU limit. Defaults to False.
+* duplicate_shared_weights(bool, optional): duplicate shared weights. Defaults to True.
 
 ### 1.3 Editors
 
@@ -289,6 +290,8 @@ Args:
 * percentile (float, optional): used under 'mmse' mode. The range to search. The larger the value, the larger the search range, the better the performance but the longer the simulation time. Defaults to 0.001,
 * outlier_factor (float, optional): used under 'mmse' mode. The factor applied on outliers. For example, if clamping data is sensitive to your model, set outlier_factor to 2 or higher. Higher outlier_factor will reduce outlier removal by increasing range. Defaults to 1.0.
 * percentage (float, optional): used under 'percentage' mode. Suggest to set value between 0.999 and 1.0. Use 1.0 for detection models. Defaults to 0.999.
+* bitwidth_mode (str, optioanl): could be "8" or "16". Try "16" if quantized model has performance degradation. Defaults to "8".
+* fm_cut (str, optional): could be "default" or "deep_search". Get a better image cut method through deep search, so as to improve the efficiency of our NPU. Defaults to "default".
 * skip_verify (bool, optional): whether skip the model verification step. The model verification step makes sure your model can be processed correctly by our toolchain. But it takes longer time and more memory. Defaults to False.
 
 ### 2.3 Model Evaluation
