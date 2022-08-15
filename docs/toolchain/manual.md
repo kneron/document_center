@@ -4,8 +4,8 @@
 
 # Kneron Linux Toolchain Manual
 
-**2022 Jun**
-**Toolchain v0.18.0**
+**2022 Aug**
+**Toolchain v0.18.1**
 
 [PDF Downloads](res/manual.pdf)
 
@@ -14,7 +14,7 @@
 KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 520, KDP 720 and KDP 530.
 For better environment compatibility, we provide a docker which include all the dependencies as well as the toolchain software.
 
-**This document is compatible with `kneron/toolchain:v0.18.0`.**
+**This document is compatible with `kneron/toolchain:v0.18.1`.**
 
  *Performance simulation result on NPU KDP520:*
 
@@ -149,8 +149,8 @@ You can use the following command to pull the latest toolchain docker.
 docker pull kneron/toolchain:latest
 ```
 
-Note that this document is compatible with toolchain v0.18.0. You can find the version of the toolchain in
-`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.18.0, you may need to find the
+Note that this document is compatible with toolchain v0.18.1. You can find the version of the toolchain in
+`/workspace/version.txt` inside the docker. If you find your toolchain is later than v0.18.1, you may need to find the
 latest document from the [online document center](http://doc.kneron.com/docs).
 
 ## 2. Toolchain Docker Overview
