@@ -285,14 +285,21 @@ Args:
 * output_bie (str, optional): path to the output bie file. Defaults to "/data1/output.bie".
 * threads (int, optional): multithread setting. Defaults to 4.
 * quantize_mode (str, optional): quantize_mode setting. Currently support default and post_sigmoid. Defaults to "default".
-* outlier (float, optional): deprecated. Please use percentage instead.
+* outlier (float, optional): DEPRECAETED. Please use percentage instead.
 * datapath_range_method (str, optional): could be 'mmse' or 'percentage. mmse: use snr-based-range method. percentage: use arbitary percentage. Default to 'percentage'.
 * percentile (float, optional): used under 'mmse' mode. The range to search. The larger the value, the larger the search range, the better the performance but the longer the simulation time. Defaults to 0.001,
 * outlier_factor (float, optional): used under 'mmse' mode. The factor applied on outliers. For example, if clamping data is sensitive to your model, set outlier_factor to 2 or higher. Higher outlier_factor will reduce outlier removal by increasing range. Defaults to 1.0.
 * percentage (float, optional): used under 'percentage' mode. Suggest to set value between 0.999 and 1.0. Use 1.0 for detection models. Defaults to 0.999.
 * bitwidth_mode (str, optioanl): could be "8" or "16". Try "16" if quantized model has performance degradation. Defaults to "8".
 * fm_cut (str, optional): could be "default" or "deep_search". Get a better image cut method through deep search, so as to improve the efficiency of our NPU. Defaults to "default".
-* skip_verify (bool, optional): whether skip the model verification step. The model verification step makes sure your model can be processed correctly by our toolchain. But it takes longer time and more memory. Defaults to False.
+* skip_verify (bool, optional): DEPRECAETED. Skip the verification when running analysis. Same behavious as `mode=1`. Defaults to None(True).
+* mode (int, optional): running mode for the analysis. Defaults to 1.
+    - 0: run ip_evaluator only. This mode will not output bie file.
+    - 1: run knerex (for quantization) only.
+    - 2: run knerex + dynasty + compiler + csim + bit-true-match check. dynasty will inference only 1 image and only check quantization accuracy of output layers.
+    - 3: run knerex + dynasty + compiler + csim + bit-true-match check. dynasty will inference all images and dump results of all layers. It will provide most detailed analysis but will take much longer time.
+* optimize (int, optional): level of optimization. 0-2, the larger number, the better model performance, but takes longer. Defaults to 0.
+* export_dynasty_dump (bool, optional): whether export the dump result when running dynasty. Defaults to False.
 
 ### 2.3 Model Evaluation
 
