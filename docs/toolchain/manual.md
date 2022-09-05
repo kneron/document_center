@@ -4,8 +4,8 @@
 
 # Kneron Linux Toolchain Manual
 
-**2022 Aug**
-**Toolchain v0.18.1**
+**2022 Sep**
+**Toolchain v0.18.2**
 
 [PDF Downloads](res/manual.pdf)
 
@@ -82,6 +82,7 @@ In this document, you'll learn:
     * ONNX is updated to 1.7.0.
     * Introduce WebGUI.
     * Adjust 720 and 530 IP Evaluator default hardware specification.
+    * Add more analysis options.
 * **[v0.17.0]**
     * Optimize analysis API. Now we verify the model while analysing the fixed point performance.
     * E2E simulator no longer requires `radix` parameter.
@@ -568,14 +569,17 @@ In this chapter, we would go through the steps of quantization.
 Quantization is the step where the floating-point weight are quantized into fixed-point to reduce the size and the calculation complexity. The Python API for this step is called `analysis`. It is also a class function of `ktc.ModelConfig`. It takes a dictionary as input.
 
 ```python
-analysis(input_mapping, output_bie = None, threads = 4, skip_verify=True)
+analysis(input_mapping, output_bie = None, threads = 4, mode=1)
 ```
 
-`input_mapping` is the a dictionary which maps a list of input data to a specific input name. Generally speaking, the quantization would be preciser with more input data.
-`output_bie` is the path where you want your bie generated. By default, it is under /data1/fpAnalyser.
-`threads` is the threads number you want to utilize. Please note more threads would lead to more RAM usage as well.
-`skip_verify` is an optional flag to determine whether to skip the model verification step while doing the quantization. The model verification makes sure your model can be processed correctly by our toolchain. But this step could take more time and consume more system resources. *Note that if your memory is not enough, the utility would raise segmentation fault.* By default, this flag is set to True, which means the verification is skipped.  
-The return value is the generated bie path.
+* `input_mapping` is the a dictionary which maps a list of input data to a specific input name. Generally speaking, the quantization would be preciser with more input data.
+* `output_bie` is the path where you want your bie generated. By default, it is under /data1/fpAnalyser.
+* `threads` is the threads number you want to utilize. Please note more threads would lead to more RAM usage as well.
+* `mode` is an optional flag to determine whether to skip the model verification step while doing the quantization. The model verification makes sure your model can be processed correctly by our toolchain. But this step could take more time and consume more system resources. *Note that if your memory is not enough, the utility would raise segmentation fault.* By default, this flag is set to 1, which means the verification is skipped.
+  * 1: only analysis. Skip verification.
+  * 2: Verification with one image.
+  * 3: Verification with all provided images. (WARNING: This option takes very long time.)
+* The return value is the generated bie path.
 
 This is a very simple example usage. There are many more parameters for fine-tuning. Please check Please check [Toolchain Python API](http://doc.kneron.com/docs/toolchain/python_api/) if needed.
 
