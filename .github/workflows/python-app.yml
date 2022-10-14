@@ -32,8 +32,10 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Build with mkdocs
       run: |
-        mkdocs --version
-        mkdocs build
+        mkdocs build 2> error.log
+        cat error.log
+        if grep -Fq "ERROR" error.log; then exit 1; fi
+        if [ ! -d site ]; then exit 1; fi
     - id: get-date
       name: Get date
       uses: Kaven-Universe/github-action-current-date-time@v1.1.0
