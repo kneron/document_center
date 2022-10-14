@@ -263,7 +263,7 @@ Args:
 
 * id (int): model ID
 * version (str): version number which should be a four digit hex, e.g. "0a2f"
-* platform (str): hardware platform, should be "520" or "720"
+* platform (str): hardware platform, should be one of "520", "720", "530", "630", "730"
 * onnx_model (ModelProto, optional): loaded onnx model. Defaults to None.
 * onnx_path (str, optional): onnx file path. Defaults to None.
 * bie_path (str, optional): bie file path. Defaults to None.

@@ -1,5 +1,6 @@
 # Manual History
 
+* [v0.18.2](history/manual_v0.18.2.pdf)
 * [v0.17.2](history/manual_v0.17.2.pdf)
 * [v0.16.0](history/manual_v0.16.0.pdf)
 * [v0.15.5](history/manual_v0.15.5.pdf)
@@ -17,6 +18,9 @@
 
 ## Change log
 
+* **[v0.19.0]**
+    * Add 730 hardware support.
+    * Minor bug fixes.
 * **[v0.18.2]**
     * ktc: Add `mode`, `optimize`, `export_dynasty_dump` argument to analysis.
     * ktc: Set `skip_verify` in analysis as deprecated.
