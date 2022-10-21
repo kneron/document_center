@@ -11,7 +11,7 @@
 
 ## 0. Overview
 
-KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 520, 720, 530 and 730.
+KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 520, 720, 530 and 730(preview).
 For better environment compatibility, we provide a docker which include all the dependencies as well as the toolchain software.
 
 **This document is compatible with `kneron/toolchain:v0.19.0`.**
@@ -67,8 +67,26 @@ For better environment compatibility, we provide a docker which include all the 
 | YOLOv3               | 416x416 |    5.93        | 169 ms         |        No        |
 | YOLOv5s              | 640x640 |    16.9        | 59.3 ms        |        No        |
 | Centernet res101     | 512x512 |    2.19        | 457 ms         |        No        |
-| Unet                 | 384x384 |    0.950       | 1050 ms         |        No        |
+| Unet                 | 384x384 |    0.950       | 1050 ms        |        No        |
 | Lite-HRNet           | 256x192 |    52.7        | 19.0 ms        |        No        |
+
+*Performance simulation result on NPU KDP630:*
+
+| Model                | Size    | FPS (npu only) | Time(npu only) | Has CPU node(s)? |
+| -------------------- | ------- | -------------- | -------------- | ---------------- |
+| Inception v3         | 224x224 |    56.8        | 17.6 ms        |        No        |
+| Inception v4         | 299x299 |    16.3        | 61.3 ms        |        No        |
+| Mobilenet v1         | 224x224 |    222         | 4.51 ms        |        No        |
+| Mobilenet v2         | 224x224 |    215         | 4.66 ms        |        No        |
+| Mobilenet v2 ssdlite | 300x300 |    128         | 7.83 ms        |        No        |
+| Resnet50 v1.5        | 224x224 |    25.4        | 39.3 ms        |        No        |
+| OpenPose             | 256x256 |    5.33        | 187 ms         |        No        |
+| SRCNN                | 384x384 |    70.5        | 14.2 ms        |        No        |
+| Tiny YOLOv3          | 416x416 |    117         | 8.53 ms        |        No        |
+| YOLOv3               | 416x416 |    5.56        | 180 ms         |        No        |
+| YOLOv5s              | 640x640 |    19.1        | 52.4 ms        |        No        |
+| Unet                 | 384x384 |    1.82        | 549 ms         |        No        |
+| Lite-HRNet           | 256x192 |    19.3        | 51.7 ms        |        No        |
 
 In this document, you'll learn:
 
@@ -79,7 +97,7 @@ In this document, you'll learn:
 **Major changes of the current version**
 
 * **[v0.19.0]**
-    * Add 730 hardware support.
+    * Add 730 hardware support as a preview version.
     * Minor bug fixes.
 * **[v0.18.2]**
     * ktc: Add `mode`, `optimize`, `export_dynasty_dump` argument to analysis.
