@@ -320,6 +320,7 @@ Table 1.1 shows the list of functions supports base on ONNX operators.
 | Upsample<sup>14</sup>         |  N  |  Y  |  Y  |  Y  |
 
 Notes:
+
 1. For AveragePool kernel size, 520 and 720 support square kernel up to 3x3. while 530 and 630 also support non-square kernel up to 3x3.
 2. All hardware only support Clip with min set to 0.
 3. 720 only supports ConvTranspose with stride set to 2.
