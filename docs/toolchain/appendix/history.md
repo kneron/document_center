@@ -1,4 +1,6 @@
-# Manual History
+# Toolchain Docker History
+
+## Manual History Version
 
 * [v0.18.2](history/manual_v0.18.2.pdf)
 * [v0.17.2](history/manual_v0.17.2.pdf)
@@ -16,7 +18,7 @@
 * [720 v0.9.0](history/manual_720_v0.9.0.pdf)
 * [v0.7.0](history/manual_v0.7.0.pdf)
 
-## Change log
+## Toolchain Change log
 
 * **[v0.19.0]**
     * Add 730 hardware support.
