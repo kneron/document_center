@@ -2,14 +2,12 @@
 <img src="../imgs/manual/kneron_log.png">
 </div>
 
-# 1. Kneron Linux Toolchain Manual Overview
+# 1. Toolchain Overview
 
 **2022 Nov**
 **Toolchain v0.20.0**
 
-[PDF Downloads](res/manual.pdf)
-
-## 1.1. Overview
+## 1.1. Introduction
 
 KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 520, 720, 530 and 730(preview).
 For better environment compatibility, we provide a docker which include all the dependencies as well as the toolchain software.
@@ -237,6 +235,7 @@ There are also other useful tools and informations:
 
 * [End to End Simulator](appendix/app_flow_manual.md): manual for the E2E simualtor.
 * [Hardware Performance](appendix/performance.md): common model performance table for Kneron hardwares and the supported operator list.
+* [Hardware Supported Operators](appendix/operators.md): operators supported by the hardware.
 * [ONNX Converters](appendix/converters.md): manual for the script usage of our converter tools.
 * [Script Tools](appendix/command_line.md): manual for deprecated command line tools. Kept for compatibility of toolchain before v0.15.0)
 * [Toolchain History](appendix/history.md): manuals for history version of toolchain and the change log.

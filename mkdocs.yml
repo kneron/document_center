@@ -181,6 +181,7 @@ nav:
     - Appendix:
       - End to End Simulator:                                       toolchain/appendix/app_flow_manual.md
       - Hardware Performance:                                       toolchain/appendix/performance.md
+      - Hardware Supported Operators:                               toolchain/appendix/operators.md
       - ONNX Converter:                                             toolchain/appendix/converters.md
       - Script Tools:                                               toolchain/appendix/command_line.md
       - Toolchain History:                                          toolchain/appendix/history.md

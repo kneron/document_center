@@ -1,8 +1,8 @@
-## 2. Toolchain Deployment
+# 2. Toolchain Deployment
 
 **Review the system requirements below before start installing and using the toolchain.**
 
-### 2.1. System requirements
+## 2.1. System requirements
 
 1. **Hardware**: Minimum quad-core CPU, 4GB RAM and 6GB free disk space.
 2. **Operating system**: Window 10 x64 version 1903 or higher with build 18362 or higher. Ubuntu 16.04 x64 or higher.
@@ -22,7 +22,7 @@ Please double-check whether the docker is successfully installed and callable fr
 next section. If there is any problem about the docker installation, please search online or go to the docker community
 for further support. The questions about the docker is beyond the reach of this document.
 
-### 2.2. Pull the latest toolchain image
+## 2.2. Pull the latest toolchain image
 
 All the following steps are on the command line. Please make sure you have the access to it.
 
