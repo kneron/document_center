@@ -1,26 +1,46 @@
-## 4. BIE Workflow
+# 4. BIE Workflow
 
 As mentioned briefly in the previous section, the bie file is the model file which is usually generated after quantization. It is encrpyted and not available for visuanlization.
 In this chapter, we would go through the steps of quantization.
 
-### 4.1. Quantization
+## 4.1. Quantization
 
 Quantization is the step where the floating-point weight are quantized into fixed-point to reduce the size and the calculation complexity. The Python API for this step is called `analysis`. It is also a class function of `ktc.ModelConfig`. It takes a dictionary as input.
 
+Below is the quantization API. Note that there are many fine-tuning parameter. We do not need to utilize them all.
+
 ```python
-analysis(input_mapping, output_bie = None, threads = 4, mode=1)
+classmethod analysis(input_mapping, output_bie=None, threads=4, quantize_mode="default")
 ```
 
-* `input_mapping` is the a dictionary which maps a list of input data to a specific input name. Generally speaking, the quantization would be preciser with more input data.
-* `output_bie` is the path where you want your bie generated. By default, it is under /data1/fpAnalyser.
-* `threads` is the threads number you want to utilize. Please note more threads would lead to more RAM usage as well.
-* `mode` is an optional flag to determine whether to skip the model verification step while doing the quantization. The model verification makes sure your model can be processed correctly by our toolchain. But this step could take more time and consume more system resources. *Note that if your memory is not enough, the utility would raise segmentation fault.* By default, this flag is set to 1, which means the verification is skipped.
-  * 1: only analysis. Skip verification.
-  * 2: Verification with one image.
-  * 3: Verification with all provided images. (WARNING: This option takes very long time.)
-* The return value is the generated bie path.
+Fix point analysis for the model. If the object is initialized with an onnx. This step is required before compiling. The result bie path will be returned.
 
-This is a very simple example usage. There are many more parameters for fine-tuning. Please check Please check [Toolchain Python API](http://doc.kneron.com/docs/toolchain/python_api/) if needed.
+Args:
+
+* input_mapping (Dict): Dictionary of mapping input data to a specific input. Input data should be a list of numpy array.
+* output_bie (str, optional): path to the output bie file. Defaults to "/data1/output.bie".
+* threads (int, optional): multithread setting. Defaults to 4.
+* quantize_mode (str, optional): quantize_mode setting. Currently support default and post_sigmoid. Defaults to "default".
+* outlier (float, optional): DEPRECAETED. Please use percentage instead.
+* datapath_range_method (str, optional): could be 'mmse' or 'percentage. mmse: use snr-based-range method. percentage: use arbitary percentage. Default to 'percentage'.
+* percentile (float, optional): used under 'mmse' mode. The range to search. The larger the value, the larger the search range, the better the performance but the longer the simulation time. Defaults to 0.001,
+* outlier_factor (float, optional): used under 'mmse' mode. The factor applied on outliers. For example, if clamping data is sensitive to your model, set outlier_factor to 2 or higher. Higher outlier_factor will reduce outlier removal by increasing range. Defaults to 1.0.
+* percentage (float, optional): used under 'percentage' mode. Suggest to set value between 0.999 and 1.0. Use 1.0 for detection models. Defaults to 0.999.
+* bitwidth_mode (str, optioanl): could be "8" or "16". Try "16" if quantized model has performance degradation. Defaults to "8".
+* fm_cut (str, optional): could be "default" or "deep_search". Get a better image cut method through deep search, so as to improve the efficiency of our NPU. Defaults to "default".
+* skip_verify (bool, optional): DEPRECAETED. Skip the verification when running analysis. Same behavious as `mode=1`. Defaults to None(True).
+* mode (int, optional): running mode for the analysis. Defaults to 1.
+    - 0: run ip_evaluator only. This mode will not output bie file.
+    - 1: run knerex (for quantization) only.
+    - 2: run knerex with 1 image verification (dynasty, compiler, csim and bit-true-match check).
+    - 3: run knerex with all images verification (dynasty, compiler, csim and bit-true-match check). WARNING: This option takes very long time.
+* optimize (int, optional): level of optimization. 0-4, the larger number, the better model performance, but takes longer. Defaults to 0.
+    * 0: the knerex generated quantization model.
+    * 1: bias adjust parallel, no firmware cut improvement.
+    * 2: bias adjust parallel, with firmware cut improvement.
+    * 3: bias adjust sequential, no firmware cut improvement. SLOW!
+    * 4: bias adjust sequential, with firmware cut improvement.  SLOW!
+* export_dynasty_dump (bool, optional): whether export the dump result when running dynasty. Defaults to False.
 
 Please also note that this step would be very time-consuming since it analysis the model with every input data you provide.
 
@@ -36,13 +56,11 @@ input_images = [
 ]
 input_mapping = {"data_out": input_images}
 
-# Quantization
+# Quantization without fine-tuning
 bie_path = km.analysis(input_mapping, output_bie = None, threads = 4)
 ```
 
-This function has more parameters for fine-tuning. Please check [Toolchain Python API](http://doc.kneron.com/docs/toolchain/python_api/) if needed.
-
-### 4.2. E2E Simulator Check (Fixed Point)
+## 4.2. E2E Simulator Check (Fixed Point)
 
 Before going into the next section of compilation, we need to ensure the quantized model do not lose too much precision.
 
@@ -59,6 +77,24 @@ The usage is almost the same as using onnx. In the code above, `inf_results` is 
 As mentioned above, we do not provide any postprocess. In reality, you may want to have your own postprocess function in Python, too.
 
 After getting the `fixed_results` and post-process it, you may want to compare the result with the `inf_results` which is generated in section 3.3 to see if the precision lose too much. If the result is unacceptable, please check FAQ 2 for possible solutions.
+
+### 4.2.1 Get Radix Value (Deprecated)
+
+In the previous versions or for the debug usage, we may need to get the input quantization value manually, which is the radix. Below is the API.
+
+```python
+ktc.get_radix(inputs)
+```
+
+Get the radix value from the given inputs.
+
+Args:
+
+* inputs (List): a list of numpy arrays which could be the inputs of the target model.
+
+Raises:
+* `ValueError`: raise if the input values are out of range
+
 
 ## 4.3. FAQ
 

@@ -20,17 +20,17 @@ In this document, you'll learn:
 
 **Major changes of the current version**
 
-* **[v0.19.0]**
-    * Add 730 hardware support as a preview version.
-    * Minor bug fixes.
+* **[v0.20.0]**
+    * Support text procssing models.
+    * Set flatbuffer as the default 720 compiling mode.
+    * Refactor compiler and analyser inner structure.
+    * Bug fixes.
 
 ## 1.2. Workflow Overview
 
 In the following parts of this page, you can go through the basic toolchain working process to get familiar with the toolchain.
 
 Below is a breif diagram showing the workflow of how to generate the binary from a floating-point model using the toolchain.
-
-**TODO: Use simplified graph here.**
 
 <div align="center">
 <img src="../imgs/manual/Manual_Flow_Chart.png">
@@ -44,6 +44,7 @@ To keep the diagram as clear as possible, some details are omitted. But it is en
 3. Compilation. Batch compile multiple bie models into a nef format binary file. Test the nef file and compare the result with the previous step.
 
 In the following parts, we will use LittleNet as the example. Details will be explained later in other sections.
+And all the code below in this section can be found inside the docker at `/workspace/examples/test_python_api.py`.
 
 ### 1.3. Toolchain Docker Deployment
 
@@ -68,11 +69,17 @@ For more details about the model conversion and optimization, please check [3. F
 
 ### 1.4.1. Model Conversion And Optimization
 
+Before we start, we need to import our python package. The package name is `ktc`. You can simply start by having `import ktc` in the script.
+In the following sections, we'll introduce the API and their usage. You can also find the usage using the python `help()` function.
+
+**Note that this package is only available in the docker due to the dependency issue.**
+
 Here the LittleNet model is already in ONNX format. So, we only need to optimize the ONNX model to fix our toolchain.
-Most of our toolchain are exporting Python API. The following model optimization code is also in Python.
+The following model optimization code is in Python since we are using the Python API.
 
 ```python
 import onnx
+# Import the ktc package which is our Python API.
 import ktc
 
 # Load the model.

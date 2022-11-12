@@ -186,7 +186,7 @@ nav:
       - Script Tools:                                               toolchain/appendix/command_line.md
       - Toolchain History:                                          toolchain/appendix/history.md
       - Web GUI:                                                    toolchain/appendix/toolchain_webgui.md
-      - YOLO Example:                                               toolchain/appendix/yolo_example.md
+      - Yolo Example:                                               toolchain/appendix/yolo_example.md
       - Yolo Example (With In-Model Preprocess):                    toolchain/appendix/yolo_example_InModelPreproc_trick.md
   - Model Training Material:
     - Model List:                                                   model_training/index.md

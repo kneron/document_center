@@ -4,7 +4,7 @@ Our toolchain utilities take ONNX files as inputs. The ONNX workflow is mainly a
 
 ## 3.1. Model Conversion and Optimization
 
-The onnx converter part currently support Keras, TFLite, a subset of Tensorflow, Caffe and Pytorch. Here, we will only briefly introduce some common usage of the python API. This part of python API is based on our converter and optimizer open-source project which can be found on Github <https://github.com/kneron/ONNX_Convertor>. The detailed usage of those converter scripts can be found in [ONNX Converter](http://doc.kneron.com/docs/toolchain/converters/). The Tensorflow ktc api is not introduced here. We recommend export the tensorflow model to tflite and convert the tflite model. If you really want to try convert a pb file, please check the onnx converter project.
+The onnx converter part currently support Keras, TFLite, a subset of Tensorflow, Caffe and Pytorch. Here, we will only briefly introduce some common usage of the python API. This part of python API is based on our converter and optimizer open-source project which can be found on Github <https://github.com/kneron/ONNX_Convertor>. We have both Python API and script usage. In this document, we only introduce the Python API. The detailed usage of those converter scripts usage can be found in [ONNX Converter](appendix/converters.md). The Tensorflow ktc api is not introduced here. We recommend export the tensorflow model to tflite and convert the tflite model. If you really want to try convert a pb file, please check the onnx converter project.
 
 The example models used in the following converter command are not included in the docker by default. They can be found on Github <https://github.com/kneron/ConvertorExamples>. You can download them through these terminal commands:
 
@@ -18,6 +18,20 @@ cd ConvertorExamples && git lfs pull
 For Keras, our converter support models from Keras 2.2.4. **Note that `tf.keras` and Keras 2.3 is not supported.** You may
 need to export the model as tflite model and see [section 3.1.4](#314-tf-lite-to-onnx) for TF Lite model conversion.
 
+Here is the API:
+
+```python
+ktc.onnx_optimizer.keras2onnx_flow(keras_model_path, optimize, input_shape)
+```
+
+Return the converted onnx object. Convert keras model to onnx object.
+
+Args:
+
+* keras_model_path (str): the input hdf5/h5 model path.
+* optimize (int, optional): optimization level. Defaults to 0.
+* input_shape (List, optional): change the input shape if set. Only single input model is supported. Defaults to None.
+
 Suppose there is an onet hdf5 model exported By Keras, you need to convert it to onnx by the following python code:
 
 ```python
@@ -27,8 +41,6 @@ result_m = ktc.onnx_optimizer.keras2onnx_flow('/data1/ConvertorExamples/keras_ex
 In this line of python code, `ktc.onnx_optimizer.keras2onnx_flow` is the function that takes an hdf5 file path and convert the hdf5 into an onnx object. The return value `result_m` is the converted onnx object. It need to take one more optimization step (section 3.1.5) before going into the next section.
 
 There might be some warning log printed out by the Tensorflow backend, but we can ignore it since we do not actually run it. You can check whether the conversion succeed by whether there is any exception raised.
-
-This function has more parameters for fine-tuning. Please check [Toolchain Python API](http://doc.kneron.com/docs/toolchain/python_api/) if needed.
 
 
 ### 3.1.2. Pytorch to ONNX
@@ -52,6 +64,21 @@ torch.onnx.export(model, dummy_input, 'output.onnx', opset_version=11)
 
 
 Pytorch exported onnx needs to pass through a special optimization designed for pytorch exported models first.
+
+The following is the Python API:
+
+```python
+ktc.onnx_optimizer.torch_exported_onnx_flow(m, disable_fuse_bn=False):
+```
+
+Return the optimized model. Optimize the Pytorch exported onnx. Note that onnx2onnx_flow is still needed after
+running this optimizaiton.
+
+Args:
+
+* m (ModelProto): the input onnx model
+* disable_fuse_bn (bool, optional): do not fuse BN into Conv. Defaults to False.
+
 Suppose the input file is loaded into a onnx object `exported_m`, here is the python code for pytorch exported onnx optimization:
 
 ```python
@@ -93,6 +120,19 @@ result_m = ktc.onnx_optimizer.torch_exported_onnx_flow(exported_m, disable_fuse_
 
 For caffe, we only support model which can be loaded by [Intel Caffe 1.0](https://github.com/intel/caffe).
 
+The following is the Python API:
+
+```python
+ktc.onnx_optimizer.caffe2onnx_flow(caffe_model_path, caffe_weight_path)
+```
+
+Return the converted onnx object. Convert caffe model to onnx object.
+
+Args:
+
+* caffe_model_path (str): the input model definition (.prototxt).
+* caffe_weight_path (str): the input weight file (.caffemodel).
+
 Here we will use the example from ConvertorExamples. You can find two files for the caffe model: the model structure definition file `mobilenetv2.prototxt` and the model weight file `mobilenetv2.caffemodel`. Here is the example python code for model conversion:
 
 ```python
@@ -104,7 +144,21 @@ In this line of python code, `ktc.onnx_optimizer.caffe2onnx_flow` is the functio
 
 ### 3.1.4. TF Lite to ONNX
 
-We only support unquantized TF Lite models for now. Also tensorflow 2 is not supported yet.
+We only support unquantized TF Lite models for now. Also tensorflow 2 is not supported yet. If our converter cannot process your model correctly, please use the open-source [tf2onnx](https://github.com/onnx/tensorflow-onnx). And use `torch_exported_onnx_flow` API for optimization after that.
+
+The following is our TFLite to ONNX API:
+
+```python
+ktc.onnx_optimizer.tflite2onnx_flow(tflite_path, release_mode, bottom_nodes)
+```
+
+Return the converted onnx object. Convert tflite model to onnx object.
+
+Args:
+
+* tflite_path (str): the input tflite model path.
+* release_mode (bool, optional): whether eliminate the transpose for channel first. Defaults to True.
+* bottom_nodes (List, optional): nodes name in tflite model which is the bottom node of sub-graph. Defaults to [].
 
 Suppose we are using the tflite file `model_unquant.tflite` from the ConvertorExamples, here is the example python code:
 
@@ -123,6 +177,26 @@ This function has more parameters for fine-tuning. Please check [Toolchain Pytho
 
 We provide a general onnx optimize API. We strongly recommend that all the onnx, including the onnx generated from the previous subsections, shall pass this API before going into the next section. This general onnx optimization API would modify the onnx graph to fit the toolchain and Kneron hardware specification. The optimization includes: inference internal value_info shapes, fuse consecutive operators, eliminate do-nothing operators, replace high-cost operators with low-cost operators, etc..
 
+Here is the detailed ONNX optimization API:
+
+```python
+ktc.onnx_optimizer.onnx2onnx_flow(m, disable_fuse_bn=False, bgr=False, norm=False, rgba2yynn=False, eliminate_tail=False, opt_matmul=False, opt_720=False, duplicate_shared_weights=True)
+```
+
+Return the optimized model. Optimize the onnx model.
+
+Args:
+
+* m (ModelProto): the input onnx ModelProto
+* disable_fuse_bn (bool, optional): do not fuse BN into Conv. Defaults to False.
+* bgr (bool, optional): add an Conv layer to convert rgb input to bgr. Defaults to False.
+* norm (bool, optional): add an Conv layer to add 0.5 tp the input. Defaults to False.
+* rgba2yynn (bool, optional): add an Conv layer to convert rgb input to yynn . Defaults to False.
+* eliminate_tail (bool, optional): remove the trailing NPU unsupported nodes. Defaults to False.
+* opt_matmul (bool, optional): optimize the MatMul layers according to the NPU limit. Defaults to False.
+* opt_720 (bool, optional): optimize the model for the kneron hardware kdp720. Defaults to False.
+* duplicate_shared_weights(bool, optional): duplicate shared weights. Defaults to False.
+
 Suppose we have a onnx object, here is the example python code:
 
 ```python
@@ -132,8 +206,6 @@ optimized_m = ktc.onnx_optimizer.onnx2onnx_flow(result_m, eliminate_tail=True, o
 In this line of python code, `ktc.onnx_optimizer.onnx2onnx_flow` is the function that takes an onnx object and optimize it. The return value `result_m` is the converted onnx object.
 
 **Note** that for hardware usage, `eliminate_tail` should be set to true as in the example. This option eliminate the no calculation operators and the npu unsupported operators (Reshape, Transpose, ...) at the last of the graph. However, since this changes the graph structure, you may need to check the model yourself and add the related functions into post-process to keep the algorithm consistent. If you only want to use onnx model for software testing, the `eliminate_tail` can be set to false to keep the model same as the input from the mathematics perspective. `opt_matmul` is also for hardware usage which optimize the MatMul nodes according to the NPU limit. By default, it is set to False. You only need to enable this flag if there are MatMul nodes with inputs more than 2D.
-
-This function has more parameters for fine-tuning. Please check [Toolchain Python API](http://doc.kneron.com/docs/toolchain/python_api/) if needed.
 
 By the way, to save the model, you can use the following function from the onnx package.
 
@@ -158,7 +230,21 @@ If you have met errors which are related to the opset version or the ir version.
 
 ### 3.1.6. ONNX Opset Upgrade
 
-From toolchain version 0.14.0, ONNX in the docker has been updated from 1.4.1 to 1.6. And the default opset that converters support is changed from opset 9 into opset 11. IR version is updated from 4 to 6. Thus, if you have a onnx model with opset 9 or IR version 4, you may need to update it with the following Python API:
+From toolchain version 0.14.0, ONNX in the docker has been updated from 1.4.1 to 1.6. And the default opset that converters support is changed from opset 9 into opset 11. IR version is updated from 4 to 6. Thus, if you have a onnx model with opset 9 or IR version 4, you may need to update it with the following Python API. Actually, the current ONNX version inside the docker is upgraded to 1.7.0. ONNX 1.7.0 do not have many changes compared to ONNX 1.6.*. Thus, the following API is still in use.
+
+Here is the API:
+
+```python
+ktc.onnx_optimizer.onnx1_4to1_6(model)
+```
+
+Return the updated onnx model. Update model ir_version from 4 to 6 and update opset from 9 to 11.
+
+Args:
+
+* model (onnx.ModelProto): input onnx model.
+
+Here is an example usage.
 
 ```python
 new_m = ktc.onnx_optimizer.onnx1_4to1_6(old_m)
@@ -172,9 +258,145 @@ In this line of python code, `ktc.onnx_optimizer.onnx1_4to1_6` is the function t
 KL520/KL720/KL530 NPU supports most of the compute extensive OPs, such as Conv, BatchNormalization, Fully Connect/GEMM, in order to speed up the model inference run time. On the other hand, there are some OPs that KL520 NPU cannot support well, such as `Softmax` or `Sigmod`. However, these OPs usually are not compute extensive and they are better to execute in CPU.
 Therefore, Kneron provides python APIs which help user modify the model so that KL520 NPU can run the model more efficiently.
 
-You can find the detailed description of this tool from [Toolchain Python API](http://doc.kneron.com/docs/toolchain/python_api/) for the python API and [ONNX Converter](http://doc.kneron.com/docs/toolchain/converters/) for the command usage.
+Following are the Python APIs we provide.
 
-## 3.2 IP Evaluation
+#### Delete specific nodes
+
+```python
+ktc.onnx_optimizer.delete_nodes(model, node_names)
+```
+
+Return the result onnx model. Delete nodes with the given names.
+
+Args:
+
+* model (onnx.ModelProto): the input onnx model.
+* node_names (List[str]): a list of node names.
+
+#### Delete specific inputs
+
+```python
+ktc.onnx_optimizer.delete_inputs(model, value_names)
+```
+
+Return the result onnx model. Delete specific inputs
+
+Args:
+
+* model (onnx.ModelProto): input onnx model.
+* value_names (List[str]): inputs to delete.
+
+#### Delete specific outputs
+
+```python
+ktc.onnx_optimizer.delete_outputs(model, value_names)
+```
+
+Return the result onnx model. Delete specific outputs
+
+Args:
+
+* model (onnx.ModelProto): input onnx model.
+* value_names (List[str]): outputs to delete.
+
+#### Cut the graph from the given node.
+
+```python
+ktc.onnx_optimizer.cut_graph_from_nodes(model, node_names)
+```
+
+Return the result onnx model. Cut the graph from the given node. The difference between this function and the
+`delete_node` is that this function also delete all the following nodes after the specific nodes.
+
+Args:
+
+* model (onnx.ModelProto): the input onnx model.
+* node_names (List[str]): a list of node names.
+
+#### Cut the graph from the given operator type.
+
+```python
+ktc.onnx_optimizer.remove_nodes_with_types(model, type_names)
+```
+
+Return the result onnx model. Cut the graph from the nodes with specific operation types. Similar behaviour to
+`cut_graph_from_nodes`.
+
+Args:
+
+* model (onnx.ModelProto): the input onnx model.
+* type_names (List[str]): operator types to cut from.
+
+#### Change input/output shapes
+
+```python
+ktc.onnx_optimizer.change_input_output_shapes(model, input_shape_mapping=None, output_shape_mapping=None)
+```
+
+Return the result onnx model. Change input shapes and output shapes.
+
+Args:
+
+* model (onnx.ModelProto): input onnx model.
+* input_shape_mapping (Dict, optional): mapping from input names to the shapes to change. Defaults to None.
+* output_shape_mapping (Dict, optional): mapping from output names to the shapes to change. Defaults to None.
+
+#### Add do-nothing Conv nodes after specific values
+
+```python
+ktc.onnx_optimizer.add_conv_after(model, value_names)
+```
+
+Return the result onnx model. Add a do-nothing Conv node after the specific value.
+
+Args:
+
+* model (onnx.ModelProto): input onnx model.
+* value_names (List[str]): values after which we add Conv.
+
+#### Add do-nothing BN nodes after specific values
+
+```python
+ktc.onnx_optimizer.add_bn_after(model, value_names)
+```
+
+Return the result onnx model. Add a do-nothing BN node after the specific value.
+
+Args:
+
+* model (onnx.ModelProto): input onnx model.
+* value_names (List[str]): values after which we add BN.
+
+#### Rename an output
+
+```python
+ktc.onnx_optimizer.rename_output(model, old_name, new_name)
+```
+
+Return the result onnx model. Rename the specific output
+
+Args:
+
+* model (onnx.ModelProto): input onnx model.
+* old_name (str): old output name.
+* new_name (str): new output name.
+
+#### Input pixel shift
+
+```python
+ktc.onnx_optimizer.pixel_modify(model, scale, bias)
+```
+
+Return the result onnx model. Add a special BN node to adjust the input range. Currently only support single input model.
+
+Args:
+
+* model (onnx.ModelProto): input onnx model.
+* scale (List[float]): the scale of the BN node.
+* bias (List[float]): the bias of the BN node
+
+
+## 3.2. IP Evaluation
 
 Before we start quantizing the model and try simulating the model, we need to test if the model can be taken by the toolchain structure and estimate the performance.
 IP evaluator is such a tool which can estimate the performance of your model and check if there is any operator or structure not supported by our toolchain.
@@ -182,13 +404,22 @@ IP evaluator is such a tool which can estimate the performance of your model and
 We need to create a `ktc.ModelConfig` object. The `ktc.ModelConfig` is the class which contains the basic needed information of a model. You can initilize it through the API below.
 
 ```python
-km = ktc.ModelConfig(id, version, platform, onnx_model=None, onnx_path=None, bie_path=None)
+class ktc.ModelConfig(self, id, version, platform, onnx_model=None, onnx_path=None, bie_path=None)
 ```
 
-* `id` is the identifier of the model. It should be a integer greater than 0. ID before 32768 are reserved for Kneron models. Please use ID greater than 32768 for custom models.
-* `version` is the model version. It should be a four digit hex code which is written as string, e.g. '001a'.
-* `platform` is the target platform for this model. It should be '520', '720', '530', '630' or '730.
-* `onnx_model`, `onnx_path` and `bie_path`. User should provide one of those three parameter and only one. It stores the model itself. `onnx_model` takes the onnx object which is generated through the converter APIs or loaded through onnx library. `onnx_path` is the path to a onnx file. `bie_path` is the path to a bie file. The bie file is the file generated by the kneron toolchain after quantization, which is introduced in the later section.
+Create an Kneron model config object. One of these three parameters is required: onnx_model, onnx_path, bie_path.
+
+Args:
+
+* id (int): model ID
+* version (str): version number which should be a four digit hex, e.g. "0a2f"
+* platform (str): hardware platform, should be one of "520", "720", "530", "630", "730"
+* onnx_model (ModelProto, optional): loaded onnx model object. Defaults to None.
+* onnx_path (str, optional): onnx file path. Defaults to None.
+* bie_path (str, optional): bie file path. Defaults to None.
+
+Note that for `onnx_model`, `onnx_path` and `bie_path`, user should provide one of those three parameter and only one.
+The bie file is the file generated by the kneron toolchain after quantization, which is introduced in the section 4.
 
 For this example, we create the LittleNet ModelConfig with the following python code:
 
@@ -197,6 +428,13 @@ km = ktc.ModelConfig(32769, "0001", "520", onnx_path="/workspace/examples/Little
 ```
 
 `evaluate` is class function of the `ktc.ModelConfig`.
+
+```python
+classmethod evaluate()
+```
+
+Return the evaluation result as `str`. The IP evaluator gives an estimation of the model running performance. It can run
+with either onnx or bie. Below is an example usage.
 
 ```python
 eval_result = km.evaluate()
@@ -215,7 +453,7 @@ Please check the report to see if the performance meets your expectation. Please
 > You can find the profiling configuration under `/workspace/scripts/res`. The configuration files are named like `ip_config_<platform>.json`. You can change the
 > bandwidth according to your scenario .
 
-## 3.3 E2E Simulator Check (Floating Point)
+## 3.3. E2E Simulator Check (Floating Point)
 
 Before going into the next section of quantization, we need to ensure the optimized onnx file can produce the same result as the originally designed model.
 

@@ -1,20 +1,50 @@
-## 5. NEF Workflow
+# 5. NEF Workflow
 
 The nef file is the binary file after compiling and can be taken by the Kneron hardware. But unlike the utilities mentioned above, the process in this chapter can compile multiple models into one nef file. This process is call batch process. In this chapter, we would go through how to batch compile and how to verify the nef file.
 
-### 5.1. Batch Compile
+## 5.1. Batch Compile
 
-Batch compile turns multiple models into a single binary file. But, we would start with single model first.
-
-The Python API is very simple:
+Batch compile turns multiple models into a single binary file. We have two APIs for batch compiling. The nef file path will be returned from both functions.
 
 ```python
-compile_result = ktc.compile(model_list)
+ktc.compile(model_list, output_dir=None, dedicated_output_buffer=True, weight_compress=False)
 ```
 
-The `compile_result` is the path for the generated nef file. By default, it is under /data1/batch_compile. It takes a list of `ktc.ModelConfig` object as the input `model_list`. The usage of `kt.ModelConfig` can be found in section 3.2. Note that the ModelConfig onject must have bie file inside. In details, it must be under either of the following status: the ModelConfig is initialized with `bie_path`, the ModelConfig is initialized with `onnx_model` or `onnx_path` but it have successfully run `analysis` function.
+Compile the models and generate the nef file. The nef path will be returned.
 
-For the LittleNet example, please check the code below. Note that `km` is the `ktc.ModelConfig` object we generate in section 3.2 and use in the section 4.
+Args:
+
+* model_list (List[ModelConfig]): a list of models need to be compile. Models with onnx should run analysis() before compilation.
+* output_dir (str, optional): output directory. Defaults to None.
+* dedicated_output_buffer (bool, optional): dedicated output buffer. Defaults to True.
+* weight_compress (bool, optional): compress weight to slightly reduce the binary file size. Defaults to False.
+* hardware_cut_opt (bool, optional): optimize the hardware memory usage while processing large inputs. This option might cause the compiling time increase. Currently, only available for 720. Defaults to False.
+* flatbuffer (bool, optional): enable new flatbuffer mode for 720. Defauls to True.
+
+```python
+ktc.encrypt_compile(model_list, output_dir=None, dedicated_output_buffer=True, mode=None, key="", key_file="", encryption_efuse_key="", weight_compress=False)
+```
+
+Compile the models, generate an encrypted nef file. The nef path will be returned.
+
+Args:
+
+* model_list (List[ModelConfig]): a list of models need to be compile. Models with onnx should run analysis() before compilation.
+* output_dir (str, optional): output directory. Defaults to None.
+* dedicated_output_buffer (bool, optional): dedicated output buffer. Defaults to True.
+* mode (int, optional): There are two modes: 1, 2. Defaults to None, which is no encryption and acts the same as `ktc.compile`.
+* key (str, optional): a hex code. Required in mode 1 Defaults to "".
+* key_file (str, optional): key file path. Required in mode 1. Defaults to "".
+* encryption_efuse_key (str, optional): a hex code. Required in mode 2 and optional in mode 1. Defaults to "".
+* weight_compress (bool, optional): compress weight to slightly reduce the binary file size. Defaults to False.
+* hardware_cut_opt (bool, optional): optimize the hardware memory usage while processing large inputs. This option might cause the compiling time increase. Currently, only available for 720. Defaults to False.
+* flatbuffer (bool, optional): enable new flatbuffer mode for 720. Defauls to True.
+
+We would start with single model first.
+
+The return value is the path for the generated nef file. By default, it is under /data1/batch_compile. It takes a list of `ktc.ModelConfig` object as the input `model_list`. The usage of `kt.ModelConfig` can be found in section 3.2. Note that the ModelConfig onject must have bie file inside. In details, it must be under either of the following status: the ModelConfig is initialized with `bie_path`, the ModelConfig is initialized with `onnx_model` or `onnx_path` but it have successfully run `analysis` function.
+
+For the LittleNet example, please check the code below. Note that `km` is the `ktc.ModelConfig` object we generate in section 3.2 and quantized in the section 4.
 
 ```python
 compile_result = ktc.compile([km])
@@ -29,11 +59,9 @@ km2 = ktc.ModelConfig(32770, "0001", "520", bie_path="dummy.bie")
 compile_result = ktc.compile([km, km2])
 ```
 
-Note that for multiple models, all the models should share the same hardware platform and the model ID should be different.
+Note that for multiple models, all the models should share the same hardware platform and the model ID must be different.
 
-This function has more parameters for fine-tuning. Please check [Toolchain Python API](http://doc.kneron.com/docs/toolchain/python_api/) if needed.
-
-### 5.2. E2E Simulator Check (Hardware)
+## 5.2. E2E Simulator Check (Hardware)
 
 After compilation, we need to check if the nef can work as expected.
 
@@ -59,7 +87,7 @@ hw_results = ktc.kneron_inference(input_data, nef_file=compile_result, model_id=
 
 After getting the `hw_results` and post-process it, you may want to compare the result with the `fixed_results` which is generated in section 4.2 to see if the results match. If the results mismatch, please contact us direcly through forum <https://www.kneron.com/forum/>.
 
-### 5.3. NEF Combine
+## 5.3. NEF Combine (Optional)
 
 This section is not part of the normal workflow. But it would be very useful when you already have multiple nef files, some of which might from different versions of the toolchain, and you want to combine them into one. Here we provide a python API to achieve it.
 
@@ -67,7 +95,12 @@ This section is not part of the normal workflow. But it would be very useful whe
 ktc.combine_nef(nef_path_list, output_path = "/data1/combined")
 ```
 
-Here the `nef_path_list` shall be a list of the `str` which are the path to the nef files you want to combine. It should not be empty. And the second argument is optional. It should be the output folder path of the combined nef. By default, it should be `/data1/combined`. The return value is the output folder path. The combined nef file would be under the output folder and be named as `models_<target>.def`. For example, if your target platform is 520, the result file name would be `models_520.nef` inside the output folder.
+Below is the API. The return value is the output folder path.
+
+Args:
+
+* nef_list (List[str]): a list of nef file paths to combine.
+* output_path (str, optional): output folder name. Defaults to /data1/combined. The nef path would be /data1/combined/models_<target>.nef.
 
 Here is an usage example. Suppose you have three 520 nef files: `/data1/model_32769.nef`, `/data1/model_32770.nef` and `/data1/model_32771.nef`. Then you can use the following code to combine them. The result is "/data1/combined/models_520.nef"
 
