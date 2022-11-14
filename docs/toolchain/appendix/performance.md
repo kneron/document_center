@@ -33,7 +33,7 @@
 | YOLOv3               | 416x416 |    10.1        | 98.6 ms        |        No        |
 | YOLOv5s              | 640x640 |    25.7        | 38.9 ms        |        No        |
 | Centernet res101     | 512x512 |    2.84        | 352 ms         |        No        |
-| Lite-HRNet           | 256x192 |    136         | 7.38 ms        |        No        |
+| Lite-HRNet           | 256x192 |    77.6        | 12.9 ms        |        No        |
 
 *Performance simulation result on NPU KDP530:*
 
