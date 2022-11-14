@@ -7,7 +7,7 @@ how to start the webgui service and how to use it to generate nef file for the K
 
 ## 1. Installation
 
-The installation is the same as in the [toolchain manual](http://doc.kneron.com/docs/#toolchain/manual/).
+The installation is the same as in the [toolchain manual](http://doc.kneron.com/docs/#toolchain/manual_1_overview/).
 If you already have the kneron toolchain docker later than v0.18.0. You can just skip this section.
 
 **Review the system requirements below before start installing and using the toolchain.**

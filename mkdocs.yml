@@ -172,17 +172,22 @@ nav:
         - DME API reference:                                        host_lib_0.8.0/host_api/dme_api.md
         - ISI API reference:                                        host_lib_0.8.0/host_api/isi_api.md
         - System API reference:                                     host_lib_0.8.0/host_api/system.md
-  - Toolchain Docker:
-    - Toolchain Manual:                                             toolchain/manual.md
-    - Yolo Example:                                                 toolchain/yolo_example.md
-    - Yolo Example (With In-Model Preprocess):                      toolchain/yolo_example_InModelPreproc_trick.md
-    - End to End Simulator:                                         toolchain/python_app/app_flow_manual.md
-    - ONNX Converter:                                               toolchain/converters.md
-    - Script Tools:                                                 toolchain/command_line.md
-    - Python API:                                                   toolchain/python_api.md
-    - Web GUI:                                                      toolchain/toolchain_webgui.md
-    - Toolchain Common Exceptions:                                  toolchain/errors.md
-    - History Versions:                                             toolchain/history.md
+  - Toolchain Docker Manual:
+    - 1. Toolchain Manual Overview:                                 toolchain/manual_1_overview.md
+    - 2. Toolchain Deployment:                                      toolchain/manual_2_deploy.md
+    - 3. Floating-Point Model Preparation:                          toolchain/manual_3_onnx.md
+    - 4. Fixed-Point Model Generation:                              toolchain/manual_4_bie.md
+    - 5. Compilation:                                               toolchain/manual_5_nef.md
+    - Appendix:
+      - End to End Simulator:                                       toolchain/appendix/app_flow_manual.md
+      - Hardware Performance:                                       toolchain/appendix/performance.md
+      - Hardware Supported Operators:                               toolchain/appendix/operators.md
+      - ONNX Converter:                                             toolchain/appendix/converters.md
+      - Script Tools:                                               toolchain/appendix/command_line.md
+      - Toolchain History:                                          toolchain/appendix/history.md
+      - Web GUI:                                                    toolchain/appendix/toolchain_webgui.md
+      - Yolo Example:                                               toolchain/appendix/yolo_example.md
+      - Yolo Example (With In-Model Preprocess):                    toolchain/appendix/yolo_example_InModelPreproc_trick.md
   - Model Training Material:
     - Model List:                                                   model_training/index.md
     - Evaluation Result:                                            model_training/evaluation.md
