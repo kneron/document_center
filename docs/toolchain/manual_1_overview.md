@@ -24,6 +24,7 @@ In this document, you'll learn:
     * Support text procssing models.
     * Set flatbuffer as the default 720 compiling mode.
     * Refactor compiler and analyser inner structure.
+    * Refactor toolchain manual.
     * Bug fixes.
 
 ## 1.2. Workflow Overview
