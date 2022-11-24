@@ -245,7 +245,7 @@ the output, then the model is transposed into channel first. We can use the mode
 [section 6](#6-onnx-to-onnx-onnx-optimization).
 
 <div align="center">
-<img src="../imgs/manual/fig4_pre_edited_model.png">
+<img src="../../imgs/manual/fig4_pre_edited_model.png">
 <p><span style="font-weight: bold;">Figure 4.</span> Pre-edited model </p>
 </div>
 

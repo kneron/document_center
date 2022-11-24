@@ -74,7 +74,7 @@ After running the command above successfully, you can access the web GUI at <htt
 Here is a brief introduction on how to use the web GUI.
 
 <div align="center">
-<img src="../imgs/webgui/webgui_0.png">
+<img src="../../imgs/webgui/webgui_0.png">
 </div>
 
 Notes:
