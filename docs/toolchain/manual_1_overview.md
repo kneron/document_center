@@ -24,6 +24,7 @@ In this document, you'll learn:
     * Support text procssing models.
     * Set flatbuffer as the default 720 compiling mode.
     * Refactor compiler and analyser inner structure.
+    * **Due to the structure change, batch compiler do not backwark support previous bie files.**
     * Refactor toolchain manual.
     * Bug fixes.
 
@@ -123,7 +124,7 @@ We are using the onnx as the input model now. But it also can take other file fo
 from PIL import Image
 import numpy as np
 
-# A very simple preprocess function. Note that the image is transposed into channel last format.
+# A very simple preprocess function. Note that the image is transposed into channel last format (HWC).
 def preprocess(input_file):
     image = Image.open(input_file)
     image = image.convert("RGB")
@@ -136,7 +137,7 @@ input_data = [preprocess("/workspace/examples/LittleNet/pytorch_imgs/Abdullah_00
 
 # The `onnx_file` is generated and saved in the previous code block.
 # The `input_names` are the input names of the model.
-# The `input_data` order should be kept corresponding to the input names.
+# The `input_data` order should be kept corresponding to the input names. It should be in channel last format (HWC).
 # The inference result will be save as a list of array.
 floating_point_inf_results = ktc.kneron_inference(input_data, onnx_file='/data1/optimized.onnx', input_names=["data_out"])
 ```

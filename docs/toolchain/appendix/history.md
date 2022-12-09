@@ -25,6 +25,7 @@
     * Support text procssing models.
     * Set flatbuffer as the default 720 compiling mode.
     * Refactor compiler and analyser inner structure.
+    * **Due to the structure change, batch compiler do not backwark support previous bie files.**
     * Refactor toolchain manual.
     * Bug fixes.
 * **[v0.19.0]**

@@ -467,7 +467,7 @@ The python code would be like:
 inf_results = ktc.kneron_inference(input_data, onnx_file="/workspace/examples/LittleNet/LittleNet.onnx", input_names=["data_out"])
 ```
 
-In the code above, `inf_results` is a list of result data. `onnx_file` is the path to the input onnx. `input_data` is a list of input data after preprocess the `input_names` is a list of string mapping the input data to specific input on the graph using the sequence. **Note that the input shoule have the same dimension as the model but in channel last format.**
+In the code above, `inf_results` is a list of result data. `onnx_file` is the path to the input onnx. `input_data` is a list of input data after preprocess. It should be in channel last format (HWC). The `input_names` is a list of string mapping the input data to specific input on the graph using the sequence. **Note that the input should have the same dimension as the model but in channel last format (HWC).**
 
 Here we provide a very simple preprocess function which only do the resize and normalization:
 
