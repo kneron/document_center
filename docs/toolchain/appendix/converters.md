@@ -97,8 +97,7 @@ cd /workspace/libs/ONNX_Convertor/keras-onnx && python rgba2yynn.py input_hdf5_f
 
 ## 2 Pytorch to ONNX
 
-The `pytorch2onnx.py` script not only takes `pth` file as the input. It also takes Pytorch exported `onnx` as the input.
-In fact, we recommend using the Pytorch exported `onnx` file instead of the `pth` file, since the Pytorch do not has a
+We recommend using the Pytorch exported `onnx` file instead of the `pth` file, since the Pytorch do not has a
 very good model save and load API. You can check TIPS below on how to export models to onnx.
 
 We currently only support models exported by Pytorch version >=1.0.0, <=1.7.1, no matter it is a `pth` file or an `onnx`
@@ -119,18 +118,6 @@ torch.onnx.export(model, dummy_input, 'output.onnx', opset_version=11)
 > In the example, `(1, 3, 224, 224)` are batch size, input channel, input height and input width. `model` is the model
 > object you want to export. `output.onnx` is the output file.
 
-*__Run pytorch2onnx with pth file__*
-
-Suppose the input file is called `/docker_mount/resnet34.pth` and you want to save the onnx as
-`/docker_mount/resnet34.onnx`. The input channel, height, width for the model are (3, 224, 224). Here is the example
-command:
-
-```bash
-python /workspace/libs/ONNX_Convertor/optimizer_scripts/pytorch2onnx.py /docker_mount/resnet34.pth /docker_mount/resnet34.onnx --input-size 3 224 224 
-```
-
-You need to run the command in [section 6](#6-onnx-to-onnx-onnx-optimization) after this step.
-
 *__Run pytorch_exported_onnx_preprocess with onnx file__*
 
 Suppose the input file is called `/docker_mount/resnet34.onnx` and you want to save the optimized onnx as
@@ -148,6 +135,7 @@ You need to run the command in [section 6](#6-onnx-to-onnx-onnx-optimization) af
 If you meet the errors related to `node not found` or `invalid input`, this might be caused by a bug in the onnx
 library. Please try using `--no-bn-fusion` flag.
 
+**Script `pytorch2onnx.py` is no longer available since toolchain v0.20.0. Please use `torch.onnx` to export the onnx model and use `pytorch_exported_onnx_preprocess.py` to optimize it instead.**
 
 ## 3 Caffe to ONNX
 

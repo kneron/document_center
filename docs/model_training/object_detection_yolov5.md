@@ -171,14 +171,15 @@ python ../exporting/yolov5_export.py --data path_to_pretrained_path_yaml_file
 We could get onnx model. 
 
 
-## Converting onnx by tool chain
+## Converting onnx by toolchain
+
 Pull the latest [ONNX converter](https://github.com/kneron/ONNX_Convertor/tree/master/optimizer_scripts) from github. You may read the latest document from Github for converting ONNX model. Execute commands in the folder `ONNX_Convertor/optimizer_scripts`:
 (reference: https://github.com/kneron/ONNX_Convertor/tree/master/optimizer_scripts)
 
 ```bash
 python -m onnxsim input_onnx_model output_onnx_model
 
-python pytorch2onnx.py input.pth output.onnx
+python pytorch_exported_onnx_preprocess.py output.onnx output_optimized.onnx
 ```
 
 We could get converted onnx model.

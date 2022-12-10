@@ -94,7 +94,7 @@ python train.py --gpu -1 --backbone backbone_name --model-def-path path_to_model
 `--loss` loss function. Options: cross_entropy. (Default: cross_entropy)
 
 # Converting to ONNX
-You may check the [Toolchain manual](http://doc.kneron.com/docs/#toolchain/manual/) for converting PyTorch model to ONNX model. Let's go through an example for converting FP_classifier PyTorch model to ONNX model.
+You may check the [Toolchain manual](https://doc.kneron.com/docs/#toolchain/manual_3_onnx/) for converting PyTorch model to ONNX model. Let's go through an example for converting FP_classifier PyTorch model to ONNX model.
 
 Execute commands in the folder `classification`: 
 ```shell
@@ -113,7 +113,7 @@ Then, execute commands in the folder `ONNX_Convertor/optimizer_scripts`:
 (reference: https://github.com/kneron/ONNX_Convertor/tree/master/optimizer_scripts)
 
 ```shell
-python pytorch2onnx.py onnx_model_path onnx_model_convert_path
+python pytorch_exported_onnx_preprocess.py onnx_model_path onnx_model_convert_path
 
 ```
 

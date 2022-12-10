@@ -262,7 +262,7 @@ Next, pull the latest [ONNX converter](https://github.com/kneron/ONNX_Convertor/
 (reference: https://github.com/kneron/ONNX_Convertor/tree/master/optimizer_scripts)
 
 ```bash
-python pytorch2onnx.py input.pth output.onnx
+python pytorch_exported_onnx_preprocess.py output.onnx output_optimized.onnx
 ```
 
 
