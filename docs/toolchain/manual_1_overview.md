@@ -9,7 +9,7 @@
 
 ## 1.1. Introduction
 
-KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 520, 720, 530 and 730(preview).
+KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 520, 720, 530, 630 and 730(preview).
 For better environment compatibility, we provide a docker which include all the dependencies as well as the toolchain software.
 
 In this document, you'll learn:
