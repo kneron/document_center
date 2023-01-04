@@ -94,7 +94,7 @@ import torch
 import torch.onnx
 
 # Load the pth saved model
-pth_model = torch.load("/data1/ConvertorExamples/keras_example/resnet34.pth", map_location='cpu')
+pth_model = torch.load("/data1/ConvertorExamples/pytorch_example/resnet34.pth", map_location='cpu')
 # Export the model
 dummy_input = torch.randn(1, 3, 224, 224)
 torch.onnx.export(pth_model, dummy_input, '/data1/resnet34.onnx', opset_version=11)
