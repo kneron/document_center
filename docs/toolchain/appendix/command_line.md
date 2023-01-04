@@ -177,7 +177,7 @@ Under `/data1`, you’ll find a folder called `batch_compile`, which contains th
 
 The name 'batch compile' comes from its ability to compile multiple models together.
 
-The `/data1/batch_input_params.json` is just like in section 4.1, but with one more model which can be found under E2E simulator folder.
+The `/data1/batch_input_params.json` is just like in section 4.1, but with one more model. (This model is not provided. You need to prepare one yourself.)
 
 ```json
 {
@@ -190,7 +190,7 @@ The `/data1/batch_input_params.json` is just like in section 4.1, but with one m
         {
             "id": 32770,
             "version": "1",
-            "path": "/workspace/E2E_simulator/app/fd_external/model/520/ssd7_0.8_epoch-97_loss-0.1407_val_loss-0.0825_opt.piano.kdp520.scaled.quan.wqbi.bie"
+            "path": "/data1/ssd7_0.8_epoch-97_loss-0.1407_val_loss-0.0825_opt.piano.kdp520.scaled.quan.wqbi.bie"
         }
     ]
 }
