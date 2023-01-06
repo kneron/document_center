@@ -246,6 +246,7 @@ Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped fo
         printf("\n");
 
         free(img_buf);
+        kp_release_model_nef_descriptor(&model_desc);
         kp_disconnect_devices(device);
 
         return 0;

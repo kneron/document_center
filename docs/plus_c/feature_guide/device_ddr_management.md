@@ -57,6 +57,8 @@ typedef struct
 
 2. `kp_ddr_manage_attr_t` must be prepared and stored into `kp_device_group_s` using `kp_store_ddr_manage_attr()` before calling `kp_load_model()`, `kp_load_encrypted_models()` or `kp_load_model_from_flash()`.
 
-3. If all size in customized configuration is larger than the available DDR space, the configuration will be failed.
+3. System has reserved 15 MB from DDR space for other working buffers.
+
+4. If (System Reserved + Model Size + (Input Buffer Count x Input Buffer Size) + (Result Buffer Count x Result Buffer Size)) is larger than the available DDR space, the configuration will fail.
 
 Please refer [Device FIFO Queue Config Example](../introduction/run_examples.md#17-device-fifo-queue-config-example) for the demonstration.

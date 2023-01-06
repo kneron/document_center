@@ -17,6 +17,7 @@ In order to infer without hardware image preprocessing, the input data must do t
 **Reference Examples**:  
 
 - `KL520DemoGenericDataInference.py`  
+- `KL630DemoGenericDataInference.py`  
 - `KL720DemoGenericDataInference.py`  
 
 ### Inference without Built-In Hardware Image Pre-Processing
@@ -71,8 +72,9 @@ In order to infer without hardware image preprocessing, the input data must do t
         ```python
         # toolchain calculate the radix value from input data (after normalization), and set it into NEF model.
         # NPU will divide input data "2^radix" automatically, so, we have to scaling the input data here due to this reason.
-        data *= (pow(2, model_input_radix) * model_input_scale)
-        data = data.astype(np.int8)
+        data *= (np.power(2, model_input_radix) * model_input_scale)
+        data = np.round(data)
+        data = np.clip(data, -128, 127).astype(np.int8)
         ```
 
     - Re-layout data to fit NPU data layout format  
@@ -119,9 +121,56 @@ In order to infer without hardware image preprocessing, the input data must do t
             npu_input_buffer = re_layout_data.tobytes()
             ```
 
-        - For KL720  
+        - For KL630
 
-            > More information about *NPU data layout format*,please refer to [Supported NPU Data Layout Format](../../../plus_c/appendix/supported_npu_data_layout_format.md)  
+            > More information about *NPU data layout format*, please refer to [Supported NPU Data Layout Format](../../../plus_c/appendix/supported_npu_data_layout_format.md)  
+
+            ```python
+            # re-layout the data to fit NPU data layout format
+            # KL720 supported NPU input layout format: 4W4C8B, 1W16C8B, 16W1C8B
+
+            if kp.ModelTensorDataLayout.KP_MODEL_TENSOR_DATA_LAYOUT_4W4C8B == model_input_data_layout:
+                width_align_base = 4
+                channel_align_base = 4
+            elif kp.ModelTensorDataLayout.KP_MODEL_TENSOR_DATA_LAYOUT_1W16C8B == model_input_data_layout:
+                width_align_base = 1
+                channel_align_base = 16
+            elif kp.ModelTensorDataLayout.KP_MODEL_TENSOR_DATA_LAYOUT_16W1C8B == model_input_data_layout:
+                width_align_base = 16
+                channel_align_base = 1
+            else:
+                print(' - Error: invalid input NPU layout format {}'.format(str(model_input_data_layout)))
+                exit(0)
+
+            # calculate width alignment size, channel block count
+            model_input_width_align = width_align_base * math.ceil(model_input_width / float(width_align_base))
+            model_input_channel_block_num = math.ceil(model_input_channel / float(channel_align_base))
+
+            # create re-layout data container
+            # KL630 dimension order: CxHxW
+            re_layout_data = np.zeros((model_input_channel_block_num,
+                                    model_input_height,
+                                    model_input_width_align,
+                                    channel_align_base), dtype=np.int8)
+
+            # fill data in re-layout data container
+            model_input_channel_block_offset = 0
+            for model_input_channel_block_idx in range(model_input_channel_block_num):
+                model_input_channel_block_offset_end = model_input_channel_block_offset + channel_align_base
+                model_input_channel_block_offset_end = model_input_channel_block_offset_end if model_input_channel_block_offset_end < model_input_channel else model_input_channel
+
+                re_layout_data[model_input_channel_block_idx, :model_input_height, :model_input_width, :(model_input_channel_block_offset_end - model_input_channel_block_offset)] = \
+                    data[:, :, model_input_channel_block_offset:model_input_channel_block_offset_end]
+
+                model_input_channel_block_offset += channel_align_base
+
+            # convert re-layout data to npu inference buffer
+            npu_input_buffer = re_layout_data.tobytes()
+            ```
+
+        - For KL720
+
+            > More information about *NPU data layout format*, please refer to [Supported NPU Data Layout Format](../../../plus_c/appendix/supported_npu_data_layout_format.md)  
 
             ```python
             # re-layout the data to fit NPU data layout format

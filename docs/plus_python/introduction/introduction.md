@@ -2,7 +2,7 @@
 
 ## Basic Features
 
-**Kneron PLUS** stands for *Platform Library Unified Software* which is a framework comprising new software(SW) and firmware(FW) design for KL520 (and alpha for KL720).
+**Kneron PLUS** stands for *Platform Library Unified Software* which is a framework comprising new software(SW) and firmware(FW) design for KL520 and KL720 (and alpha for KL630).
 
 In order to run the inference of models on Kneron AI devices, there are three parts of AI application development are required:
 
@@ -14,7 +14,7 @@ Below diagram depicts three parts of development in a big picture.
 
 ![](../imgs/KL520_develop_flow.png)
 
-However, this document only focuses on the **software development** and the **firmware development**. For the **model development**, please refer to the [Toolchain Docker](../../toolchain/manual_1_overview.md) part.
+However, this document only focuses on the **software development** and the **firmware development**. For the **model development**, please refer to the [Toolchain Docker](../../toolchain/manual.md) part.
 
 In comparison with the previous SW/FW framework, this aims to simplify the design flow for AI applications development.
 
@@ -31,58 +31,61 @@ Below gives some definitions regarding the Kneron PLUS:
 
 The features which PLUS Supported are listed below:
 
-Index   | Category              | Supported Item                                                            | Minimum Version   | KL520 | KL720
-------- | :-------------------- | :------------------------------------------------------------------------ | :---------------- | :---: | :---:
-1       | Image Format          | RGBA8888 , RAW8 , YCbCr422 (YUYV422) , RGB565                             |                   |       |
-2       | System                | Firmware In Flash                                                         |                   |       |
-3       |                       | Model In Flash                                                            |                   |       |
-4       |                       | Runtime Upload Firmware                                                   |                   |       | X
-5       |                       | Runtime Upload Model                                                      |                   |       |
-6       |                       | Software Reset                                                            |                   |       |
-7       |                       | Software Shutdown (Developing Broad Only)                                 |                   |       | X
-8       |                       | Software Reboot                                                           |                   |       |
-9       |                       | Scan Devices                                                              |                   |       |
-10      |                       | Device Log via USB                                                        |                   |       |
-11      |                       | Device Connection : All Devices, Specified Device(s)                      |                   |       |
-12      | Inference             | Flexible Send / Receive Inference                                         |                   |       |
-13      |                       | Multiple Device Auto Dispatch                                             |                   |       |
-14      |                       | Enable / Disable Pre-process on Device                                    |                   |       |
-15      |                       | Enable / Disable Post-process on Device                                   |                   |       |
-16      |                       | Output Floating Point / Fixed Point Result                                |                   |       |
-17      | System / Model Info   | Get Firmware Version                                                      |                   |       |
-18      |                       | Get KN Number                                                             |                   |       |
-19      |                       | Get Model CRC                                                             |                   |       |
-20      |                       | Get Model Info                                                            |                   |       |
-21      |                       | Install Device Driver for Windows                                         | v1.3.0            |       |
-22      | Application API       | Generic Image Inference                                                   | v2.0.0            |       |
-23      |                       | Generic Data Inference                                                    | v2.0.0            |       |
-24      |                       | Customized Inference (C code only)                                        |                   |       |
-25      |                       | User Define API (C code only)                                             |                   |       |
-26      | System Examples       | Get Firmware Info                                                         |                   |       |
-27      |                       | Get Model Info                                                            |                   |       |
-28      |                       | Reboot Device                                                             |                   |       |
-29      |                       | Shutdown Device                                                           |                   |       | X
-30      |                       | Device Memory Usage Control                                               | v2.0.0            |       |
-31      | Inference Examples    | Generic Image Inference (Raw Output)                                      | v2.0.0            |       |
-32      |                       | Generic Image Inference (with Crop)                                       | v2.0.0            |       |
-33      |                       | Generic Image Inference (with Post Process on Host Side)                  | v2.0.0            |       |
-34      |                       | Generic Image Inference (Multiple Threads)                                | v2.0.0            |       |
-35      |                       | Generic Image Inference (Model in Flash)                                  | v2.0.0            |       |
-36      |                       | Generic Image Inference (Web Cam with Drop Frame)                         | v2.0.0            |       |
-37      |                       | Generic Data Inference (with Pre Process on Host Side)                    | v2.0.0            |       |
-38      |                       | User Define API Inference (Yolo with Config Post Process) (C code only)   | v1.3.0            |       |
-39      |                       | Customized Inference with Single Model (C code only)                      | v2.0.0 for KL720  |       |
-40      |                       | Customized Inference with Multiple Models (C code only)                   | v2.0.0 for KL720  |       |
-41      | Debug Examples        | Debug Checkpoints Example                                                 | v1.3.0            |       | X
-42      |                       | Execution Time Profiling Example                                          | v1.3.0            |       | X
-43      | Model Zoo Examples    | Simple examples for pre-trained models                                    |                   |       |
+Index   | Category              | Supported Item                                                            | Minimum Version   | KL520 | KL720 | KL630
+------- | :-------------------- | :------------------------------------------------------------------------ | :---------------- | :---: | :---: | :---:
+1       | Image Format          | RGBA8888 , RAW8 , Packed YCbCr422 (YUYV422) , RGB565                      |                   |       |       |
+2       |                       | Planar YUV420                                                             | v2.1.0            | X     | X     |
+3       | System                | Firmware In Flash                                                         |                   |       |       |
+4       |                       | Model In Flash                                                            |                   |       |       |
+5       |                       | Runtime Upload Firmware                                                   |                   |       | X     |
+6       |                       | Runtime Upload Model                                                      |                   |       |       |
+7       |                       | Software Reset                                                            |                   |       |       |
+8       |                       | Software Shutdown (Developing Broad Only)                                 |                   |       | X     | X
+9       |                       | Software Reboot                                                           |                   |       |       |
+10      |                       | Scan Devices                                                              |                   |       |       |
+11      |                       | Device Log via USB                                                        |                   |       |       |
+12      |                       | Device Connection : All Devices, Specified Device(s)                      |                   |       |       |
+13      | Inference             | Flexible Send / Receive Inference                                         |                   |       |       |
+14      |                       | Multiple Device Auto Dispatch                                             |                   |       |       |
+15      |                       | Enable / Disable Pre-process on Device                                    |                   |       |       |
+16      |                       | Enable / Disable Post-process on Device                                   |                   |       |       |
+17      |                       | Output Floating Point / Fixed Point Result                                |                   |       |       |
+18      |                       | Enable / Disable Debug Checkpoints                                        |                   | X     | X     | X
+19      |                       | Enable / Disable Execution Time Profiling                                 | v2.1.0            |       |       |
+20      | System / Model Info   | Get Firmware Version                                                      |                   |       |       |
+21      |                       | Get KN Number                                                             |                   |       |       |
+22      |                       | Get Model CRC                                                             |                   |       |       |
+23      |                       | Get Model Info                                                            |                   |       |       |
+24      |                       | Install Device Driver for Windows                                         | v1.3.0            |       |       |
+25      | Application API       | Generic Image Inference                                                   | v2.0.0            |       |       |
+26      |                       | Generic Data Inference                                                    | v2.0.0            |       |       |
+27      |                       | Customized Inference (C code only)                                        |                   |       |       |
+28      |                       | User Define API (C code only)                                             |                   |       |       |
+29      | System Examples       | Get Firmware Info                                                         |                   |       |       |
+30      |                       | Get Model Info                                                            |                   |       |       |
+31      |                       | Reboot Device                                                             |                   |       |       |
+32      |                       | Shutdown Device                                                           |                   |       | X     | X
+33      |                       | Device Memory Usage Control                                               | v2.0.0            |       |       |
+34      | Inference Examples    | Generic Image Inference (Raw Output)                                      | v2.0.0            |       |       |
+35      |                       | Generic Image Inference (with Crop)                                       | v2.0.0            |       |       |
+36      |                       | Generic Image Inference (with Post Process on Host Side)                  | v2.0.0            |       |       |
+37      |                       | Generic Image Inference (Multiple Threads)                                | v2.0.0            |       |       |
+38      |                       | Generic Image Inference (Model in Flash)                                  | v2.0.0            |       |       |
+39      |                       | Generic Image Inference (Web Cam with Drop Frame)                         | v2.0.0            |       |       |
+40      |                       | Generic Data Inference (with Pre Process on Host Side)                    | v2.0.0            |       |       |
+41      |                       | User Define API Inference (Yolo with Config Post Process) (C code only)   | v1.3.0            |       |       |
+42      |                       | Customized Inference with Single Model (C code only)                      | v2.0.0 for KL720  |       |       |
+43      |                       | Customized Inference with Multiple Models (C code only)                   | v2.0.0 for KL720  |       |       |
+44      | Debug Examples        | Debug Checkpoints Example                                                 |                   | X     | X     | X
+45      |                       | Execution Time Profiling Example                                          |                   | X     | X     | X
+46      | Model Zoo Examples    | Simple examples for pre-trained models                                    |                   |       |       | X
 
 
 The following components are contained in Kneron PLUS:
 
 - KP API
 - PLUS examples code
-- KDP2 firmware code (KL520 only)
+- KDP2 firmware code (KL520 and KL720 only)
 - Pre-build firmware binary files
 - Some demonstrative NEF files
 
@@ -96,18 +99,18 @@ Besides the basic features, there are few advanced features provided in Kneron P
 
 **Note**: Most of the advanced features and examples are C code only. Only **Update Kdp2 to Kdp2 Flash Boot** has the python version example.
 
-Index   | Category              | Supported Item                                            | Minimum Version   | KL520 | KL720
-------- | :-------------------- | :-------------------------------------------------------- | :---------------- | :---: | :---:
-1       | System                | Runtime Upload Firmware via UART                          |                   |       | X
-2       |                       | Hico Mode (MIPI image input, Companion Result Output)     |                   |   X   |
-2       | Examples              | Update Kdp to Kdp2 Usb Boot                               |                   |       | X
-3       |                       | Update Kdp2 to Kdp2 Usb Boot                              |                   |       | X
-4       |                       | Update Kdp to Kdp2 Flash Boot                             |                   |       |
-5       |                       | Update Kdp2 to Kdp2 Flash Boot                            |                   |       |
-6       |                       | Update Model to Flash                                     |                   |       |
-7       |                       | Upload Firmware via UART                                  |                   |       | X
-8       |                       | Upload Firmware via Usb for No-Flash Device               | v2.0.0            |   X   |
-9       |                       | Read / Write Device Memory                                |                   |       |
-10      |                       | Access Firmware Log via USB                               |                   |   X   |
-11      |                       | Hico Cam Inference (Kneron LW 3D module is required)      |                   |   X   |
-12      |                       | Hico ToF Inference (Kneron ToF module is required)        | v1.3.0            |   X   |
+Index   | Category              | Supported Item                                            | Minimum Version   | KL520 | KL720 | KL630
+------- | :-------------------- | :-------------------------------------------------------- | :---------------- | :---: | :---: | :---:
+1       | System                | Runtime Upload Firmware via UART                          |                   |       | X     | X
+2       |                       | Hico Mode (MIPI image input, Companion Result Output)     |                   |   X   |       |
+2       | Examples              | Update Kdp to Kdp2 Usb Boot                               |                   |       | X     | X
+3       |                       | Update Kdp2 to Kdp2 Usb Boot                              |                   |       | X     |
+4       |                       | Update Kdp to Kdp2 Flash Boot                             |                   |       |       | X
+5       |                       | Update Kdp2 to Kdp2 Flash Boot                            |                   |       |       |
+6       |                       | Update Model to Flash                                     |                   |       |       |
+7       |                       | Upload Firmware via UART                                  |                   |       | X     | X
+8       |                       | Upload Firmware via Usb for No-Flash Device               | v2.0.0            |   X   |       | X
+9       |                       | Read / Write Device Memory                                |                   |       |       | X
+10      |                       | Access Firmware Log via USB                               |                   |   X   |       | X
+11      |                       | Hico Cam Inference (Kneron LW 3D module is required)      |                   |   X   |       |
+12      |                       | Hico ToF Inference (Kneron ToF module is required)        | v1.3.0            |   X   |       | X
