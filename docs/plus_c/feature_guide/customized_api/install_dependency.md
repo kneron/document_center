@@ -28,3 +28,11 @@ the developing of customized api must be proceeded under OS Windows 10.
 
     - Only required when developing ncpu firmware for KL720
     - Please refer [Xtensa Xplorer Overview](../../../720_2.0.0/sdk/xtensa.md) for the instruction of installation.
+
+4. **Cross Compiler for KL630**
+
+    - Only required when developing firmware for KL630
+
+    - Download the latest **KL630_SDK_vXXX.zip** from <https://www.kneron.com/tw/support/developers/>. It is located at **KL620 SDK** section.
+    - Unzip KL630_SDK_vXXX.zip
+    - Please refer KLM5S3_Development_Environment_User_Guide.pdf in {KL630_SDK_TOP_FOLDER_PATH}/02_BSP/01_Documents

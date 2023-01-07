@@ -22,6 +22,25 @@ And the following sections in this chapter will provide the instructions for ins
     $ sudo apt install build-essential
     ```
 
+- Config Kneron AI USB device permission
+    * Execute script to config permission
+    ```bash
+    $ sudo bash install_libusb.sh
+    ```
+
+    * Or add following rules in `/etc/udev/rules.d/10-local.rules` manually
+    ```text
+    SUBSYSTEM=="usb",ATTRS{product}=="Kneron KL520",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0100",MODE="0666"
+    SUBSYSTEM=="usb",ATTRS{product}=="Kneron KL720l",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0200",MODE="0666"
+    SUBSYSTEM=="usb",ATTRS{product}=="Kneron KL720",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0720",MODE="0666"
+    SUBSYSTEM=="usb",ATTRS{product}=="Kneron KL630",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0630",MODE="0666"
+    ```
+    and apply the new rules by following commands (Or reboot the host)
+    ```bash
+    $ sudo udevadm control --reload-rules
+    $ sudo udevadm trigger
+    ```
+
 ---
 
 ## 2. Windows 10
@@ -62,7 +81,18 @@ Note: This feature is only provided in Kneron PLUS v1.3.0 and above.
 
     - Click "Install Driver" button.
 
-2. KL720
+2. KL630
+
+    - The application should detect Kneron KL630 device as "Kneron KL630" with USB ID
+    "3231/0630" as shown below:
+
+        ![](../imgs/zadig_install_kl630_driver.png)
+
+    - Make sure that the Driver field, has WinUSB option selected.
+
+    - Click "Install Driver" button.
+
+3. KL720
 
     - The application should detect Kneron KL720 device as "Kneron KL720" with USB ID
     "3231/0200" as shown below:

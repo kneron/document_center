@@ -6,7 +6,7 @@
 
 **Note**: To execute **MSYS2 MinGW 64-bit**, please use the shortcut or `c:\msys64\msys2_shell.cmd -mingw64` instead of `c:\msys64\mingw64.exe`.
 
-**Note**: In the inference related examples, we are using KL520 for most demo. If you wish to use KL720, just change the prefix of the example name from kl520 to kl720.
+**Note**: In the inference related examples, we are using KL520 for most demo. If you wish to use KL630 or KL720, just change the prefix of the example name from kl520 to kl630 or kl720.
 
 **Note**: Few examples will auto connect multiple devices to run inference. If you put hybrid types of devices on host, the inference may fail.
 
@@ -150,7 +150,7 @@ This example is to show the usage of `kp_install_driver_for_windows()` and help 
     ```bash
     [arguments]
     -h     : help
-    -target: [target platform] (ALL, KL520, KL720) = KL520
+    -target: [target platform] (ALL, KL520, KL630, KL720) = KL520
 
     [note]
         You must run this app as administrator on Windows
@@ -158,19 +158,43 @@ This example is to show the usage of `kp_install_driver_for_windows()` and help 
     Installing driver for KL520 ... Success (0)
     ```
 
-2. For installing the driver for KL720:
+2. For installing the driver for KL630:
+
+    ```bash
+    $ ./install_driver_windows.exe -target KL630
+    ```
+
+    ```bash
+    [arguments]
+    -h     : help
+    -target: [target platform] (ALL, KL520, KL630, KL720) = KL630
+
+    [note]
+        You must run this app as administrator on Windows
+
+    Installing driver for KL520 ... Success (0)
+    ```
+
+3. For installing the driver for KL720:
 
     ```bash
     $ ./install_driver_windows.exe -target KL720
     ```
 
     ```bash
+    [arguments]
+    -h     : help
+    -target: [target platform] (ALL, KL520, KL630, KL720) = KL720
+
+    [note]
+        You must run this app as administrator on Windows
+
     Installing driver for KL720 ... Success (0)
     ```
 
 ### 1.4 Load Firmware and Model Example
 
-`kp_load_firmware_from_file()` is an API to load firmware file from host to the AI device via USB. And this API is only available on KL520 (USB Boot Mode). Please refer [Upgrade AI Device To KDP2](./upgrade_ai_device_to_kdp2.md) for more information.
+`kp_load_firmware_from_file()` is an API to load firmware file from host to the AI device via USB. And this API is only available when device is on **USB Boot Mode**. Please refer [Upgrade AI Device To KDP2](./upgrade_ai_device_to_kdp2.md) for more information.
 
 `kp_load_model_from_file()` is an API to load model file from host to the AI device via USB. Please refer [Write Model to Flash](./write_model_to_flash.md) for more information.
 
@@ -305,15 +329,21 @@ DFUT_console provides only the console interface of the Kneron DFUT.
 
 Therefore, all the functions in console mode, other than executable file name, are the same.
 
-1. For upgrading KL520 to USB boot mode, please refer [Upgrade KL520 to USB Boot Mode](./upgrade_ai_device_to_kdp2.md#32-use-command-line-to-update-ai-device).
+1. For upgrading KL520 to USB boot mode, please refer [Upgrade KL520 to USB Boot Mode](./upgrade_ai_device_to_kdp2.md#42-use-command-line-to-update-ai-device).
 
-2. For upgrading KL520 to Flash boot mode, please refer [Upgrade KL520 to Flash Boot Mode](./upgrade_ai_device_to_kdp2.md#42-use-command-line-to-update-ai-device).
+2. For upgrading KL520 to Flash boot mode, please refer [Upgrade KL520 to Flash Boot Mode](./upgrade_ai_device_to_kdp2.md#52-use-command-line-to-update-ai-device).
 
 3. For writing model into KL520, please refer [Write Model Into KL520](./write_model_to_flash.md#32-use-command-line-to-write-model-into-ai-device).
 
-4. For upgrading KL720 to Flash boot mode, please refer [Upgrade KL720 to Flash Boot Mode](./upgrade_ai_device_to_kdp2.md#52-use-command-line-to-update-ai-device).
+4. For upgrading KL630 to USB boot mode, please refer [Upgrade KL630 to USB Boot Mode](./upgrade_ai_device_to_kdp2.md#62-use-command-line-to-update-ai-device).
 
-5. For writing model into KL720, please refer [Write Model Into KL720](./write_model_to_flash.md#42-use-command-line-to-write-model-into-ai-device).
+5. For upgrading KL630 to Flash boot mode, please refer [Upgrade KL630 to Flash Boot Mode](./upgrade_ai_device_to_kdp2.md#72-use-command-line-to-update-ai-device).
+
+6. For writing model into KL630, please refer [Write Model Into KL630](./write_model_to_flash.md#42-use-command-line-to-write-model-into-ai-device).
+
+7. For upgrading KL720 to Flash boot mode, please refer [Upgrade KL720 to Flash Boot Mode](./upgrade_ai_device_to_kdp2.md#82-use-command-line-to-update-ai-device).
+
+8. For writing model into KL720, please refer [Write Model Into KL720](./write_model_to_flash.md#52-use-command-line-to-write-model-into-ai-device).
 
 
 ## 1.7 Device FIFO Queue Config Example
@@ -323,7 +353,7 @@ This example is to show how to configure the `kp_ddr_manage_attr_t` and the usag
 Please refer [Device DDR Management](../feature_guide/device_ddr_management.md) for more information.
 
 ```bash
-$ sudo ./kl520_demo_generic_image_inference_fifoq_config
+$ sudo ./kl520_demo_generic_image_inference_customize_fifoq
 ```
 
 ```bash

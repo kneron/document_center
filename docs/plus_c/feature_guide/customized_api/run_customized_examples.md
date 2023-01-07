@@ -27,6 +27,15 @@
 
 ![](../../imgs/keil_build_kl520_firmware.png)
 
+### 1.2 KL630 Firmware
+
+```bash
+$ cd {KL630_SDK_FOLDER_PATH}/apps/vmf_nnm
+$ bash build.sh
+```
+
+*If build succeeded, **kp_firmware.tar** will be put into {KL630_SDK_FOLDER_PATH}/apps/vmf_nnm/bin/
+
 ### 1.3 KL720 SCPU
 1. Execute Keil uVision5
 
@@ -146,14 +155,28 @@ $ cd bin
 $ sudo ./my_kl520_mul_example.exe
 ```
 
-### 2.3 Run KL720 Single Model Example
+### 2.3 Run KL630 Single Model Example
+
+```bash
+$ cd bin
+$ sudo ./my_kl630_sin_example.exe
+```
+
+### 2.4 Run KL630 Multiple Models Example
+
+```bash
+$ cd bin
+$ sudo ./my_kl630_mul_example.exe
+```
+
+### 2.5 Run KL720 Single Model Example
 
 ```bash
 $ cd bin
 $ sudo ./my_kl720_sin_example.exe
 ```
 
-### 2.4 Run KL720 Multiple Models Example
+### 2.6 Run KL720 Multiple Models Example
 
 ```bash
 $ cd bin

@@ -75,7 +75,7 @@ Note: This feature is only provided in Kneron PLUS v1.3.0 and above.
 #### 2.3 Using **Zadig** to Install Driver
 
 - Download Zadig application from zadig.akeo.ie appropriate for Windows 10.
-- Connect Kneron KL520/KL720 device to your PC.
+- Connect Kneron KL520/KL630/KL720 device to your PC.
 - Run the Zadig application.
 
 1. KL520
@@ -84,6 +84,17 @@ Note: This feature is only provided in Kneron PLUS v1.3.0 and above.
     "3231/0100" as shown below:
 
         ![](../imgs/zadig_install_kl520_driver.png)
+
+    - Make sure that the Driver field, has WinUSB option selected.
+
+    - Click "Install Driver" button.
+
+2. KL630
+
+    - The application should detect Kneron KL630 device as "Kneron KL630" with USB ID
+    "3231/0630" as shown below:
+
+        ![](../imgs/zadig_install_kl630_driver.png)
 
     - Make sure that the Driver field, has WinUSB option selected.
 
@@ -102,22 +113,22 @@ Note: This feature is only provided in Kneron PLUS v1.3.0 and above.
 
     **Note**: After Upgrade Kneron KL720 to KDP2 (ex. via Kneron DFUT), you may need to re-install the driver of KL720, since the USB ID will be changed to "3231/0720".
 
-## 3. Update Kneron AI Device USB Permission on Ubuntu and Raspberry Pi
+## 3. Update Kneron AI Device USB Permission on Ubuntu/Raspberry Pi
 
  * Config USB permission on Ubuntu/Raspberry Pi
    ```bash
    $ sudo bash install_libusb.sh
    ```
 
- * Or add following lines in `/etc/udev/rules.d/10-local.rules` manually
+ * Or add following rules in `/etc/udev/rules.d/10-local.rules` manually
    ```text
-   KERNEL=="ttyUSB*",ATTRS{idVendor}=="067b",ATTRS{idProduct}=="2303",MODE="0777",SYMLINK+="kneron_uart"
-   KERNEL=="ttyUSB*",ATTRS{idVendor}=="1a86",ATTRS{idProduct}=="7523",MODE="0777", SYMLINK+="kneron_pwr"
-   SUBSYSTEM=="usb",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0100",MODE="0666"
-   SUBSYSTEM=="usb",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0200",MODE="0666"
-   SUBSYSTEM=="usb",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0720",MODE="0666"
+   SUBSYSTEM=="usb",ATTRS{product}=="Kneron KL520",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0100",MODE="0666"
+   SUBSYSTEM=="usb",ATTRS{product}=="Kneron KL720l",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0200",MODE="0666"
+   SUBSYSTEM=="usb",ATTRS{product}=="Kneron KL720",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0720",MODE="0666"
+   SUBSYSTEM=="usb",ATTRS{product}=="Kneron KL630",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0630",MODE="0666"
    ```
-   and restart service by following command (You may need to restart the service after rebooting the host PC)
+   and apply the new rules by following commands (Or you may need to restart the service after rebooting the host PC)
    ```bash
+   $ sudo udevadm control --reload-rules
    $ sudo udevadm trigger
    ```
