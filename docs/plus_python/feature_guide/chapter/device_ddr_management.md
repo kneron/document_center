@@ -70,4 +70,4 @@ class DdrManageAttributes(ValueBase, ValueRepresentBase):
 
 4. If (System Reserved + Model Size + (Input Buffer Count x Input Buffer Size) + (Result Buffer Count x Result Buffer Size)) is larger than the available DDR space, the configuration will fail.
 
-Please refer [6. Device Memory Usage Control Example](../introduction/run_examples.md#6-device-memory-usage-control-example) for the demonstration.
+Please refer [6. Device Memory Usage Control Example](../../introduction/run_examples.md#6-device-memory-usage-control-example) for the demonstration.

@@ -20,7 +20,7 @@ This **Getting Started** document only focuses on host software usage with the A
 - How to build the software package
 - How to run the APP Yolo inference example.
 
-For **model development**, please refer the [Toolchain Docker](../toolchain/manual.md) part.
+For **model development**, please refer the [Toolchain Docker](../toolchain/manual_1_overview.md) part.
 
 For **firmware development**, please refer the documents in [Customized API](./feature_guide/customized_api/introduction.md).
 

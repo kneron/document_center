@@ -186,7 +186,7 @@ This section describes the concept of customization on input/output interface by
 Below is a recommended flow of AI application construction:
 
 1. Prepare your AI model(s)
-2. Convert and verify model(s) via [Kneron Toolchain](../toolchain/manual.md)
+2. Convert and verify model(s) via [Kneron Toolchain](../toolchain/manual_1_overview.md)
 3. With a PC, it is convenient to verify converted NEF models and easy to test variant data on target device via [Kneron PLUS](../plus_c/feature_guide/customized_api/introduction.md)  
    **note:** If your application is designed as host-companion architecture with USB interface, you can stop here and go ahead with Kneron PLUS.   
     - See [Kneron PLUS - generic inference](../plus_c/feature_guide/generic_inference.md) for model-only verification   

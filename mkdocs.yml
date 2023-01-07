@@ -36,6 +36,8 @@ nav:
         - Install Dependency:                                       plus_c/feature_guide/customized_api/install_dependency.md
         - Create Single Model Example for KL520:                    plus_c/feature_guide/customized_api/create_kl520_single_model_example.md
         - Create Multiple Models Example for KL520:                 plus_c/feature_guide/customized_api/create_kl520_multiple_models_example.md
+        - Create Single Model Example for KL630:                    plus_c/feature_guide/customized_api/create_kl630_single_model_example.md
+        - Create Multiple Models Example for KL630:                 plus_c/feature_guide/customized_api/create_kl630_multiple_models_example.md
         - Create Single Model Example for KL720:                    plus_c/feature_guide/customized_api/create_kl720_single_model_example.md
         - Create Multiple Model Example for KL720:                  plus_c/feature_guide/customized_api/create_kl720_multiple_models_example.md
         - NCPU Firmware Configuration:                              plus_c/feature_guide/customized_api/ncpu_firmware_configuration.md

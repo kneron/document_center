@@ -14,7 +14,7 @@ Below diagram depicts three parts of development in a big picture.
 
 ![](../imgs/KL520_develop_flow.png)
 
-However, this document only focuses on the **software development** and the **firmware development**. For the **model development**, please refer to the [Toolchain Docker](../../toolchain/manual.md) part.
+However, this document only focuses on the **software development** and the **firmware development**. For the **model development**, please refer to the [Toolchain Docker](../../toolchain/manual_1_overview.md) part.
 
 In comparison with the previous SW/FW framework, this aims to simplify the design flow for AI applications development.
 
