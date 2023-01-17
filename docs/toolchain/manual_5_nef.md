@@ -44,19 +44,38 @@ We would start with single model first.
 
 The return value is the path for the generated nef file. By default, it is under /data1/batch_compile. It takes a list of `ktc.ModelConfig` object as the input `model_list`. The usage of `kt.ModelConfig` can be found in section 3.2. Note that the ModelConfig onject must have bie file inside. In details, it must be under either of the following status: the ModelConfig is initialized with `bie_path`, the ModelConfig is initialized with `onnx_model` or `onnx_path` but it have successfully run `analysis` function.
 
-For the LittleNet example, please check the code below. Note that `km` is the `ktc.ModelConfig` object we generate in section 3.2 and quantized in the section 4.
+For the MobileNet V2 example, please check the code below. Note that `km` is the `ktc.ModelConfig` object we generate in section 3.2 and quantized in the section 4.
 
 ```python
 compile_result = ktc.compile([km])
 ```
 
-For multiple models, we can simply extend the model list.
+For multiple models, we can simply extend the model list. Note that the model IDs in the list should be different and the platform should be the same. For example, we can batch compile the current MobileNet V2 with a LittleNet:
 
 ```python
-# dummy.bie is not a real example bie which is available in the docker. Just for command showcase.
-# Please adjust the parameters according to your actual input.
-km2 = ktc.ModelConfig(32770, "0001", "520", bie_path="dummy.bie")
-compile_result = ktc.compile([km, km2])
+# Prepare LittleNet BIE. Note that we skip the verification steps and only used 1 quantization image since we only want to use the bie as another example input and do not cares about its precision.
+km_2 = ktc.ModelConfig(32770, "0001", "720", onnx_path="/workspace/examples/LittleNet/LittleNet.onnx")
+
+def preprocess_2(input_file):
+    image = Image.open(input_file)
+    image = image.convert("RGB")
+    img_data = np.array(image.resize((112, 96), Image.BILINEAR)) / 255
+    img_data = np.transpose(img_data, (1, 0, 2))
+    return img_data
+
+input_images_2 = [
+    preprocess_2("/workspace/examples/LittleNet/pytorch_imgs/Abdullah_0001.png"),
+    preprocess_2("/workspace/examples/LittleNet/pytorch_imgs/Abdullah_0002.png"),
+    preprocess_2("/workspace/examples/LittleNet/pytorch_imgs/Abdullah_0003.png"),
+    preprocess_2("/workspace/examples/LittleNet/pytorch_imgs/Abdullah_0004.png"),
+]
+input_mapping_2 = {"data_out": input_images_2}
+
+# Quantization
+km_2.analysis(input_mapping_2, output_bie = '/data1/littlenet.bie', threads = 4)
+
+# Here we do the batch compiling.
+batch_compile_result = ktc.compile([km, km_2])
 ```
 
 Note that for multiple models, all the models should share the same hardware platform and the model ID must be different.
@@ -67,22 +86,22 @@ After compilation, we need to check if the nef can work as expected.
 
 We would use `ktc.kneron_inference` here again. And we are using the generated nef file this time.
 
-For the batch compile with only LittleNet, the python code would be like:
+For the batch compile with only MobileNet V2, the python code would be like:
 
 ```python
-hw_results = ktc.kneron_inference(input_data, nef_file=compile_result)
+hw_results = ktc.kneron_inference(input_data, nef_file=compile_result, platform=720)
 ```
 
 The usage is a little different here. In the code above, `hw_results` is a list of result data. `nef_file` is the path to the input nef. `input_data` is a list of input data after preprocess. The requirement is the same as in section 3.3. If your platform is not 520, you may need an extra parameter `platform`, e.g. `platform=720` or `platform=530`.
 
-Here we use the same input `input_data` which we used in section 3.3. And the `compile_result` is the one that generated with only LittleNet model.
+Here we use the same input `input_data` which we used in section 3.3. And the `compile_result` is the one that generated with only Mobilenet V2 model.
 
 As mentioned above, we do not provide any postprocess. In reality, you may want to have your own postprocess function in Python, too.
 
 For nef file with mutiple models, we can specify the model with model ID:
 
 ```python
-hw_results = ktc.kneron_inference(input_data, nef_file=compile_result, model_id=32769)
+hw_results_2 = ktc.kneron_inference(input_data, nef_file=batch_compile_result, model_id=32769, platform=720)
 ```
 
 After getting the `hw_results` and post-process it, you may want to compare the result with the `fixed_results` which is generated in section 4.2 to see if the results match. If the results mismatch, please contact us direcly through forum <https://www.kneron.com/forum/>.
@@ -105,5 +124,6 @@ Args:
 Here is an usage example. Suppose you have three 520 nef files: `/data1/model_32769.nef`, `/data1/model_32770.nef` and `/data1/model_32771.nef`. Then you can use the following code to combine them. The result is "/data1/combined/models_520.nef"
 
 ```python
+# Note that the nef files in this example is not really provided.
 ktc.combine_nef(['/data1/model_32769.nef', '/data1/model_32770.nef', '/data1/model_32771.nef'], output_path = "/data1/combined")
 ```

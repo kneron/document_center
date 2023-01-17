@@ -47,14 +47,13 @@ Please also note that this step would be very time-consuming since it analysis t
 Here as a simple example, we only use four input image as exmaple and run it with the `ktc.ModelConfig` object `km` created in section 3.2:
 
 ```python
-# Preprocess images and create the input mapping
-input_images = [
-    preprocess("/workspace/examples/LittleNet/pytorch_imgs/Abdullah_0001.png"),
-    preprocess("/workspace/examples/LittleNet/pytorch_imgs/Abdullah_0002.png"),
-    preprocess("/workspace/examples/LittleNet/pytorch_imgs/Abdullah_0003.png"),
-    preprocess("/workspace/examples/LittleNet/pytorch_imgs/Abdullah_0004.png"),
-]
-input_mapping = {"data_out": input_images}
+# Preprocess images as the quantization inputs. The preprocess function is defined in the previous section.
+import os
+raw_images = os.listdir("/workspace/examples/mobilenetv2/images")
+input_images = [preprocess("/workspace/examples/mobilenetv2/images/" + image_name) for image_name in raw_images]
+
+# We need to prepare a dictionary, which mapping the input name to a list of preprocessed arrays.
+input_mapping = {"images": input_images}
 
 # Quantization without fine-tuning
 bie_path = km.analysis(input_mapping, output_bie = None, threads = 4)
@@ -69,7 +68,7 @@ We would use `ktc.kneron_inference` here, too. But here we are using the generat
 The python code would be like:
 
 ```python
-fixed_results = ktc.kneron_inference(input_data, bie_file=bie_path, input_names=["data_out"])
+fixed_results = ktc.kneron_inference(input_data, bie_file=bie_path, input_names=["data_out"], platform=720)
 ```
 
 The usage is almost the same as using onnx. In the code above, `inf_results` is a list of result data. `bie_file` is the path to the input bie. `input_data` is a list of input data after preprocess the `input_names` is a list of model input name. The requirement is the same as in section 3.3. If your platform is not 520, you may need an extra parameter `platform`, e.g. `platform=720` or `platform=530`.
