@@ -36,6 +36,8 @@ $ bash build.sh
 
 *If build succeeded, **kp_firmware.tar** will be put into {KL630_SDK_FOLDER_PATH}/apps/vmf_nnm/bin/
 
+*For further information of building firmware of KL630, please refer **Vienna_NNM_Example_User_Guide.pdf** in {KL630_SDK_TOP_FOLDER_PATH}/03_SDK/01_Documents/
+
 ### 1.3 KL720 SCPU
 1. Execute Keil uVision5
 

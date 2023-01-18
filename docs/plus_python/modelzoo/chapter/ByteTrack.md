@@ -1,7 +1,7 @@
 # Kneron Model Zoo PLUS Inference Example - ByteTrack  (Object Tracking)
 
 NEF model trained from
-http://doc.kneron.com/docs/#model_training/OpenMMLab/ByteTrack.md
+http://doc.kneron.com/docs/#model_training/OpenMMLab/ByteTrack
 
 ---
 

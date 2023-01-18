@@ -101,16 +101,16 @@ Besides the basic features, there are few advanced features provided in Kneron P
 
 Index   | Category              | Supported Item                                            | Minimum Version   | KL520 | KL720 | KL630
 ------- | :-------------------- | :-------------------------------------------------------- | :---------------- | :---: | :---: | :---:
-1       | System                | Runtime Upload Firmware via UART                          |                   |       | X     | X
-2       |                       | Hico Mode (MIPI image input, Companion Result Output)     |                   |   X   |       |
+1       | System                | Runtime Upload Firmware via UART                          |                   |   X   | X     | X
+2       |                       | Hico Mode (MIPI image input, Companion Result Output)     |                   |   X   |       | X
 2       | Examples              | Update Kdp to Kdp2 Usb Boot                               |                   |       | X     | X
 3       |                       | Update Kdp2 to Kdp2 Usb Boot                              |                   |       | X     |
 4       |                       | Update Kdp to Kdp2 Flash Boot                             |                   |       |       | X
 5       |                       | Update Kdp2 to Kdp2 Flash Boot                            |                   |       |       |
 6       |                       | Update Model to Flash                                     |                   |       |       |
-7       |                       | Upload Firmware via UART                                  |                   |       | X     | X
+7       |                       | Upload Firmware via UART                                  |                   |   X   | X     | X
 8       |                       | Upload Firmware via Usb for No-Flash Device               | v2.0.0            |   X   |       | X
-9       |                       | Read / Write Device Memory                                |                   |       |       | X
+9       |                       | Read / Write Device Memory                                |                   |   X   | X     | X
 10      |                       | Access Firmware Log via USB                               |                   |   X   |       | X
-11      |                       | Hico Cam Inference (Kneron LW 3D module is required)      |                   |   X   |       |
-12      |                       | Hico ToF Inference (Kneron ToF module is required)        | v1.3.0            |   X   |       | X
+11      |                       | Hico Cam Inference (Kneron LW 3D module is required)      |                   |   X   | X     | X
+12      |                       | Hico ToF Inference (Kneron ToF module is required)        | v1.3.0            |   X   | X     | X

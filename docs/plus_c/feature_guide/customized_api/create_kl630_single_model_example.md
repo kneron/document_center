@@ -10,7 +10,7 @@
 
     Note: **{PLUS_FOLDER_PATH}** will be used below for representing the unzipped folder path of PLUS.
 
-3. Download the latest **KL630_SDK_vXXX.zip** into Ubuntu from <https://www.kneron.com/tw/support/developers/>. It is located at **KL620 SDK** section.
+3. Please contact Kneron to obtain the latest **KL630_SDK_vXXX.zip**.
 
     Note: KL630 SDK can only be developed on Ubuntu
 
@@ -254,6 +254,8 @@
 ---
 
 ## 3. Firmware Development
+
+**Note**: For further information of KL630 VMF_NNM, please refer **Vienna_NNM_Programming_Guide.pdf** in {KL630_SDK_TOP_FOLDER_PATH}/03_SDK/01_Documents/
 
 1. Go to App Flow Folder {KL630_SDK_FOLDER_PATH}/apps/vmf_nnm/solution/app_flow
 

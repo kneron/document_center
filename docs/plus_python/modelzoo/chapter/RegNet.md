@@ -1,7 +1,7 @@
 # Kneron Model Zoo PLUS Inference Example - RegNet  (Classification)
 
 NEF model trained from
-http://doc.kneron.com/docs/#model_training/OpenMMLab/RegNet.md
+http://doc.kneron.com/docs/#model_training/OpenMMLab/RegNet
 
 ---
 
