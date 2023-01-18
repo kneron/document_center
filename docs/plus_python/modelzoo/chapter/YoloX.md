@@ -1,7 +1,7 @@
 # Kneron Model Zoo PLUS Inference Example - YoloX  (Object Detection)
 
 NEF model trained from
-http://doc.kneron.com/docs/#model_training/OpenMMLab/YoloX.md
+http://doc.kneron.com/docs/#model_training/OpenMMLab/YoloX
 
 ---
 

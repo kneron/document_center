@@ -127,7 +127,18 @@ nav:
       - Compatible with V1.x API:                                   plus_python/api_migration/chapter/api_compatible_legacy.md
     - API Document:
       - Index:                                                      plus_python/api_document/index.md
-      - V2.0.0 (Latest Version):
+      - V2.1.0 (Latest Version):
+        - Index:                                                    plus_python/api_document/V2.1.0/index.md
+        - kp.core:                                                  plus_python/api_document/V2.1.0/kp/core.md
+        - kp.inference:                                             plus_python/api_document/V2.1.0/kp/inference.md
+        - kp value:                                                 plus_python/api_document/V2.1.0/kp/value.md
+        - kp enum:                                                  plus_python/api_document/V2.1.0/kp/enum.md
+        - kp exception:                                             plus_python/api_document/V2.1.0/kp/exception.md
+        - kp const:                                                 plus_python/api_document/V2.1.0/kp/const.md
+        - kp.v1 (Legacy Module):
+          - kp.v1.inference:                                        plus_python/api_document/V2.1.0/kp/v1/inference.md
+          - kp.v1 value:                                            plus_python/api_document/V2.1.0/kp/v1/value.md
+      - V2.0.0:
         - Index:                                                    plus_python/api_document/V2.0.0/index.md
         - kp.core:                                                  plus_python/api_document/V2.0.0/kp/core.md
         - kp.inference:                                             plus_python/api_document/V2.0.0/kp/inference.md

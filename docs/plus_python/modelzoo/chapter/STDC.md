@@ -1,7 +1,7 @@
 # Kneron Model Zoo PLUS Inference Example - STDC  (Segmentation)
 
 NEF model trained from
-http://doc.kneron.com/docs/#model_training/OpenMMLab/STDC.md
+http://doc.kneron.com/docs/#model_training/OpenMMLab/STDC
 
 ---
 

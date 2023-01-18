@@ -27,5 +27,5 @@ In addition, the  **Kneron PLUS** provides `Generic Image Inference`  and `Gener
 
 ### Reference
 
-- [Toolchain Docker](http://doc.kneron.com/docs/#toolchain/manual/#2-toolchain-docker-overview)
-- [Model Training](../../model_training//index.md)
+- [Toolchain Docker](https://doc.kneron.com/docs/#toolchain/manual_1_overview/)
+- [Model Training](https://doc.kneron.com/docs/#model_training/)

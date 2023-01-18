@@ -480,7 +480,7 @@ This example is to show how to configure the `kp.DdrManageAttributes` and the us
 Please refer [Device DDR Management](../feature_guide/chapter/device_ddr_management.md) for more information.
 
 ```bash
-$ python3 
+$ python3 KL520DemoGenericImageInferenceFifoqConfig.py
 
 [Connect Device]
  - Success

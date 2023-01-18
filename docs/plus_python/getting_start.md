@@ -94,6 +94,7 @@ $ sudo sh KneronDFUT.sh --help
 
     * Select the AI device to be update to KDP2 firmware
     * Push **Run** button
+      \(**Update to USB Boot** should be checked by default\)
 
     ![](./imgs/dfut_kl520_usb_boot.png)
 
@@ -125,7 +126,22 @@ $ sudo sh KneronDFUT.sh --help
     ==== Update of Device with Port Id: 133 Succeeded ====
     ```
 
-### 2.2 KL720
+### 2.2 KL630
+
+1. Use GUI to Update AI Device
+
+    ```bash
+    $ sudo sh KneronDFUT.sh
+    ```
+
+    * Select the AI device to be update to KDP2 firmware
+
+    * Push **Run** button
+      \(**Update to USB Boot** should be checked by default\)
+
+    ![](./imgs/dfut_kl630_usb_boot.png)
+
+### 2.3 KL720
 
 1. Use GUI to Update AI Device
 

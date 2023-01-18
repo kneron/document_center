@@ -1,7 +1,7 @@
 # Kneron Model Zoo PLUS Inference Example - RSN18  (Pose Estimate)
 
 NEF model trained from
-http://doc.kneron.com/docs/#model_training/OpenMMLab/RSN18.md
+http://doc.kneron.com/docs/#model_training/OpenMMLab/RSN18
 
 ---
 
