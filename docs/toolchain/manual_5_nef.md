@@ -7,6 +7,7 @@ The nef file is the binary file after compiling and can be taken by the Kneron h
 Batch compile turns multiple models into a single binary file. We have two APIs for batch compiling. The nef file path will be returned from both functions.
 
 ```python
+#[API]
 ktc.compile(model_list, output_dir=None, dedicated_output_buffer=True, weight_compress=False)
 ```
 
@@ -22,6 +23,7 @@ Args:
 * flatbuffer (bool, optional): enable new flatbuffer mode for 720. Defauls to True.
 
 ```python
+#[API]
 ktc.encrypt_compile(model_list, output_dir=None, dedicated_output_buffer=True, mode=None, key="", key_file="", encryption_efuse_key="", weight_compress=False)
 ```
 
@@ -124,6 +126,6 @@ Args:
 Here is an usage example. Suppose you have three 520 nef files: `/data1/model_32769.nef`, `/data1/model_32770.nef` and `/data1/model_32771.nef`. Then you can use the following code to combine them. The result is "/data1/combined/models_520.nef"
 
 ```python
-# Note that the nef files in this example is not really provided.
+#[Note] The nef files in this example is not really provided.
 ktc.combine_nef(['/data1/model_32769.nef', '/data1/model_32770.nef', '/data1/model_32771.nef'], output_path = "/data1/combined")
 ```

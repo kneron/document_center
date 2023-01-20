@@ -10,6 +10,7 @@ Quantization is the step where the floating-point weight are quantized into fixe
 Below is the quantization API. Note that there are many fine-tuning parameter. We do not need to utilize them all.
 
 ```python
+#[API]
 classmethod analysis(input_mapping, output_bie=None, threads=4, quantize_mode="default")
 ```
 
@@ -82,6 +83,7 @@ After getting the `fixed_results` and post-process it, you may want to compare t
 In the previous versions or for the debug usage, we may need to get the input quantization value manually, which is the radix. Below is the API.
 
 ```python
+#[API]
 ktc.get_radix(inputs)
 ```
 

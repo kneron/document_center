@@ -219,7 +219,7 @@ We would use `ktc.kneron_inference` here again. And we are using the generated n
 
 ```python
 # `nef_path` is defined in section 1.6.1.
-binary_inf_results = ktc.kneron_inference(input_data, nef_file=nef_patht, platform=720)
+binary_inf_results = ktc.kneron_inference(input_data, nef_file=nef_path, platform=720)
 
 # Compare binary_inf_results and fixed_point_inf_results. They should be almost the same.
 ```
