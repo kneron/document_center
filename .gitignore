@@ -1,3 +1,6 @@
+__pycache__
 site/
+scripts/generated_tests/
 nohup.out
 error.log
+*.pyc

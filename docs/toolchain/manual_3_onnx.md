@@ -21,6 +21,7 @@ need to export the model as tflite model and see [section 3.1.4](#314-tf-lite-to
 Here is the API:
 
 ```python
+#[API]
 ktc.onnx_optimizer.keras2onnx_flow(keras_model_path, optimize, input_shape)
 ```
 
@@ -35,6 +36,7 @@ Args:
 Suppose there is an onet hdf5 model exported By Keras, you need to convert it to onnx by the following python code:
 
 ```python
+#[Note] You need to download the model first
 result_m = ktc.onnx_optimizer.keras2onnx_flow('/data1/ConvertorExamples/keras_example/onet-0.417197.hdf5')
 ```
 
@@ -54,9 +56,10 @@ The Pytorch inside the docker is version 1.7.1. We currently only support models
 > You can use `torch.onnx` to export your model into onnx object. Here is the [Pytorch to ONNX document](https://pytorch.org/docs/stable/onnx.html#example-alexnet-from-pytorch-to-onnx) for `onnx.torch`. An example code for exporting the model is:
 
 ```python
+#[Note] Please modify input dimension according to your need.
 import torch.onnx
 dummy_input = torch.randn(1, 3, 224, 224)
-torch.onnx.export(model, dummy_input, 'output.onnx', opset_version=11)
+torch.onnx.export(model, dummy_input, 'output.onnx', opset_version=12)
 ```
 
 > In the example, `(1, 3, 224, 224)` are batch size, input channel, input height and input width.
@@ -68,6 +71,7 @@ Pytorch exported onnx needs to pass through a special optimization designed for 
 The following is the Python API:
 
 ```python
+#[API]
 ktc.onnx_optimizer.torch_exported_onnx_flow(m, disable_fuse_bn=False):
 ```
 
@@ -82,6 +86,7 @@ Args:
 Suppose the input file is loaded into a onnx object `exported_m`, here is the python code for pytorch exported onnx optimization:
 
 ```python
+#[API]
 result_m = ktc.onnx_optimizer.torch_exported_onnx_flow(exported_m)
 ```
 
@@ -90,6 +95,7 @@ In this line of python code, `ktc.onnx_optimizer.torch_exported_onnx_flow` is th
 For the example in ConvertorExamples project, the whole process would be:
 
 ```python
+#[Note] You need to download the model first
 import torch
 import torch.onnx
 
@@ -112,6 +118,7 @@ If you meet the errors related to `node not found` or `invalid input`, this migh
 Please try set `disable_fuse_bn` to `True`. The code would be:
 
 ```python
+#[API]
 result_m = ktc.onnx_optimizer.torch_exported_onnx_flow(exported_m, disable_fuse_bn=True)
 ```
 
@@ -123,6 +130,7 @@ For caffe, we only support model which can be loaded by [Intel Caffe 1.0](https:
 The following is the Python API:
 
 ```python
+#[API]
 ktc.onnx_optimizer.caffe2onnx_flow(caffe_model_path, caffe_weight_path)
 ```
 
@@ -136,6 +144,7 @@ Args:
 Here we will use the example from ConvertorExamples. You can find two files for the caffe model: the model structure definition file `mobilenetv2.prototxt` and the model weight file `mobilenetv2.caffemodel`. Here is the example python code for model conversion:
 
 ```python
+#[Note] You need to download the model first
 result_m = ktc.onnx_optimizer.caffe2onnx_flow('/data1/ConvertorExamples/caffe_example/mobilenetv2.prototxt', '/data1/ConvertorExamples/caffe_example/mobilenetv2.caffemodel')
 ```
 
@@ -149,6 +158,7 @@ We only support unquantized TF Lite models for now. Also tensorflow 2 is not sup
 The following is our TFLite to ONNX API:
 
 ```python
+#[API]
 ktc.onnx_optimizer.tflite2onnx_flow(tflite_path, release_mode, bottom_nodes)
 ```
 
@@ -163,6 +173,7 @@ Args:
 Suppose we are using the tflite file `model_unquant.tflite` from the ConvertorExamples, here is the example python code:
 
 ```python
+#[Note] You need to download the model first
 result_m = ktc.onnx_optimizer.tflite2onnx_flow('/data1/ConvertorExamples/tflite_example/model_unquant.tflite')
 ```
 
@@ -180,6 +191,7 @@ We provide a general onnx optimize API. We strongly recommend that all the onnx,
 Here is the detailed ONNX optimization API:
 
 ```python
+#[API]
 ktc.onnx_optimizer.onnx2onnx_flow(m, disable_fuse_bn=False, bgr=False, norm=False, rgba2yynn=False, eliminate_tail=False, opt_matmul=False, opt_720=False, duplicate_shared_weights=True)
 ```
 
@@ -220,6 +232,7 @@ If you meet the errors related to `node not found` or `invalid input`, this migh
 Please try set `disable_fuse_bn` to `True`. The code would be:
 
 ```python
+#[API]
 optimized_m = ktc.onnx_optimizer.onnx2onnx_flow(result_m, eliminate_tail=True, disable_fuse_bn=True)
 ```
 
@@ -235,6 +248,7 @@ From toolchain version 0.14.0, ONNX in the docker has been updated from 1.4.1 to
 Here is the API:
 
 ```python
+#[API]
 ktc.onnx_optimizer.onnx1_4to1_6(model)
 ```
 
@@ -247,6 +261,7 @@ Args:
 Here is an example usage.
 
 ```python
+#[Note] old_m is the opset 9 onnx model object.
 new_m = ktc.onnx_optimizer.onnx1_4to1_6(old_m)
 ```
 
@@ -263,6 +278,7 @@ Following are the Python APIs we provide.
 #### Delete specific nodes
 
 ```python
+#[API]
 ktc.onnx_optimizer.delete_nodes(model, node_names)
 ```
 
@@ -276,6 +292,7 @@ Args:
 #### Delete specific inputs
 
 ```python
+#[API]
 ktc.onnx_optimizer.delete_inputs(model, value_names)
 ```
 
@@ -289,6 +306,7 @@ Args:
 #### Delete specific outputs
 
 ```python
+#[API]
 ktc.onnx_optimizer.delete_outputs(model, value_names)
 ```
 
@@ -302,6 +320,7 @@ Args:
 #### Cut the graph from the given node.
 
 ```python
+#[API]
 ktc.onnx_optimizer.cut_graph_from_nodes(model, node_names)
 ```
 
@@ -316,6 +335,7 @@ Args:
 #### Cut the graph from the given operator type.
 
 ```python
+#[API]
 ktc.onnx_optimizer.remove_nodes_with_types(model, type_names)
 ```
 
@@ -330,6 +350,7 @@ Args:
 #### Change input/output shapes
 
 ```python
+#[API]
 ktc.onnx_optimizer.change_input_output_shapes(model, input_shape_mapping=None, output_shape_mapping=None)
 ```
 
@@ -344,6 +365,7 @@ Args:
 #### Add do-nothing Conv nodes after specific values
 
 ```python
+#[API]
 ktc.onnx_optimizer.add_conv_after(model, value_names)
 ```
 
@@ -357,6 +379,7 @@ Args:
 #### Add do-nothing BN nodes after specific values
 
 ```python
+#[API]
 ktc.onnx_optimizer.add_bn_after(model, value_names)
 ```
 
@@ -370,6 +393,7 @@ Args:
 #### Rename an output
 
 ```python
+#[API]
 ktc.onnx_optimizer.rename_output(model, old_name, new_name)
 ```
 
@@ -384,6 +408,7 @@ Args:
 #### Input pixel shift
 
 ```python
+#[API]
 ktc.onnx_optimizer.pixel_modify(model, scale, bias)
 ```
 
@@ -404,6 +429,7 @@ IP evaluator is such a tool which can estimate the performance of your model and
 We need to create a `ktc.ModelConfig` object. The `ktc.ModelConfig` is the class which contains the basic needed information of a model. You can initilize it through the API below.
 
 ```python
+#[API]
 class ktc.ModelConfig(self, id, version, platform, onnx_model=None, onnx_path=None, bie_path=None)
 ```
 
@@ -417,19 +443,24 @@ Args:
 * onnx_model (ModelProto, optional): loaded onnx model object. Defaults to None.
 * onnx_path (str, optional): onnx file path. Defaults to None.
 * bie_path (str, optional): bie file path. Defaults to None.
+* compiler_config_path (str, optional): compiler config json path. Defaults to None.
 
 Note that for `onnx_model`, `onnx_path` and `bie_path`, user should provide one of those three parameter and only one.
 The bie file is the file generated by the kneron toolchain after quantization, which is introduced in the section 4.
 
-For this example, we create the LittleNet ModelConfig with the following python code:
+`compiler_config_path` is used to specify the configuration for batch compiling. This configuration currently is only for
+advanced users. Please leave it to `None`.
+
+For this example, we create the MobileNet V2 ModelConfig with the following python code:
 
 ```python
-km = ktc.ModelConfig(32769, "0001", "520", onnx_path="/workspace/examples/LittleNet/LittleNet.onnx")
+km = ktc.ModelConfig(32769, "8b28", "720", onnx_model=optimized_m)
 ```
 
 `evaluate` is class function of the `ktc.ModelConfig`.
 
 ```python
+#[API]
 classmethod evaluate()
 ```
 
@@ -464,12 +495,12 @@ Here we are using the onnx as the input model. But it also can take bie file and
 The python code would be like:
 
 ```python
-inf_results = ktc.kneron_inference(input_data, onnx_file="/workspace/examples/LittleNet/LittleNet.onnx", input_names=["data_out"])
+inf_results = ktc.kneron_inference(input_data, onnx_file="/workspace/examples/mobilenetv2/mobilenetv2_zeroq.origin.onnx", input_names=["images"])
 ```
 
 In the code above, `inf_results` is a list of result data. `onnx_file` is the path to the input onnx. `input_data` is a list of input data after preprocess. It should be in channel last format (HWC). The `input_names` is a list of string mapping the input data to specific input on the graph using the sequence. **Note that the input should have the same dimension as the model but in channel last format (HWC).**
 
-Here we provide a very simple preprocess function which only do the resize and normalization:
+Here we provide a very simple preprocess function which only do the resize and normalization. Then, the full code of this section would be:
 
 ```python
 from PIL import Image
@@ -478,26 +509,12 @@ import numpy as np
 def preprocess(input_file):
     image = Image.open(input_file)
     image = image.convert("RGB")
-    img_data = np.array(image.resize((112, 96), Image.BILINEAR)) / 255
-    img_data = np.transpose(img_data, (1, 0, 2))
-    return img_data
-```
-
-Then, the full code of this section would be:
-
-```python
-from PIL import Image
-import numpy as np
-
-def preprocess(input_file):
-    image = Image.open(input_file)
-    image = image.convert("RGB")
-    img_data = np.array(image.resize((112, 96), Image.BILINEAR)) / 255
+    img_data = np.array(image.resize((224, 224), Image.BILINEAR)) / 255
     img_data = np.transpose(img_data, (1, 0, 2))
     return img_data
 
-input_data = [preprocess("/workspace/examples/LittleNet/pytorch_imgs/Abdullah_0001.png")]
-inf_results = ktc.kneron_inference(input_data, onnx_file="/workspace/examples/LittleNet/LittleNet.onnx", input_names=["data_out"])
+input_data = [preprocess("/workspace/examples/mobilenetv2/images/000007.jpg")]
+inf_results = ktc.kneron_inference(input_data, onnx_file="/workspace/examples/mobilenetv2/mobilenetv2_zeroq.origin.onnx", input_names=["images"])
 ```
 
 Since we want to focus on the toolchain usage here, we do not provide any postprocess. In reality, you may want to have your own postprocess function in Python, too.
