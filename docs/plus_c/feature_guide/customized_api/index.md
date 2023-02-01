@@ -6,6 +6,8 @@ Documents in **Customized API** explain the usage of create customized API in So
 - [Install Dependency](./install_dependency.md)
 - [Create Single Model Example for KL520](./create_kl520_single_model_example.md)
 - [Create Multiple Models Example for KL520](./create_kl520_multiple_models_example.md)
+- [Create Single Model Example for KL630](./create_kl630_single_model_example.md)
+- [Create Multiple Model Example for KL630](./create_kl630_multiple_models_example.md)
 - [Create Single Model Example for KL720](./create_kl720_single_model_example.md)
 - [Create Multiple Model Example for KL720](./create_kl720_multiple_models_example.md)
 - [NCPU Firmware Configuration](./ncpu_firmware_configuration.md)

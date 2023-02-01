@@ -1,7 +1,7 @@
 # Kneron Model Zoo Inference Example - Classification
 
 PLUS Inference Example with NEF model trained from
-http://doc.kneron.com/docs/#model_training/classification/
+https://doc.kneron.com/docs/#model_training/classification/
 
 ---
 
@@ -10,12 +10,12 @@ Check
 
 in
 
-- Kneron Toolchain docker (doc: http://doc.kneron.com/docs/#toolchain/manual/#2-toolchain-docker-overview)
+- Kneron Toolchain docker (doc: https://doc.kneron.com/docs/#toolchain/manual_1_overview/)
 
 to learn how to train a the example model, and check 
 
-- http://doc.kneron.com/docs/#toolchain/manual/#2-toolchain-docker-overview
-- http://doc.kneron.com/docs/#toolchain/yolo_example/
+- https://doc.kneron.com/docs/#toolchain/manual_1_overview/
+- https://doc.kneron.com/docs/#toolchain/appendix/yolo_example/
 
 to learn how to convert the trained model to NEF model
 

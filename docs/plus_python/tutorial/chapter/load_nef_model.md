@@ -60,7 +60,7 @@ print(model_nef_descriptor)
         "toolchain_version": "",
         "compiler_version": "v0.9.0(bf6cf311)",
         "nef_schema_version": {
-            "version": "0.9.0"
+            "version": "0.0.0"
         },
         "platform": "USB dongle"
     },

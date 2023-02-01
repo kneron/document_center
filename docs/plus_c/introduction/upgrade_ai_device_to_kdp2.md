@@ -77,15 +77,24 @@ $ sudo sh KneronDFUT.sh --help
     --scpu                : [argument required]   self pointed scpu firmware file path (.bin)
     --ncpu                : [argument required]   self pointed ncpu firmware file path (.bin)
 
-[Update firmware file to flash memory in dongles (Only works for KL720)
+[Update dongles to usb boot] (Only works for KL630)
+    --kl630-usb-boot      : [no argument]         choose update to Usb Boot
+    --port                : [argument required]   port id set ("all" or specified multiple port ids "13,537")
+
+[Update dongles to usb boot] (Only works for KL630)
+    --kl630-flash-boot    : [no argument]         choose update to Flash Boot
+    --port                : [argument required]   port id set ("all" or specified multiple port ids "13,537")
+    --scpu                : [argument required]   self pointed firmware file path (.tar)
+
+[Update firmware file to flash memory in dongles] (Only works for KL720)
     --kl720-update        : [no argument]         choose write firmware to flash memory
     --port                : [argument required]   port id set ("all" or specified multiple port ids "13,537")
     --scpu                : [argument required]   self pointed scpu firmware file path (.bin)
     --ncpu                : [argument required]   self pointed ncpu firmware file path (.bin)
 
-[Update model file to flash memory in dongles
+[Update model file to flash memory in dongles]
     --model-to-flash      : [argument required]   self pointed model file path (.nef)
-    --type                : [argument required]   type of device ("KL520" or "KL720")
+    --type                : [argument required]   type of device ("KL520", "KL630", or "KL720")
     --port                : [argument required]   port id set ("all" or specified multiple port ids "13,537")
 
 [Enable Graphic User Interface]
@@ -99,7 +108,7 @@ $ sudo sh KneronDFUT.sh --help
 
 ## 3. Install Driver for Windows
 
-When you execute any kind of update on Kneron DFUT, it will check whether the driver of KL520 or KL720 has been installed on Windows. If the driver has not been installed, Kneron DFUT will install the driver before any update.
+When you execute any kind of update on Kneron DFUT, it will check whether the driver of KL520, KL630 or KL720 has been installed on Windows. If the driver has not been installed, Kneron DFUT will install the driver before any update.
 
 Note: Kneron DFUT only check and install driver when it was executed on Windows.
 
@@ -127,9 +136,9 @@ Note: This feature and example are only provided in Kneron DFUT v1.3.0 and above
 
 ---
 
-## 3. [KL520] Update to USB Boot Mode
+## 4. [KL520] Update to USB Boot Mode
 
-### 3.1 Use GUI to Update AI Device
+### 4.1 Use GUI to Update AI Device
 
 ```bash
 $ sudo sh KneronDFUT.sh
@@ -146,7 +155,7 @@ $ sudo sh KneronDFUT.sh
     ![](../imgs/dfut_kl520_usb_boot.png)
 
 
-### 3.2 Use Command Line to Update AI Device
+### 4.2 Use Command Line to Update AI Device
 
 1. List all devices
 
@@ -182,9 +191,9 @@ $ sudo sh KneronDFUT.sh
 
 ---
 
-## 4. [KL520] Update to Flash Boot Mode
+## 5. [KL520] Update to Flash Boot Mode
 
-### 4.1 Use GUI to Update AI Device
+### 5.1 Use GUI to Update AI Device
 ```bash
 $ sudo sh KneronDFUT.sh
 ```
@@ -203,7 +212,7 @@ $ sudo sh KneronDFUT.sh
 
     ![](../imgs/dfut_kl520_flash_boot.png)
 
-### 4.2 Use Command Line to Update AI Device
+### 5.2 Use Command Line to Update AI Device
 
 1. List all devices
 
@@ -239,12 +248,124 @@ $ sudo sh KneronDFUT.sh
 
 ---
 
-## 5. [KL720] Update Firmware to Flash Memory
+## 6. [KL630] Update to USB Boot Mode
+
+### 6.1 Use GUI to Update AI Device
+
+```bash
+$ sudo sh KneronDFUT.sh
+```
+
+1. Select **KL630** Tab.
+
+2. Select the KL630 devices to be update to USB Boot Mode.
+
+3. Select **Update to USB Boot**
+
+4. Push **Run** button.
+
+    ![](../imgs/dfut_kl630_usb_boot.png)
+
+
+### 6.2 Use Command Line to Update AI Device
+
+1. List all devices
+
+    ```bash
+    $ sudo sh KneronDFUT.sh --list
+    ```
+
+    ```bash
+    ===========================================
+    Index:          1
+    Port Id:        133
+    Kn Number:      0x270A265C
+    Device Type:    KL630
+    FW Type:        KDP2
+    Usb Speed:      High-Speed
+    Connectable:    true
+    ===========================================
+    ```
+
+2. Upgrade the selected KL630 devices using the port id
+
+    ```bash
+    $ sudo sh KneronDFUT.sh --kl630-usb-boot --port 133
+    ```
+
+    ```bash
+    Start Update Device with Port Id 133 to USB Boot
+
+    ==== Update of Device with Port Id: 133 Succeeded ====
+
+    ```
+
+
+---
+
+## 7. [KL630] Update to Flash Boot Mode
+
+### 7.1 Use GUI to Update AI Device
+```bash
+$ sudo sh KneronDFUT.sh
+```
+
+1. Select **KL630** Tab.
+
+2. Select the KL630 devices to be **Update to Flash Boot** Mode.
+
+3. Select **Update to Flash Boot**
+
+4. Manually choose **SCPU firmware file**.
+
+    SCPU firmware file for KL630 can be found in **${PLUS_FOLDER}/res/firmware/KL630/**
+
+5. Push **Run** button.
+
+    ![](../imgs/dfut_kl630_flash_boot.png)
+
+### 7.2 Use Command Line to Update AI Device
+
+1. List all devices
+
+    ```bash
+    $ sudo sh KneronDFUT.sh --list
+    ```
+
+    ```bash
+    ===========================================
+    Index:          1
+    Port Id:        13
+    Kn Number:      0x09011004
+    Device Type:    KL630
+    FW Type:        KDP2
+    Usb Speed:      High-Speed
+    Connectable:    true
+    ===========================================
+    ```
+
+2. Upgrade the selected KL630 devices using the port id
+
+    ```bash
+    $ sudo sh KneronDFUT.sh --kl630-flash-boot --port 13 --scpu ${SCPU_FILE_PATH}
+    ```
+
+    ```bash
+    Start Update Device with Port Id 13 to Flash Boot
+
+    ==== Update of Device with Port Id: 13 Succeeded ====
+    ```
+
+    SCPU firmware file for KL630 can be found in **${PLUS_FOLDER}/res/firmware/KL630/**
+
+---
+
+## 8. [KL720] Update Firmware to Flash Memory
 
 
 **Note**: Update flash for KL720 is required under USB3.0\(Super-Speed) model
 
-### 5.1 Use GUI to Update AI Device
+### 8.1 Use GUI to Update AI Device
 
 ```bash
 $ sudo sh KneronDFUT.sh
@@ -264,7 +385,7 @@ $ sudo sh KneronDFUT.sh
 
     ![](../imgs/dfut_kl720_firmware.png)
 
-### 5.2 Use Command Line to Update AI Device
+### 8.2 Use Command Line to Update AI Device
 
 1. List all devices
 

@@ -2,7 +2,7 @@
 
 The provided examples are designed to show how to use KP APIs and present Kneron Device features. Error handling, wording and application layer features are not covered. They are open for more creatives.
 
-> **Note 1**: In the inference related examples, we are using KL520 for most demo. If you wish to use KL720, just change the prefix of the example name from kl520 to kl720.
+> **Note 1**: In the inference related examples, we are using KL520 for most demo. If you wish to use KL630 or KL720, just change the prefix of the example name from kl520 to kl630 or kl720.
 
 > **Note 2**: **[Ubuntu]** Please update Kneron device USB permission before following steps on Ubuntu. See the [Installation
 ](./install_dependency.md) for details.
@@ -88,7 +88,21 @@ Note: This example is only available on Windows 10, and it must be run as Admini
         - Success
     ```
 
-2. For installing the driver for KL720:
+2. For installing the driver for KL630:
+
+    ```bash
+    $ python3 InstallDriverWindows.py --target KL630
+    ```
+
+    ```bash
+    [Note]
+     - You must run this app as administrator on Windows
+    [Installing Driver]
+     - [KP_DEVICE_KL630]
+        - Success
+    ```
+
+3. For installing the driver for KL720:
 
     ```bash
     $ python3 InstallDriverWindows.py --target KL720
@@ -108,7 +122,7 @@ Note: This example is only available on Windows 10, and it must be run as Admini
 
 ## 3. Load Firmware and Model Example
 
-`kp.core.load_firmware_from_file()` is an API to load firmware file from host to the AI device via USB. And this API is only available on KL520 (USB Boot Mode). Please refer [Upgrade AI Device To KDP2](./upgrade_ai_device_to_kdp2.md) for more information.
+`kp.core.load_firmware_from_file()` is an API to load firmware file from host to the AI device via USB. And this API is only available when device is on **USB Boot Mode**. Please refer [Upgrade AI Device To KDP2](./upgrade_ai_device_to_kdp2.md) for more information.
 
 `kp.core.load_model_from_file()` is an API to load model file from host to the AI device via USB. Please refer [Write Model to Flash](./write_model_to_flash.md) for more information.
 
@@ -466,7 +480,7 @@ This example is to show how to configure the `kp.DdrManageAttributes` and the us
 Please refer [Device DDR Management](../feature_guide/chapter/device_ddr_management.md) for more information.
 
 ```bash
-$ python3 
+$ python3 KL520DemoGenericImageInferenceFifoqConfig.py
 
 [Connect Device]
  - Success

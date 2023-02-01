@@ -36,6 +36,8 @@ nav:
         - Install Dependency:                                       plus_c/feature_guide/customized_api/install_dependency.md
         - Create Single Model Example for KL520:                    plus_c/feature_guide/customized_api/create_kl520_single_model_example.md
         - Create Multiple Models Example for KL520:                 plus_c/feature_guide/customized_api/create_kl520_multiple_models_example.md
+        - Create Single Model Example for KL630:                    plus_c/feature_guide/customized_api/create_kl630_single_model_example.md
+        - Create Multiple Models Example for KL630:                 plus_c/feature_guide/customized_api/create_kl630_multiple_models_example.md
         - Create Single Model Example for KL720:                    plus_c/feature_guide/customized_api/create_kl720_single_model_example.md
         - Create Multiple Model Example for KL720:                  plus_c/feature_guide/customized_api/create_kl720_multiple_models_example.md
         - NCPU Firmware Configuration:                              plus_c/feature_guide/customized_api/ncpu_firmware_configuration.md
@@ -55,13 +57,19 @@ nav:
       - NPU Raw Output Memory Layout:                               plus_c/appendix/npu_raw_output_memory_layout.md
       - Yolo Object Name Mapping:                                   plus_c/appendix/yolo_object_name_mapping.md
     - API Reference:
-      - v2.0.x:
-        - Data Structure:                                           plus_c_api/api_reference_2.0.x/kp_struct.h.md
-        - Core API:                                                 plus_c_api/api_reference_2.0.x/kp_core.h.md
-        - Inference API:                                            plus_c_api/api_reference_2.0.x/kp_inference.h.md
-        - (legacy)Data Structure:                                   plus_c_api/api_reference_2.0.x/kp_struct_v1.h.md
-        - (legacy)Inference API:                                    plus_c_api/api_reference_2.0.x/kp_inference_v1.h.md
+      - v2.1.x:
+        - Data Structure:                                           plus_c_api/api_reference_2.1.x/kp_struct.h.md
+        - Core API:                                                 plus_c_api/api_reference_2.1.x/kp_core.h.md
+        - Inference API:                                            plus_c_api/api_reference_2.1.x/kp_inference.h.md
+        - (legacy)Data Structure:                                   plus_c_api/api_reference_2.1.x/kp_struct_v1.h.md
+        - (legacy)Inference API:                                    plus_c_api/api_reference_2.1.x/kp_inference_v1.h.md
       - Archive:
+        - v2.0.x:
+          - Data Structure:                                         plus_c_api/api_reference_2.0.x/kp_struct.h.md
+          - Core API:                                               plus_c_api/api_reference_2.0.x/kp_core.h.md
+          - Inference API:                                          plus_c_api/api_reference_2.0.x/kp_inference.h.md
+          - (legacy)Data Structure:                                 plus_c_api/api_reference_2.0.x/kp_struct_v1.h.md
+          - (legacy)Inference API:                                  plus_c_api/api_reference_2.0.x/kp_inference_v1.h.md
         - v1.3.x:
           - Data Structure:                                         plus_c_api/api_reference_1.3.x/kp_struct.h.md
           - Core API:                                               plus_c_api/api_reference_1.3.x/kp_core.h.md
@@ -119,7 +127,18 @@ nav:
       - Compatible with V1.x API:                                   plus_python/api_migration/chapter/api_compatible_legacy.md
     - API Document:
       - Index:                                                      plus_python/api_document/index.md
-      - V2.0.0 (Latest Version):
+      - V2.1.0 (Latest Version):
+        - Index:                                                    plus_python/api_document/V2.1.0/index.md
+        - kp.core:                                                  plus_python/api_document/V2.1.0/kp/core.md
+        - kp.inference:                                             plus_python/api_document/V2.1.0/kp/inference.md
+        - kp value:                                                 plus_python/api_document/V2.1.0/kp/value.md
+        - kp enum:                                                  plus_python/api_document/V2.1.0/kp/enum.md
+        - kp exception:                                             plus_python/api_document/V2.1.0/kp/exception.md
+        - kp const:                                                 plus_python/api_document/V2.1.0/kp/const.md
+        - kp.v1 (Legacy Module):
+          - kp.v1.inference:                                        plus_python/api_document/V2.1.0/kp/v1/inference.md
+          - kp.v1 value:                                            plus_python/api_document/V2.1.0/kp/v1/value.md
+      - V2.0.0:
         - Index:                                                    plus_python/api_document/V2.0.0/index.md
         - kp.core:                                                  plus_python/api_document/V2.0.0/kp/core.md
         - kp.inference:                                             plus_python/api_document/V2.0.0/kp/inference.md
@@ -147,16 +166,18 @@ nav:
 
   - Firmware SDK:
     - KL520 SDK:
-      - v2.0.x:                                                     520_2.0.0/introduction.md
+      - v2.1.x:                                                     520_2.1.0/introduction.md
       - Archive:
+        - v2.0.x:                                                   520_2.0.0/introduction.md
         - v1.7.x:                                                   520_1.7.0/introduction.md
         - v1.6.x:                                                   520_1.6.0/introduction.md
         - v1.5.0.0:                                                 520_1.5.0.0/getting_start.md
         - v1.4.0.0:                                                 520_1.4.0.0/getting_start.md
         - v1.3.0.0:                                                 520_1.3.0.0/getting_start.md
     - KL720 SDK:
-      - v2.0.x:                                                     720_2.0.0/introduction.md
+      - v2.1.x:                                                     720_2.1.0/introduction.md
       - Archive:
+        - v2.0.x:                                                   720_2.0.0/introduction.md
         - v1.5.x:                                                   720_1.5.0/introduction.md
         - v1.4.x:                                                   720_1.4.0/introduction.md
         - v1.3.0:                                                   720_1.3.0/getting_start_720.md

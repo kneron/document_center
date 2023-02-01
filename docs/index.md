@@ -36,13 +36,14 @@ Kneron AI consists the following components:
 ---
 ## Compatibility Table
 
-Versions           | KL520 SDK version | KL720 SDK version 
-:------------------|:------------------|:--------------
-Kneron PLUS v2.0.x | 2.0.x             | 2.0.x         
-Kneron PLUS v1.3.x | 1.7.x             | 1.5.x         
-Kneron PLUS v1.2.x | 1.6.x             | 1.4.x         
-host_lib    v1.0.0 | 1.5.0.0           | 1.3.0         
-host_lib    v0.9.x | 1.4.0.x           | Not supported
+Versions           | KL520 SDK version | KL720 SDK version | KL630 SDK version (NNM version)
+:------------------|:------------------|:------------------|:-------------------------------
+Kneron PLUS v2.1.x | 2.1.x             | 2.1.x             | 2.5.2 (1.0.x)
+Kneron PLUS v2.0.x | 2.0.x             | 2.0.x             | Not supported
+Kneron PLUS v1.3.x | 1.7.x             | 1.5.x             | Not supported
+Kneron PLUS v1.2.x | 1.6.x             | 1.4.x             | Not supported
+host_lib    v1.0.0 | 1.5.0.0           | 1.3.0             | Not supported
+host_lib    v0.9.x | 1.4.0.x           | Not supported     | Not supported
 
 **Notes:**  
 	**Host API v1.0.0(host_lib)** *stays with [KL520 SDK v1.5.0.0](./520_1.5.0.0/getting_start.md) / [KL720 SDK v1.3.0](./720_1.3.0/getting_start_720.md) and deprecated from KL520 SDK v1.6.0/KL720 SDK v1.4.1*

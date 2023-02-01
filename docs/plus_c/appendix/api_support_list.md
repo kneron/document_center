@@ -4,52 +4,52 @@ The following mapping table shows the **Kneron PLUS** supported C/Python API:
 
 * **Core API**  
 
-    | Function Name                                                       | C         | Python    |
-    | ------------------------------------------------------------------- | --------- | --------- |
-    | kp\_scan\_devices                                                   | Yes       | Yes       |
-    | kp\_connect\_devices                                                | Yes       | Yes       |
-    | kp\_connect\_devices\_without\_check                                | Yes (New) | Yes (New) |
-    | kp\_disconnect\_devices                                             | Yes       | Yes       |
-    | kp\_set\_timeout                                                    | Yes       | Yes       |
-    | kp\_reset\_device                                                   | Yes       | Yes       |
-    | kp\_load\_firmware/kp\_load\_firmware\_from\_file                   | Yes       | Yes       |
-    | kp\_load\_model/kp\_load\_model\_from\_file                         | Yes       | Yes       |
-    | kp\_load\_encrypted\_models/kp\_load\_encrypted\_models\_from\_file | Yes       | Yes       |
-    | kp\_enable\_firmware\_log                                           | Yes       | Yes       |
-    | kp\_disable\_firmware\_log                                          | Yes       | Yes       |
-    | kp\_get\_system\_info                                               | Yes       | Yes       |
-    | kp\_get\_model\_info                                                | Yes       | Yes       |
-    | kp\_load\_model\_from\_flash                                        | Yes       | Yes       |
-    | kp\_install\_driver\_for\_windows                                   | Yes       | Yes       |
-    | kp\_store\_ddr\_manage\_attr                                        | Yes (New) | Yes (New) |
-    | kp\_error\_string                                                   | Yes       |           |
-    | kp\_get\_version                                                    | Yes       | Yes       |
+    | Function Name                                               | C   | Python |
+    | ----------------------------------------------------------- | --- | ------ |
+    | kp_scan_devices                                             | Yes | Yes    |
+    | kp_connect_devices                                          | Yes | Yes    |
+    | kp_connect_devices_without_check                            | Yes | Yes    |
+    | kp_disconnect_devices                                       | Yes | Yes    |
+    | kp_set_timeout                                              | Yes | Yes    |
+    | kp_reset_device                                             | Yes | Yes    |
+    | kp_load_firmware/kp_load_firmware_from_file                 | Yes | Yes    |
+    | kp_load_model/kp_load_model_from_file                       | Yes | Yes    |
+    | kp_load_encrypted_models/kp_load_encrypted_models_from_file | Yes | Yes    |
+    | kp_enable_firmware_log                                      | Yes | Yes    |
+    | kp_disable_firmware_log                                     | Yes | Yes    |
+    | kp_get_system_info                                          | Yes | Yes    |
+    | kp_get_model_info                                           | Yes | Yes    |
+    | kp_load_model_from_flash                                    | Yes | Yes    |
+    | kp_install_driver_for_windows                               | Yes | Yes    |
+    | kp_store_ddr_manage_attr                                    | Yes | Yes    |
+    | kp_error_string                                             | Yes |        |
+    | kp_get_version                                              | Yes | Yes    |
 
 * **Inference API**  
 
-    | Function Name                                      | C         | Python    |
-    | -------------------------------------------------- | --------- | --------- |
-    | kp\_inference\_configure                           | Yes       | Yes       |
-    | kp\_generic\_image\_inference\_send                | Yes (New) | Yes (New) |
-    | kp\_generic\_image\_inference\_receive             | Yes (New) | Yes (New) |
-    | kp\_generic\_data\_inference\_send                 | Yes (New) | Yes (New) |
-    | kp\_generic\_data\_inference\_receive              | Yes (New) | Yes (New) |
-    | kp\_generic\_inference\_retrieve\_raw\_fixed\_node | Yes       |           |
-    | kp\_generic\_inference\_retrieve\_fixed\_node      | Yes       | Yes       |
-    | kp\_generic\_inference\_retrieve\_float\_node      | Yes       | Yes       |
-    | kp\_customized\_inference\_send                    | Yes       |           |
-    | kp\_customized\_inference\_receive                 | Yes       |           |
-    | kp\_customized\_command\_send                      | Yes       |           |
-    | kp\_dbg\_set\_enable\_checkpoints                  | Yes       |           |
-    | kp\_dbg\_receive\_checkpoint\_data                 | Yes       |           |
-    | kp\_profile\_set\_enable                           | Yes       |           |
-    | kp\_profile\_get\_statistics                       | Yes       |           |
+    | Function Name                                | C         | Python    |
+    | -------------------------------------------- | --------- | --------- |
+    | kp_inference_configure                       | Yes       | Yes       |
+    | kp_generic_image_inference_send              | Yes       | Yes       |
+    | kp_generic_image_inference_receive           | Yes       | Yes       |
+    | kp_generic_data_inference_send               | Yes       | Yes       |
+    | kp_generic_data_inference_receive            | Yes       | Yes       |
+    | kp_generic_inference_retrieve_raw_fixed_node | Yes       |           |
+    | kp_generic_inference_retrieve_fixed_node     | Yes       | Yes       |
+    | kp_generic_inference_retrieve_float_node     | Yes       | Yes       |
+    | kp_customized_inference_send                 | Yes       |           |
+    | kp_customized_inference_receive              | Yes       |           |
+    | kp_customized_command_send                   | Yes       |           |
+    | kp_dbg_set_enable_checkpoints                | Yes       |           |
+    | kp_dbg_receive_checkpoint_data               | Yes       |           |
+    | kp_profile_set_enable                        | Yes (New) | Yes (New) |
+    | kp_profile_get_statistics                    | Yes (New) | Yes (New) |
 
 * **Inference API V1.x (Legacy)**  
 
-    | Function Name                                           | C   | Python |
-    | ------------------------------------------------------- | --- | ------ |
-    | kp\_generic\_raw\_inference\_send                       | Yes | Yes    |
-    | kp\_generic\_raw\_inference\_receive                    | Yes | Yes    |
-    | kp\_generic\_raw\_inference\_bypass\_pre\_proc\_send    | Yes | Yes    |
-    | kp\_generic\_raw\_inference\_bypass\_pre\_proc\_receive | Yes | Yes    |
+    | Function Name                                    | C   | Python |
+    | ------------------------------------------------ | --- | ------ |
+    | kp_generic_raw_inference_send                    | Yes | Yes    |
+    | kp_generic_raw_inference_receive                 | Yes | Yes    |
+    | kp_generic_raw_inference_bypass_pre_proc_send    | Yes | Yes    |
+    | kp_generic_raw_inference_bypass_pre_proc_receive | Yes | Yes    |

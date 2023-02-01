@@ -66,6 +66,8 @@ class DdrManageAttributes(ValueBase, ValueRepresentBase):
 
 2. `kp.DdrManageAttributes` must be prepared and stored into `kp.DeviceGroup` using `kp.core.store_ddr_management_attributes()` before calling `kp.core.load_model()`, `kp.core.load_encrypted_models()` or `kp.core.load_model_from_flash()`.
 
-3. If all size in customized configuration is larger than the available DDR space, the configuration will be failed.
+3. System has reserved 15 MB from DDR space for other working buffers.
 
-Please refer [6. Device Memory Usage Control Example](../../introduction/run_examples.md#6-device-memory-usage-control-example) for the demonstration.
+4. If (System Reserved + Model Size + (Input Buffer Count x Input Buffer Size) + (Result Buffer Count x Result Buffer Size)) is larger than the available DDR space, the configuration will fail.
+
+Please refer [9. Device Memory Usage Control Example](../../introduction/run_examples.md#9-device-memory-usage-control-example) for the demonstration.
