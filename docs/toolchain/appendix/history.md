@@ -21,6 +21,11 @@
 
 ## Toolchain Change log
 
+* **[v0.20.1]**
+    * Update toolchain example to MobileNet v2.
+    * Fix knerex bias adjustment.
+    * Fix knerex shared weight with same name support.
+    * Fix other bugs.
 * **[v0.20.0]**
     * Support text procssing models.
     * Set flatbuffer as the default 720 compiling mode.

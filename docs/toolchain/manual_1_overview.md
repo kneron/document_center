@@ -4,8 +4,8 @@
 
 # 1. Toolchain Overview
 
-**2022 Nov**
-**Toolchain v0.20.0**
+**2023 Feb**
+**Toolchain v0.20.1**
 
 ## 1.1. Introduction
 
@@ -20,6 +20,11 @@ In this document, you'll learn:
 
 **Major changes of the current version**
 
+* **[v0.20.1]**
+    * Update toolchain example to MobileNet v2.
+    * Fix knerex bias adjustment.
+    * Fix knerex shared weight with same name support.
+    * Fix other bugs.
 * **[v0.20.0]**
     * Support text procssing models.
     * Set flatbuffer as the default 720 compiling mode.
