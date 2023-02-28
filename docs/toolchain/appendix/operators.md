@@ -39,7 +39,7 @@ Table below shows the list of operators supports base on ONNX operators.
 | LpNormalization               |  N  |  N  |  N  |  N  |
 | LRN                           |  N  |  N  |  N  |  N  |
 | LSTM                          |  N  |  Y  |  Y  |  Y  |
-| MatMul                        |  Y  |  Y  |  Y  |  Y  |
+| MatMul                        |  N  |  Y  |  Y  |  Y  |
 | MaxPool<sup>8</sup>           |  Y  |  Y  |  Y  |  Y  |
 | MaxRoiPool                    |  N  |  Y  |  Y  |  Y  |
 | MaxUnpool                     |  N  |  N  |  N  |  N  |
@@ -77,14 +77,14 @@ Table below shows the list of operators supports base on ONNX operators.
 | Softplus                      |  N  |  N  |  Y  |  Y  |
 | Softsign                      |  N  |  N  |  Y  |  Y  |
 | SpaceToDepth<sup>13</sup>     |  N  |  N  |  Y  |  Y  |
-| Split                         |  N  |  Y  |  Y  |  Y  |
+| Split                         |  Y  |  Y  |  Y  |  Y  |
 | Squeeze                       |  N  |  N  |  N  |  N  |
 | Sub                           |  Y  |  Y  |  Y  |  Y  |
 | Sum                           |  Y  |  Y  |  Y  |  Y  |
 | Tanh                          |  N  |  Y  |  Y  |  Y  |
 | ThresholdedRelu               |  N  |  N  |  N  |  N  |
 | Tile                          |  N  |  N  |  N  |  N  |
-| Transpose                     |  N  |  N  |  Y  |  Y  |
+| Transpose                     |  N  |  Y  |  Y  |  Y  |
 | Unsqueeze                     |  N  |  N  |  N  |  N  |
 | Upsample<sup>14</sup>         |  N  |  Y  |  Y  |  Y  |
 
