@@ -21,6 +21,8 @@
 
 ## Toolchain Change log
 
+* **[v0.20.2]**
+    * Fix combining nef error.
 * **[v0.20.1]**
     * Update toolchain example to MobileNet v2.
     * Fix knerex bias adjustment.

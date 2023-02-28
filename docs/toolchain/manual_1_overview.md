@@ -5,7 +5,7 @@
 # 1. Toolchain Overview
 
 **2023 Feb**
-**Toolchain v0.20.1**
+**Toolchain v0.20.2**
 
 ## 1.1. Introduction
 
@@ -20,6 +20,8 @@ In this document, you'll learn:
 
 **Major changes of the current version**
 
+* **[v0.20.2]**
+    * Fix combining nef error.
 * **[v0.20.1]**
     * Update toolchain example to MobileNet v2.
     * Fix knerex bias adjustment.

@@ -37,8 +37,8 @@ You can use the following command to pull the latest toolchain docker.
 docker pull kneron/toolchain:latest
 ```
 
-Note that the latest toolchain version v0.20.1. You can find the version of the toolchain in
-`/workspace/version.txt` inside the docker. If you find your toolchain is earlier than v0.20.1, you may need to find the
+Note that the latest toolchain version v0.20.2. You can find the version of the toolchain in
+`/workspace/version.txt` inside the docker. If you find your toolchain is earlier than v0.20.0, you may need to find the
 document from the [manual history](appendix/history.md).
 
 ## 2.3. Toolchain Docker Overview

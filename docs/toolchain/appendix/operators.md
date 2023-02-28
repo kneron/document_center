@@ -65,7 +65,7 @@ Table below shows the list of operators supports base on ONNX operators.
 | ReduceSum                     |  Y  |  Y  |  Y  |  Y  |
 | ReduceSumSquare               |  N  |  Y  |  Y  |  Y  |
 | Relu                          |  Y  |  Y  |  Y  |  Y  |
-| Reshape                       |  N  |  N  |  Y  |  Y  |
+| Reshape                       |  N  |  Y  |  Y  |  Y  |
 | Resize<sup>12</sup>           |  N  |  Y  |  Y  |  Y  |
 | RNN                           |  N  |  Y  |  Y  |  Y  |
 | RoiAlign                      |  N  |  Y  |  Y  |  Y  |
