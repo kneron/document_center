@@ -62,7 +62,8 @@ def preprocess_2(input_file):
     image = Image.open(input_file)
     image = image.convert("RGB")
     img_data = np.array(image.resize((112, 96), Image.BILINEAR)) / 255
-    img_data = np.transpose(img_data, (1, 0, 2))
+    img_data = np.transpose(img_data, (2, 1, 0))
+    img_data = np.expand_dims(img_data, 0)
     return img_data
 
 input_images_2 = [
@@ -129,3 +130,5 @@ Here is an usage example. Suppose you have three 520 nef files: `/data1/model_32
 #[Note] The nef files in this example is not really provided.
 ktc.combine_nef(['/data1/model_32769.nef', '/data1/model_32770.nef', '/data1/model_32771.nef'], output_path = "/data1/combined")
 ```
+
+**Please note that nef files for 720 hardware generated using the default configuration after toolchain v0.20.0 cannot be combined with the nef files generated previously. This is caused by the default setting for flatbuffer has been changed from False to True for the 720 hardware.**

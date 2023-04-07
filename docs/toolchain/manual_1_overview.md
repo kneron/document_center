@@ -4,8 +4,8 @@
 
 # 1. Toolchain Overview
 
-**2023 Feb**
-**Toolchain v0.20.2**
+**2023 Apr**
+**Toolchain v0.21.0**
 
 ## 1.1. Introduction
 
@@ -20,20 +20,15 @@ In this document, you'll learn:
 
 **Major changes of the current version**
 
-* **[v0.20.2]**
-    * Fix combining nef error.
-* **[v0.20.1]**
-    * Update toolchain example to MobileNet v2.
-    * Fix knerex bias adjustment.
-    * Fix knerex shared weight with same name support.
-    * Fix other bugs.
-* **[v0.20.0]**
-    * Support text procssing models.
-    * Set flatbuffer as the default 720 compiling mode.
-    * Refactor compiler and analyser inner structure.
-    * **Due to the structure change, batch compiler do not backwark support previous bie files.**
-    * Refactor toolchain manual.
+* **[v0.21.0]**
+    * **Change input format from channel last to the same input shape of ONNX.**
+    * **Change compiler generated `ioinfo.csv` into `ioinfo.json` for platforms other than 520.**
+    * **Remove deprecated command line scripts, e.g. fpAnalyserCompilerIpevaluator_520.py, fpAnalyserBatchCompile_520.py.**
+    * Add html report for `analysis` API.
+    * Add helper utilities under compiler folder.
+    * Add `parallel` and `w3m` into docker environment.
     * Bug fixes.
+    * Documentation updates.
 
 ## 1.2. Workflow Overview
 
@@ -126,17 +121,21 @@ Before going into the next section of quantization, we need to ensure the optimi
 Here we introduce the E2E simulator which is the abbreviation for end to end simulator. It can inference a model and simulate the calculation of the hardware.
 We are using the onnx as the input model now. But it also can take other file formats which would be introduced later.
 
+**Since toolchain v0.21.0, we take inputs with exactly the same shape as onnx instead of the previous channel last format.**
+
 ```python
 # Import necessary libraries for image processing.
 from PIL import Image
 import numpy as np
 
-# A very simple preprocess function. Note that the image is transposed into channel last format (HWC).
+# A very simple preprocess function. Note that the image should be in the same format as the ONNX input (usually NCHW).
 def preprocess(input_file):
     image = Image.open(input_file)
     image = image.convert("RGB")
     img_data = np.array(image.resize((224, 224), Image.BILINEAR)) / 255
-    img_data = np.transpose(img_data, (1, 0, 2))
+    img_data = np.transpose(img_data, (2, 1, 0))
+    # Expand 3x224x224 to 1x3x224x224 which is the shape of ONNX input.
+    img_data = np.expand_dims(img_data, 0)
     return img_data
 
 # Use the previous function to preprocess an example image as the input.
@@ -144,7 +143,7 @@ input_data = [preprocess("/workspace/examples/mobilenetv2/images/000007.jpg")]
 
 # The `onnx_file` is generated and saved in the previous code block.
 # The `input_names` are the input names of the model.
-# The `input_data` order should be kept corresponding to the input names. It should be in channel last format (HWC).
+# The `input_data` order should be kept corresponding to the input names. It should be in the same shape as ONNX (NCHW).
 # The inference result will be save as a list of array.
 floating_point_inf_results = ktc.kneron_inference(input_data, onnx_file='/data1/optimized.onnx', input_names=["images"])
 ```
@@ -175,8 +174,11 @@ input_images = [preprocess("/workspace/examples/mobilenetv2/images/" + image_nam
 input_mapping = {"images": input_images}
 
 # Quantization the model. `km` is the ModelConfig object defined in the previous section.
+# `fm_cut` is a optional arguments which improves the NPU efficiency but takes longer to analysis.
+# For more fine-tuning arguments, please check '4. Fixed-Point Model Generation'.
 # The quantized model is saved as a bie file. The path to the bie file is returned as a string.
-bie_path = km.analysis(input_mapping, threads = 4)
+# It also generates a html report with more details. Please check `/data1/kneron_flow/model_fx_report.html`
+bie_path = km.analysis(input_mapping, threads = 8, fm_cut="deep_search")
 ```
 
 ### 1.5.2. Fixed-Point Model Inference

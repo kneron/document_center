@@ -37,8 +37,8 @@ You can use the following command to pull the latest toolchain docker.
 docker pull kneron/toolchain:latest
 ```
 
-Note that the latest toolchain version v0.20.2. You can find the version of the toolchain in
-`/workspace/version.txt` inside the docker. If you find your toolchain is earlier than v0.20.0, you may need to find the
+Note that the latest toolchain version v0.21.0. You can find the version of the toolchain in
+`/workspace/version.txt` inside the docker. If you find your toolchain is earlier than v0.21.0, you may need to find the
 document from the [manual history](appendix/history.md).
 
 ## 2.3. Toolchain Docker Overview
@@ -77,12 +77,13 @@ their usage:
 |-- examples            # Example for the workflow, will be used later.
 |-- libs                # The libraries
 |   |-- ONNX_Convertor  # ONNX Converters and optimizer scripts, will be discussed in section 3.
+|   |-- c_sim_[version] # Hardware simulators for specific hardware versions.
 |   |-- compiler        # Compiler for the hardware and the IP evaluator to infer the performance.
 |   |-- dynasty         # Simulator which only simulates the calculation.
-|   |-- fpAnalyser      # Analyze the model and provide fixed point information.
-|   `-- hw_c_sim        # Hardware simulator which simulate all the hardware behaviours.
+|   `-- fpAnalyser      # Analyze the model and provide fixed point information.
 |-- miniconda           # Environment
 |-- scripts             # Scripts to run the tools, will be discussed in section 3.
+|-- webgui              # Web GUI for the toolchain. Please check appendix for details.
 `-- version.txt
 ```
 
