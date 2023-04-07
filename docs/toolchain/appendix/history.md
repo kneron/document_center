@@ -2,6 +2,9 @@
 
 ## Manual History Version
 
+* [v0.20.2](https://github.com/kneron/document_center/releases/tag/v0.20.2)
+* [v0.20.1](https://github.com/kneron/document_center/releases/tag/v0.20.1)
+* [v0.20.0](https://github.com/kneron/document_center/releases/tag/v0.20.0)
 * [v0.19.0](../history/manual_v0.19.0.pdf)
 * [v0.18.2](../history/manual_v0.18.2.pdf)
 * [v0.17.2](../history/manual_v0.17.2.pdf)
@@ -21,6 +24,15 @@
 
 ## Toolchain Change log
 
+* **[v0.21.0]**
+    * **Change input format from channel last to the same input shape of ONNX.**
+    * **Change compiler generated `ioinfo.csv` into `ioinfo.json` for platforms other than 520.**
+    * **Remove deprecated command line scripts, e.g. fpAnalyserCompilerIpevaluator_520.py, fpAnalyserBatchCompile_520.py.**
+    * Add html report for `analysis` API.
+    * Add helper utilities under compiler folder.
+    * Add `parallel` and `w3m` into docker environment.
+    * Bug fixes.
+    * Documentation updates.
 * **[v0.20.2]**
     * Fix combining nef error.
 * **[v0.20.1]**

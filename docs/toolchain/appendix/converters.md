@@ -302,9 +302,12 @@ For existed onnx models with the previous version of the opset, we provide the f
 Note that after running any of the following scripts, you may still need to run `onnx2onnx.py`.
 
 ```bash
-# For ONNX 1.3 to 1.4 (opset 7/8 to opset 9):
-python /workspace/libs/ONNX_Convertor/optimizer_scripts/onnx1_3to1_4.py input.onnx output.onnx
+# For ONNX opset 8 to opset 9:
+python /workspace/libs/ONNX_Convertor/optimizer_scripts/opset_8_to_9.py input.onnx output.onnx
 
-# For ONNX 1.4 to 1.6 (opset 9 to opset 11):
-python /workspace/libs/ONNX_Convertor/optimizer_scripts/onnx1_4to1_6.py input.onnx output.onnx
+# For ONNX opset 9 to opset 11:
+python /workspace/libs/ONNX_Convertor/optimizer_scripts/opset_9_to_11.py input.onnx output.onnx
+
+# For ONNX opset 10 to opset 11:
+python /workspace/libs/ONNX_Convertor/optimizer_scripts/opset_10_to_11.py input.onnx output.onnx
 ```

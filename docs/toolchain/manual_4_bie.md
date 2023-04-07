@@ -22,14 +22,12 @@ Args:
 * output_bie (str, optional): path to the output bie file. Defaults to "/data1/output.bie".
 * threads (int, optional): multithread setting. Defaults to 4.
 * quantize_mode (str, optional): quantize_mode setting. Currently support default and post_sigmoid. Defaults to "default".
-* outlier (float, optional): DEPRECAETED. Please use percentage instead.
 * datapath_range_method (str, optional): could be 'mmse' or 'percentage. mmse: use snr-based-range method. percentage: use arbitary percentage. Default to 'percentage'.
 * percentile (float, optional): used under 'mmse' mode. The range to search. The larger the value, the larger the search range, the better the performance but the longer the simulation time. Defaults to 0.001,
 * outlier_factor (float, optional): used under 'mmse' mode. The factor applied on outliers. For example, if clamping data is sensitive to your model, set outlier_factor to 2 or higher. Higher outlier_factor will reduce outlier removal by increasing range. Defaults to 1.0.
 * percentage (float, optional): used under 'percentage' mode. Suggest to set value between 0.999 and 1.0. Use 1.0 for detection models. Defaults to 0.999.
 * bitwidth_mode (str, optioanl): could be "8" or "16". Try "16" if quantized model has performance degradation. Defaults to "8".
 * fm_cut (str, optional): could be "default" or "deep_search". Get a better image cut method through deep search, so as to improve the efficiency of our NPU. Defaults to "default".
-* skip_verify (bool, optional): DEPRECAETED. Skip the verification when running analysis. Same behavious as `mode=1`. Defaults to None(True).
 * mode (int, optional): running mode for the analysis. Defaults to 1.
     - 0: run ip_evaluator only. This mode will not output bie file.
     - 1: run knerex (for quantization) only.
@@ -56,8 +54,15 @@ input_images = [preprocess("/workspace/examples/mobilenetv2/images/" + image_nam
 # We need to prepare a dictionary, which mapping the input name to a list of preprocessed arrays.
 input_mapping = {"images": input_images}
 
-# Quantization without fine-tuning
-bie_path = km.analysis(input_mapping, output_bie = None, threads = 4)
+# Quantization with only deep_search enabled.
+bie_path = km.analysis(input_mapping, output_bie = None, threads = 4, fm_cut='deep_search')
+```
+
+Since toolchain v0.21.0, the analysis step also generates a detailed report in html format. You can find it under
+`/data1/kneron_flow/model_fx_report.html`. You can view it using the command line web browser included in the toolchain:
+
+```bash
+w3m /data1/kneron_flow/model_fx_report.html
 ```
 
 ## 4.2. E2E Simulator Check (Fixed Point)
@@ -72,7 +77,7 @@ The python code would be like:
 fixed_results = ktc.kneron_inference(input_data, bie_file=bie_path, input_names=["data_out"], platform=720)
 ```
 
-The usage is almost the same as using onnx. In the code above, `inf_results` is a list of result data. `bie_file` is the path to the input bie. `input_data` is a list of input data after preprocess the `input_names` is a list of model input name. The requirement is the same as in section 3.3. If your platform is not 520, you may need an extra parameter `platform`, e.g. `platform=720` or `platform=530`.
+The usage is almost the same as using onnx. In the code above, `inf_results` is a list of result data. `bie_file` is the path to the input bie. `input_data` is a list of input data after preprocess the `input_names` is a list of model input name. The requirement is the same as in section 3.3. If your platform is not 520, you need an extra parameter `platform`, e.g. `platform=720` or `platform=530`.
 
 As mentioned above, we do not provide any postprocess. In reality, you may want to have your own postprocess function in Python, too.
 

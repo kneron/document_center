@@ -498,7 +498,7 @@ The python code would be like:
 inf_results = ktc.kneron_inference(input_data, onnx_file="/workspace/examples/mobilenetv2/mobilenetv2_zeroq.origin.onnx", input_names=["images"])
 ```
 
-In the code above, `inf_results` is a list of result data. `onnx_file` is the path to the input onnx. `input_data` is a list of input data after preprocess. It should be in channel last format (HWC). The `input_names` is a list of string mapping the input data to specific input on the graph using the sequence. **Note that the input should have the same dimension as the model but in channel last format (HWC).**
+In the code above, `inf_results` is a list of result data. `onnx_file` is the path to the input onnx. `input_data` is a list of input data after preprocess. It should be the same shape as in the onnx. The `input_names` is a list of string mapping the input data to specific input on the graph using the sequence. **Note that the input should have the same shape as in the onnx (usually NCHW).**
 
 Here we provide a very simple preprocess function which only do the resize and normalization. Then, the full code of this section would be:
 
@@ -510,7 +510,8 @@ def preprocess(input_file):
     image = Image.open(input_file)
     image = image.convert("RGB")
     img_data = np.array(image.resize((224, 224), Image.BILINEAR)) / 255
-    img_data = np.transpose(img_data, (1, 0, 2))
+    img_data = np.transpose(img_data, (2, 1, 0))
+    img_data = np.expand_dims(img_data, 0)
     return img_data
 
 input_data = [preprocess("/workspace/examples/mobilenetv2/images/000007.jpg")]
