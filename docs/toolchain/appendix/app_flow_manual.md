@@ -1,6 +1,63 @@
-# Kneron End to End Simulator v0.15.5
+# Kneron End to End Simulator v0.22.0
 
 This project allows users to perform image inference using Kneron's built in simulator. As of version 0.5.0 the 520 and 720 simulators have been merged into one codebase, and any existing apps will need to be updated to the new structure to work.
+
+## Python API Inference
+
+This is a standalone feature that allows the user to perform inference given a model and some inputs. This is separate from the E2E Simulator itself. For details, you can take a look at ```python_flow/kneron_inference.py```.
+
+### Necessary items
+
+There are only two items that you need to prepare to run the inference function. Everything else is optional.
+
+* preprocessed input: list of NumPy arrays in channel first (1, c, h, w) format. Before 0.21.0, this took in channel last format.
+* model file: depending on what kind of model you want to run, but it will be one of NEF, ONNX, and BIE file
+
+### Inputs
+
+```python
+def kneron_inference(pre_results: List[npt.ArrayLike], nef_file: str = "", onnx_file: str = "",
+                     bie_file: str = "", model_id: Optional[int] = None,
+                     input_names: Optional[List[str]] = None,
+                     data_type: str = "float", reordering: Optional[List[Union[int, str]]] = None,
+                     ioinfo_file: str = "", dump: bool = False, platform: int = 520,
+                     platform_version: int = 1) -> List[npt.ArrayLike]:
+```
+
+* ```pre_results```: same as ```preprocessed input``` mentioned above
+* ```nef_file/onnx_file/bie_file```: path to your input model file
+	* only one of these will be used, if they are all specified, priority is NEF -> ONNX -> BIE
+* ```model_id```: ID of model to run inference
+	* only used with NEF file if file has multiple models
+* ```input_names```: list of input node names
+	* only needed with ONNX/BIE file
+* ```data_type```: string data format that you would like the output returned as
+	* ```float``` or ```fixed```
+* ```reordering```: list of node names/integers specifying the output order
+	* integers for NEF file without ```ioinfo_file```, node names with ```ioinfo_file```
+	* node names for ONNX and BIE file
+* ```ioinfo_file```: string path to file mapping output node number to name
+	* only used with NEF file
+* ```dump```: flag to dump intermediate nodes
+* ```platform```: integer platform to be used
+	* used with NEF file to prepare CSIM input
+	* used with BIE file to indicate Dynasty fixed model version
+	* ```520```, ```530```, ```630```, ```720```, ```730```
+* ```platform_version```: indicates version for a specific platform
+  * in most cases, will not need to specify and simply can use default
+
+### Output
+
+Output will be a list of NumPy arrays in ONNX shape format. It will be in the order specified by reordering; if reordering is not speicifed, it will be in default order provided by the model.
+
+### Usage
+
+Prepare a preprocess function and postprocess function. Then, simply call the kneron_inference function using the results of your preprocess function and input model file to get inference results. Then, use those inference results as input into your postprocess function.
+
+### Example
+
+For a detailed example on how to call the kneron_inference function, please explore this [YOLO example](http://doc.kneron.com/docs/toolchain/yolo_example/#python-api).
+
 
 ## File Structure
 
@@ -20,7 +77,6 @@ This project allows users to perform image inference using Kneron's built in sim
 * python_flow: all of the Python code that makes up the application framework, THIS SHOULD NOT BE MODIFIED
 	* common: shared classes
 	* dongle: library to perform Dongle inference
-  * dynasty: library to perform Dynasty inference
   * internal: various functions used internally, does not affect external usage and can be ignored
   * nef: library to perform standalone inference with NEF models, can be ignored
   * prepostprocess: Kneron PPP library
@@ -55,7 +111,9 @@ Kneron simulator uses a JSON file to specify parameters used throughout the test
 In each JSON, there are three sections (pre, emu, post) to define parameters necessary to complete the testing process. The parameters shown are the minimum required to run the simulator; you may add new parameters to the "pre" or "post" to pass into your preprocess or postprocess functions.
 
 If any of the required keys are missing, the program will end. The required keys will be specified in their respective sections.
-#### Preprocess Parameters
+
+### Preprocess Parameters
+
 **Required keys:** pre_type
 
 | Name           | Description                                                          | Acceptable Values                        |
@@ -63,38 +121,34 @@ If any of the required keys are missing, the program will end. The required keys
 | pre_bypass     | Specifies whether preprocessing should be bypassed, default is false | true, false                              |
 | **pre_type**   | Name of the preprocess function to run, in Python import format      | any preprocess function you wish to call |
 
+### Simulator Parameters
 
-#### Simulator Parameters
 You only need to specify the parameters for the type of inferencer you intend to use. Paths to files should be relative to the base of your app folder or absolute.
 
-**Required key in general**: emu_mode
+**Required key in general**: emu_mode, input_names
 
-**Required keys if hardware CSIM 520/720 is used:** setup_file, command_file, weight_file
+**Required keys if hardware CSIM is used:** nef_file
 
-**Required keys if Dynasty is used:** onnx_file/bie_file (depending on emu_mode), onnx_input
+**Required keys if Dynasty is used:** onnx_file/bie_file (depending on emu_mode)
 
 | Name          | Description                                                                                                        | Acceptable Values                             |
 |:-------------:|:------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------:|
 |  **emu_mode** | Specifies what inferencer to use                                                                                   | "csim", "float", "fixed", "dongle", "bypass"  |
 | model_type    | Used to specify output paths and files                                                                             | any string                                    |
-| platform      | Platform of the Kneron inferencer for CSIM, default is 520                                                         | 520, 720                                      |
+| platform      | Platform of the Kneron inferencer for CSIM, default is 520                                                         | 520, 530, 630, 720, 730                                      |
 | channel_first | Flag to specify if you want the inference results to be returned in channel last or first format, default is false | true, false                                   |
-| setup_file    | Name of the binary setup file used for Kneron CSIM 520/720                                                         | any string path                               |
-| command_file  | Name of the binary command file used for Kneron CSIM 520/720                                                       | any string path                               |
-| weight_file   | Name of the binary weight file used for Kneron CSIM 520/720                                                        | any string path                               |
-| ioinfo_file   | Name of the CSV file to map output number to name for Kneron CSIM 520/720 and dongle                               | any string path                               |
-| num_inputs    | Number of inputs to the model, CSIM 520/720 only, default is 1                                                     | any non-negative integer                      |
+| input_names   | Name of the input nodes to the model                                                                               | list of strings                               |
+| nef_file      | Name of the compiled NEF file used for Kneron CSIM                                                                 | any string path                               |
 | data_type     | Type of the NumPy array returned to your postprocess function, only for CSIM and Dynasty fixed                     | "float", "fixed"                              |
-| radix         | Radix used to convert from float input to integer input used for CSIM 520/720                                      | any non-negative integer                      |
 | bie_file      | Name of BIE file to use for the Kneron Dynasty simulator, use with "fixed" emu_mode                                | any string                                    |
 | onnx_file     | Name of ONNX file to use for the Kneron Dynasty simulator, use with "float" emu_mode                               | any string                                    |
-| onnx_input    | Name of the input nodes to the ONNX model                                                                          | list of strings                               |
-| reordering    | List of how the inference outputs should be reordered, default is []                                               | list of integers or list of strings           |
+| reordering    | List of how the inference outputs should be reordered, default is []                                               | list of strings           |
 | model_id      | Integer ID of the model that you would like to perform inference with, only dongle                                 | any non-negative integer                      |
 
-Note on the reordering parameter: this can be specified for your convenience in the postprocess function. By default, the inference results for CSIM and Dynasty will be returned in alphabetical order of the output file names. For CSIM, this will be in order of the outputs designated by CSIM: 1, 2, 3,... For Dynasty, this will be in order of the output node names. If you do not specify the ioinfo_file parameter, the reordering parameter for CSIM should be a list of integers, based on the output order designated by CSIM. Otherwise, it should be a list of strings, based on the output node names. The reordering parameter for Dynasty should be a list of strings, based on the output node names.
+Note on the reordering parameter: this can be specified for your convenience in the postprocess function. It should be a list of strings, based on the output node names.
 
-#### Postprocess Parameters
+### Postprocess Parameters
+
 **Required keys:** post_type
 
 | Name          | Description                                                        | Acceptable Values                         |
@@ -103,6 +157,7 @@ Note on the reordering parameter: this can be specified for your convenience in 
 | **post_type** | Name of the postprocess function to run, in Python import format   | any postprocess function you wish to call |
 
 ## Custom pre/postprocess
+
 Since inference results can vary based on users' tests, we provide support for integrating custom preprocess and postprocess functions. The preprocess and postprocess functions you supply into the ```pre_type``` and ```post_type``` fields must follow the API that we provide.
 
 Both the preprocess and postprocess must take in a TestConfig class as input. For reference, you can find it defined at python_flow/common/config.py. This class is filled with parameters from the supplied input JSONs and other environment variables. To access all of those parameters, you will need to access the "config" attribute, a dictionary. There are four keys to access the dictionary: ```pre```, ```emu```, ```post```, and ```flow```. The first three keys have values that are dictionaries with the same exact values as in the JSON files. The ```flow``` key simply has values parsed from the command line options and other environment variables such as the input image.
@@ -187,16 +242,22 @@ Use ```convert_binary_to_numpy``` to get a NumPy array from an input binary imag
 ## Usage
 
 ```
-usage: simulator.py [-h] [-j JSON_OPTIONS] [-b BIN_INPUT] [-c {before,none}]
-                    [--debug] [-d] [--dump] [-f {ALL,INF,NIR,RGB}] [-fl FLOW]
-                    [--fusion] [-il IMAGE_JSON] [-i {binary,image,image_txt}]
-                    [-n NUM_IMAGES] [-p {alg,sys520,sys530,sys720}] [-r]
+usage: simulator.py [-h] [-j JSON_OPTIONS] [-b BIN_INPUT]
+                    [-c {all_x_result,before,none}] [--cuda] [--debug] [-d]
+                    [--dump] [-f {ALL,INF,NIR,RGB}] [-fl FLOW] [--fusion]
+                    [-il IMAGE_JSON] [-i {binary,bin_txt,image,image_txt}]
+                    [--input_shape {0,1}]
+                    [-is [INPUT_SINGLE [INPUT_SINGLE ...]]] [-n NUM_IMAGES]
+                    [--ort]
+                    [-p {alg,sys520,sys530,sys540,sys630,sys720,sys730}]
+                    [-pv PLATFORM_VERSION] [-r]
                     [--runner_dump [RUNNER_DUMP [RUNNER_DUMP ...]]] [--rgba]
-                    [-s] [-v VIDEO VIDEO VIDEO] [-w WORKERS] [-g GROUP]
-                    [-in NUM_INFERENCE] [-bp] [-dfix]
+                    [-s] [-tc TOOLCHAIN] [-v VIDEO VIDEO VIDEO] [-w WORKERS]
+                    [-g GROUP] [-in NUM_INFERENCE] [-bp] [-lnp LOCAL_NEF_PATH]
+                    [-dfix] [-ddebug]
                     app_folder image_directory test
 
-Runs a test on multiple images
+Runs through a solution provided a dataset.
 
 positional arguments:
   app_folder            directory of your application
@@ -206,33 +267,45 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -j JSON_OPTIONS, --json_options JSON_OPTIONS
-                        JSON file holding the command line options.
-                        NOTE: using this option will ignore all other provided options.
+                        JSON file holding the command line options
+                        NOTE: any options provided will overwrite the options in the JSON file
   -b BIN_INPUT, --bin_input BIN_INPUT
-                        file to specify the format and dimensions of the binary inputs
-  -c {before,none}, --clear {before,none}
+                        JSON file to specify the color format and dimensions of the binary inputs
+  -c {all_x_result,before,none}, --clear {all_x_result,before,none}
                         when to clear CSIM or Dynasty dumps, default: 'before'
+  --cuda                use CUDA compiled Dynasty library, only works if you have CUDA installed on your device, unable to be used as of 0.22.0
   --debug               enable debug flag for the runners
   -d, --debug_print     flag to enable prints
   --dump                flag to dump intermediate node outputs for the simulator
   -f {ALL,INF,NIR,RGB}, --fmt {ALL,INF,NIR,RGB}
-                        format of the input images to test, default:'ALL'
+                        format of the input images to test, default: 'ALL'
   -fl FLOW, --flow FLOW
                         suffix of flow.py to run
   --fusion              flag to enable fusion test input
   -il IMAGE_JSON, --image_json IMAGE_JSON
-                        path to JSON file holding all of the test images, to be used instead of image_directory if specified
-  -i {binary,image}, --inputs {binary,image}
+                        JSON file holding all of the test images
+                        NOTE: using this option will ignore the provided image directory
+  -i {binary,bin_txt,image,image_txt}, --inputs {binary,bin_txt,image,image_txt}
                         type of inputs to be tested, default: 'image'
+  --input_shape {0,1}   shape of input data from preprocess, default: 0
+                        (0) channel last
+                        (1) ONNX shape
+  -is [INPUT_SINGLE [INPUT_SINGLE ...]], --input_single [INPUT_SINGLE [INPUT_SINGLE ...]]
+                        list of files to test one singular input, mostly applicable when using run_solution wrapper
   -n NUM_IMAGES, --num_images NUM_IMAGES
                         number of images to test
-  -p {alg,sys520,sys530,sys720}, --platform {alg,sys520,sys530,sys720}
+  --ort                 use onnxruntime Dynasty inferencer, unable to be used as of 0.22.0
+  -p {alg,sys520,sys530,sys540,sys630,sys720,sys730}, --platform {alg,sys520,sys530,sys540,sys630,sys720,sys730}
                         platform to use for input JSON subfolder, only internal runners are affected, default will use no subfolder
+  -pv PLATFORM_VERSION, --platform_version PLATFORM_VERSION
+                        which version of a specific platform to use
   -r, --resume          flag to resume dataset from where it left off previously
   --runner_dump [RUNNER_DUMP [RUNNER_DUMP ...]]
                         name of runners to dump result
-  --rgba                flag to dumb preprocessed RGBA binary
+  --rgba                flag to dump preprocessed RGBA binary
   -s, --sort            sort the images in alphanumerical order
+  -tc TOOLCHAIN, --toolchain TOOLCHAIN
+                        version of CSIM and Dynasty libraries to run, NOTE: unused after 0.21.0 API change
   -v VIDEO VIDEO VIDEO, --video VIDEO VIDEO VIDEO
                         parameters to help drop images for video
                         (1) 'excess', 'randomly', 'periodically'
@@ -241,13 +314,17 @@ optional arguments:
   -w WORKERS, --workers WORKERS
                         number of worker processes to run, default: 1
   -g GROUP, --group GROUP
-                        group using this e2e platform(CI/SYS/ALGO)
+                        group using this E2E platform (CI/SYS/ALGO)
   -in NUM_INFERENCE, --num_inference NUM_INFERENCE
-                        number of devices (520/720) to run inference, default: 1
+                        number of devices (520/530/720) to run inference, default: 1
   -bp, --bypass_batch_compile
                         flag to bypass batch compile
+  -lnp LOCAL_NEF_PATH, --local_nef_path LOCAL_NEF_PATH
+                        copy the nef to e2e and using the local nef in solution to run dongle
   -dfix, --dongle_fixed_mode
                         flag to enable dongle to return fixed result then convert to float using CSIM utility function
+  -ddebug, --dongle_debug_mode
+                        flag to enable dongle debug mode to dump intermediate inference results
 ```
 
 * -h: show the help message
@@ -269,9 +346,12 @@ optional arguments:
 	* If binary, will look for binary files instead
 	* Example can be found at ```app/template_app/example_image_list.json```
   * Every JSON key except ```id``` is used
+* -is: single input test, will not need to be used
 * -n: set for number of images to test, default is all of the images in the test directory
+* --ort: call ONNXRUNTIME Dynasty library
 * -p: set this to determine what kind of JSON folder will be used
 	* This will only be used for internal runners, external users do not need to use this option
+* -pv: specifies platform version, not needed
 * -r: set this option if you want to resume a dataset that was previously run that ended in the middle because of crash/user stop/other error
 * -s: sort the inputs in alphanumerical order
 * -v: set this if you want to simulate the hardware limitations and drop some input images when running a video dataset
@@ -292,7 +372,7 @@ You will need the following to run your application:
 
 * all model files that you plan on testing
 	* BIE if you are running Dynasty fixed, ONNX if you are running Dynasty float
-	* weight, setup, and command binaries if you are running CSIM 520/720, ioinfo CSV file is optional
+	* NEF binaries if you are running CSIM
 * preprocess and postprocess functions
 * input JSON files for each of your models
 * flow.py to control the simulator flow
@@ -300,7 +380,7 @@ You will need the following to run your application:
 
 ### Model files
 
-To get the input model files from your model, [follow the steps in section 2](http://doc.kneron.com/docs/#toolchain/command_line/). The ONNX, BIE, ioinfo CSV, and weight/setup/command binaries will all be generated upon completing step 2.3.
+To get the input model files from your model, [follow the steps in section 2](http://doc.kneron.com/docs/#toolchain/command_line/). The ONNX, BIE, and NEF binaries will all be generated upon completing step 2.3.
 
 ### Preprocess and postprocess
 
@@ -341,63 +421,6 @@ Now, we can run the test. Arguments are explained [here](#usage). This is assumi
 ```bash
 python3 simulator.py app/my_app your_test_image_folder your_test_name
 ```
-
-Use this command to run the fdr example set up in ```app/fd_external```:
-
-```bash
-python3 simulator.py app/fd_external app/test_image_folder/fd fdr
-```
-
-## Python API Inference
-
-This is a standalone feature that allows the user to perform inference given a model and some inputs. This is separate from the E2E Simulator itself. For details, you can take a look at ```python_flow/kneron_inference.py```.
-
-### Necessary items
-
-There are only two items that you need to prepare to run the inference function. Everything else is optional.
-
-* preprocessed input: list of NumPy arrays in (1, h, w, c) format
-* model file: depending on what kind of model you want to run, but it will be one of NEF, ONNX, and BIE file
-
-### Inputs
-
-```python
-def kneron_inference(pre_results, nef_file="", onnx_file="", bie_file="", model_id=None,
-                     input_names=[], radix=8, data_type="float", reordering=[],
-                     ioinfo_file="", dump=False, platform=520)
-```
-
-* ```pre_results```: same as ```preprocessed input``` mentioned above
-* ```nef_file/onnx_file/bie_file```: path to your input model file
-	* only one of these will be used, if they are all specified priority is NEF -> ONNX -> BIE
-* ```model_id```: ID of model to run inference
-	* only used with NEF file
-  * only needed if NEF model has multiple models
-* ```input_names```: list of input node names
-	* only needed with ONNX/BIE file
-* ```radix```: integer radix to convert from float to fixed input
-	* for NEF file, will be used to convert to CSIM RGBA input
-	* for ONNX/BIE file, will be used to dump RGBA file for debugging
-* ```data_type```: string data format that you would like the output returned as
-	* ```float``` or ```fixed```
-* ```reordering```: list of node names/integers specifying the output order
-	* integers for NEF file without ```ioinfo_file```, node names with ```ioinfo_file```
-	* node names for ONNX and BIE file
-* ```ioinfo_file```: string path to file mapping output node number to name
-	* only used with NEF file
-* ```dump```: flag to dump intermediate nodes
-* ```platform```: integer platform to be used
-	* used with NEF file to prepare CSIM input
-	* used with BIE file to indicate Dynasty fixed model version
-	* ```520``` or ```720```
-
-### Usage
-
-Prepare a preprocess function and postprocess function. Then, simply call the kneron_inference function using the results of your preprocess function and input model file to get inference results. Then, use those inference results as input into your postprocess function.
-
-### Example
-
-For a detailed example on how to call the kneron_inference function, please explore this [YOLO example](http://doc.kneron.com/docs/toolchain/yolo_example/#python-api).
 
 ## FAQ
 
