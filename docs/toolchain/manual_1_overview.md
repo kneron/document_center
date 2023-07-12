@@ -4,12 +4,12 @@
 
 # 1. Toolchain Overview
 
-**2023 Apr**
-**Toolchain v0.21.0**
+**2023 Jul**
+**Toolchain v0.22.0**
 
 ## 1.1. Introduction
 
-KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 520, 720, 530, 630 and 730(preview).
+KDP toolchain is a set of software which provide inputs and simulate the operation in the hardware KDP 520, 720, 530, 630 and 730.
 For better environment compatibility, we provide a docker which include all the dependencies as well as the toolchain software.
 
 In this document, you'll learn:
@@ -20,15 +20,23 @@ In this document, you'll learn:
 
 **Major changes of the current version**
 
-* **[v0.21.0]**
-    * **Change input format from channel last to the same input shape of ONNX.**
-    * **Change compiler generated `ioinfo.csv` into `ioinfo.json` for platforms other than 520.**
-    * **Remove deprecated command line scripts, e.g. fpAnalyserCompilerIpevaluator_520.py, fpAnalyserBatchCompile_520.py.**
-    * Add html report for `analysis` API.
-    * Add helper utilities under compiler folder.
-    * Add `parallel` and `w3m` into docker environment.
-    * Bug fixes.
-    * Documentation updates.
+* **[v0.22.0]**
+    * `ktc.ModelConfig.evaluate`
+      * **Change function parameter `output_folder` to `output_dir`.**
+      * **Change default output location to `/data1/kneronflow`.**
+    * `ktc.ModelConfig.analysis`
+      * **Change function parameter `output_bie` to `output_dir`, which should be a folder path instead of the file path before. Defaults to `/data1/kneronflow`.**
+      * **Remove deprecated parameters `bitwidth_mode`, `outlier` and `skip_verify`.**
+      * Add parameters `model_in_bitwidth_mode`, `model_out_bitwidth_mode`, `datapath_bitwidth_mode` and `weight_bitwidth_mode`.
+    * `ktc.ModelConfig`
+      * Add `radix_json_path` to `ktc.ModelConfig.__init__` which provides `ktc.compile` ability to compile with onnx and a special json file. Defaults to `None`.
+      * Add `debug` to `ktc.ModelConfig.__init__` to avoid removing debug output files. Defaults to `False`.
+    * `ktc.compile`, `ktc.encrpyt_compile`
+      * **Change default output location to `/data1/kneronflow`.**
+      * Add `debug` parameter to avoid removing debug output files. Defaults to `False`.
+    * Provided a function `ktc.convert_channel_last_to_first` to help converting channel last inputs to channel first(image only).
+    * Remove unessential output files. Some functions add `debug` parameters to avoid removing debug output files. `ktc.kneron_inference` can use `dump` parameter avoid removing debug output files.
+    * Bug fixes and performance improvements.
 
 ## 1.2. Workflow Overview
 
@@ -78,7 +86,7 @@ In the following sections, we'll introduce the API and their usage. You can also
 
 **Note that this package is only available in the docker due to the dependency issue.**
 
-Here the MobileNet V2 model is already in ONNX format. So, we only need to optimize the ONNX model to fix our toolchain.
+Here the MobileNet V2 model is already in ONNX format. So, we only need to optimize the ONNX model to fit our toolchain.
 The following model optimization code is in Python since we are using the Python API.
 
 ```python
@@ -109,7 +117,7 @@ km = ktc.ModelConfig(32769, "8b28", "720", onnx_model=optimized_m)
 eval_result = km.evaluate()
 ```
 
-The evaluation result will be returned as string. User can also find the evaluation result under /data1/compiler/.
+The evaluation result will be returned as string. User can also find the evaluation result under /data1/kneron_flow/.
 But the report file names are different for different platforms.
 
 * 520: ip_eval_prof.txt
@@ -122,6 +130,7 @@ Here we introduce the E2E simulator which is the abbreviation for end to end sim
 We are using the onnx as the input model now. But it also can take other file formats which would be introduced later.
 
 **Since toolchain v0.21.0, we take inputs with exactly the same shape as onnx instead of the previous channel last format.**
+**Since toolchain v0.22.0, we provide `ktc.convert_channel_last_to_first` to help converting channel last inputs to channel first(image only). For details, please check [3. Floating-Point Model Preparation](manual_3_onnx.md)**
 
 ```python
 # Import necessary libraries for image processing.
@@ -133,7 +142,7 @@ def preprocess(input_file):
     image = Image.open(input_file)
     image = image.convert("RGB")
     img_data = np.array(image.resize((224, 224), Image.BILINEAR)) / 255
-    img_data = np.transpose(img_data, (2, 1, 0))
+    img_data = np.transpose(img_data, (2, 0, 1))
     # Expand 3x224x224 to 1x3x224x224 which is the shape of ONNX input.
     img_data = np.expand_dims(img_data, 0)
     return img_data

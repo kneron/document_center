@@ -8,7 +8,7 @@ Batch compile turns multiple models into a single binary file. We have two APIs 
 
 ```python
 #[API]
-ktc.compile(model_list, output_dir=None, dedicated_output_buffer=True, weight_compress=False)
+ktc.compile(model_list, output_dir="/data1/kneron_flow", dedicated_output_buffer=True, weight_compress=False)
 ```
 
 Compile the models and generate the nef file. The nef path will be returned.
@@ -16,7 +16,7 @@ Compile the models and generate the nef file. The nef path will be returned.
 Args:
 
 * model_list (List[ModelConfig]): a list of models need to be compile. Models with onnx should run analysis() before compilation.
-* output_dir (str, optional): output directory. Defaults to None.
+* output_dir (str, optional): output directory. Defaults to "/data1/kneron_flow".
 * dedicated_output_buffer (bool, optional): dedicated output buffer. Defaults to True.
 * weight_compress (bool, optional): compress weight to slightly reduce the binary file size. Defaults to False.
 * hardware_cut_opt (bool, optional): optimize the hardware memory usage while processing large inputs. This option might cause the compiling time increase. Currently, only available for 720. Defaults to False.
@@ -24,7 +24,7 @@ Args:
 
 ```python
 #[API]
-ktc.encrypt_compile(model_list, output_dir=None, dedicated_output_buffer=True, mode=None, key="", key_file="", encryption_efuse_key="", weight_compress=False)
+ktc.encrypt_compile(model_list, output_dir="/data1/kneron_flow", dedicated_output_buffer=True, mode=None, key="", key_file="", encryption_efuse_key="", weight_compress=False)
 ```
 
 Compile the models, generate an encrypted nef file. The nef path will be returned.
@@ -32,7 +32,7 @@ Compile the models, generate an encrypted nef file. The nef path will be returne
 Args:
 
 * model_list (List[ModelConfig]): a list of models need to be compile. Models with onnx should run analysis() before compilation.
-* output_dir (str, optional): output directory. Defaults to None.
+* output_dir (str, optional): output directory. Defaults to "/data1/kneron_flow".
 * dedicated_output_buffer (bool, optional): dedicated output buffer. Defaults to True.
 * mode (int, optional): There are two modes: 1, 2. Defaults to None, which is no encryption and acts the same as `ktc.compile`.
 * key (str, optional): a hex code. Required in mode 1 Defaults to "".
@@ -75,7 +75,7 @@ input_images_2 = [
 input_mapping_2 = {"data_out": input_images_2}
 
 # Quantization
-km_2.analysis(input_mapping_2, output_bie = '/data1/littlenet.bie', threads = 4)
+km_2.analysis(input_mapping_2, threads = 4)
 
 # Here we do the batch compiling.
 batch_compile_result = ktc.compile([km, km_2])

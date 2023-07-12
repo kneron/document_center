@@ -24,6 +24,23 @@
 
 ## Toolchain Change log
 
+* **[v0.22.0]**
+    * `ktc.ModelConfig.evaluate`
+      * **Change function parameter `output_folder` to `output_dir`.**
+      * **Change default output location to `/data1/kneronflow`.**
+    * `ktc.ModelConfig.analysis`
+      * **Change function parameter `output_bie` to `output_dir`, which should be a folder path instead of the file path before. Defaults to `/data1/kneronflow`.**
+      * **Remove deprecated parameters `bitwidth_mode`, `outlier` and `skip_verify`.**
+      * Add parameters `model_in_bitwidth_mode`, `model_out_bitwidth_mode`, `datapath_bitwidth_mode` and `weight_bitwidth_mode`.
+    * `ktc.ModelConfig`
+      * Add `radix_json_path` to `ktc.ModelConfig.__init__` which provides `ktc.compile` ability to compile with onnx and a special json file. Defaults to `None`.
+      * Add `debug` to `ktc.ModelConfig.__init__` to avoid removing debug output files. Defaults to `False`.
+    * `ktc.compile`, `ktc.encrpyt_compile`
+      * **Change default output location to `/data1/kneronflow`.**
+      * Add `debug` parameter to avoid removing debug output files. Defaults to `False`.
+    * Provided a function `ktc.convert_channel_last_to_first` to help converting channel last inputs to channel first(image only).
+    * Remove unessential output files. Some functions add `debug` parameters to avoid removing debug output files. `ktc.kneron_inference` can use `dump` parameter avoid removing debug output files.
+    * Bug fixes and performance improvements.
 * **[v0.21.0]**
     * **Change input format from channel last to the same input shape of ONNX.**
     * **Change compiler generated `ioinfo.csv` into `ioinfo.json` for platforms other than 520.**
