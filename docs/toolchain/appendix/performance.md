@@ -58,19 +58,19 @@
 
 | Model                | Size    | FPS (npu only) | Time(npu only) | Has CPU node(s)? |
 | -------------------- | ------- | -------------- | -------------- | ---------------- |
-| Inception v3         | 224x224 |    57.8        | 17.3 ms        |        No        |
-| Inception v4         | 299x299 |    16.7        | 59.9 ms        |        No        |
-| Mobilenet v1         | 224x224 |    221.1       | 4.52 ms        |        No        |
-| Mobilenet v2         | 224x224 |    218.7       | 4.57 ms        |        No        |
-| Mobilenet v2 ssdlite | 300x300 |    128         | 7.83 ms        |        No        |
-| Resnet50 v1.5        | 224x224 |    26.0        | 38.4 ms        |        No        |
-| OpenPose             | 256x256 |    5.46        | 183.1 ms       |        No        |
-| SRCNN                | 384x384 |    74.73       | 13.3 ms        |        No        |
-| Tiny YOLOv3          | 416x416 |    118.8       | 8.42 ms        |        No        |
-| YOLOv3               | 416x416 |    5.77        | 173.3 ms       |        No        |
-| YOLOv5s              | 640x640 |    19.25       | 51.9 ms        |        No        |
-| Unet                 | 384x384 |    2.01        | 497 ms         |        No        |
-| Lite-HRNet           | 256x192 |    19.68       | 50.8 ms        |        No        |
+| Inception v3         | 224x224 |    49.08       | 20.37 ms       |        No        |
+| Inception v4         | 299x299 |    13.07       | 76.51 ms       |        No        |
+| Mobilenet v1         | 224x224 |    196.79      | 5.08 ms        |        No        |
+| Mobilenet v2         | 224x224 |    207.92      | 4.8  ms        |        No        |
+| Mobilenet v2 ssdlite | 300x300 |    122.89      | 8.14 ms        |        No        |
+| Resnet50 v1.5        | 224x224 |    23.56       | 42.4 ms        |        No        |
+| OpenPose             | 256x256 |    2.99        | 334.4 ms       |        No        |
+| SRCNN                | 384x384 |    51.2        | 19.53 ms       |        No        |
+| Tiny YOLOv3          | 416x416 |    76.73       | 13.03 ms       |        No        |
+| YOLOv3               | 416x416 |    4.75        | 210.5 ms       |        No        |
+| YOLOv5s              | 640x640 |    15.76       | 63.45 ms       |        No        |
+| Unet                 | 384x384 |    1.5         | 666.7 ms       |        No        |
+| Lite-HRNet           | 256x192 |    19.81       | 50.48 ms       |        No        |
 
 
 
