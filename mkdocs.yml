@@ -207,6 +207,7 @@ nav:
       - Script Tools:                                               toolchain/appendix/command_line.md
       - Toolchain History:                                          toolchain/appendix/history.md
       - Web GUI:                                                    toolchain/appendix/toolchain_webgui.md
+      - NEF Utils Guide:                                            toolchain/appendix/nef_utils_guide.md
       - Yolo Example:                                               toolchain/appendix/yolo_example.md
       - Yolo Example (With In-Model Preprocess):                    toolchain/appendix/yolo_example_InModelPreproc_trick.md
   - Model Training Material:
