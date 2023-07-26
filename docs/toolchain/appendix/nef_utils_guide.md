@@ -1,6 +1,7 @@
 # Kneron NEF Utils Guide
 
 ## 0. Usage
+
 ```shell
 ./kneron_nef_utils <section> <options>
 
@@ -24,14 +25,17 @@
 ```
 
 ## 1. Extract NEF
+
 * **Extract NEF to get fw_info.bin & all_models.bin or modes_730.kne**
 
     Command Line:
+
     ```shell
     ./kneron_nef_utils --extract path/to/file.nef
     ```
 
     Result:
+
     ```shell
     NEFv0 or NEFv1:
     ├── all_models.bin
@@ -44,11 +48,13 @@
 * **Extract NEF to get all models.bin or models.kne**
 
     Command Line:
+
     ```shell
     ./kneron_nef_utils --extract path/to/file.nef --keep_all
     ```
 
     Result:
+
     ```shell
     NEFv0 or NEFv1:
     ├── all_models.bin
@@ -71,11 +77,13 @@
 * **Extract NEF to get all models.bin or models.kne and parse it.**
 
     Command Line:
+
     ```shell
     ./kneron_nef_utils --extract path/to/file.nef --keep_all -s
     ```
 
     Result:
+
     ```shell
     NEFv0 or NEFv1:
     ├── all_models.bin
@@ -99,9 +107,11 @@
     ```
 
 ## 2. Generated NEF
+
 * **Generated NEF by fw_info.bin & all_models.bin or modes_730.kne**
 
     Command Line:
+
     ```shell
     NEFv0 or NEFv1:
     ./kneron_nef_utils --gen \
@@ -114,6 +124,7 @@
     ```
 
     Result:
+
     ```shell
     NEFv0 or NEFv1:
     └── output/models_720.nef
