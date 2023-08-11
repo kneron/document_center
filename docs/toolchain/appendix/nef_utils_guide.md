@@ -6,7 +6,7 @@
 ./kneron_nef_utils <section> <options>
 
   section list:
-    EXTRACT_NEF     : -X(--extract) <nef_file_path> -l(--keep_all) -s(--parse_setup_bin)
+    EXTRACT_NEF     : -X(--extract) <nef_file_path> -l(--keep_all)
     GEN_NEF         : -G(--gen) [-h(--header) <fw_info_path> -m(--model) <all_models_path>]|[-e(--kne) <kne_path>] -t(--target) "target"
     DUMP_DATA       : -I(--info) <nef_file_path>
     READ_NEF        : -R(--read) <nef_file_path> -k(--header_key) "info_key"
@@ -68,37 +68,6 @@
 
     NEFv2:
     ├── NEF_0x25F8D591_model_211.kne
-    └── NEF_0x25F8D591_models_730.kne
-    ```
-
-* **Extract NEF to get all models.bin or models.kne and parse it.**
-
-    Command Line:
-
-    ```shell
-    ./kneron_nef_utils --extract path/to/file.nef --keep_all -s
-    ```
-
-    Result:
-
-    ```shell
-    NEFv0 or NEFv1:
-    ├── all_models.bin
-    ├── fw_info.bin
-    ├── NEF_0xF6D172C6_modelid_32771_command.bin
-    ├── NEF_0xF6D172C6_modelid_32771_setup.bin
-    ├── NEF_0xF6D172C6_modelid_32771_setup.bin.json
-    ├── NEF_0xF6D172C6_modelid_32771_test.conf
-    ├── NEF_0xF6D172C6_modelid_32771_weight.bin
-    ├── NEF_0xF6D172C6_modelid_32772_command.bin
-    ├── NEF_0xF6D172C6_modelid_32772_setup.bin
-    ├── NEF_0xF6D172C6_modelid_32772_setup.bin.json
-    ├── NEF_0xF6D172C6_modelid_32772_test.conf
-    └── NEF_0xF6D172C6_modelid_32772_weight.bin
-
-    NEFv2:
-    ├── NEF_0x25F8D591_model_211.kne
-    ├── NEF_0x25F8D591_model_211.kne.no_binary.json
     └── NEF_0x25F8D591_models_730.kne
     ```
 
@@ -185,6 +154,8 @@
     Model_Version: 0x1
     ===========================
     ```
+
+    > The current compiler version number, **v0.9.1**, is not in use at the moment. However, there is a possibility that it might be utilized in the future. Presently, the commit hash **(e9ab1ffd6)** is being used to identify the compiler version.
 
 ## 5. Read NEF Header by Header Key
 
