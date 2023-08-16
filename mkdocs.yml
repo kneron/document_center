@@ -212,8 +212,8 @@ nav:
       - Yolo Example:                                               toolchain/appendix/yolo_example.md
       - Yolo Example (With In-Model Preprocess):                    toolchain/appendix/yolo_example_InModelPreproc_trick.md
     - Quantization:
-      - 1.1 Introdution to Post-training Quantization:              toolchain/quantization/1.1_Introdution_to_Post-training_Quantization.md
-      - 1.2 Post-training Quantization(PTQ) Flow and Steps:         toolchain/quantization/1.2_Flow_and_Steps.md
+      - 1 Introdution to Post-training Quantization:              toolchain/quantization/1.1_Introdution_to_Post-training_Quantization.md
+      - 2 Post-training Quantization(PTQ) Flow and Steps:         toolchain/quantization/1.2_Flow_and_Steps.md
   - Model Training Material:
     - Model List:                                                   model_training/index.md
     - Evaluation Result:                                            model_training/evaluation.md
