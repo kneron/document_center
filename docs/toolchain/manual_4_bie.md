@@ -68,7 +68,7 @@ Since toolchain v0.21.0, the analysis step also generates a detailed report in h
 w3m /data1/kneron_flow/model_fx_report.html
 ```
 
-You can learn how to interpret it through the following link: [How to Interpret Fixed-Point Report](appendix/summary.md).
+You can learn how to interpret it through the following link: [How to Interpret Fixed-Point Report](appendix/fx_report.md).
 
 ## 4.2. E2E Simulator Check (Fixed Point)
 

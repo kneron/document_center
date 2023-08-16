@@ -205,7 +205,6 @@ nav:
       - Hardware Supported Operators:                               toolchain/appendix/operators.md
       - How to Interpret Fixed-Point Report:                        toolchain/appendix/fx_report.md
       - ONNX Converter:                                             toolchain/appendix/converters.md
-      - Quantization:                                               toolchain/quantization/mainpage.md
       - Script Tools:                                               toolchain/appendix/command_line.md
       - Toolchain History:                                          toolchain/appendix/history.md
       - Web GUI:                                                    toolchain/appendix/toolchain_webgui.md
