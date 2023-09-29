@@ -9,22 +9,22 @@ information table.
 The summary will show the ip evaluator information. Below are some examples of report:
 
 <div align="center">
-<img src="../../imgs/table_summary_520.png">
+<img src="../../imgs/fx_report/table_summary_520.png">
 <p><span style="font-weight: bold;">Figure 1.</span> Summary for platform 520, mode 0 (ip evaluator only) </p>
 </div>
 
 <div align="center">
-<img src="../../imgs/table_summary_530.png">
+<img src="../../imgs/fx_report/table_summary_530.png">
 <p><span style="font-weight: bold;">Figure 2.</span> Summary for platform 530, mode 0 (ip evaluator only) </p>
 </div>
 
 <div align="center">
-<img src="../../imgs/table_summary_520_mode1.png">
+<img src="../../imgs/fx_report/table_summary_520_mode1.png">
 <p><span style="font-weight: bold;">Figure 3.</span> Summary for platform 520, mode 1 (with fix model generated) </p>
 </div>
 
 <div align="center">
-<img src="../../imgs/table_summary_730_mode2.png">
+<img src="../../imgs/fx_report/table_summary_730_mode2.png">
 <p><span style="font-weight: bold;">Figure 4.</span> Summary for platform 730, model 2 (with fix model generated and snr check.) </p>
 </div>
 
