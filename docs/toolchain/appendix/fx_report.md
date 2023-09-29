@@ -28,7 +28,7 @@ The summary will show the ip evaluator information. Below are some examples of r
 <p><span style="font-weight: bold;">Figure 4.</span> Summary for platform 730, model 2 (with fix model generated and snr check.) </p>
 </div>
 
-| **name**                | **explaination**                                                               | **available**                    |
+| **name**                | **explaination**                                                               | **availability**                 |
 |-------------------------|--------------------------------------------------------------------------------|----------------------------------|
 | **docker_version**      | the version of the toolchain docker for this report                            |                                  |
 | **comments**            | extra information                                                              |                                  |
@@ -77,26 +77,26 @@ The summary will show the ip evaluator information. Below are some examples of r
 <p><span style="font-weight: bold;">Figure 8.</span> NOde details for platform 730, mode 2 (with fix model generated and snr check). </p>
 </div>
 
-| **column**              | **explanation**                                                 | **availability**                                        |
-|-------------------------|-----------------------------------------------------------------|---------------------------------------------------------|
-| **node**                | frontend node name                                              |                                                         |
-| **SNR**                 | SNR score between fix point model and orignal model (per layer) | every layer for mode 2 and only output layer for mode 1 |
-| **node origin**         | corresponding node name in original onnx                        |                                                         |
-| **type**                | NPU / FUSED / CPU                                               |                                                         |
-| **bw in**               | input bitwidth for this node                                    | mode 1 / 2 / 3                                          |
-| **bw out**              | output bitwidth for this node                                   | mode 1 / 2 / 3                                          |
-| **bw weight**           | weight bitwidth for this node                                   | mode 1 / 2 / 3                                          |
-| **node backend**        | corresponding backend node name                                 |                                                         |
-| **CMD_node_idx**        | index of command node                                           |                                                         |
-| **MAC_cycle**           |                                                                 |                                                         |
-| **MAC_runtime(ms)**     |                                                                 |                                                         |
-| **RDMA_amount(Byte)**   |                                                                 |                                                         |
-| **WDMA_amount(Byte)**   |                                                                 |                                                         |
-| **Weight_amount(Byte)** |                                                                 |                                                         |
-| **runtime(ms)**         |                                                                 |                                                         |
-| **in_fmt**              |                                                                 | mode 1 / 2 / 3                                          |
-| **out_fmt**             |                                                                 | mode 1 / 2 / 3                                          |
 
+| **column**              | **explanation**                                                                                                                                                                                                                            | **availability**                                        |
+|-------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| **node**                | frontend node name                                                                                                                                                                                                                         |                                                         |
+| **SNR**                 | SNR score between fix point model and orignal model (per layer)                                                                                                                                                                            | every layer for mode 3 and only output layer for mode 2 |
+| **node origin**         | corresponding node name in original onnx                                                                                                                                                                                                   |                                                         |
+| **type**                | NPU / FUSED / CPU                                                                                                                                                                                                                          |                                                         |
+| **bw in / bw out / weight **      | input / output / weight bitwidth for this node                                                                                                                                                                                             | mode 1 / 2 / 3                                          |
+| **node backend**        | corresponding backend node name                                                                                                                                                                                                            |                                                         |
+| **CMD_node_idx**        | index of command node                                                                                                                                                                                                                      |                                                         |
+| **MAC_cycle**           | how many mac cycles for this backend node.                                                                                                                                                                                                 | below info not available for 520                        |
+| **MAC_runtime(ms)**     | how many miliseconds used in this backend node.                                                                                                                                                                                            |                                                         |
+| **RDMA_amount(Byte)**   | RDMA amount for this backend node.                                                                                                                                                                                                         |                                                         |
+| **WDMA_amount(Byte)**   | WDMA amount for this backend node.                                                                                                                                                                                                         |                                                         |
+| **Weight_amount(Byte)** | weight amount for this backend node.                                                                                                                                                                                                       |                                                         |
+| **runtime(ms)**         | operator runtime.                                                                                                                                                                                                                          |                                                         |
+| **in_fmt / out_fmt**    | input/output data formats. If only one input/output or multiple inputs/outputs with same format, the only format will be shown. If multiple formats for this node, then the details will be listed as \“FORMAT1:IN1,IN2 \ FORMAT2:IN3\”.   | mode 1 / 2 / 3                                          |
+| **out_fmt**             |                                                                                                                                                                                                                                            | mode 1 / 2 / 3                                          |
+
+------------------
 
 ## TODELETE below
 
