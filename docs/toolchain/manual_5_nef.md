@@ -92,10 +92,11 @@ We would use `ktc.kneron_inference` here again. And we are using the generated n
 For the batch compile with only MobileNet V2, the python code would be like:
 
 ```python
-hw_results = ktc.kneron_inference(input_data, nef_file=compile_result, platform=720)
+hw_results = ktc.kneron_inference(input_data, nef_file=compile_result, input_names=["images"], platform=720)
 ```
 
 The usage is a little different here. In the code above, `hw_results` is a list of result data. `nef_file` is the path to the input nef. `input_data` is a list of input data after preprocess. The requirement is the same as in section 3.3. If your platform is not 520, you may need an extra parameter `platform`, e.g. `platform=720` or `platform=530`.
+The `input_names` is a list of string mapping the input data to specific input on the graph using the sequence.
 
 Here we use the same input `input_data` which we used in section 3.3. And the `compile_result` is the one that generated with only Mobilenet V2 model.
 
@@ -104,7 +105,7 @@ As mentioned above, we do not provide any postprocess. In reality, you may want 
 For nef file with mutiple models, we can specify the model with model ID:
 
 ```python
-hw_results_2 = ktc.kneron_inference(input_data, nef_file=batch_compile_result, model_id=32769, platform=720)
+hw_results_2 = ktc.kneron_inference(input_data, nef_file=batch_compile_result, input_names=["images"], model_id=32769, platform=720)
 ```
 
 After getting the `hw_results` and post-process it, you may want to compare the result with the `fixed_results` which is generated in section 4.2 to see if the results match. If the results mismatch, please contact us direcly through forum <https://www.kneron.com/forum/>.

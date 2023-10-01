@@ -24,6 +24,16 @@
 
 ## Toolchain Change log
 
+* **[v0.23.0]**
+    * **`ktc.kneron_inference` now requires `input_names` which is optional previously.**
+    * **`ktc.ModelConfig.evaluate()` now only generate html report instead of the previous txt report.**
+    * **`bie` format update for better supporting new models. Due to this update, the previous generated `bie` files are no longer supported.**
+    * **Batch compiler now support 730 hardware.**
+    * Provide more information in IP evaluator report.
+    * Optimize the quantization snr calculation.
+    * Optimize the compiler for better on-chip performance.
+    * Supporting latest models with loop node inside.
+    * Bug fixes and other improvements.
 * **[v0.22.0]**
     * `ktc.ModelConfig.evaluate`
       * **Change function parameter `output_folder` to `output_dir`.**

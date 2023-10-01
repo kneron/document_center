@@ -4,8 +4,8 @@
 
 # 1. Toolchain Overview
 
-**2023 Jul**
-**Toolchain v0.22.0**
+**2023 Sep**
+**Toolchain v0.23.0**
 
 ## 1.1. Introduction
 
@@ -20,23 +20,16 @@ In this document, you'll learn:
 
 **Major changes of the current version**
 
-* **[v0.22.0]**
-    * `ktc.ModelConfig.evaluate`
-      * **Change function parameter `output_folder` to `output_dir`.**
-      * **Change default output location to `/data1/kneronflow`.**
-    * `ktc.ModelConfig.analysis`
-      * **Change function parameter `output_bie` to `output_dir`, which should be a folder path instead of the file path before. Defaults to `/data1/kneronflow`.**
-      * **Remove deprecated parameters `bitwidth_mode`, `outlier` and `skip_verify`.**
-      * Add parameters `model_in_bitwidth_mode`, `model_out_bitwidth_mode`, `datapath_bitwidth_mode` and `weight_bitwidth_mode`.
-    * `ktc.ModelConfig`
-      * Add `radix_json_path` to `ktc.ModelConfig.__init__` which provides `ktc.compile` ability to compile with onnx and a special json file. Defaults to `None`.
-      * Add `debug` to `ktc.ModelConfig.__init__` to avoid removing debug output files. Defaults to `False`.
-    * `ktc.compile`, `ktc.encrpyt_compile`
-      * **Change default output location to `/data1/kneronflow`.**
-      * Add `debug` parameter to avoid removing debug output files. Defaults to `False`.
-    * Provided a function `ktc.convert_channel_last_to_first` to help converting channel last inputs to channel first(image only).
-    * Remove unessential output files. Some functions add `debug` parameters to avoid removing debug output files. `ktc.kneron_inference` can use `dump` parameter avoid removing debug output files.
-    * Bug fixes and performance improvements.
+* **[v0.23.0]**
+    * **`ktc.kneron_inference` now requires `input_names` which is optional previously.**
+    * **`ktc.ModelConfig.evaluate()` now only generate html report instead of the previous txt report.**
+    * **`bie` format update for better supporting new models. Due to this update, the previous generated `bie` files are no longer supported.**
+    * **Batch compiler now support 730 hardware.**
+    * Provide more information in IP evaluator report.
+    * Optimize the quantization snr calculation.
+    * Optimize the compiler for better on-chip performance.
+    * Supporting latest models with loop node inside.
+    * Bug fixes and other improvements.
 
 ## 1.2. Workflow Overview
 
@@ -118,10 +111,11 @@ eval_result = km.evaluate()
 ```
 
 The evaluation result will be returned as string. User can also find the evaluation result under /data1/kneron_flow/.
-But the report file names are different for different platforms.
+The report is in html format: `model_fx_report.html`. You can check the report in command line with:
 
-* 520: ip_eval_prof.txt
-* Other hardware: ProfileResult.txt
+```bash
+w3m /data1/kneron_flow/model_fx_report.html
+```
 
 ### 1.4.3. Floating-Point Model Inference
 
@@ -237,7 +231,7 @@ We would use `ktc.kneron_inference` here again. And we are using the generated n
 
 ```python
 # `nef_path` is defined in section 1.6.1.
-binary_inf_results = ktc.kneron_inference(input_data, nef_file=nef_path, platform=720)
+binary_inf_results = ktc.kneron_inference(input_data, nef_file=nef_path, input_names=["images"], platform=720)
 
 # Compare binary_inf_results and fixed_point_inf_results. They should be almost the same.
 ```

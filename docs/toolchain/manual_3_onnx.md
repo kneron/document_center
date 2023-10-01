@@ -481,10 +481,11 @@ eval_result = km.evaluate()
 ```
 
 The evaluation result will be returned as string. User can also find the evaluation result under `output_dir`.
-But the report file names are different for different platforms.
+The report is in html format: `model_fx_report.html`. You can check the report in command line with:
 
-* 520: ip_eval_prof.txt
-* Other hardware: ProfileResult.txt
+```bash
+w3m model_fx_report.html
+```
 
 If the model is not supported, there would be warning messages or exceptions. Please modify the model structure referring to the message.
 Please check the report to see if the performance meets your expectation. Please consider redesign the network structure. Also note that the evaluator report only considers the performance of NPU. Thus, if the model contains many operators that are not supported by NPU but by CPU, the actual performance would be even worse.
@@ -507,7 +508,7 @@ The python code would be like:
 inf_results = ktc.kneron_inference(input_data, onnx_file="/workspace/examples/mobilenetv2/mobilenetv2_zeroq.origin.onnx", input_names=["images"])
 ```
 
-In the code above, `inf_results` is a list of result data. `onnx_file` is the path to the input onnx. `input_data` is a list of input data after preprocess. It should be the same shape as in the onnx. The `input_names` is a list of string mapping the input data to specific input on the graph using the sequence. **Note that the input should have the same shape as in the onnx (usually NCHW).**
+In the code above, `inf_results` is a list of result data. `onnx_file` is the path to the input onnx. `input_data` is a list of input data after preprocess. It should be the same shape as in the onnx. The `input_names` is a list of string mapping the input data to specific input on the graph using the sequence. **Note that the input should have the same shape as in the onnx (usually NCHW for image inputs).**
 
 Here we provide a very simple preprocess function which only do the resize and normalization. Then, the full code of this section would be:
 
