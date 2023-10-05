@@ -217,7 +217,6 @@ nav:
   - Model Training Material:
     - Model List:                                                   model_training/index.md
     - Evaluation Result:                                            model_training/evaluation.md
-  - Kneron Docker Hub:                                              dockerhub/kneron_dockerhub_service.md
 
 
 extra:
