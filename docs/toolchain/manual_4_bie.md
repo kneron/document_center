@@ -68,6 +68,8 @@ Since toolchain v0.21.0, the analysis step also generates a detailed report in h
 w3m /data1/kneron_flow/model_fx_report.html
 ```
 
+You can learn how to interpret it through the following link: [How to Interpret Fixed-Point Report](appendix/fx_report.md).
+
 ## 4.2. E2E Simulator Check (Fixed Point)
 
 Before going into the next section of compilation, we need to ensure the quantized model do not lose too much precision.

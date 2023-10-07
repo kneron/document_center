@@ -203,6 +203,7 @@ nav:
       - End to End Simulator:                                       toolchain/appendix/app_flow_manual.md
       - Hardware Performance:                                       toolchain/appendix/performance.md
       - Hardware Supported Operators:                               toolchain/appendix/operators.md
+      - How to Interpret Fixed-Point Report:                        toolchain/appendix/fx_report.md
       - ONNX Converter:                                             toolchain/appendix/converters.md
       - Script Tools:                                               toolchain/appendix/command_line.md
       - Toolchain History:                                          toolchain/appendix/history.md
@@ -210,6 +211,9 @@ nav:
       - NEF Utils Guide:                                            toolchain/appendix/nef_utils_guide.md
       - Yolo Example:                                               toolchain/appendix/yolo_example.md
       - Yolo Example (With In-Model Preprocess):                    toolchain/appendix/yolo_example_InModelPreproc_trick.md
+    - Quantization:
+      - 1 Introdution to Post-training Quantization:              toolchain/quantization/1.1_Introdution_to_Post-training_Quantization.md
+      - 2 Post-training Quantization(PTQ) Flow and Steps:         toolchain/quantization/1.2_Flow_and_Steps.md
   - Model Training Material:
     - Model List:                                                   model_training/index.md
     - Evaluation Result:                                            model_training/evaluation.md
