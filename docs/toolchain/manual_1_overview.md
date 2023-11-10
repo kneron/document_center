@@ -4,8 +4,8 @@
 
 # 1. Toolchain Overview
 
-**2023 Sep**
-**Toolchain v0.23.0**
+**2023 Oct**
+**Toolchain v0.23.1**
 
 ## 1.1. Introduction
 
@@ -20,6 +20,9 @@ In this document, you'll learn:
 
 **Major changes of the current version**
 
+* **[v0.23.1]**
+    * Compiler may raise error on unsupported CPU nodes.
+    * Bug fixes for compiler, dynasty and ktc.
 * **[v0.23.0]**
     * **`ktc.kneron_inference` now requires `input_names` which is optional previously.**
     * **`ktc.ModelConfig.evaluate()` now only generate html report instead of the previous txt report.**
