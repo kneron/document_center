@@ -1,4 +1,4 @@
-# Kneron End to End Simulator v0.23.0
+# Kneron End to End Simulator v0.23.1
 
 This project allows users to perform image inference using Kneron's built in simulator. As of version 0.5.0 the 520 and 720 simulators have been merged into one codebase, and any existing apps will need to be updated to the new structure to work.
 
