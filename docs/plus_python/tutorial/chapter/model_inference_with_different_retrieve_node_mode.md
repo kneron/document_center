@@ -173,8 +173,8 @@ This tutorial shows how to inference model by Kneron devices in the following tw
 
     for node_idx in range(generic_raw_result.header.num_output_node):
         inference_fixed_node_output = kp.inference.generic_inference_retrieve_fixed_node(node_idx=node_idx,
-                                                                                        generic_raw_result=generic_raw_result,
-                                                                                        channels_ordering=kp.ChannelOrdering.KP_CHANNEL_ORDERING_CHW)
+                                                                                         generic_raw_result=generic_raw_result,
+                                                                                         channels_ordering=kp.ChannelOrdering.KP_CHANNEL_ORDERING_CHW)
         inf_node_output_list.append(inference_fixed_node_output)
 
     print(inf_node_output_list)

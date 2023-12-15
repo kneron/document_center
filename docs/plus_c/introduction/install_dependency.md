@@ -2,8 +2,8 @@
 
 Verified platforms and OS to build and run PLUS:
 
-- Windows 10 (x86_64 64-bit)
-- Ubuntu 18.04 (x86_64 64-bit)
+- Windows 10, 11 (x86_64 64-bit)
+- Ubuntu 18.04, 20.04 (x86_64 64-bit)
 - Raspberry Pi OS - Buster (armv7l 32-bit)
 
 And the following sections in this chapter will provide the instructions for installing the tools and dependency libraries to the corresponding platform.
@@ -12,7 +12,7 @@ And the following sections in this chapter will provide the instructions for ins
 ---
 
 
-## 1. Ubuntu 18.04 / Raspberry Pi OS - Buster
+## 1. Ubuntu 18.04, 20.04 / Raspberry Pi OS - Buster
 
 - Install required packages
 
@@ -43,7 +43,7 @@ And the following sections in this chapter will provide the instructions for ins
 
 ---
 
-## 2. Windows 10
+## 2. Windows 10, 11
 
 ### 2.1 Kneron AI Device Driver
 

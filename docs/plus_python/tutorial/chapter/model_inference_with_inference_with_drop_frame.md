@@ -8,6 +8,7 @@ This tutorial shows how to inference model with drop frame configuration
 **Reference Examples**:  
 
 - `KL520DemoCamGenericImageInferenceDropFrame.py`  
+- `KL630DemoCamGenericImageInferenceDropFrame.py`  
 - `KL720DemoCamGenericImageInferenceDropFrame.py`  
 
 ### Inference with Drop Frame
