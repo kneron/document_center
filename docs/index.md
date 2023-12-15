@@ -11,12 +11,13 @@ Kneron AI consists the following components:
 
 1. **Kneron AI Development Kit - Kneron PLUS**  
 	It is Platform Libraries Unified Software to control Kneron Chip via USB interface  
-	*KL520 SDK v1.6.0 / KL720 SDK v1.4.1, or higher version is required*
+	*KL520 SDK v1.6.0 / KL720 SDK v1.4.1 / KL630 SDK v2.5.2, or higher version is required*
 
 2. **Kneron AI Development Kit - Firmware SDK**  
 	Open source for peripheral drivers, middleware and application code can be optimized to meet the needs for different applications  
         - KL520 SDK  
         - KL720 SDK  
+        - KL630 SDK
 
 3. **Kneron AI Development Kit - Kneron Model Toolchain**  
 	A series of utilities for Kneron AI model creation   
@@ -32,12 +33,14 @@ Kneron AI consists the following components:
 5. **Kneron AI Chips**  
         - KL520: Dongle, 96board, M.2 board  
         - KL720: Dongle, 96board  
+        - KL630: 96board
 
 ---
 ## Compatibility Table
 
 Versions           | KL520 SDK version | KL720 SDK version | KL630 SDK version (NNM version)
 :------------------|:------------------|:------------------|:-------------------------------
+Kneron PLUS v2.2.x | 2.2.x             | 2.2.x             | 2.5.5 (1.2.x)
 Kneron PLUS v2.1.x | 2.1.x             | 2.1.x             | 2.5.2 (1.0.x)
 Kneron PLUS v2.0.x | 2.0.x             | 2.0.x             | Not supported
 Kneron PLUS v1.3.x | 1.7.x             | 1.5.x             | Not supported
@@ -59,8 +62,8 @@ Please see [Kneron PLUS-C - Getting Started](./plus_c/getting_started.md) \(or [
 ## References
 
  - [Kneron PLUS-C](./plus_c/introduction/introduction.md) / [Kneron PLUS-Python](./plus_python/introduction/index.md) 
- - [Firmware KL520 SDK](./520_2.0.0/introduction.md)
- - [Firmware KL720 SDK](./720_2.0.0/introduction.md)
+ - [Firmware KL520 SDK](./520_2.2.0/introduction.md)
+ - [Firmware KL720 SDK](./720_2.2.0/introduction.md)
  - [Kneron Model Toolchain](./toolchain/manual_1_overview.md)
  - [Model Zoo - C-examples](./plus_c/modelzoo/index.md) / [Python-examples](./plus_python/modelzoo/index.md)
  - [Model Zoo - retraining](./model_training/classification.md)

@@ -57,13 +57,19 @@ nav:
       - NPU Raw Output Memory Layout:                               plus_c/appendix/npu_raw_output_memory_layout.md
       - Yolo Object Name Mapping:                                   plus_c/appendix/yolo_object_name_mapping.md
     - API Reference:
-      - v2.1.x:
-        - Data Structure:                                           plus_c_api/api_reference_2.1.x/kp_struct.h.md
-        - Core API:                                                 plus_c_api/api_reference_2.1.x/kp_core.h.md
-        - Inference API:                                            plus_c_api/api_reference_2.1.x/kp_inference.h.md
-        - (legacy)Data Structure:                                   plus_c_api/api_reference_2.1.x/kp_struct_v1.h.md
-        - (legacy)Inference API:                                    plus_c_api/api_reference_2.1.x/kp_inference_v1.h.md
+      - v2.2.x:
+        - Data Structure:                                           plus_c_api/api_reference_2.2.x/kp_struct.h.md
+        - Core API:                                                 plus_c_api/api_reference_2.2.x/kp_core.h.md
+        - Inference API:                                            plus_c_api/api_reference_2.2.x/kp_inference.h.md
+        - (legacy)Data Structure:                                   plus_c_api/api_reference_2.2.x/kp_struct_v1.h.md
+        - (legacy)Inference API:                                    plus_c_api/api_reference_2.2.x/kp_inference_v1.h.md
       - Archive:
+        - v2.1.x:
+          - Data Structure:                                         plus_c_api/api_reference_2.1.x/kp_struct.h.md
+          - Core API:                                               plus_c_api/api_reference_2.1.x/kp_core.h.md
+          - Inference API:                                          plus_c_api/api_reference_2.1.x/kp_inference.h.md
+          - (legacy)Data Structure:                                 plus_c_api/api_reference_2.1.x/kp_struct_v1.h.md
+          - (legacy)Inference API:                                  plus_c_api/api_reference_2.1.x/kp_inference_v1.h.md
         - v2.0.x:
           - Data Structure:                                         plus_c_api/api_reference_2.0.x/kp_struct.h.md
           - Core API:                                               plus_c_api/api_reference_2.0.x/kp_core.h.md
@@ -166,8 +172,9 @@ nav:
 
   - Firmware SDK:
     - KL520 SDK:
-      - v2.1.x:                                                     520_2.1.0/introduction.md
+      - v2.2.x:                                                     520_2.2.0/introduction.md
       - Archive:
+        - v2.1.x:                                                   520_2.1.0/introduction.md
         - v2.0.x:                                                   520_2.0.0/introduction.md
         - v1.7.x:                                                   520_1.7.0/introduction.md
         - v1.6.x:                                                   520_1.6.0/introduction.md
@@ -175,8 +182,9 @@ nav:
         - v1.4.0.0:                                                 520_1.4.0.0/getting_start.md
         - v1.3.0.0:                                                 520_1.3.0.0/getting_start.md
     - KL720 SDK:
-      - v2.1.x:                                                     720_2.1.0/introduction.md
+      - v2.1.x:                                                     720_2.2.0/introduction.md
       - Archive:
+        - v2.1.x:                                                   720_2.1.0/introduction.md
         - v2.0.x:                                                   720_2.0.0/introduction.md
         - v1.5.x:                                                   720_1.5.0/introduction.md
         - v1.4.x:                                                   720_1.4.0/introduction.md
