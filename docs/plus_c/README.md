@@ -15,6 +15,6 @@ Kneron PLUS is compatible with the platform and OS listed below:
 
 | OS                          | Platform
 |-----------------------------|---------------
-| Windows 10                  | x86_64 64-bit
-| Ubuntu 18.04                | x86_64 64-bit
+| Windows 10, 11              | x86_64 64-bit
+| Ubuntu 18.04, 20.04         | x86_64 64-bit
 | Raspberry Pi OS - Buster 10 | armv7l 32-bit

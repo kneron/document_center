@@ -182,7 +182,7 @@ nav:
         - v1.4.0.0:                                                 520_1.4.0.0/getting_start.md
         - v1.3.0.0:                                                 520_1.3.0.0/getting_start.md
     - KL720 SDK:
-      - v2.1.x:                                                     720_2.2.0/introduction.md
+      - v2.2.x:                                                     720_2.2.0/introduction.md
       - Archive:
         - v2.1.x:                                                   720_2.1.0/introduction.md
         - v2.0.x:                                                   720_2.0.0/introduction.md
