@@ -112,8 +112,12 @@ In order to infer without hardware image preprocessing, the input data must do t
                 model_input_channel_block_offset_end = model_input_channel_block_offset + channel_align_base
                 model_input_channel_block_offset_end = model_input_channel_block_offset_end if model_input_channel_block_offset_end < model_input_channel else model_input_channel
 
-                re_layout_data[:model_input_height, model_input_channel_block_idx, :model_input_width, :(model_input_channel_block_offset_end - model_input_channel_block_offset)] = \
-                    data[:, :, model_input_channel_block_offset:model_input_channel_block_offset_end]
+                re_layout_data[
+                    :model_input_height,
+                    model_input_channel_block_idx,
+                    :model_input_width,
+                    :(model_input_channel_block_offset_end - model_input_channel_block_offset)
+                ] = data[:, :, model_input_channel_block_offset:model_input_channel_block_offset_end]
 
                 model_input_channel_block_offset += channel_align_base
 
@@ -127,7 +131,7 @@ In order to infer without hardware image preprocessing, the input data must do t
 
             ```python
             # re-layout the data to fit NPU data layout format
-            # KL720 supported NPU input layout format: 4W4C8B, 1W16C8B, 16W1C8B
+            # KL630 supported NPU input layout format: 4W4C8B, 1W16C8B, 16W1C8B
 
             if kp.ModelTensorDataLayout.KP_MODEL_TENSOR_DATA_LAYOUT_4W4C8B == model_input_data_layout:
                 width_align_base = 4
@@ -149,9 +153,9 @@ In order to infer without hardware image preprocessing, the input data must do t
             # create re-layout data container
             # KL630 dimension order: CxHxW
             re_layout_data = np.zeros((model_input_channel_block_num,
-                                    model_input_height,
-                                    model_input_width_align,
-                                    channel_align_base), dtype=np.int8)
+                                       model_input_height,
+                                       model_input_width_align,
+                                       channel_align_base), dtype=np.int8)
 
             # fill data in re-layout data container
             model_input_channel_block_offset = 0
@@ -159,8 +163,12 @@ In order to infer without hardware image preprocessing, the input data must do t
                 model_input_channel_block_offset_end = model_input_channel_block_offset + channel_align_base
                 model_input_channel_block_offset_end = model_input_channel_block_offset_end if model_input_channel_block_offset_end < model_input_channel else model_input_channel
 
-                re_layout_data[model_input_channel_block_idx, :model_input_height, :model_input_width, :(model_input_channel_block_offset_end - model_input_channel_block_offset)] = \
-                    data[:, :, model_input_channel_block_offset:model_input_channel_block_offset_end]
+                re_layout_data[
+                    model_input_channel_block_idx,
+                    :model_input_height,
+                    :model_input_width,
+                    :(model_input_channel_block_offset_end - model_input_channel_block_offset)
+                ] = data[:, :, model_input_channel_block_offset:model_input_channel_block_offset_end]
 
                 model_input_channel_block_offset += channel_align_base
 
@@ -196,9 +204,9 @@ In order to infer without hardware image preprocessing, the input data must do t
             # create re-layout data container
             # KL720 dimension order: CxHxW
             re_layout_data = np.zeros((model_input_channel_block_num,
-                                    model_input_height,
-                                    model_input_width_align,
-                                    channel_align_base), dtype=np.int8)
+                                       model_input_height,
+                                       model_input_width_align,
+                                       channel_align_base), dtype=np.int8)
 
             # fill data in re-layout data container
             model_input_channel_block_offset = 0
@@ -206,8 +214,12 @@ In order to infer without hardware image preprocessing, the input data must do t
                 model_input_channel_block_offset_end = model_input_channel_block_offset + channel_align_base
                 model_input_channel_block_offset_end = model_input_channel_block_offset_end if model_input_channel_block_offset_end < model_input_channel else model_input_channel
 
-                re_layout_data[model_input_channel_block_idx, :model_input_height, :model_input_width, :(model_input_channel_block_offset_end - model_input_channel_block_offset)] = \
-                    data[:, :, model_input_channel_block_offset:model_input_channel_block_offset_end]
+                re_layout_data[
+                    model_input_channel_block_idx,
+                    :model_input_height,
+                    :model_input_width,
+                    :(model_input_channel_block_offset_end - model_input_channel_block_offset)
+                ] = data[:, :, model_input_channel_block_offset:model_input_channel_block_offset_end]
 
                 model_input_channel_block_offset += channel_align_base
 

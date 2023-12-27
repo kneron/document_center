@@ -61,6 +61,8 @@ Otherwise, if you wish to execute the post-processing on Kneron AI devices (or i
 
 Following examples show the usage of `kp_generic_image_inference_send()` and `kp_generic_image_inference_receive()`.
 
+**Note**: Multiple calls of `kp_generic_image_inference_send()` without any call of `kp_generic_image_inference_receive()` may cause the system stuck.
+
 Generic image inference examples are using the **Generic Image Inference API**, which is intended for advanced users who are interested in developing their models and implement corresponding post-processing code.
 
 **Generic Image Inference API** allows users to directly run a model with an input image and obtain the raw output from the model, without any developments of Kneron AI device's firmware. Please refer [2.1 Generic Image Inference With Raw Output](#21-generic-image-inference-with-raw-output) for the demonstration of the usage.
@@ -283,6 +285,8 @@ dumped node 1 output to 'output_bike_cars_street_224x224_node1_14x14x255.txt'
 ## 3. Generic Data Inference API
 
 Following examples show the usage of `kp_generic_data_inference_send()` and `kp_generic_data_inference_receive()`.
+
+**Note**: Multiple calls of `kp_generic_data_inference_send()` without any call of `kp_generic_data_inference_receive()` may cause the system stuck.
 
 Generic data inference examples are using the **Generic Data Inference API**, which is intended for advanced users who are interested in developing their models with pre-processing code on host and implement corresponding post-processing code.
 
