@@ -4,8 +4,8 @@
 
 # 1. Toolchain Overview
 
-**2023 Oct**
-**Toolchain v0.23.1**
+**2024 Feb**
+**Toolchain v0.24.0**
 
 ## 1.1. Introduction
 
@@ -20,19 +20,17 @@ In this document, you'll learn:
 
 **Major changes of the current version**
 
-* **[v0.23.1]**
-    * Compiler may raise error on unsupported CPU nodes.
-    * Bug fixes for compiler, dynasty and ktc.
-* **[v0.23.0]**
-    * **`ktc.kneron_inference` now requires `input_names` which is optional previously.**
-    * **`ktc.ModelConfig.evaluate()` now only generate html report instead of the previous txt report.**
-    * **`bie` format update for better supporting new models. Due to this update, the previous generated `bie` files are no longer supported.**
-    * **Batch compiler now support 730 hardware.**
-    * Provide more information in IP evaluator report.
-    * Optimize the quantization snr calculation.
-    * Optimize the compiler for better on-chip performance.
-    * Supporting latest models with loop node inside.
-    * Bug fixes and other improvements.
+* **[v0.24.0]**
+    * **`ktc.ModelConfig.analysis` rename 'fm_cut' to 'compiler_tiling'.**
+    * `ktc.ModelConfig.analysis` change `datapath_bitwidth_mode` and `weight_bitwidth_mode` to support mix-bitwidth mode "mix light" and "mix balance". (exclude 520).
+    * Knerex support for Quantized Awareness Training (QAT).
+    * Support ONNX opset 18.
+    * Optimize customized node support.
+    * Support multiple output operators.
+    * Support per-channel quantization
+    * WebGUI Auto-detect model input node information, make convert onnx or tflite to nef more easier.
+    * Docker update the parallel package version.
+    * Fix known bugs and improve performance.
 
 ## 1.2. Workflow Overview
 

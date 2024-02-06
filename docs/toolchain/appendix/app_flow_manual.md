@@ -1,4 +1,4 @@
-# Kneron End to End Simulator v0.23.1
+# Kneron End to End Simulator v0.24.0
 
 This project allows users to perform image inference using Kneron's built in simulator. As of version 0.5.0 the 520 and 720 simulators have been merged into one codebase, and any existing apps will need to be updated to the new structure to work.
 
@@ -30,7 +30,6 @@ def kneron_inference(pre_results: List[npt.ArrayLike], nef_file: str = "", onnx_
 * ```model_id```: ID of model to run inference
 	* only used with NEF file if file has multiple models
 * ```input_names```: list of input node names
-	* only needed with ONNX/BIE file
 * ```data_type```: string data format that you would like the output returned as
 	* ```float``` or ```fixed```
 * ```reordering```: list of node names/integers specifying the output order

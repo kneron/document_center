@@ -26,11 +26,12 @@ Args:
 * percentile (float, optional): used under 'mmse' mode. The range to search. The larger the value, the larger the search range, the better the performance but the longer the simulation time. Defaults to 0.001,
 * outlier_factor (float, optional): used under 'mmse' mode. The factor applied on outliers. For example, if clamping data is sensitive to your model, set outlier_factor to 2 or higher. Higher outlier_factor will reduce outlier removal by increasing range. Defaults to 1.0.
 * percentage (float, optional): used under 'percentage' mode. Suggest to set value between 0.999 and 1.0. Use 1.0 for detection models. Defaults to 0.999.
-* datapath_bitwidth_mode: choose from "int8"/"int16". ("int16" not supported in kdp520).
-* weight_bitwidth_mode: choose from "int8"/"int16". ("int16" not supported in kdp520).
-* model_in_bitwidth_mode: choose from "int8"/"int16". ("int16" only for internal debug usage).
-* model_out_bitwidth_mode: choose from "int8"/"int16". (currently should be same as model_in_bitwidth_mode).
-* fm_cut (str, optional): could be "default" or "deep_search". Get a better image cut method through deep search, so as to improve the efficiency of our NPU. Defaults to "default".
+* datapath_bitwidth_mode: choose from "int8"/"int16"/"mix balance"/"mix light". ("int16" is not supported in kdp520. "mix balance" and "mix light" are combines of int8 and int16 mode. "mix balance" prefers int16 while "mix light" prefers int8.)
+* weight_bitwidth_mode: choose from "int8"/"int16"/"int4"/"mix balance"/"mix light". ("int16" is not supported in kdp520. "int4" is not supported in kdp720. "mix balance" and "mix light" are combines of int8 and int16 mode. "mix balance" prefers int16 while "mix light" prefers int8.)
+* model_in_bitwidth_mode: choose from "int8"/"int16". ("int16" is not supported in kdp520.)
+* model_out_bitwidth_mode: choose from "int8"/"int16". ("int16" is not supported in kdp520.)
+* cpu_node_bitwidth_mode: choose from "int8"/"int16". ("int16" is not supported in kdp520.)
+* compiler_tiling (str, optional): could be "default" or "deep_search". Get a better image cut method through deep search, so as to improve the efficiency of our NPU. Defaults to "default".
 * mode (int, optional): running mode for the analysis. Defaults to 1.
     - 0: run ip_evaluator only. This mode will not output bie file.
     - 1: run knerex (for quantization) only.
@@ -42,7 +43,6 @@ Args:
     * 2: bias adjust parallel, with firmware cut improvement.
     * 3: bias adjust sequential, no firmware cut improvement. SLOW!
     * 4: bias adjust sequential, with firmware cut improvement.  SLOW!
-* export_dynasty_dump (bool, optional): whether export the dump result when running dynasty. Defaults to False.
 
 Please also note that this step would be very time-consuming since it analysis the model with every input data you provide.
 
