@@ -401,12 +401,13 @@ dumped node 1 output to 'output_bike_cars_street_224x224_node1_14x14x255.txt'
 
 ## 2. Inference API Examples
 
-Kneron PLUS provides two different API set for inference:
+Kneron PLUS provides three different API set for inference:
 
-1. [Generic Image Inference](#21-generic-inference-example)
-2. [Generic Data Inference](#21-generic-inference-example)
-3. [Customized Inference](#22-customized-inference-example)
-4. [User Defined API Inference](#23-user-define-api-inference-example)
+1. [Generic Inference](#21-generic-inference-example)
+    - Generic Image Inference
+    - Generic Data Inference
+2. [Customized Inference](#22-customized-inference-example)
+3. [User Defined API Inference](#23-user-define-api-inference-example)
 
 The main difference between **Generic Inference** and **Customized Inference** is shown below:
 
@@ -454,6 +455,8 @@ The `kl520_demo_user_define_api` is to show you how to use the User Define API:
 2. For command: `kp_app_yolo_get_post_proc_parameters()` and `kp_app_yolo_get_post_proc_parameters()`.
 
 All these 4 API functions are implemented by Customized API, please refer the documents in [Customize API](../feature_guide/customized_api/introduction.md) section for more information.
+
+**Note**: Multiple calls of `kp_app_yolo_inference_send()` without any call of `kp_app_yolo_inference_receive()` may cause the system stuck.
 
 ```bash
 $ sudo ./kl520_demo_user_define_api

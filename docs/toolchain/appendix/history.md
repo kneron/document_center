@@ -24,6 +24,9 @@
 
 ## Toolchain Change log
 
+* **[v0.23.1]**
+    * Compiler may raise error on unsupported CPU nodes.
+    * Bug fixes for compiler, dynasty and ktc.
 * **[v0.23.0]**
     * **`ktc.kneron_inference` now requires `input_names` which is optional previously.**
     * **`ktc.ModelConfig.evaluate()` now only generate html report instead of the previous txt report.**

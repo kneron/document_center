@@ -4,8 +4,8 @@
 
 # 1. Toolchain Overview
 
-**2023 Sep**
-**Toolchain v0.23.0**
+**2023 Oct**
+**Toolchain v0.23.1**
 
 ## 1.1. Introduction
 
@@ -20,6 +20,9 @@ In this document, you'll learn:
 
 **Major changes of the current version**
 
+* **[v0.23.1]**
+    * Compiler may raise error on unsupported CPU nodes.
+    * Bug fixes for compiler, dynasty and ktc.
 * **[v0.23.0]**
     * **`ktc.kneron_inference` now requires `input_names` which is optional previously.**
     * **`ktc.ModelConfig.evaluate()` now only generate html report instead of the previous txt report.**
@@ -254,7 +257,10 @@ There are also other useful tools and informations:
 * [End to End Simulator](appendix/app_flow_manual.md): manual for the E2E simualtor.
 * [Hardware Performance](appendix/performance.md): common model performance table for Kneron hardwares and the supported operator list.
 * [Hardware Supported Operators](appendix/operators.md): operators supported by the hardware.
+* [How to Interpret Fixed-Point Report](appendix/interpret_report.md): manual for interpreting the fixed-point report.
 * [ONNX Converters](appendix/converters.md): manual for the script usage of our converter tools.
+* [Quantization 1 - Introdution to Post-training Quantization](quantization/1.1_Introdution_to_Post-training_Quantization.md): introduction for the quantization.
+* [Quantization 2 - Post-training Quantization(PTQ) Flow and Steps](quantization/1.2_Flow_and_Steps.md): manual for the quantization flow and steps.
 * [Script Tools](appendix/command_line.md): manual for deprecated command line tools. Kept for compatibility of toolchain before v0.15.0)
 * [Toolchain History](appendix/history.md): manuals for history version of toolchain and the change log.
 * [Web GUI](appendix/toolchain_webgui.md): a simple web interface for the toolchain docker image.
