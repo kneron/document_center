@@ -6,6 +6,8 @@ In this document, we provide a step by step example on how to utilize our tools 
 > 1. Step 2: Convert and optimize the pretrain model.
 > 2. Step 4: Check ONNX model and preprocess and postprocess are good.
 
+> This document is writen for toolchain v0.22.0. If any description is not consistent with the latest toolchain, please refer to the main toolchain manual.
+
 ## Step 0: Prepare environment and data
 
 We need to download the latest toolchain docker image which contains all the tools we need.

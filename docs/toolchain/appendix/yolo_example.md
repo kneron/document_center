@@ -2,6 +2,8 @@
 
 In this document, we provide a step by step example on how to utilize our tools to compile and test with a newly downloaded YOLOv3 model.
 
+> This document is writen for toolchain v0.22.0. If any description is not consistent with the latest toolchain, please refer to the main toolchain manual.
+
 ## Step 0: Prepare environment and data
 
 We need to download the latest toolchain docker image which contains all the tools we need.
