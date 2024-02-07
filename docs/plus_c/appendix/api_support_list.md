@@ -27,23 +27,23 @@ The following mapping table shows the **Kneron PLUS** supported C/Python API:
 
 * **Inference API**  
 
-    | Function Name                                | C         | Python    |
-    | -------------------------------------------- | --------- | --------- |
-    | kp_inference_configure                       | Yes       | Yes       |
-    | kp_generic_image_inference_send              | Yes       | Yes       |
-    | kp_generic_image_inference_receive           | Yes       | Yes       |
-    | kp_generic_data_inference_send               | Yes       | Yes       |
-    | kp_generic_data_inference_receive            | Yes       | Yes       |
-    | kp_generic_inference_retrieve_raw_fixed_node | Yes       |           |
-    | kp_generic_inference_retrieve_fixed_node     | Yes       | Yes       |
-    | kp_generic_inference_retrieve_float_node     | Yes       | Yes       |
-    | kp_customized_inference_send                 | Yes       |           |
-    | kp_customized_inference_receive              | Yes       |           |
-    | kp_customized_command_send                   | Yes       |           |
-    | kp_dbg_set_enable_checkpoints                | Yes       |           |
-    | kp_dbg_receive_checkpoint_data               | Yes       |           |
-    | kp_profile_set_enable                        | Yes (New) | Yes (New) |
-    | kp_profile_get_statistics                    | Yes (New) | Yes (New) |
+    | Function Name                                | C   | Python |
+    |----------------------------------------------|-----|--------|
+    | kp_inference_configure                       | Yes | Yes    |
+    | kp_generic_image_inference_send              | Yes | Yes    |
+    | kp_generic_image_inference_receive           | Yes | Yes    |
+    | kp_generic_data_inference_send               | Yes | Yes    |
+    | kp_generic_data_inference_receive            | Yes | Yes    |
+    | kp_generic_inference_retrieve_raw_fixed_node | Yes |        |
+    | kp_generic_inference_retrieve_fixed_node     | Yes | Yes    |
+    | kp_generic_inference_retrieve_float_node     | Yes | Yes    |
+    | kp_customized_inference_send                 | Yes |        |
+    | kp_customized_inference_receive              | Yes |        |
+    | kp_customized_command_send                   | Yes |        |
+    | kp_dbg_set_enable_checkpoints                | Yes |        |
+    | kp_dbg_receive_checkpoint_data               | Yes |        |
+    | kp_profile_set_enable                        | Yes | Yes    |
+    | kp_profile_get_statistics                    | Yes | Yes    |
 
 * **Inference API V1.x (Legacy)**  
 

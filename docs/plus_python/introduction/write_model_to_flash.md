@@ -33,9 +33,9 @@ There are two ways to load models:
 
     - The GUI or command line of **KneronDFUT** can be used for writing the model file into flash.
 
-    - For the usage, please refer the example **kl520_demo_generic_inference_flash_model** or **kl720_demo_generic_inference_flash_model**.
+    - For the usage, please refer the example **kl520_demo_generic_image_inference_flash_model** or **kl720_demo_generic_image_inference_flash_model**.
 
-    - For Python users, please refer the example **KL520DemoGenericInferenceFlashModel.py** or **KL720DemoGenericInferenceFlashModel.py**.
+    - For Python users, please refer the example **KL520DemoGenericImageInferenceFlashModel.py** or **KL720DemoGenericImageInferenceFlashModel.py**.
 
     - In this method, the size of the model file must be below:
         - **32 MB** for KL520

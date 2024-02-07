@@ -188,6 +188,8 @@ This function has more parameters for fine-tuning. Please check [Toolchain Pytho
 
 We provide a general onnx optimize API. We strongly recommend that all the onnx, including the onnx generated from the previous subsections, shall pass this API before going into the next section. This general onnx optimization API would modify the onnx graph to fit the toolchain and Kneron hardware specification. The optimization includes: inference internal value_info shapes, fuse consecutive operators, eliminate do-nothing operators, replace high-cost operators with low-cost operators, etc..
 
+> This ONNX optimizer is for ONNX with opset 12. If you have a model with later opset, please check [Kneronnxopt](appendix/converters.md).
+
 Here is the detailed ONNX optimization API:
 
 ```python
@@ -472,6 +474,11 @@ classmethod evaluate(output_dir: str = "/data1/kneron_flow")
 Args:
 
 * output_dir (str, optional): output directory. Defaults to "/data1/kneron_flow".
+* datapath_bitwidth_mode: choose from "int8"/"int16"/"mix balance"/"mix light". ("int16" is not supported in kdp520. "mix balance" and "mix light" are combines of int8 and int16 mode. "mix balance" prefers int16 while "mix light" prefers int8.)
+* weight_bitwidth_mode: choose from "int8"/"int16"/"int4"/"mix balance"/"mix light". ("int16" is not supported in kdp520. "int4" is not supported in kdp720. "mix balance" and "mix light" are combines of int8 and int16 mode. "mix balance" prefers int16 while "mix light" prefers int8.)
+* model_in_bitwidth_mode: choose from "int8"/"int16". ("int16" is not supported in kdp520.)
+* model_out_bitwidth_mode: choose from "int8"/"int16". ("int16" is not supported in kdp520.)
+* cpu_node_bitwidth_mode: choose from "int8"/"int16". ("int16" is not supported in kdp520.)
 
 Return the evaluation result as `str`. The IP evaluator gives an estimation of the model running performance. It can run
 with either onnx or bie. Below is an example usage.

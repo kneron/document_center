@@ -24,6 +24,17 @@
 
 ## Toolchain Change log
 
+* **[v0.24.0]**
+    * **`ktc.ModelConfig.analysis` rename 'fm_cut' to 'compiler_tiling'.**
+    * `ktc.ModelConfig.analysis` change `datapath_bitwidth_mode` and `weight_bitwidth_mode` to support mix-bitwidth mode "mix light" and "mix balance". (exclude 520).
+    * Knerex support for Quantized Awareness Training (QAT).
+    * Support ONNX opset 18.
+    * Optimize customized node support.
+    * Support multiple output operators.
+    * Support per-channel quantization
+    * WebGUI Auto-detect model input node information, make convert onnx or tflite to nef more easier.
+    * Docker update the parallel package version.
+    * Fix known bugs and improve performance.
 * **[v0.23.1]**
     * Compiler may raise error on unsupported CPU nodes.
     * Bug fixes for compiler, dynasty and ktc.
