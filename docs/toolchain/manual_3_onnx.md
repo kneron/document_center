@@ -188,6 +188,8 @@ This function has more parameters for fine-tuning. Please check [Toolchain Pytho
 
 We provide a general onnx optimize API. We strongly recommend that all the onnx, including the onnx generated from the previous subsections, shall pass this API before going into the next section. This general onnx optimization API would modify the onnx graph to fit the toolchain and Kneron hardware specification. The optimization includes: inference internal value_info shapes, fuse consecutive operators, eliminate do-nothing operators, replace high-cost operators with low-cost operators, etc..
 
+> This ONNX optimizer is for ONNX with opset 12. If you have a model with later opset, please check [Kneronnxopt](appendix/converters.md).
+
 Here is the detailed ONNX optimization API:
 
 ```python
