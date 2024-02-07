@@ -14,6 +14,7 @@ The flow in concept:
 **Reference Examples**:  
 
 - `KL520DemoGenericImageInferenceCrop.py`  
+- `KL630DemoGenericImageInferenceCrop.py`  
 - `KL720DemoGenericImageInferenceCrop.py`  
 
 ---
