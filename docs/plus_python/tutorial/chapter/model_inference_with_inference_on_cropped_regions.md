@@ -16,6 +16,7 @@ The flow in concept:
 - `KL520DemoGenericImageInferenceCrop.py`  
 - `KL630DemoGenericImageInferenceCrop.py`  
 - `KL720DemoGenericImageInferenceCrop.py`  
+- `KL730DemoGenericImageInferenceCrop.py`  
 
 ---
 

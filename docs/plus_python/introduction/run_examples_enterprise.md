@@ -2,7 +2,7 @@
 
 Other than the examples briefed in [Run Examples](./run_examples.md), Kneron PLUS Enterprise also provides few examples for demonstrating the usage of advanced features.
 
-**Note 1**: In the inference related examples, we are using KL520 for most demo. If you wish to use KL630 or KL720, just change the prefix of the example name from kl520 to kl630 or kl720. (There might be no KL520 version, KL630 version or KL720 version on certain examples.)
+**Note 1**: In the inference related examples, we are using KL520 for most demo. If you wish to use KL630, KL720, or KL730, just change the prefix of the example name from kl520 to kl630, kl720, or kl730. (There might be no KL520 version, KL630 version, KL720 version, or KL730 version on certain examples.)
 
 **Note 2**: Few examples will auto connect multiple devices to run inference. If you put hybrid types of devices on host, the inference may fail.
 

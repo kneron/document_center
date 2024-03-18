@@ -15,6 +15,7 @@ This tutorial shows how to inference image data by Kneron devices **with built-i
 - `KL520DemoGenericImageInference.py`  
 - `KL630DemoGenericImageInference.py`  
 - `KL720DemoGenericImageInference.py`  
+- `KL730DemoGenericImageInference.py`
 
 ### Inference general format image:
 Kneron PLUS support **`BGR565`**, **`BGRA8888`**, **`RAW8 (Grayscale)`** numpy.ndarray (dtype=numpy.uint8, dim=3) image inference.  

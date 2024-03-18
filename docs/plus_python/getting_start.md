@@ -1,6 +1,6 @@
 # Getting Started
 
-> **Note 1**: We run the examples below under OS Ubuntu 18.04.5 LTS with Kenron KL520/KL720 AI device.  
+> **Note 1**: We run the examples below under OS Ubuntu 18.04.5 LTS with Kenron KL520/KL630/KL720/KL730 AI device.  
 
 > **Note 2**: The example below is under the assumption that device is connected and recognized by host machine correctly. For the operations, please refer to section [Install dependency](./introduction/install_dependency.md)  
 
@@ -191,6 +191,50 @@ $ sudo sh KneronDFUT.sh --help
     ==== Update Firmware to Device with Port Id: 262 Succeeded ====
     ```
 
+### 2.4 KL730
+
+1. Use GUI to Update AI Device
+
+    ```bash
+    $ sudo sh KneronDFUT.sh
+    ```
+
+    * Select the AI device to be update to KDP2 firmware
+
+    * Push **Run** button
+      \(**Update to USB Boot** should be checked by default\)
+
+    ![](./imgs/dfut_kl730_usb_boot.png)
+
+2. Use Command Line to Update AI Device
+
+    ```bash
+    $ sudo sh KneronDFUT.sh --list
+    ```
+
+    ```bash
+    ===========================================
+    Index:          1
+    Port Id:        13
+    Kn Number:      0x19611034
+    Device Type:    KL730
+    FW Type:        KDP2
+    Usb Speed:      Super-Speed
+    Connectable:    true
+    ===========================================
+    ```
+
+    ```bash
+    $ sudo sh KneronDFUT.sh --kl730-usb-boot --port 13
+    ```
+
+    ```bash
+    Start Update Device with Port Id 13 to USB Boot
+
+    ==== Update of Device with Port Id: 13 Succeeded ====
+    ```
+
+
 ---
 
 ## 3. Install Kneron PLUS Python Package
@@ -339,7 +383,209 @@ Besides output results in the screen console, it also draws detected objects in 
 
 ![](./imgs/ex_kdp2_kl520_generic_inference_raw.bmp)
 
-#### 4.1.2 KL720 Generic Inference Example
+#### 4.1.2 KL630 Generic Inference Example
+The **'KL630DemoGenericImageInferencePostYolo.py'** is an example for showing how it work.
+
+By default, it runs with a YOLO v5s model NEF and takes an BMP image as input and does post-process in host side.
+
+```bash
+$ python KL630DemoGenericImageInferencePostYolo.py
+
+[Connect Device]
+ - Success
+[Set Device Timeout]
+ - Success
+[Upload Firmware]
+ - Success
+[Upload Model]
+ - Success
+[Read Image]
+ - Success
+[Starting Inference Work]
+ - Starting inference loop 50 times
+ - ..................................................
+[Retrieve Inference Node Output ]
+ - Success
+[Yolo V5s Post-Processing]
+ - Success
+[Result]
+{
+    "class_count": 80,
+    "box_count": 20,
+    "box_list": {
+        "0": {
+            "x1": 45,
+            "y1": 71,
+            "x2": 94,
+            "y2": 182,
+            "score": 0.8449,
+            "class_num": 0
+        },
+        "1": {
+            "x1": 59,
+            "y1": 128,
+            "x2": 87,
+            "y2": 203,
+            "score": 0.5845,
+            "class_num": 1
+        },
+        "2": {
+            "x1": 96,
+            "y1": 90,
+            "x2": 131,
+            "y2": 123,
+            "score": 0.8682,
+            "class_num": 2
+        },
+        "3": {
+            "x1": 0,
+            "y1": 79,
+            "x2": 38,
+            "y2": 176,
+            "score": 0.8558,
+            "class_num": 2
+        },
+        "4": {
+            "x1": 111,
+            "y1": 78,
+            "x2": 132,
+            "y2": 91,
+            "score": 0.7229,
+            "class_num": 2
+        },
+        "5": {
+            "x1": 32,
+            "y1": 79,
+            "x2": 53,
+            "y2": 94,
+            "score": 0.6963,
+            "class_num": 2
+        },
+        "6": {
+            "x1": 87,
+            "y1": 76,
+            "x2": 100,
+            "y2": 85,
+            "score": 0.6006,
+            "class_num": 2
+        },
+        "7": {
+            "x1": 52,
+            "y1": 81,
+            "x2": 68,
+            "y2": 95,
+            "score": 0.5999,
+            "class_num": 2
+        },
+        "8": {
+            "x1": 119,
+            "y1": 77,
+            "x2": 223,
+            "y2": 174,
+            "score": 0.5981,
+            "class_num": 2
+        },
+        "9": {
+            "x1": 102,
+            "y1": 77,
+            "x2": 110,
+            "y2": 85,
+            "score": 0.4883,
+            "class_num": 2
+        },
+        "10": {
+            "x1": 82,
+            "y1": 77,
+            "x2": 87,
+            "y2": 82,
+            "score": 0.3307,
+            "class_num": 2
+        },
+        "11": {
+            "x1": 88,
+            "y1": 72,
+            "x2": 104,
+            "y2": 84,
+            "score": 0.1816,
+            "class_num": 2
+        },
+        "12": {
+            "x1": 83,
+            "y1": 76,
+            "x2": 95,
+            "y2": 84,
+            "score": 0.1577,
+            "class_num": 2
+        },
+        "13": {
+            "x1": 55,
+            "y1": 82,
+            "x2": 68,
+            "y2": 90,
+            "score": 0.155,
+            "class_num": 2
+        },
+        "14": {
+            "x1": 118,
+            "y1": 78,
+            "x2": 223,
+            "y2": 175,
+            "score": 0.3757,
+            "class_num": 7
+        },
+        "15": {
+            "x1": 194,
+            "y1": 68,
+            "x2": 199,
+            "y2": 74,
+            "score": 0.3488,
+            "class_num": 9
+        },
+        "16": {
+            "x1": 59,
+            "y1": 89,
+            "x2": 92,
+            "y2": 121,
+            "score": 0.4136,
+            "class_num": 24
+        },
+        "17": {
+            "x1": 80,
+            "y1": 92,
+            "x2": 93,
+            "y2": 120,
+            "score": 0.3071,
+            "class_num": 24
+        },
+        "18": {
+            "x1": 47,
+            "y1": 90,
+            "x2": 79,
+            "y2": 123,
+            "score": 0.177,
+            "class_num": 24
+        },
+        "19": {
+            "x1": 46,
+            "y1": 94,
+            "x2": 63,
+            "y2": 124,
+            "score": 0.1531,
+            "class_num": 24
+        }
+    }
+}
+[Output Result Image]
+ - Output bounding boxes on 'output_bike_cars_street_224x224.bmp'
+```
+
+From the console output, it can be observed that the information of models in the NEF is printed, including model ID, raw resolution, input channel, raw image format and raw output size.
+
+Besides output results in the screen console, it also draws detected objects in a new-created **output_bike_cars_street_224x224.bmp**.
+
+![](./imgs/ex_kdp2_kl630_generic_inference_raw.bmp)
+
+#### 4.1.3 KL720 Generic Inference Example
 The **'KL720DemoGenericImageInferencePostYolo.py'** is an example for showing how it work.
 
 By default, it runs with a YOLO v5s model NEF and takes an BMP image as input and does post-process in host side.
@@ -466,3 +712,205 @@ From the console output, it can be observed that the information of models in th
 Besides output results in the screen console, it also draws detected objects in a new-created **output_car_park_barrier_608x608.bmp**.
 
 ![](./imgs/ex_kdp2_kl720_generic_inference_raw.bmp)
+
+#### 4.1.4 KL730 Generic Inference Example
+The **'KL730DemoGenericImageInferencePostYolo.py'** is an example for showing how it work.
+
+By default, it runs with a YOLO v5s model NEF and takes an BMP image as input and does post-process in host side.
+
+```bash
+$ python KL730DemoGenericImageInferencePostYolo.py
+
+[Connect Device]
+ - Success
+[Set Device Timeout]
+ - Success
+[Upload Firmware]
+ - Success
+[Upload Model]
+ - Success
+[Read Image]
+ - Success
+[Starting Inference Work]
+ - Starting inference loop 50 times
+ - ..................................................
+[Retrieve Inference Node Output ]
+ - Success
+[Yolo V5s Post-Processing]
+ - Success
+[Result]
+{
+    "class_count": 80,
+    "box_count": 20,
+    "box_list": {
+        "0": {
+            "x1": 46,
+            "y1": 71,
+            "x2": 93,
+            "y2": 182,
+            "score": 0.8372,
+            "class_num": 0
+        },
+        "1": {
+            "x1": 59,
+            "y1": 129,
+            "x2": 87,
+            "y2": 202,
+            "score": 0.6383,
+            "class_num": 1
+        },
+        "2": {
+            "x1": 96,
+            "y1": 90,
+            "x2": 131,
+            "y2": 123,
+            "score": 0.8604,
+            "class_num": 2
+        },
+        "3": {
+            "x1": 0,
+            "y1": 80,
+            "x2": 38,
+            "y2": 175,
+            "score": 0.8552,
+            "class_num": 2
+        },
+        "4": {
+            "x1": 110,
+            "y1": 78,
+            "x2": 133,
+            "y2": 91,
+            "score": 0.7306,
+            "class_num": 2
+        },
+        "5": {
+            "x1": 32,
+            "y1": 79,
+            "x2": 52,
+            "y2": 95,
+            "score": 0.7114,
+            "class_num": 2
+        },
+        "6": {
+            "x1": 52,
+            "y1": 81,
+            "x2": 68,
+            "y2": 94,
+            "score": 0.6152,
+            "class_num": 2
+        },
+        "7": {
+            "x1": 118,
+            "y1": 79,
+            "x2": 223,
+            "y2": 174,
+            "score": 0.6088,
+            "class_num": 2
+        },
+        "8": {
+            "x1": 87,
+            "y1": 76,
+            "x2": 101,
+            "y2": 85,
+            "score": 0.5875,
+            "class_num": 2
+        },
+        "9": {
+            "x1": 102,
+            "y1": 77,
+            "x2": 110,
+            "y2": 84,
+            "score": 0.5383,
+            "class_num": 2
+        },
+        "10": {
+            "x1": 82,
+            "y1": 77,
+            "x2": 87,
+            "y2": 82,
+            "score": 0.2922,
+            "class_num": 2
+        },
+        "11": {
+            "x1": 45,
+            "y1": 80,
+            "x2": 63,
+            "y2": 95,
+            "score": 0.2365,
+            "class_num": 2
+        },
+        "12": {
+            "x1": 14,
+            "y1": 68,
+            "x2": 27,
+            "y2": 81,
+            "score": 0.1773,
+            "class_num": 2
+        },
+        "13": {
+            "x1": 83,
+            "y1": 77,
+            "x2": 94,
+            "y2": 84,
+            "score": 0.1514,
+            "class_num": 2
+        },
+        "14": {
+            "x1": 116,
+            "y1": 79,
+            "x2": 223,
+            "y2": 175,
+            "score": 0.4219,
+            "class_num": 7
+        },
+        "15": {
+            "x1": 194,
+            "y1": 68,
+            "x2": 199,
+            "y2": 74,
+            "score": 0.4651,
+            "class_num": 9
+        },
+        "16": {
+            "x1": 62,
+            "y1": 90,
+            "x2": 88,
+            "y2": 120,
+            "score": 0.4238,
+            "class_num": 24
+        },
+        "17": {
+            "x1": 46,
+            "y1": 89,
+            "x2": 71,
+            "y2": 123,
+            "score": 0.3418,
+            "class_num": 24
+        },
+        "18": {
+            "x1": 80,
+            "y1": 92,
+            "x2": 93,
+            "y2": 121,
+            "score": 0.3196,
+            "class_num": 24
+        },
+        "19": {
+            "x1": 52,
+            "y1": 82,
+            "x2": 69,
+            "y2": 94,
+            "score": 0.1712,
+            "class_num": 24
+        }
+    }
+}
+[Output Result Image]
+ - Output bounding boxes on 'output_bike_cars_street_224x224.bmp'
+```
+
+From the console output, it can be observed that the information of models in the NEF is printed, including model ID, raw resolution, input channel, raw image format and raw output size.
+
+Besides output results in the screen console, it also draws detected objects in a new-created **output_bike_cars_street_224x224.bmp**.
+
+![](./imgs/ex_kdp2_kl730_generic_inference_raw.bmp)

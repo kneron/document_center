@@ -28,7 +28,7 @@ To infer by Kneron NPU, the input/output data must be re-layout by the following
             | Entry #1 | P31CH0      | P30CH0      | P29CH0      | P28CH0     | P27CH0    | P26CH0    | P25CH0    | P24CH0    | P23CH0    | P22CH0    | P21CH0    | P20CH0    | P19CH0    | P18CH0    | P17CH0   | P16CH0  |
             | Entry #2 | P47CH0      | P46CH0      | P45CH0      | P44CH0     | P43CH0    | P42CH0    | P41CH0    | P40CH0    | P39CH0    | P38CH0    | P37CH0    | P36CH0    | P35CH0    | P34CH0    | P33CH0   | P32CH0  |
 
-2. **KL720**  
+2. **KL630, KL720 and KL630**  
 
     - Input Data Layout  
         - **4W4C8B** - 4 Column 4 Channel 8-Bit Feature Map Format  

@@ -34,6 +34,7 @@ And the following sections in this chapter will provide the instructions for ins
     SUBSYSTEM=="usb",ATTRS{product}=="Kneron KL720l",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0200",MODE="0666"
     SUBSYSTEM=="usb",ATTRS{product}=="Kneron KL720",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0720",MODE="0666"
     SUBSYSTEM=="usb",ATTRS{product}=="Kneron KL630",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0630",MODE="0666"
+    SUBSYSTEM=="usb",ATTRS{product}=="Kneron KL730",ATTRS{idVendor}=="3231",ATTRS{idProduct}=="0732",MODE="0666"
     ```
     and apply the new rules by following commands (Or reboot the host)
     ```bash
@@ -104,6 +105,18 @@ Note: This feature is only provided in Kneron PLUS v1.3.0 and above.
     - Click "Install Driver" button.
 
     **Note**: After Upgrade Kneron KL720 to KDP2 (ex. via Kneron DFUT), you may need to re-install the driver of KL720, since the USB ID will be changed to "3231/0720".
+
+4. KL730
+
+    - The application should detect Kneron KL730 device as "Kneron KL730" with USB ID
+    "3231/0732" as shown below:
+
+        ![](../imgs/zadig_install_kl730_driver.png)
+
+    - Make sure that the Driver field, has WinUSB option selected.
+
+    - Click "Install Driver" button.
+
 
 
 
