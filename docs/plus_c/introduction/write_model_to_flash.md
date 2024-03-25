@@ -24,6 +24,7 @@ There are two ways to load models:
         - **35 MB** for KL520
         - **60 MB** for KL630
         - **75 MB** for KL720
+        - **350 MB** for KL730 (KL730 SDK default setting: 350MB, and this size can be enlarged in the firmware device tree.)
 
 - **Load Model from Flash**
 
@@ -41,6 +42,7 @@ There are two ways to load models:
         - **32 MB** for KL520
         - **55 MB** for KL630
         - **70 MB** for KL720
+        - **55 MB** for KL730
 
 **Note**: Only one model file (.nef) can be loaded, no matter it was uploaded via USB or loaded from flash. If you want to change the model, please reboot the Kneron AI device.
 
@@ -223,4 +225,58 @@ $ sudo sh KneronDFUT.sh
     Start Update Model to Device with Port Id 262
 
     ==== Update Model to Device with Port Id: 262 Succeeded ====
+    ```
+
+---
+
+## 6. Write Model Into KL730
+
+### 6.1 Use GUI to Write Model into AI Device
+
+```bash
+$ sudo sh KneronDFUT.sh
+```
+
+1. Select **KL730** Tab.
+
+2. Select the KL730 devices to write model into.
+
+3. Select **Update Model to Flash**
+
+4. Manually choose **Model file**.
+
+5. Push **Run** button.
+
+    ![](../imgs/dfut_kl730_model.png)
+
+### 6.2 Use Command Line to Write Model into AI Device
+
+1. List all devices
+
+    ```bash
+    $ sudo sh KneronDFUT.sh --list
+    ```
+
+    ```bash
+    ===========================================
+    Index:          1
+    Port Id:        13
+    Kn Number:      0x09011004
+    Device Type:    KL730
+    FW Type:        KDP2
+    Usb Speed:      High-Speed
+    Connectable:    true
+    ===========================================
+    ```
+
+3. Write model into the selected KL520 devices using the port id
+
+    ```bash
+    $ sudo sh KneronDFUT.sh --model-to-flash ${MODEL_FILE_PATH} --port 13 -- type KL730
+    ```
+
+    ```bash
+    Start Update Model to Device with Port Id 13
+
+    ==== Update Model to Device with Port Id: 13 Succeeded ====
     ```
