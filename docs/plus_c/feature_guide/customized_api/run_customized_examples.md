@@ -125,6 +125,17 @@ $ bash build.sh debug
 
 *If build succeeded, **fw_ncpu.bin** will be put into {PLUS_FOLDER_PATH}/res/firmware/KL720/
 
+### 1.6 KL730 Firmware
+
+```bash
+$ cd {KL730_SDK_FOLDER_PATH}/apps/vmf_nnm
+$ bash build.sh
+```
+
+*If build succeeded, **kp_firmware.tar** will be put into {KL730_SDK_FOLDER_PATH}/apps/vmf_nnm/bin/
+
+*For further information of building firmware of KL730, please refer **Leipzig_NNM_Example_User_Guide.pdf** in {KL730_SDK_TOP_FOLDER_PATH}/03_SDK/01_Documents/
+
 ---
 
 ## 2. Build PLUS
@@ -183,4 +194,17 @@ $ sudo ./my_kl720_sin_example.exe
 ```bash
 $ cd bin
 $ sudo ./my_kl720_mul_example.exe
+```
+### 2.7 Run KL730 Single Model Example
+
+```bash
+$ cd bin
+$ sudo ./my_kl730_sin_example.exe
+```
+
+### 2.8 Run KL730 Multiple Models Example
+
+```bash
+$ cd bin
+$ sudo ./my_kl730_mul_example.exe
 ```

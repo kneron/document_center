@@ -1,6 +1,6 @@
 # Firmware Configuration
 
-When SCPU activates NCPU to run models, **kmdw_inference_app_config_t** (KL520/KL720) or **VMF_NNM_INFERENCE_APP_CONFIG_T** (KL630), which contains configurations of NCPU, is required to pass to NCPU.
+When SCPU activates NCPU to run models, **kmdw_inference_app_config_t** (KL520/KL720) or **VMF_NNM_INFERENCE_APP_CONFIG_T** (KL630/KL730), which contains configurations of NCPU, is required to pass to NCPU.
 
 **kmdw_inference_app_config_t** and **VMF_NNM_INFERENCE_APP_CONFIG_T** contain following configurable options:
 
@@ -77,7 +77,7 @@ When SCPU activates NCPU to run models, **kmdw_inference_app_config_t** (KL520/K
 
 -  **result_callback**:
     - type [KL520/KL720]: kmdw_inference_result_callback_t
-    - type [KL630]: VMF_NNM_INFERENCE_APP_RESULT_CALLBACK_T
+    - type [KL630/KL730]: VMF_NNM_INFERENCE_APP_RESULT_CALLBACK_T
     - The callback function for parallel mode
 
 -  **inf_result_buf**:
@@ -93,14 +93,22 @@ When SCPU activates NCPU to run models, **kmdw_inference_app_config_t** (KL520/K
     - type: kp_pad_value_t*
     - The pad_value for the pre-processing in NCPU.
 
-- **user_define_data**
+- **user_define_data** (KL520/KL720/KL630)
+    - type: void*
+    - The user define data for the pre-processing and post-processing in NCPU.
+
+- **pre_proc_config** (KL730)
     - type: void*
     - The user define data for the pre-processing in NCPU.
 
-- **pre_proc_func**
-    - type [KL630]: void*
+- **post_proc_config** (KL730)
+    - type: void*
+    - The user define data for the post-processing in NCPU.
+
+- **pre_proc_func** (KL630/KL730)
+    - type: void*
     - The pointer for the customized pre-processing function.
 
-- **post_proc_func**
-    - type [KL630]: void*
+- **post_proc_func** (KL630/KL730)
+    - type: void*
     - The pointer for the customized post-processing function.

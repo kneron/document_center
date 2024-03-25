@@ -6,7 +6,7 @@
 
 **Note**: To execute **MSYS2 MinGW 64-bit**, please use the shortcut or `c:\msys64\msys2_shell.cmd -mingw64` instead of `c:\msys64\mingw64.exe`.
 
-**Note**: In the inference related examples, we are using KL520 for most demo. If you wish to use KL630 or KL720, just change the prefix of the example name from kl520 to kl630 or kl720.
+**Note**: In the inference related examples, we are using KL520 for most demo. If you wish to use KL630, KL720, or KL730, just change the prefix of the example name from kl520 to kl630, kl720, or kl730.
 
 **Note**: Few examples will auto connect multiple devices to run inference. If you put hybrid types of devices on host, the inference may fail.
 
@@ -150,7 +150,7 @@ This example is to show the usage of `kp_install_driver_for_windows()` and help 
     ```bash
     [arguments]
     -h     : help
-    -target: [target platform] (ALL, KL520, KL630, KL720) = KL520
+    -target: [target platform] (ALL, KL520, KL630, KL720, KL730) = KL520
 
     [note]
         You must run this app as administrator on Windows
@@ -167,7 +167,7 @@ This example is to show the usage of `kp_install_driver_for_windows()` and help 
     ```bash
     [arguments]
     -h     : help
-    -target: [target platform] (ALL, KL520, KL630, KL720) = KL630
+    -target: [target platform] (ALL, KL520, KL630, KL720, KL730) = KL630
 
     [note]
         You must run this app as administrator on Windows
@@ -184,12 +184,29 @@ This example is to show the usage of `kp_install_driver_for_windows()` and help 
     ```bash
     [arguments]
     -h     : help
-    -target: [target platform] (ALL, KL520, KL630, KL720) = KL720
+    -target: [target platform] (ALL, KL520, KL630, KL720, KL730) = KL720
 
     [note]
         You must run this app as administrator on Windows
 
     Installing driver for KL720 ... Success (0)
+    ```
+
+4. For installing the driver for KL730:
+
+    ```bash
+    $ ./install_driver_windows.exe -target KL730
+    ```
+
+    ```bash
+    [arguments]
+    -h     : help
+    -target: [target platform] (ALL, KL520, KL630, KL720, KL730) = KL730
+
+    [note]
+        You must run this app as administrator on Windows
+
+    Installing driver for KL730 ... Success (0)
     ```
 
 ### 1.4 Load Firmware and Model Example
@@ -345,6 +362,12 @@ Therefore, all the functions in console mode, other than executable file name, a
 
 8. For writing model into KL720, please refer [Write Model Into KL720](./write_model_to_flash.md#52-use-command-line-to-write-model-into-ai-device).
 
+9. For upgrading KL730 to USB boot mode, please refer [Upgrade KL730 to USB Boot Mode](./upgrade_ai_device_to_kdp2.md#92-use-command-line-to-update-ai-device).
+
+10. For upgrading KL730 to Flash boot mode, please refer [Upgrade KL730 to Flash Boot Mode](./upgrade_ai_device_to_kdp2.md#102-use-command-line-to-update-ai-device).
+
+11. For writing model into KL730, please refer [Write Model Into KL730](./write_model_to_flash.md#62-use-command-line-to-write-model-into-ai-device).
+
 
 ## 1.7 Device FIFO Queue Config Example
 
@@ -434,6 +457,8 @@ The main difference between **Generic Inference** and **Customized Inference** i
 **Generic Inference** includes two sets of APIs, **Generic Image Inference API** and **Generic Data Inference API**.
 
 For the detail introduction, please refer the documents in [Generic Inference](../feature_guide/generic_inference.md).
+
+**Note**: Multiple calls of `kp_app_yolo_inference_send()` without any call of `kp_app_yolo_inference_receive()` may cause the system stuck.
 
 ### 2.2 Customized Inference Example
 

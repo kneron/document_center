@@ -33,6 +33,14 @@ the developing of customized api must be proceeded under OS Windows 10.
 
     - Only required when developing firmware for KL630
 
-    - Download the latest **KL630_SDK_vXXX.zip** from <https://www.kneron.com/tw/support/developers/>. It is located at **KL620 SDK** section.
+    - Download the latest **KL630_SDK_vXXX.zip** from <https://www.kneron.com/tw/support/developers/>. It is located at **KL630 SDK** section.
     - Unzip KL630_SDK_vXXX.zip
     - Please refer KLM5S3_Development_Environment_User_Guide.pdf in {KL630_SDK_TOP_FOLDER_PATH}/02_BSP/01_Documents
+
+5. **Cross Compiler for KL730**
+
+    - Only required when developing firmware for KL730
+
+    - Download the latest **KL730_SDK_vXXX.zip** from <https://www.kneron.com/tw/support/developers/>. It is located at **KL730 SDK** section.
+    - Unzip KL730_SDK_vXXX.zip
+    - Please refer KLM5S3_Development_Environment_User_Guide.pdf in {KL730_SDK_TOP_FOLDER_PATH}/02_BSP/01_Documents
