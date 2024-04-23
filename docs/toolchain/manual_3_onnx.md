@@ -47,7 +47,7 @@ There might be some warning log printed out by the Tensorflow backend, but we ca
 
 ### 3.1.2. Pytorch to ONNX
 
-Our Python API do not actually convert the python model. It only takes Pytorch exported onnx object as the input and optimize it. Pleace checkout the tips below on how to export an onnx with Pytorch.
+Our Python API do not actually convert the Pytorch model. It only takes Pytorch exported onnx object as the input and optimize it. Pleace checkout the tips below on how to export an onnx with Pytorch.
 
 The Pytorch inside the docker is version 1.7.1. We currently only support models exported by Pytorch version >=1.0.0, <=1.7.1. Other versions are not tested.
 
