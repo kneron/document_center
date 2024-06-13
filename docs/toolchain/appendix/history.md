@@ -27,7 +27,6 @@
 * **[v0.24.0]**
     * **`ktc.ModelConfig.analysis` rename 'fm_cut' to 'compiler_tiling'.**
     * `ktc.ModelConfig.analysis` change `datapath_bitwidth_mode` and `weight_bitwidth_mode` to support mix-bitwidth mode "mix light" and "mix balance". (exclude 520).
-    * Knerex support for Quantized Awareness Training (QAT).
     * Support ONNX opset 18.
     * Optimize customized node support.
     * Support multiple output operators.
