@@ -4,7 +4,7 @@
 
 # 1. Toolchain Overview
 
-**2024 Feb**
+**2024 Jun**
 **Toolchain v0.25.0**
 
 ## 1.1. Introduction
