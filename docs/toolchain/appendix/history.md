@@ -24,6 +24,16 @@
 
 ## Toolchain Change log
 
+* **[v0.25.0]**
+    * **IP evaluator add arguments `weight_bandwidth` and `dma_bandwidth`.**
+    * 730 toolchain full upgrade.
+    * Optimize batch compiler efficiency.
+    * Optimize batch compiler memory management algorithm.
+    * Support fmap over 4D.
+    * Support more operators (Abs, Log, Pow, Sign).
+    * Support mix accuracy mode.
+    * Update environment packages.
+    * Fix bugs.
 * **[v0.24.0]**
     * **`ktc.ModelConfig.analysis` rename 'fm_cut' to 'compiler_tiling'.**
     * `ktc.ModelConfig.analysis` change `datapath_bitwidth_mode` and `weight_bitwidth_mode` to support mix-bitwidth mode "mix light" and "mix balance". (exclude 520).

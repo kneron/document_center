@@ -5,7 +5,7 @@
 # 1. Toolchain Overview
 
 **2024 Feb**
-**Toolchain v0.24.0**
+**Toolchain v0.25.0**
 
 ## 1.1. Introduction
 
@@ -20,17 +20,16 @@ In this document, you'll learn:
 
 **Major changes of the current version**
 
-* **[v0.24.0]**
-    * **`ktc.ModelConfig.analysis` rename 'fm_cut' to 'compiler_tiling'.**
-    * `ktc.ModelConfig.analysis` change `datapath_bitwidth_mode` and `weight_bitwidth_mode` to support mix-bitwidth mode "mix light" and "mix balance". (exclude 520).
-    * Knerex support for Quantized Awareness Training (QAT).
-    * Support ONNX opset 18.
-    * Optimize customized node support.
-    * Support multiple output operators.
-    * Support per-channel quantization
-    * WebGUI Auto-detect model input node information, make convert onnx or tflite to nef more easier.
-    * Docker update the parallel package version.
-    * Fix known bugs and improve performance.
+* **[v0.25.0]**
+    * **IP evaluator add arguments `weight_bandwidth` and `dma_bandwidth`.**
+    * 730 toolchain full upgrade.
+    * Optimize batch compiler efficiency.
+    * Optimize batch compiler memory management algorithm.
+    * Support fmap over 4D.
+    * Support more operators (Abs, Log, Pow, Sign).
+    * Support mix accuracy mode.
+    * Update environment packages.
+    * Fix bugs.
 
 ## 1.2. Workflow Overview
 

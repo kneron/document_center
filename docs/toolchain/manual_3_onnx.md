@@ -479,6 +479,8 @@ Args:
 * model_in_bitwidth_mode: choose from "int8"/"int16". ("int16" is not supported in kdp520.)
 * model_out_bitwidth_mode: choose from "int8"/"int16". ("int16" is not supported in kdp520.)
 * cpu_node_bitwidth_mode: choose from "int8"/"int16". ("int16" is not supported in kdp520.)
+* weight_bandwidth: weight bandwidth in gbps. Defaults to None to use the default value for the specific hardware. This only affect the evaluation result.
+* dma_bandwidth: dma bandwidth in gbps. Defaults to None to use the default value for the specific hardware. This only affect the evaluation result.
 
 Return the evaluation result as `str`. The IP evaluator gives an estimation of the model running performance. It can run
 with either onnx or bie. Below is an example usage.
