@@ -73,7 +73,7 @@ Table below shows the list of operators supports base on ONNX operators.
 | Shrink                        |  N  |  N  |  N  |  N  |
 | Sigmoid                       |  N  |  Y  |  Y  |  Y  |
 | Slice                         |  N  |  Y  |  Y  |  Y  |
-| Softmax                       |  N  |  N  |  Y  |  Y  |
+| Softmax                       |  N  |  N  |  N  |  N  |
 | Softplus                      |  N  |  N  |  Y  |  Y  |
 | Softsign                      |  N  |  N  |  Y  |  Y  |
 | SpaceToDepth<sup>13</sup>     |  N  |  N  |  Y  |  Y  |
