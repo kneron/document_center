@@ -290,7 +290,8 @@
         my_KL730_sin_example_yolo_result_t yolo_result;
     } __attribute__((aligned(4))) my_KL730_sin_example_result_t;
 
-    void my_KL730_sin_example_inf(uint32_t job_id, void *inf_input_buf);
+    void my_KL730_sin_example_inf(int job_id, int num_input_buf, void **inf_input_buf_list);
+    void my_KL730_sin_example_inf_deinit();
     ```
 
 3. Add *my_KL730_sin_example_inf.c*
@@ -321,27 +322,24 @@
     #include "vmf_nnm_inference_app.h"
     #include "vmf_nnm_fifoq_manager.h"
     #include "my_KL730_sin_example_inf.h"
-    #include "yolov5_post_process.h"
+    #include "user_post_process_yolov5.h"
 
-    static yolo_post_proc_params_t post_proc_params_v5s = {
-        .prob_thresh = 0.15,
-        .nms_thresh = 0.5,
-        .max_detection_per_class = 20,
-        .anchor_row = 3,
-        .anchor_col = 6,
-        .stride_size = 3,
-        .reserved_size = 0,
-        .data = {
-            // anchors[3][6]
-            10, 13, 16, 30, 33, 23,
-            30, 61, 62, 45, 59, 119,
-            116, 90, 156, 198, 373, 326,
-            // strides[3]
-            8, 16, 32,
-        },
+    static ex_yolo_post_proc_config_t post_proc_params_v5s = {
+        .prob_thresh                = 0.15,
+        .nms_thresh                 = 0.5,
+        .max_detection              = YOLO_BOX_MAX,
+        .max_detection_per_class    = YOLO_BOX_MAX,
+        .nms_mode                   = EX_NMS_MODE_SINGLE_CLASS,
+        .anchor_layer_num           = 3,
+        .anchor_cell_num_per_layer  = 3,
+        .data                       = {{{10, 13}, {16, 30}, {33, 23}},
+                                       {{30, 61}, {62, 45}, {59, 119}},
+                                       {{116, 90}, {156, 198}, {373, 326}},
+                                       {{0, 0}, {0, 0}, {0, 0}},
+                                       {{0, 0}, {0, 0}, {0, 0}}},
     };
 
-    void my_KL730_sin_example_inf(uint32_t job_id, int num_input_buf, void **inf_input_buf_list)
+    void my_KL730_sin_example_inf(int job_id, int num_input_buf, void **inf_input_buf_list)
     {
         if (1 != num_input_buf) {
             VMF_NNM_Fifoq_Manager_Status_Code_Enqueue(job_id, KP_FW_WRONG_INPUT_BUFFER_COUNT_110);
@@ -349,8 +347,8 @@
         }
 
         int result_buf_size;
-        uint32_t inf_result_buf;
-        uint32_t inf_result_phy_addr;
+        uintptr_t inf_result_buf;
+        uintptr_t inf_result_phy_addr;
 
         /******* Prepare the memory space of result *******/
         if (0 != VMF_NNM_Fifoq_Manager_Result_Get_Free_Buffer(&inf_result_buf, &inf_result_phy_addr, &result_buf_size, -1)) {
@@ -370,9 +368,9 @@
 
         // image buffer address should be just after the header
         inf_config.num_image = 1;
-        inf_config.image_list[0].image_buf = (void *)((uint32_t)input_header + sizeof(my_KL730_sin_example_header_t));
-        inf_config.image_list[0].image_width = input_header->width;
-        inf_config.image_list[0].image_height = input_header->height;
+        inf_config.image_list[0].image_buf = (void *)((uintptr_t)input_header + sizeof(my_KL730_sin_example_header_t));
+        inf_config.image_list[0].image_width = input_header->img_width;
+        inf_config.image_list[0].image_height = input_header->img_height;
         inf_config.image_list[0].image_channel = 3;                             // assume RGB565
         inf_config.image_list[0].image_format = KP_IMAGE_FORMAT_RGB565;         // assume RGB565
         inf_config.image_list[0].image_norm = KP_NORMALIZE_KNERON;              // this depends on model
@@ -380,8 +378,11 @@
         inf_config.image_list[0].image_padding = KP_PADDING_CORNER;             // enable padding on corner
         inf_config.model_id = KNERON_YOLOV5S_COCO80_640_640_3;                  // this depends on model
         inf_config.ncpu_result_buf = (void *)&(output_result->yolo_result);     // give result buffer for ncpu/npu, callback will carry it
-        inf_config.user_define_data = (void *)&post_proc_params_v5s;            // yolo post-process configurations for yolo v3 series
-        inf_config.post_proc_func = yolov5_no_sigmoid_post_process;             // yolo post-process function
+
+        // setting pre/post-proc configuration
+        inf_config.pre_proc_config = NULL;
+        inf_config.post_proc_config = (void *)&post_proc_params_v5s;            // yolo post-process configurations for yolo v5 series
+        inf_config.post_proc_func = user_post_yolov5_no_sigmoid;
 
         /******* Activate inferencing in NCPU *******/
 
@@ -397,6 +398,11 @@
 
         // send output result buffer back to host SW
         VMF_NNM_Fifoq_Manager_Result_Enqueue(inf_result_buf, inf_result_phy_addr, result_buf_size, -1, false);
+    }
+
+    void my_KL730_sin_example_inf_deinit()
+    {
+        //there is no temp buffer need to release in this model
     }
     ```
 
@@ -486,6 +492,36 @@
         }
     }
 
+    static void _app_func_deinit(unsigned int job_id);
+
+    void _app_func_deinit(unsigned int job_id)
+    {
+        switch (job_id)
+        {
+        case KDP2_INF_ID_APP_YOLO:
+            kdp2_app_yolo_inference_deinit();
+            break;
+        case DEMO_KL730_CUSTOMIZE_INF_SINGLE_MODEL_JOB_ID:
+            demo_customize_inf_single_model_deinit();
+            break;
+        case DEMO_KL730_CUSTOMIZE_INF_MULTIPLE_MODEL_JOB_ID:
+            demo_customize_inf_multiple_model_deinit();
+            break;
+        /* ======================================== */
+        /*              Add Line Begin              */
+        /* ======================================== */
+        case MY_KL730_SIN_EXAMPLE_JOB_ID:
+            my_KL730_sin_example_inf_deinit();
+            break;
+        /* ======================================== */
+        /*               Add Line End               */
+        /* ======================================== */
+        default:
+            printf("%s, unsupported job_id %d \n", __func__, job_id);
+            break;
+        }
+    }
+
     void app_initialize(void)
     {
         printf(">> Start running KL730 KDP2 companion mode ...\n");
@@ -501,6 +537,17 @@
 
     void app_destroy(void)
     {
+        _app_func_deinit(KDP2_INF_ID_APP_YOLO);
+        _app_func_deinit(DEMO_KL730_CUSTOMIZE_INF_SINGLE_MODEL_JOB_ID);
+        _app_func_deinit(DEMO_KL730_CUSTOMIZE_INF_MULTIPLE_MODEL_JOB_ID);
+        /* ======================================== */
+        /*              Add Line Begin              */
+        /* ======================================== */
+        _app_func_deinit(MY_KL730_SIN_EXAMPLE_JOB_ID);
+        /* ======================================== */
+        /*               Add Line End               */
+        /* ======================================== */
+
         VMF_NNM_Inference_App_Destroy();
         VMF_NNM_Fifoq_Manager_Destroy();
     }

@@ -31,8 +31,8 @@ Below gives some definitions regarding the Kneron PLUS:
 
 The features which PLUS Supported are listed below:
 
-Index   | Category              | Supported Item                                                            | Min Version (KL520/KL720) | Min Version (KL630) [***1***] | Min Version (KL730) [***2***] | KL520 | KL720 | KL630 | KL730
-------- | :-------------------- | :------------------------------------------------------------------------ | :------------------------ | :---------------------------- | :---------------------------- | :---: | :---: | :---: | :---:
+Index   | Category              | Supported Item                                                            | Min Version (KL520/KL720) | Min Version (KL630) [***1***] | Min Version (KL730) [***2***][***3***] | KL520 | KL720 | KL630 | KL730
+------- | :-------------------- | :------------------------------------------------------------------------ | :------------------------ | :---------------------------- | :------------------------------------- | :---: | :---: | :---: | :---:
 1       | Image Format          | RGBA8888 , RAW8 , Packed YCbCr422 (YUYV422) , RGB565                      |                           | | |       |       |       |
 2       |                       | Planar YUV420                                                             |                           | | | X     | X     |       |
 3       | System                | Firmware In Flash                                                         |                           | | |       |       |       |
@@ -83,6 +83,7 @@ Index   | Category              | Supported Item                                
 **Note**:
 - [1] If the minimum version is not written, this feature is supported from v2.1.1.
 - [2] If the minimum version is not written, this feature is supported from v2.3.0.
+- [3] The official support for KL730 starts on v3.0.0, and only support KL730 model under toolchain version 0.25.0
 
 
 The following components are contained in Kneron PLUS:
@@ -106,7 +107,7 @@ Besides the basic features, there are few advanced features provided in Kneron P
 Index   | Category              | Supported Item                                            | Min Version (KL520/KL720) | Min Version (KL630) | Min Version (KL730) | KL520 | KL720 | KL630 | KL730
 ------- | :-------------------- | :-------------------------------------------------------- | :------------------------ | :------------------ | :------------------ | :---: | :---: | :---: | :---:
 1       | System                | Runtime Upload Firmware via UART                          |                           |                     |                     |       | X     | X     | X
-2       |                       | Hico Mode (MIPI image input, Companion Result Output)     |                           | v2.1.1              | v2.3.0              |       |       |       | X
+2       |                       | Hico Mode (MIPI image input, Companion Result Output)     |                           | v2.1.1              |                     |       |       |       | X
 3       | Examples              | Update Kdp to Kdp2 Usb Boot                               |                           |                     |                     |       | X     | X     | X
 4       |                       | Update Kdp2 to Kdp2 Usb Boot                              |                           | v2.1.1              | v2.3.0              |       | X     |       |
 5       |                       | Update Kdp to Kdp2 Flash Boot                             |                           |                     |                     |       |       | X     | X
@@ -116,7 +117,7 @@ Index   | Category              | Supported Item                                
 9       |                       | Upload Firmware via Usb for No-Flash Device               | v2.0.0                    |                     |                     |   X   |       | X     | X
 10      |                       | Read / Write Device Memory                                |                           |                     |                     |       |       | X     | X
 11      |                       | Access Firmware Log via USB                               |                           |                     |                     |   X   |       | X     | X
-12      |                       | Hico Cam Inference [***1***] [***2***] [***3***]          |                           | v2.1.1              | v2.3.0              |       |       |       | X
+12      |                       | Hico Cam Inference [***1***] [***2***] [***3***]          |                           | v2.1.1              |                     |       |       |       | X
 13      |                       | Hico ToF Inference (Kneron ToF module is required)        | v1.3.0                    |                     |                     |   X   |       | X     | X
 
 **Note**:

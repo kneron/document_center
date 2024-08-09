@@ -125,7 +125,7 @@ $ bash build.sh debug
 
 *If build succeeded, **fw_ncpu.bin** will be put into {PLUS_FOLDER_PATH}/res/firmware/KL720/
 
-### 1.6 KL730 Firmware
+### 1.5 KL730 Firmware
 
 ```bash
 $ cd {KL730_SDK_FOLDER_PATH}/apps/vmf_nnm

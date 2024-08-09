@@ -84,9 +84,9 @@
     */
     typedef struct
     {
-        float pd_class_socre;   /**< a pedestrian classification score */
+        float pd_class_score;   /**< a pedestrian classification score */
         kp_bounding_box_t pd;   /**< a pedestrian box information */
-    } __attribute__((aligned(4))) one_pd_classification_result_t;
+    } __attribute__((aligned(4))) my_KL630_one_pd_classification_result_t;
 
     /**
     * @brief describe a pedestrian detect classification output result
@@ -94,8 +94,8 @@
     typedef struct
     {
         uint32_t box_count;                                     /**< boxes of all classes */
-        one_pd_classification_result_t pds[PD_BOX_MAX];         /**< pedestrian detect information */
-    } __attribute__((aligned(4))) pd_classification_result_t;
+        my_KL630_one_pd_classification_result_t pds[PD_BOX_MAX];         /**< pedestrian detect information */
+    } __attribute__((aligned(4))) my_KL630_pd_classification_result_t;
 
     typedef struct
     {
@@ -110,7 +110,7 @@
     {
         /* header stamp is necessary for data transfer between host and device */
         kp_inference_header_stamp_t header_stamp;
-        pd_classification_result_t pd_classification_result;
+        my_KL630_pd_classification_result_t pd_classification_result;
     } __attribute__((aligned(4))) my_kl630_mul_example_result_t;
 
     ```
@@ -153,7 +153,7 @@
     int main(int argc, char *argv[])
     {
         kp_device_group_t device;
-    kp_model_nef_descriptor_t model_desc;
+        kp_model_nef_descriptor_t model_desc;
 
         // each device has a unique port ID, 0 for auto-search
         int port_id = (argc > 1) ? atoi(argv[1]) : 0;
@@ -217,7 +217,7 @@
         /******* prepare input and output header/buffers *******/
         my_kl630_mul_example_header_t input_header;
         my_kl630_mul_example_result_t output_result;
-        pd_classification_result_t* pd_classification_result = &output_result.pd_classification_result;
+        my_KL630_pd_classification_result_t* pd_classification_result = &output_result.pd_classification_result;
 
         input_header.header_stamp.job_id = MY_KL630_MUL_EXAMPLE_JOB_ID;
         input_header.header_stamp.total_image = 1;
@@ -288,7 +288,7 @@
     #include "kp_struct.h"
     #include "model_res.h"
 
-    #define MY_KL630_MUL_EXAMPLE_JOB_ID 3003
+    #define MY_KL630_MUL_EXAMPLE_JOB_ID 3004
     #define PD_BOX_MAX                  80
 
     /**
@@ -296,9 +296,9 @@
     */
     typedef struct
     {
-        float pd_class_socre;   /**< a pedestrian classification score */
+        float pd_class_score;   /**< a pedestrian classification score */
         kp_bounding_box_t pd;   /**< a pedestrian box information */
-    } __attribute__((aligned(4))) one_pd_classification_result_t;
+    } __attribute__((aligned(4))) my_KL630_one_pd_classification_result_t;
 
     /**
     * @brief describe a pedestrian detect classification output result
@@ -306,8 +306,8 @@
     typedef struct
     {
         uint32_t box_count;                                     /**< boxes of all classes */
-        one_pd_classification_result_t pds[DME_OBJECT_MAX];     /**< pedestrian detect information */
-    } __attribute__((aligned(4))) pd_classification_result_t;
+        my_KL630_one_pd_classification_result_t pds[DME_OBJECT_MAX];     /**< pedestrian detect information */
+    } __attribute__((aligned(4))) my_KL630_pd_classification_result_t;
 
     typedef struct
     {
@@ -322,10 +322,11 @@
     {
         /* header stamp is necessary for data transfer between host and device */
         kp_inference_header_stamp_t header_stamp;
-        pd_classification_result_t pd_classification_result;
+        my_KL630_pd_classification_result_t pd_classification_result;
     } __attribute__((aligned(4))) my_kl630_mul_example_result_t;
 
     void my_kl630_mul_example_inf(int job_id, int num_input_buf, void **inf_input_buf_list);
+    void my_kl630_mul_example_inf_deinit();
     ```
 
 3. Add *my_kl630_mul_example_inf.c*
@@ -363,9 +364,9 @@
     #include "model_type.h"
     #include "vmf_nnm_inference_app.h"
     #include "vmf_nnm_fifoq_manager.h"
-    #include "demo_customize_inf_multiple_models.h"
-    #include "vmf_nnm_post_proc.h"
-    #include "vmf_nnm_pre_post_proc_params.h"
+    #include "my_kl630_mul_example_inf.h"
+    #include "yolov5_post_process.h"
+    #include "classifier_post_process.h"
 
     // for pedestrian detection result, should be in DDR
     static struct yolo_result_s *_yolo_pd_result = NULL;
@@ -385,7 +386,7 @@
         KP_APP_PD_CLASS_DOG         = 7
     } kp_app_pd_class_t;
 
-    static VMF_NNM_PRE_POST_PROC_PARAMS_YOLO_t post_proc_params_v5s = {
+    static yolo_post_proc_params_t post_proc_params_v5s = {
         .prob_thresh = 0.3,
         .nms_thresh = 0.65,
         .max_detection_per_class = 20,
@@ -403,6 +404,9 @@
         },
     };
 
+    // this app needs extra DDR buffers for ncpu result
+    static bool is_init = false;
+
     static bool init_temp_buffer()
     {
         // allocate DDR memory for ncpu/npu output restult
@@ -413,6 +417,23 @@
         _classifier_result = (struct classifier_result_s *)calloc(1, sizeof(struct classifier_result_s));
         if (NULL == _classifier_result)
             return false;
+
+        return true;
+    }
+
+    static bool deinit_temp_buffer()
+    {
+        if(is_init == true)
+        {
+            // free DDR memory for ncpu/npu output restult
+            if(_yolo_pd_result)
+                free(_yolo_pd_result);
+
+            if(_classifier_result)
+                free(_classifier_result);
+
+            is_init = false;
+        }
 
         return true;
     }
@@ -436,7 +457,7 @@
         inf_config.image_list[0].image_padding = KP_PADDING_CORNER;                                 // default: enable padding on corner
         inf_config.model_id = KNERON_YOLOV5S_PersonBicycleCarMotorcycleBusTruckCatDog8_256_480_3;   // this depends on model
         inf_config.user_define_data = (void *)&post_proc_params_v5s;                                // yolo post-process configurations for yolo v5 series
-        inf_config.post_proc_func = VMF_NNM_Post_Proc_Yolov5_No_Sigmoid;
+        inf_config.post_proc_func = yolov5_no_sigmoid_post_process;
 
         // set up fd result output buffer for ncpu/npu
         inf_config.ncpu_result_buf = (void *)_pd_result;
@@ -477,7 +498,7 @@
         inf_config.image_list[0].crop_area.height = bottom - top;
 
         inf_config.model_id = KNERON_PERSONCLASSIFIER_MB_56_48_3;           // this depends on model
-        inf_config.post_proc_func = VMF_NNM_Post_Proc_Classifier;
+        inf_config.post_proc_func = classifier_post_process;
 
         // set up fd result output buffer for ncpu/npu
         inf_config.ncpu_result_buf = (void *)_classifier_result;
@@ -516,8 +537,6 @@
 
         /******* Prepare the temporary memory space for the result of middle model *******/
 
-        static bool is_init = false;
-
         if (!is_init) {
             int status = init_temp_buffer();
             if (!status) {
@@ -541,7 +560,7 @@
 
         int box_count = 0;
         int max_box_count = (pd_result->box_count > PD_BOX_MAX) ? PD_BOX_MAX : _yolo_pd_result->box_count;
-        pd_classification_result_t *pd_result = &output_result->pd_classification_result;
+        my_KL630_pd_classification_result_t *pd_result = &output_result->pd_classification_result;
 
         for (int i = 0; i < max_box_count; i++) {
             struct bounding_box_s *box = &_yolo_pd_result->boxes[i];
@@ -571,10 +590,15 @@
         pd_result->box_count = box_count;
 
         output_result->header_stamp.status_code = KP_SUCCESS;
-        output_result->header_stamp.total_size = sizeof(my_kl630_mul_example_result_t) - sizeof(pd_classification_result_t) +
-                                                 sizeof(pd_result->box_count) + (box_count * sizeof(one_pd_classification_result_t));
+        output_result->header_stamp.total_size = sizeof(my_kl630_mul_example_result_t) - sizeof(my_KL630_pd_classification_result_t) +
+                                                 sizeof(pd_result->box_count) + (box_count * sizeof(my_KL630_one_pd_classification_result_t));
         // send output result buffer back to host SW
         VMF_NNM_Fifoq_Manager_Result_Enqueue(inf_result_buf, inf_result_phy_addr, result_buf_size, -1, false);
+    }
+
+    void my_kl630_mul_example_inf_deinit()
+    {
+        deinit_temp_buffer();
     }
     ```
 
@@ -664,6 +688,36 @@
         }
     }
 
+    static void _app_func_deinit(unsigned int job_id);
+
+    void _app_func_deinit(unsigned int job_id)
+    {
+        switch (job_id)
+        {
+        case KDP2_INF_ID_APP_YOLO:
+            kdp2_app_yolo_inference_deinit();
+            break;
+        case DEMO_KL630_CUSTOMIZE_INF_SINGLE_MODEL_JOB_ID:
+            demo_customize_inf_single_model_deinit();
+            break;
+        case DEMO_KL630_CUSTOMIZE_INF_MULTIPLE_MODEL_JOB_ID:
+            demo_customize_inf_multiple_model_deinit();
+            break;
+        /* ======================================== */
+        /*              Add Line Begin              */
+        /* ======================================== */
+        case MY_KL630_MUL_EXAMPLE_JOB_ID:
+            my_kl630_mul_example_inf_deinit();
+            break;
+        /* ======================================== */
+        /*               Add Line End               */
+        /* ======================================== */
+        default:
+            printf("%s, unsupported job_id %d \n", __func__, job_id);
+            break;
+        }
+    }
+
     void app_initialize(void)
     {
         printf(">> Start running KL630 KDP2 companion mode ...\n");
@@ -679,6 +733,17 @@
 
     void app_destroy(void)
     {
+        _app_func_deinit(KDP2_INF_ID_APP_YOLO);
+        _app_func_deinit(DEMO_KL630_CUSTOMIZE_INF_SINGLE_MODEL_JOB_ID);
+        _app_func_deinit(DEMO_KL630_CUSTOMIZE_INF_MULTIPLE_MODEL_JOB_ID);
+        /* ======================================== */
+        /*              Add Line Begin              */
+        /* ======================================== */
+        _app_func_deinit(MY_KL630_MUL_EXAMPLE_JOB_ID);
+        /* ======================================== */
+        /*               Add Line End               */
+        /* ======================================== */
+
         VMF_NNM_Inference_App_Destroy();
         VMF_NNM_Fifoq_Manager_Destroy();
     }

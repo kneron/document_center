@@ -25,6 +25,6 @@ The **`kp`** is Kneron PLUS Python API for controlling Kneron Device. The tutori
 - [Introduction](../introduction/index.md)
 - [Feature Guide](../feature_guide/index.md)
 - [Kneron ModelZoo](../modelzoo/index.md)
-- [Migrate to Kneron PLUS 2](../api_migration/index.md)
+- [Migrate to Kneron PLUS 3](../api_migration/index.md)
 - [API Document](http://doc.kneron.com/docs/#plus_python/api_document/)
 - [Appendix](../../plus_c/appendix/index.md)

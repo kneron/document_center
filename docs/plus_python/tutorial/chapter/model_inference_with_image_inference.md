@@ -157,7 +157,7 @@ Kneron PLUS support **`BGR565`**, **`BGRA8888`**, **`RAW8 (Grayscale)`** numpy.n
                 }
             },
             "raw_result": {
-                "buffer_size": 86076
+                "buffer_size": 86180
             }
         }
         '''
@@ -187,9 +187,13 @@ Kneron PLUS support **`BGR565`**, **`BGRA8888`**, **`RAW8 (Grayscale)`** numpy.n
 
     '''
     [{
-        "width": 7,
-        "height": 7,
-        "channel": 255,
+        "name": "",
+        "shape": [
+            1,
+            255,
+            7,
+            7
+        ],
         "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
         "num_data": 12495,
         "ndarray": [
@@ -208,9 +212,13 @@ Kneron PLUS support **`BGR565`**, **`BGRA8888`**, **`RAW8 (Grayscale)`** numpy.n
             "     -8.153462    -8.49319   ]]]]"
         ]
     }, {
-        "width": 14,
-        "height": 14,
-        "channel": 255,
+        "name": "",
+        "shape": [
+            1,
+            255,
+            14,
+            14
+        ],
         "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
         "num_data": 49980,
         "ndarray": [
@@ -234,12 +242,11 @@ Kneron PLUS support **`BGR565`**, **`BGRA8888`**, **`RAW8 (Grayscale)`** numpy.n
 
     Above shows kp.InferenceFloatNodeOutput results, a brief description listed below.
 
-    - **width** : Width of output node.
-    - **height** : Height of output node.
-    - **channel** : Channel of output node.
-    - **channels_ordering** : Channel ordering of feature map. (Options: KP_CHANNEL_ORDERING_HCW, KP_CHANNEL_ORDERING_CHW)
+    - **name** : Name of the tensor.
+    - **shape** : ONNX shape of the tensor.
     - **num_data** : Total number of floating-point values.
     - **ndarray** : N-dimensional numpy.ndarray of feature map.
+    - **channels_ordering** : Channel ordering of feature map. (Options: KP_CHANNEL_ORDERING_HCW, KP_CHANNEL_ORDERING_CHW, KP_CHANNEL_ORDERING_DEFAULT)
 
 ---
 
@@ -382,7 +389,7 @@ Kneron PLUS support **`BGR565`**, **`BGRA8888`**, **`RAW8 (Grayscale)`**, **`YCb
                 }
             },
             "raw_result": {
-                "buffer_size": 86076
+                "buffer_size": 86180
             }
         }
         '''
@@ -412,9 +419,13 @@ Kneron PLUS support **`BGR565`**, **`BGRA8888`**, **`RAW8 (Grayscale)`**, **`YCb
 
     '''
     [{
-        "width": 7,
-        "height": 7,
-        "channel": 255,
+        "name": "",
+        "shape": [
+            1,
+            255,
+            7,
+            7
+        ],
         "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
         "num_data": 12495,
         "ndarray": [
@@ -433,9 +444,13 @@ Kneron PLUS support **`BGR565`**, **`BGRA8888`**, **`RAW8 (Grayscale)`**, **`YCb
             "     -8.153462    -8.49319   ]]]]"
         ]
     }, {
-        "width": 14,
-        "height": 14,
-        "channel": 255,
+        "name": "",
+        "shape": [
+            1,
+            255,
+            14,
+            14
+        ],
         "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
         "num_data": 49980,
         "ndarray": [
@@ -459,9 +474,8 @@ Kneron PLUS support **`BGR565`**, **`BGRA8888`**, **`RAW8 (Grayscale)`**, **`YCb
 
     Above shows **`kp.InferenceFloatNodeOutput`** results, a brief description listed below.
 
-    - **width** : Width of output node.
-    - **height** : Height of output node.
-    - **channel** : Channel of output node.
-    - **channels_ordering** : Channel ordering of feature map. (Options: KP_CHANNEL_ORDERING_HCW, KP_CHANNEL_ORDERING_CHW)
+    - **name** : Name of the tensor.
+    - **shape** : ONNX shape of the tensor.
     - **num_data** : Total number of floating-point values.
     - **ndarray** : N-dimensional numpy.ndarray of feature map.
+    - **channels_ordering** : Channel ordering of feature map. (Options: KP_CHANNEL_ORDERING_HCW, KP_CHANNEL_ORDERING_CHW, KP_CHANNEL_ORDERING_DEFAULT)

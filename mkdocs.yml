@@ -47,10 +47,10 @@ nav:
       - Device DDR Management:                                      plus_c/feature_guide/device_ddr_management.md
     - Model Zoo:
       - Introduction:                                               plus_c/modelzoo/index.md
-    - Migrate to Kneron PLUS 2:
+    - Migrate to Kneron PLUS 3:
       - Index:                                                      plus_c/api_migration/index.md
       - V1.x and V2 APIs Mapping Table:                             plus_c/api_migration/api_migration_mapping_table.md
-      - Migrate to Kneron PLUS 2:                                   plus_c/api_migration/api_migration.md
+      - Migrate to Kneron PLUS 3:                                   plus_c/api_migration/api_migration.md
       - Compatible with V1.x API:                                   plus_c/api_migration/api_compatible_legacy.md
     - Appendix:
       - Index:                                                      plus_c/appendix/index.md
@@ -59,13 +59,19 @@ nav:
       - NPU Raw Output Memory Layout:                               plus_c/appendix/npu_raw_output_memory_layout.md
       - Yolo Object Name Mapping:                                   plus_c/appendix/yolo_object_name_mapping.md
     - API Reference:
-      - v2.3.x-alpha:
-        - Data Structure:                                           plus_c_api/api_reference_2.3.x/kp_struct.h.md
-        - Core API:                                                 plus_c_api/api_reference_2.3.x/kp_core.h.md
-        - Inference API:                                            plus_c_api/api_reference_2.3.x/kp_inference.h.md
-        - (legacy)Data Structure:                                   plus_c_api/api_reference_2.3.x/kp_struct_v1.h.md
-        - (legacy)Inference API:                                    plus_c_api/api_reference_2.3.x/kp_inference_v1.h.md
+      - v3.0.x:
+        - Data Structure:                                           plus_c_api/api_reference_3.0.x/kp_struct.h.md
+        - Core API:                                                 plus_c_api/api_reference_3.0.x/kp_core.h.md
+        - Inference API:                                            plus_c_api/api_reference_3.0.x/kp_inference.h.md
+        - (legacy)Data Structure:                                   plus_c_api/api_reference_3.0.x/kp_struct_v1.h.md
+        - (legacy)Inference API:                                    plus_c_api/api_reference_3.0.x/kp_inference_v1.h.md
       - Archive:
+        - v2.3.x-alpha:
+          - Data Structure:                                         plus_c_api/api_reference_2.3.x/kp_struct.h.md
+          - Core API:                                               plus_c_api/api_reference_2.3.x/kp_core.h.md
+          - Inference API:                                          plus_c_api/api_reference_2.3.x/kp_inference.h.md
+          - (legacy)Data Structure:                                 plus_c_api/api_reference_2.3.x/kp_struct_v1.h.md
+          - (legacy)Inference API:                                  plus_c_api/api_reference_2.3.x/kp_inference_v1.h.md
         - v2.2.x:
           - Data Structure:                                         plus_c_api/api_reference_2.2.x/kp_struct.h.md
           - Core API:                                               plus_c_api/api_reference_2.2.x/kp_core.h.md
@@ -134,10 +140,10 @@ nav:
         - Inference with Drop Frame:                                plus_python/tutorial/chapter/model_inference_with_inference_with_drop_frame.md
     - Model Zoo:
       - Index:                                                      plus_python/modelzoo/index.md
-    - Migrate to Kneron PLUS 2:
+    - Migrate to Kneron PLUS 3:
       - Index:                                                      plus_python/api_migration/index.md
       - V1.x and V2 APIs Mapping Table:                             plus_python/api_migration/chapter/api_migration_mapping_table.md
-      - Migrate to Kneron PLUS 2:                                   plus_python/api_migration/chapter/api_migration.md
+      - Migrate to Kneron PLUS 3:                                   plus_python/api_migration/chapter/api_migration.md
       - Compatible with V1.x API:                                   plus_python/api_migration/chapter/api_compatible_legacy.md
     - API Document:
       - Index:                                                      plus_python/api_document/index.md

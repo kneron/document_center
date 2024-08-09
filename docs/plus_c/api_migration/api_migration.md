@@ -1,22 +1,22 @@
-## Migrate from Kneron PLUS 1.x to Kneron PLUS 2
+## Migrate from Kneron PLUS 1.x to Kneron PLUS 2 / 3
 
-This chapter shows how to migrate your code from Kneron PLUS V1.x to Kneron PLUS V2. Before getting started, please reference the [APIs V1 and V2 Mapping Table](./api_migration_mapping_table.md) for mapping V1.x to V2 API. The major migration process is:  
+This chapter shows how to migrate your code from Kneron PLUS V1.x to Kneron PLUS V2. Before getting started, please reference the [APIs V1 and V2 / V3 Mapping Table](./api_migration_mapping_table.md) for mapping V1.x to V2 / V3 API. The major migration process is:
 
-1. [Rewrite model information access usage](#1-rewrite-model-information-access-usage)  
-2. [Replace inference usage](#2-replace-inference-usage)  
-3. [(Option) Replace built-in YOLO post process function](#3-option-replace-built-in-yolo-post-process-function)  
+1. [Rewrite model information access usage](#1-rewrite-model-information-access-usage)
+2. [Replace inference usage](#2-replace-inference-usage)
+3. [(Option) Replace built-in YOLO post process function](#3-option-replace-built-in-yolo-post-process-function)
 
 ---
 
-### 1. Rewrite model information access usage  
+### 1. Rewrite model information access usage
 
-In Kneron PLUS 1. x, the `kp_model_nef_descriptor_t` provides basic and essential information about loaded models, such as model ID, model input size, and model raw output size. It is clear and easy to use.  
+In Kneron PLUS 1. x, the `kp_model_nef_descriptor_t` provides basic and essential information about loaded models, such as model ID, model input size, and model raw output size. It is clear and easy to use.
 
-But some API usage, such as using data inference (without hardware image pre-processing) needs more model information (e.g. model input NPU data layout, model input quantization parameters ...) to deal with software pre-processing on the host PC.  
+But some API usage, such as using data inference (without hardware image pre-processing) needs more model information (e.g. model input NPU data layout, model input quantization parameters ...) to deal with software pre-processing on the host PC.
 
-To provide more model information, we redesign the `kp_model_nef_descriptor_t` in the Kneron PLUS 2.  
+To provide more model information, we redesign the `kp_model_nef_descriptor_t` in the Kneron PLUS 2.
 
-- Change model input size access usage  
+- Change model input size access usage
 
     - V1.x
 
@@ -49,9 +49,37 @@ To provide more model information, we redesign the `kp_model_nef_descriptor_t` i
         ...
         ```
 
-- Release `kp_model_nef_descriptor_t` by `kp_release_model_nef_descriptor()` in V2  
+    - V3
 
-    - V2
+        ```c
+        ...
+
+        kp_model_nef_descriptor_t _model_desc;
+        int ret = kp_load_model_from_file(_device, _model_file_path, &_model_desc);
+        kp_tensor_descriptor_t *input_node_0 = &(_model_desc.models[0].input_nodes[0]);
+        int shape_info_version = input_node_0->tensor_shape_info.version;
+
+        if (KP_MODEL_TENSOR_SHAPE_INFO_VERSION_1 == shape_info_version) {
+            kp_tensor_shape_info_v1_t* tensor_shape_info    = &(input_node_0->tensor_shape_info.tensor_shape_info_data.v1);
+            uint32_t npu_data_channel                       = tensor_shape_info->shape_npu[1];
+            uint32_t npu_data_height                        = tensor_shape_info->shape_npu[2];
+            uint32_t npu_data_width                         = tensor_shape_info->shape_npu[3];
+            uint32_t onnx_data_channel                      = tensor_shape_info->shape_onnx[1];
+            uint32_t onnx_data_height                       = tensor_shape_info->shape_onnx[2];
+            uint32_t onnx_data_width                        = tensor_shape_info->shape_onnx[3];
+        } else if (KP_MODEL_TENSOR_SHAPE_INFO_VERSION_2 == shape_info_version) {
+            kp_tensor_shape_info_v2_t* tensor_shape_info    = &(input_node_0->tensor_shape_info.tensor_shape_info_data.v2);
+            uint32_t onnx_data_channel                      = tensor_shape_info->shape[1];
+            uint32_t onnx_data_height                       = tensor_shape_info->shape[2];
+            uint32_t onnx_data_width                        = tensor_shape_info->shape[3];
+        }
+
+        ...
+        ```
+
+- Release `kp_model_nef_descriptor_t` by `kp_release_model_nef_descriptor()` in V2
+
+    - V2 / V3
 
         ```c
         ...
@@ -65,11 +93,11 @@ To provide more model information, we redesign the `kp_model_nef_descriptor_t` i
         ...
         ```
 
-    **Note**: For new information added in `kp_model_nef_descriptor_t`, please reference `kp_model_nef_descriptor_t` struct definition.  
+    **Note**: For new information added in `kp_model_nef_descriptor_t`, please reference `kp_model_nef_descriptor_t` struct definition.
 
-### 2. Replace inference usage  
+### 2. Replace inference usage
 
-#### 2.1. Change **Generic Raw Inference** to **Generic Image Inference**  
+#### 2.1. Change **Generic Raw Inference** to **Generic Image Inference**
 
 1. Replace inference header
 
@@ -99,7 +127,7 @@ To provide more model information, we redesign the `kp_model_nef_descriptor_t` i
         ...
         ```
 
-    - V2
+    - V2 / V3
 
         ```c
         ...
@@ -148,7 +176,7 @@ To provide more model information, we redesign the `kp_model_nef_descriptor_t` i
         ...
         ```
 
-    - V2
+    - V2 / V3
 
         ```c
         ...
@@ -166,9 +194,9 @@ To provide more model information, we redesign the `kp_model_nef_descriptor_t` i
         ...
         ```
 
-#### 2.2. Change **Generic Raw Inference Bypass Pre-Processing** to **Generic Data Inference**  
+#### 2.2. Change **Generic Raw Inference Bypass Pre-Processing** to **Generic Data Inference**
 
-1. Replace inference header  
+1. Replace inference header
 
     - V1.x
 
@@ -185,7 +213,7 @@ To provide more model information, we redesign the `kp_model_nef_descriptor_t` i
         ...
         ```
 
-    - V2
+    - V2 / V3
 
         ```c
         ...
@@ -203,7 +231,7 @@ To provide more model information, we redesign the `kp_model_nef_descriptor_t` i
         ...
         ```
 
-2. Replace inference send and receive function  
+2. Replace inference send and receive function
 
     - V1.x
 
@@ -227,7 +255,7 @@ To provide more model information, we redesign the `kp_model_nef_descriptor_t` i
         ...
         ```
 
-    - V2
+    - V2 / V3
 
         ```c
         ...
@@ -245,7 +273,7 @@ To provide more model information, we redesign the `kp_model_nef_descriptor_t` i
         ...
         ```
 
-### 3. (Option) Replace built-in YOLO post process function  
+### 3. (Option) Replace built-in YOLO post process function
 
 * **KL520**
 
@@ -261,7 +289,7 @@ To provide more model information, we redesign the `kp_model_nef_descriptor_t` i
             ...
             ```
 
-        - V2
+        - V2 / V3
 
             ```c
             ...
@@ -283,7 +311,7 @@ To provide more model information, we redesign the `kp_model_nef_descriptor_t` i
             ...
             ```
 
-        - V2
+        - V2 / V3
 
             ```c
             ...
@@ -307,7 +335,7 @@ To provide more model information, we redesign the `kp_model_nef_descriptor_t` i
             ...
             ```
 
-        - V2
+        - V2 / V3
 
             ```c
             ...
@@ -317,4 +345,4 @@ To provide more model information, we redesign the `kp_model_nef_descriptor_t` i
             ...
             ```
 
-**Note**: For more  information of YOLO post processing parameters update, please reference `kneron_plus/ex_common/postprocess.h`  
+**Note**: For more  information of YOLO post processing parameters update, please reference `kneron_plus/ex_common/postprocess.h`

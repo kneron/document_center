@@ -266,7 +266,7 @@
     ```cpp
     #include "kp_struct.h"
 
-    #define MY_KL630_SIN_EXAMPLE_JOB_ID     3002
+    #define MY_KL630_SIN_EXAMPLE_JOB_ID     3003
     #define YOLO_BOX_MAX                    100
 
     typedef struct {
@@ -290,7 +290,8 @@
         my_kl630_sin_example_yolo_result_t yolo_result;
     } __attribute__((aligned(4))) my_kl630_sin_example_result_t;
 
-    void my_kl630_sin_example_inf(uint32_t job_id, void *inf_input_buf);
+    void my_kl630_sin_example_inf(int job_id, int num_input_buf, void **inf_input_buf_list);
+    void my_kl630_sin_example_inf_deinit();
     ```
 
 3. Add *my_kl630_sin_example_inf.c*
@@ -341,7 +342,7 @@
         },
     };
 
-    void my_kl630_sin_example_inf(uint32_t job_id, int num_input_buf, void **inf_input_buf_list)
+    void my_kl630_sin_example_inf(int job_id, int num_input_buf, void **inf_input_buf_list)
     {
         if (1 != num_input_buf) {
             VMF_NNM_Fifoq_Manager_Status_Code_Enqueue(job_id, KP_FW_WRONG_INPUT_BUFFER_COUNT_110);
@@ -371,8 +372,8 @@
         // image buffer address should be just after the header
         inf_config.num_image = 1;
         inf_config.image_list[0].image_buf = (void *)((uint32_t)input_header + sizeof(my_kl630_sin_example_header_t));
-        inf_config.image_list[0].image_width = input_header->width;
-        inf_config.image_list[0].image_height = input_header->height;
+        inf_config.image_list[0].image_width = input_header->img_width;
+        inf_config.image_list[0].image_height = input_header->img_height;
         inf_config.image_list[0].image_channel = 3;                             // assume RGB565
         inf_config.image_list[0].image_format = KP_IMAGE_FORMAT_RGB565;         // assume RGB565
         inf_config.image_list[0].image_norm = KP_NORMALIZE_KNERON;              // this depends on model
@@ -397,6 +398,11 @@
 
         // send output result buffer back to host SW
         VMF_NNM_Fifoq_Manager_Result_Enqueue(inf_result_buf, inf_result_phy_addr, result_buf_size, -1, false);
+    }
+
+    void my_kl630_sin_example_inf_deinit()
+    {
+        //there is no temp buffer need to release in this model
     }
     ```
 
@@ -486,6 +492,36 @@
         }
     }
 
+    static void _app_func_deinit(unsigned int job_id);
+
+    void _app_func_deinit(unsigned int job_id)
+    {
+        switch (job_id)
+        {
+        case KDP2_INF_ID_APP_YOLO:
+            kdp2_app_yolo_inference_deinit();
+            break;
+        case DEMO_KL630_CUSTOMIZE_INF_SINGLE_MODEL_JOB_ID:
+            demo_customize_inf_single_model_deinit();
+            break;
+        case DEMO_KL630_CUSTOMIZE_INF_MULTIPLE_MODEL_JOB_ID:
+            demo_customize_inf_multiple_model_deinit();
+            break;
+        /* ======================================== */
+        /*              Add Line Begin              */
+        /* ======================================== */
+        case MY_KL630_SIN_EXAMPLE_JOB_ID:
+            my_kl630_sin_example_inf_deinit();
+            break;
+        /* ======================================== */
+        /*               Add Line End               */
+        /* ======================================== */
+        default:
+            printf("%s, unsupported job_id %d \n", __func__, job_id);
+            break;
+        }
+    }
+
     void app_initialize(void)
     {
         printf(">> Start running KL630 KDP2 companion mode ...\n");
@@ -501,6 +537,17 @@
 
     void app_destroy(void)
     {
+        _app_func_deinit(KDP2_INF_ID_APP_YOLO);
+        _app_func_deinit(DEMO_KL630_CUSTOMIZE_INF_SINGLE_MODEL_JOB_ID);
+        _app_func_deinit(DEMO_KL630_CUSTOMIZE_INF_MULTIPLE_MODEL_JOB_ID);
+        /* ======================================== */
+        /*              Add Line Begin              */
+        /* ======================================== */
+        _app_func_deinit(MY_KL630_SIN_EXAMPLE_JOB_ID);
+        /* ======================================== */
+        /*               Add Line End               */
+        /* ======================================== */
+
         VMF_NNM_Inference_App_Destroy();
         VMF_NNM_Fifoq_Manager_Destroy();
     }
