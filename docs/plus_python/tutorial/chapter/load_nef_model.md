@@ -75,19 +75,42 @@ print(model_nef_descriptor)
                 "0": {
                     "index": 0,
                     "name": "",
-                    "shape_npu": [
-                        1,
-                        3,
-                        224,
-                        224
-                    ],
-                    "shape_onnx": [],
                     "data_layout": "ModelTensorDataLayout.KP_MODEL_TENSOR_DATA_LAYOUT_4W4C8B",
+                    "tensor_shape_info": {
+                        "version": "ModelTensorShapeInformationVersion.KP_MODEL_TENSOR_SHAPE_INFO_VERSION_1",
+                        "data": {
+                            "shape_npu": [
+                                1,
+                                3,
+                                224,
+                                224
+                            ],
+                            "shape_onnx": [
+                                1,
+                                3,
+                                224,
+                                224
+                            ],
+                            "axis_permutation_onnx_to_npu": [
+                                0,
+                                1,
+                                2,
+                                3
+                            ]
+                        }
+                    },
                     "quantization_parameters": {
-                        "quantized_fixed_point_descriptor_list": {
-                            "0": {
-                                "scale": 1.0,
-                                "radix": 8
+                        "version": "QuantizationParametersVersion.KP_MODEL_QUANTIZATION_PARAMS_VERSION_1",
+                        "data": {
+                            "quantized_axis": 1,
+                            "quantized_fixed_point_descriptor_list": {
+                                "0": {
+                                    "scale": {
+                                        "dtype": "DataType.KP_DTYPE_FLOAT32",
+                                        "value": 1.0
+                                    },
+                                    "radix": 8
+                                }
                             }
                         }
                     }
@@ -97,19 +120,42 @@ print(model_nef_descriptor)
                 "0": {
                     "index": 0,
                     "name": "",
-                    "shape_npu": [
-                        1,
-                        255,
-                        7,
-                        7
-                    ],
-                    "shape_onnx": [],
                     "data_layout": "ModelTensorDataLayout.KP_MODEL_TENSOR_DATA_LAYOUT_16W1C8B",
+                    "tensor_shape_info": {
+                        "version": "ModelTensorShapeInformationVersion.KP_MODEL_TENSOR_SHAPE_INFO_VERSION_1",
+                        "data": {
+                            "shape_npu": [
+                                1,
+                                255,
+                                7,
+                                7
+                            ],
+                            "shape_onnx": [
+                                1,
+                                255,
+                                7,
+                                7
+                            ],
+                            "axis_permutation_onnx_to_npu": [
+                                0,
+                                1,
+                                2,
+                                3
+                            ]
+                        }
+                    },
                     "quantization_parameters": {
-                        "quantized_fixed_point_descriptor_list": {
-                            "0": {
-                                "scale": 1.4717674255371094,
-                                "radix": 2
+                        "version": "QuantizationParametersVersion.KP_MODEL_QUANTIZATION_PARAMS_VERSION_1",
+                        "data": {
+                            "quantized_axis": 1,
+                            "quantized_fixed_point_descriptor_list": {
+                                "0": {
+                                    "scale": {
+                                        "dtype": "DataType.KP_DTYPE_FLOAT32",
+                                        "value": 1.4717674255371094
+                                    },
+                                    "radix": 2
+                                }
                             }
                         }
                     }
@@ -117,19 +163,42 @@ print(model_nef_descriptor)
                 "1": {
                     "index": 1,
                     "name": "",
-                    "shape_npu": [
-                        1,
-                        255,
-                        14,
-                        14
-                    ],
-                    "shape_onnx": [],
                     "data_layout": "ModelTensorDataLayout.KP_MODEL_TENSOR_DATA_LAYOUT_16W1C8B",
+                    "tensor_shape_info": {
+                        "version": "ModelTensorShapeInformationVersion.KP_MODEL_TENSOR_SHAPE_INFO_VERSION_1",
+                        "data": {
+                            "shape_npu": [
+                                1,
+                                255,
+                                14,
+                                14
+                            ],
+                            "shape_onnx": [
+                                1,
+                                255,
+                                14,
+                                14
+                            ],
+                            "axis_permutation_onnx_to_npu": [
+                                0,
+                                1,
+                                2,
+                                3
+                            ]
+                        }
+                    },
                     "quantization_parameters": {
-                        "quantized_fixed_point_descriptor_list": {
-                            "0": {
-                                "scale": 1.4307060241699219,
-                                "radix": 2
+                        "version": "QuantizationParametersVersion.KP_MODEL_QUANTIZATION_PARAMS_VERSION_1",
+                        "data": {
+                            "quantized_axis": 1,
+                            "quantized_fixed_point_descriptor_list": {
+                                "0": {
+                                    "scale": {
+                                        "dtype": "DataType.KP_DTYPE_FLOAT32",
+                                        "value": 1.4307060241699219
+                                    },
+                                    "radix": 2
+                                }
                             }
                         }
                     }
@@ -141,7 +210,7 @@ print(model_nef_descriptor)
             "setup_file_schema_version": {
                 "version": "0.0.0"
             },
-            "max_raw_out_size": 86076
+            "max_raw_out_size": 86180
         }
     }
 }

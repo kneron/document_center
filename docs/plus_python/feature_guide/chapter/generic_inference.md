@@ -1,6 +1,6 @@
 # Generic Inference
 
-**Note**: In the inference related examples, we are using KL520 for most demo. If you wish to use KL720, just change the prefix of the example name from KL520 to KL720. (There might be no KL520 version or KL720 version on certain examples.)
+**Note**: In the inference related examples, we are using KL520 for most demo. If you wish to use KL630, KL720, or KL730, just change the prefix of the example name from kl520 to kl630, kl720, or kl730. (There might be no KL520 version, KL630 version, KL720 version, or KL730 version on certain examples.)
 
 **Note**: Few examples will auto connect multiple devices to run inference. If you put hybrid types of devices on host, the inference may fail.
 
@@ -68,7 +68,7 @@ In **Generic Image Inference API**, you may customized what to do in the pre-pro
 The **KL520DemoGenericImageInference** not do any post-processing and prints feature map raw output for each output node.
 
 ```bash
-$ python3 KL520DemoGenericInference.py
+$ python3 KL520DemoGenericImageInference.py
 
 [Connect Device]
  - Success
@@ -87,9 +87,13 @@ $ python3 KL520DemoGenericInference.py
  - Success
 [Result]
 [{
-    "width": 7,
-    "height": 7,
-    "channel": 255,
+    "name": "",
+    "shape": [
+        1,
+        255,
+        7,
+        7
+    ],
     "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
     "num_data": 12495,
     "ndarray": [
@@ -108,9 +112,13 @@ $ python3 KL520DemoGenericInference.py
         "     -8.153462    -8.49319   ]]]]"
     ]
 }, {
-    "width": 14,
-    "height": 14,
-    "channel": 255,
+    "name": "",
+    "shape": [
+        1,
+        255,
+        14,
+        14
+    ],
     "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
     "num_data": 49980,
     "ndarray": [
@@ -138,7 +146,7 @@ $ python3 KL520DemoGenericInference.py
 The **'KL520DemoGenericImageInferencePostYolo.py'** is an example for showing how it gets raw output from device, running a Tiny Yolo v3 model, and does post-processing in the software (host side).
 
 ```bash
-$ python3 KL520DemoGenericInferencePostYolo.py
+$ python3 KL520DemoGenericImageInferencePostYolo.py
 
 [Connect Device]
  - Success
@@ -390,9 +398,13 @@ $ python3 KL520DemoGenericImageInferenceFlashModel.py
  - Success
 [Result]
 [{
-    "width": 7,
-    "height": 7,
-    "channel": 255,
+    "name": "",
+    "shape": [
+        1,
+        255,
+        7,
+        7
+    ],
     "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
     "num_data": 12495,
     "ndarray": [
@@ -411,9 +423,13 @@ $ python3 KL520DemoGenericImageInferenceFlashModel.py
         "     -8.153462    -8.49319   ]]]]"
     ]
 }, {
-    "width": 14,
-    "height": 14,
-    "channel": 255,
+    "name": "",
+    "shape": [
+        1,
+        255,
+        14,
+        14
+    ],
     "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
     "num_data": 49980,
     "ndarray": [

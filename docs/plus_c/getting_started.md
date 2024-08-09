@@ -512,20 +512,16 @@ inference loop is done, starting post-processing ...
 doing yolo v5 post-processing ...
 
 detectable class count : 80
-box count : 13
-Box 0 (x1, y1, x2, y2, score, class) = 124.0, 267.0, 133.0, 287.0, 0.155090, 0
-Box 1 (x1, y1, x2, y2, score, class) = 303.0, 262.0, 471.0, 435.0, 0.719055, 2
-Box 2 (x1, y1, x2, y2, score, class) = 26.0, 263.0, 132.0, 392.0, 0.508118, 2
-Box 3 (x1, y1, x2, y2, score, class) = 7.0, 264.0, 38.0, 296.0, 0.473145, 2
-Box 4 (x1, y1, x2, y2, score, class) = 0.0, 274.0, 12.0, 300.0, 0.447144, 2
-Box 5 (x1, y1, x2, y2, score, class) = 107.0, 270.0, 134.0, 317.0, 0.372437, 2
-Box 6 (x1, y1, x2, y2, score, class) = 158.0, 255.0, 197.0, 333.0, 0.323059, 2
-Box 7 (x1, y1, x2, y2, score, class) = 0.0, 267.0, 27.0, 303.0, 0.263916, 2
-Box 8 (x1, y1, x2, y2, score, class) = 26.0, 263.0, 132.0, 392.0, 0.325195, 7
-Box 9 (x1, y1, x2, y2, score, class) = 153.0, 254.0, 196.0, 331.0, 0.278320, 7
-Box 10 (x1, y1, x2, y2, score, class) = 121.0, 164.0, 155.0, 221.0, 0.491943, 11
-Box 11 (x1, y1, x2, y2, score, class) = 320.0, 170.0, 350.0, 226.0, 0.340576, 11
-Box 12 (x1, y1, x2, y2, score, class) = 205.0, 60.0, 250.0, 142.0, 0.317871, 11
+box count : 9
+Box 0 (x1, y1, x2, y2, score, class) = 306.0, 259.0, 468.0, 436.0, 0.827637, 2
+Box 1 (x1, y1, x2, y2, score, class) = 158.0, 257.0, 199.0, 328.0, 0.692688, 2
+Box 2 (x1, y1, x2, y2, score, class) = 0.0, 273.0, 13.0, 300.0, 0.643311, 2
+Box 3 (x1, y1, x2, y2, score, class) = 9.0, 264.0, 38.0, 295.0, 0.625488, 2
+Box 4 (x1, y1, x2, y2, score, class) = 25.0, 266.0, 132.0, 390.0, 0.599854, 2
+Box 5 (x1, y1, x2, y2, score, class) = 106.0, 270.0, 134.0, 317.0, 0.567627, 2
+Box 6 (x1, y1, x2, y2, score, class) = 120.0, 164.0, 156.0, 220.0, 0.821655, 11
+Box 7 (x1, y1, x2, y2, score, class) = 204.0, 61.0, 251.0, 142.0, 0.713135, 11
+Box 8 (x1, y1, x2, y2, score, class) = 319.0, 173.0, 350.0, 223.0, 0.658875, 11
 
 output bounding boxes on 'output_car_park_barrier_608x608.bmp'
 

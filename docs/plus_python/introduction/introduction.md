@@ -2,7 +2,7 @@
 
 ## Basic Features
 
-**Kneron PLUS** stands for *Platform Library Unified Software* which is a framework comprising new software(SW) and firmware(FW) design for KL520, KL720, and KL630 (and alpha for KL730).
+**Kneron PLUS** stands for *Platform Library Unified Software* which is a framework comprising new software(SW) and firmware(FW) design for KL520, KL720, KL630, and KL730.
 
 In order to run the inference of models on Kneron AI devices, there are three parts of AI application development are required:
 

@@ -1,6 +1,6 @@
 ## Introduction
 
-Kneron PLUS stands for Platform Library Unified Software which is a framework comprising new software(SW) and firmware(FW) design for KL520 (and alpha for KL720). Please visit the following documents for more information:
+Kneron PLUS stands for Platform Library Unified Software which is a framework comprising new software(SW) and firmware(FW) design for KL520/KL720/KL630/KL730. Please visit the following documents for more information:
 
 - [Introduction](./introduction.md)
 - [Installation](./install_dependency.md)
@@ -14,6 +14,6 @@ Kneron PLUS stands for Platform Library Unified Software which is a framework co
 - [Feature Guide](../feature_guide/index.md)
 - [Tutorial](../tutorial/index.md)
 - [Kneron ModelZoo](../modelzoo/index.md)
-- [Migrate to Kneron PLUS 2](../api_migration/index.md)
+- [Migrate to Kneron PLUS 3](../api_migration/index.md)
 - [API Document](http://doc.kneron.com/docs/#plus_python/api_document/)
 - [Appendix](../../plus_c/appendix/index.md)

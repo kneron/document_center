@@ -67,9 +67,13 @@ This tutorial shows how to inference model by Kneron devices in the following tw
 
     '''
     [{
-        "width": 7,
-        "height": 7,
-        "channel": 255,
+        "name": "",
+        "shape": [
+            1,
+            255,
+            7,
+            7
+        ],
         "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
         "num_data": 12495,
         "ndarray": [
@@ -88,9 +92,13 @@ This tutorial shows how to inference model by Kneron devices in the following tw
             "     -8.153462    -8.49319   ]]]]"
         ]
     }, {
-        "width": 14,
-        "height": 14,
-        "channel": 255,
+        "name": "",
+        "shape": [
+            1,
+            255,
+            14,
+            14
+        ],
         "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
         "num_data": 49980,
         "ndarray": [
@@ -114,12 +122,11 @@ This tutorial shows how to inference model by Kneron devices in the following tw
 
     Above shows `kp.InferenceFloatNodeOutput` results, a brief description listed below.
 
-    - **width** : Width of output node.
-    - **height** : Height of output node.
-    - **channel** : Channel of output node.
-    - **channels_ordering** : Channel ordering of feature map. (Options: KP_CHANNEL_ORDERING_HCW, KP_CHANNEL_ORDERING_CHW)
+    - **name** : Name of the tensor.
+    - **shape** : ONNX shape of the tensor.
     - **num_data** : Total number of floating-point values.
     - **ndarray** : N-dimensional numpy.ndarray of feature map.
+    - **channels_ordering** : Channel ordering of feature map. (Options: KP_CHANNEL_ORDERING_HCW, KP_CHANNEL_ORDERING_CHW, KP_CHANNEL_ORDERING_DEFAULT)
 
 ---
 
@@ -181,12 +188,28 @@ This tutorial shows how to inference model by Kneron devices in the following tw
 
     '''
     [{
-        "width": 7,
-        "height": 7,
-        "channel": 255,
-        "radix": 2,
-        "scale": 1.4717674255371094,
-        "factor": 5.8870697021484375,
+        "name": "",
+        "shape": [
+            1,
+            255,
+            7,
+            7
+        ],
+        "quantization_parameters": {
+            "version": "QuantizationParametersVersion.KP_MODEL_QUANTIZATION_PARAMS_VERSION_1",
+            "data": {
+                "quantized_axis": 1,
+                "quantized_fixed_point_descriptor_list": {
+                    "0": {
+                        "scale": {
+                            "dtype": "DataType.KP_DTYPE_FLOAT32",
+                            "value": 1.4717674255371094
+                        },
+                        "radix": 2
+                    }
+                }
+            }
+        },
         "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
         "dtype": "FixedPointDType.KP_FIXED_POINT_DTYPE_INT8",
         "num_data": 12495,
@@ -200,12 +223,28 @@ This tutorial shows how to inference model by Kneron devices in the following tw
             "   [-36 -48 -55 ... -47 -48 -50]]]]"
         ]
     }, {
-        "width": 14,
-        "height": 14,
-        "channel": 255,
-        "radix": 2,
-        "scale": 1.4307060241699219,
-        "factor": 5.7228240966796875,
+        "name": "",
+        "shape": [
+            1,
+            255,
+            14,
+            14
+        ],
+        "quantization_parameters": {
+            "version": "QuantizationParametersVersion.KP_MODEL_QUANTIZATION_PARAMS_VERSION_1",
+            "data": {
+                "quantized_axis": 1,
+                "quantized_fixed_point_descriptor_list": {
+                    "0": {
+                        "scale": {
+                            "dtype": "DataType.KP_DTYPE_FLOAT32",
+                            "value": 1.4307060241699219
+                        },
+                        "radix": 2
+                    }
+                }
+            }
+        },
         "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
         "dtype": "FixedPointDType.KP_FIXED_POINT_DTYPE_INT8",
         "num_data": 49980,
@@ -213,7 +252,6 @@ This tutorial shows how to inference model by Kneron devices in the following tw
             "[[[[   5   -2   -1 ...    0   -1   -4]",
             "   [   4   -5   -4 ...   -3   -1   -3]",
             "   [   3   -5   -4 ...   -1    1   -5]",
-            "   ...",
             "   ...",
             "   [ -64  -88 -104 ...  -75  -72  -62]",
             "   [ -58  -81  -96 ...  -61  -55  -48]",
@@ -224,16 +262,14 @@ This tutorial shows how to inference model by Kneron devices in the following tw
 
     Above shows `kp.InferenceFixedNodeOutput` results, a brief description listed below.
 
-    - **width** : Width of output node.
-    - **height** : Height of output node.
-    - **channel** : Channel of output node.
-    - **radix** : Radix for fixed/floating point conversion.
-    - **scale** : Scale for fixed/floating point conversion.
-    - **factor** : Conversion factor for fixed-point to floating-point conversion - formulation: scale * (2 ^ radix).
-    - **channels_ordering** : Channel ordering of feature map. (Options: KP_CHANNEL_ORDERING_HCW, KP_CHANNEL_ORDERING_CHW)
+    - **name** : Name of the tensor.
+    - **shape** : ONNX shape of the tensor.
+    - **quantization_parameters** : Quantization parameters of the tensor.
+    - **factor** : N-dimensional numpy.ndarray of dequantization factor.
     - **dtype** : fixed-point data type, refer to kp.FixedPointDType.
     - **num_data** : Total number of floating-point values.
     - **ndarray** : N-dimensional numpy.ndarray of feature map.
+    - **channels_ordering** : Channel ordering of feature map. (Options: KP_CHANNEL_ORDERING_HCW, KP_CHANNEL_ORDERING_CHW, KP_CHANNEL_ORDERING_DEFAULT)
 
 - Convert `kp.InferenceFixedNodeOutput` results to `kp.InferenceFloatNodeOutput` results  
     ```python
@@ -246,9 +282,13 @@ This tutorial shows how to inference model by Kneron devices in the following tw
 
     '''
     [{
-        "width": 7,
-        "height": 7,
-        "channel": 255,
+        "name": "",
+        "shape": [
+            1,
+            255,
+            7,
+            7
+        ],
         "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
         "num_data": 12495,
         "ndarray": [
@@ -267,9 +307,13 @@ This tutorial shows how to inference model by Kneron devices in the following tw
             "     -8.15346241  -8.49318981]]]]"
         ]
     }, {
-        "width": 14,
-        "height": 14,
-        "channel": 255,
+        "name": "",
+        "shape": [
+            1,
+            255,
+            14,
+            14
+        ],
         "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
         "num_data": 49980,
         "ndarray": [

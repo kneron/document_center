@@ -185,7 +185,7 @@ The flow in concept:
                 }
             },
             "raw_result": {
-                "buffer_size": 86076
+                "buffer_size": 86180
             }
         }, { # 2th crop box
             "header": {
@@ -217,7 +217,7 @@ The flow in concept:
                 }
             },
             "raw_result": {
-                "buffer_size": 86076
+                "buffer_size": 86180
             }
         }]
         '''
@@ -253,9 +253,13 @@ The flow in concept:
 
     '''
     [[{ # 1th crop box
-        "width": 7,
-        "height": 7,
-        "channel": 255,
+        "name": "",
+        "shape": [
+            1,
+            255,
+            7,
+            7
+        ],
         "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
         "num_data": 12495,
         "ndarray": [
@@ -274,9 +278,13 @@ The flow in concept:
             "     -8.832917    -6.9644156 ]]]]"
         ]
     }, {
-        "width": 14,
-        "height": 14,
-        "channel": 255,
+        "name": "",
+        "shape": [
+            1,
+            255,
+            14,
+            14
+        ],
         "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
         "num_data": 49980,
         "ndarray": [
@@ -295,9 +303,13 @@ The flow in concept:
             "     -8.03799     -8.562206  ]]]]"
         ]
     }], [{ # 2th crop box
-        "width": 7,
-        "height": 7,
-        "channel": 255,
+        "name": "",
+        "shape": [
+            1,
+            255,
+            7,
+            7
+        ],
         "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
         "num_data": 12495,
         "ndarray": [
@@ -316,9 +328,13 @@ The flow in concept:
             "     -6.9644156   -6.9644156 ]]]]"
         ]
     }, {
-        "width": 14,
-        "height": 14,
-        "channel": 255,
+        "name": "",
+        "shape": [
+            1,
+            255,
+            14,
+            14
+        ],
         "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
         "num_data": 49980,
         "ndarray": [
@@ -342,9 +358,8 @@ The flow in concept:
 
     Above shows **`kp.InferenceFloatNodeOutput`** results, a brief description listed below.
 
-    - **width** : Width of output node.
-    - **height** : Height of output node.
-    - **channel** : Channel of output node.
-    - **channels_ordering** : Channel ordering of feature map. (Options: KP_CHANNEL_ORDERING_HCW, KP_CHANNEL_ORDERING_CHW)
+    - **name** : Name of the tensor.
+    - **shape** : ONNX shape of the tensor.
     - **num_data** : Total number of floating-point values.
     - **ndarray** : N-dimensional numpy.ndarray of feature map.
+    - **channels_ordering** : Channel ordering of feature map. (Options: KP_CHANNEL_ORDERING_HCW, KP_CHANNEL_ORDERING_CHW, KP_CHANNEL_ORDERING_DEFAULT)

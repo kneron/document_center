@@ -232,7 +232,7 @@ The `generic_command` is an example for showing you how to use few system API:
 
     ```bash
     [note - using default parameter values if no value is passed]
-    -target: [target platform] (KL520, KL720) = KL520 (default: KL520)
+    -target: [target platform] (KL520, KL720, KL630, KL730, KL830) = KL520 (default: KL520)
     -sidx  : [scan index] = default (specified scan index) (default: scan index of the first scanned Kneron device)
     -port  : [port id] = 533 (specified port id) (default: port ID of the first scanned Kneron device)
             Notice that scan index has higher priority than port id
@@ -259,7 +259,7 @@ The `generic_command` is an example for showing you how to use few system API:
 
     ```bash
     [note - using default parameter values if no value is passed]
-    -target: [target platform] (KL520, KL720) = KL520 (default: KL520)
+    -target: [target platform] (KL520, KL720, KL630, KL730, KL830) = KL520 (default: KL520)
     -sidx  : [scan index] = default (specified scan index) (default: scan index of the first scanned Kneron device)
     -port  : [port id] = 533 (specified port id) (default: port ID of the first scanned Kneron device)
             Notice that scan index has higher priority than port id
@@ -296,7 +296,7 @@ The `generic_command` is an example for showing you how to use few system API:
 
     ```bash
     [note - using default parameter values if no value is passed]
-    -target: [target platform] (KL520, KL720) = KL520 (default: KL520)
+    -target: [target platform] (KL520, KL720, KL630, KL730, KL830) = KL520 (default: KL520)
     -sidx  : [scan index] = default (specified scan index) (default: scan index of the first scanned Kneron device)
     -port  : [port id] = 533 (specified port id) (default: port ID of the first scanned Kneron device)
             Notice that scan index has higher priority than port id
@@ -321,7 +321,7 @@ The `generic_command` is an example for showing you how to use few system API:
 
     ```bash
     [note - using default parameter values if no value is passed]
-    -target: [target platform] (KL520, KL720) = KL520 (default: KL520)
+    -target: [target platform] (KL520, KL720, KL630, KL730, KL830) = KL520 (default: KL520)
     -sidx  : [scan index] = default (specified scan index) (default: scan index of the first scanned Kneron device)
     -port  : [port id] = 533 (specified port id) (default: port ID of the first scanned Kneron device)
             Notice that scan index has higher priority than port id
@@ -376,7 +376,7 @@ This example is to show how to configure the `kp_ddr_manage_attr_t` and the usag
 Please refer [Device DDR Management](../feature_guide/device_ddr_management.md) for more information.
 
 ```bash
-$ sudo ./kl520_demo_generic_image_inference_customize_fifoq
+$ sudo ./kl520_demo_generic_image_inference_fifoq_config
 ```
 
 ```bash
@@ -533,19 +533,36 @@ read image ... OK
 
 starting inference loop 100 times:
 ....................................................................................................
+number of output node : 2
+
+node 0:
+width: 7:
+height: 7:
+channel: 255:
+number of data (float): 12495:
+first 20 data:
+    1.359, 0.340, 0.510, -0.510, 0.170, 0.340,
+    -0.849, 0.849, 0.849, 0.510, 0.679,
+    0.679, 0.679, 0.510, 0.000, 0.340,
+    0.510, 0.510, 0.340, 0.000,
+
+node 1:
+width: 14:
+height: 14:
+channel: 255:
+number of data (float): 49980:
+first 20 data:
+    0.874, -0.349, -0.175, 0.000, 0.000, -0.175,
+    0.175, 0.349, -0.175, 0.175, -0.175,
+    0.000, -0.175, -0.699, 1.398, 1.048,
+    1.048, 0.874, 0.524, 0.699,
+
+dumped node 0 output to 'output_bike_cars_street_224x224_node0_7x7x255.txt'
+dumped node 1 output to 'output_bike_cars_street_224x224_node1_14x14x255.txt'
+
 
 total inference 100 images
-time spent: 2.09 secs, FPS = 47.9
-
-detectable class count : 80
-box count : 5
-Box 0 (x1, y1, x2, y2, score, class) = 45.0, 57.0, 93.0, 196.0, 0.965018, 0
-Box 1 (x1, y1, x2, y2, score, class) = 43.0, 95.0, 100.0, 211.0, 0.465116, 1
-Box 2 (x1, y1, x2, y2, score, class) = 122.0, 68.0, 218.0, 185.0, 0.997959, 2
-Box 3 (x1, y1, x2, y2, score, class) = 87.0, 84.0, 131.0, 118.0, 0.499075, 2
-Box 4 (x1, y1, x2, y2, score, class) = 28.0, 77.0, 55.0, 100.0, 0.367952, 2
-
-output bounding boxes on 'output_bike_cars_street_224x224.bmp'
+time spent: 2.00 secs, FPS = 50.0
 ```
 
 
@@ -643,7 +660,7 @@ After all debug data have been retrieved, `kp_dbg_receive_checkpoint_data()` wil
 Note: If you are using multiple models, `kp_dbg_receive_checkpoint_data()` may need to be called more times than the diagram shows.
 
 ```bash
-$ ./kl520_demo_customize_inf_single_model_debug.exe
+$ sudo ./kl520_demo_customize_inf_single_model_debug
 ```
 
 ```bash
@@ -667,6 +684,32 @@ img_format = 0xd (kp_image_format_t)
 inference model ID = 19
 image data (hex) = 0x 60.64.68.00.60.64.63.00.60.64 ...
 
+before-cpu data:
+inference model ID = 19
+total raw output size = 14336 bytes
+number of nodes = 1
+    node 0:
+    - width = 7
+    - height = 7
+    - channel = 128
+    - radix = 3
+    - scale = 1.667
+    - npu data layout = 16W1C8B
+raw output (hex) = 0x FF.FD.FD.FE.FF.00.15.0B.FE.FF ...
+
+after-cpu data:
+inference model ID = 19
+total raw output size = 28672 bytes
+number of nodes = 1
+    node 0:
+    - width = 14
+    - height = 14
+    - channel = 128
+    - radix = 2
+    - scale = 1.667
+    - npu data layout = 16W1C8B
+raw output (hex) = 0x FF.FF.FD.FD.FD.FD.FE.FE.FF.FF ...
+
 after-inference data:
 inference model ID = 19
 total raw output size = 85680 bytes
@@ -677,12 +720,14 @@ number of nodes = 2
     - channel = 255
     - radix = 2
     - scale = 1.472
+    - npu data layout = 16W1C8B
     node 1:
     - width = 14
     - height = 14
     - channel = 255
     - radix = 2
     - scale = 1.431
+    - npu data layout = 16W1C8B
 raw output (hex) = 0x 0A.01.00.FE.FE.FE.FA.0C.FA.FC ...
 got the end of debug loop ... OK
 receive inference result ... OK
@@ -723,8 +768,11 @@ inference loop completed.
 number of models: 1
     - model_id = 19
     - inf_count = 100
-    - avg_pre_process_ms = 1.41
+    - cpu_op_count = 1
+    - avg_pre_process_ms = 1.31
     - avg_inference_ms = 18.00
+    - avg_cpu_op_ms = 1.00
+    - avg_cpu_op_per_cpu_node_ms = 1.00
     - avg_post_process_ms = 2.00
 
 
