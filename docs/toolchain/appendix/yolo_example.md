@@ -2,7 +2,7 @@
 
 In this document, we provide a step by step example on how to utilize our tools to compile and test with a newly downloaded YOLOv3 model.
 
-> This document is writen for toolchain v0.22.0. If any description is not consistent with the latest toolchain, please refer to the main toolchain manual.
+> This document is writen for toolchain v0.25.1. If any description is not consistent with the latest toolchain, please refer to the main toolchain manual.
 
 ## Step 0: Prepare environment and data
 
@@ -107,7 +107,7 @@ To make sure the onnx model is as expected, we should check the onnx model's per
 
 ```python
 # npu (only) performance simulation
-km = ktc.ModelConfig(33, "0001", "520", onnx_model=m)
+km = ktc.ModelConfig(33, "0001", "720", onnx_model=m)
 eval_result = km.evaluate()
 print("\nNpu performance evaluation result:\n" + str(eval_result))
 ```
@@ -157,7 +157,7 @@ This file gives information about the special nodes in the ONNX. Each line shows
 >* o: output node
 >* c: cpu node
 
-We can see, under KL520, one CPU node called `up_sampling2d_1_o0_kn1` in our ONNX model.
+We can see, under KL720, one CPU node called `up_sampling2d_1_o0_kn1` in our ONNX model.
 
 ## Step 4: Check ONNX model and preprocess and postprocess are good
 
@@ -262,7 +262,7 @@ Then, perform quantization. The BIE model will be generated at `/data1/output.bi
 
 ```python
 # fix point analysis
-bie_model_path = km.analysis({"input_1_o0": img_list})
+bie_model_path = km.analysis({"input_1_o0": img_list}, platform=720)
 print("\nFix point analysis done. Save bie model to '" + str(bie_model_path) + "'")
 ```
 
@@ -273,8 +273,6 @@ After quantization, the slight drop in model accuracy is expected. We should che
 Toolchain API `ktc.kneron_inference` can help us to check. The usage of 'ktc.kneron_inference' is similar to Step 4, but there are several differences:
 
 1. The 2nd parameter is changed from onnx_file to bie_file.
-2. You need to provide the radix value, which can be obtained by `ktc.get_radix` with input images as the parameter.
-3. If the platform is not 520, you need to provide an extra parameter: `platform`, e.g. `platform=720`.
 
 ```python
 ## bie model check
@@ -283,11 +281,8 @@ input_image = Image.open('/data1/000000350003.jpg')
 # resize and normalize input data
 in_data = preprocess(input_image)
 
-# check nef radix from quantization data
-radix = ktc.get_radix(img_list)
-
 # bie inference 
-out_data = ktc.kneron_inference([in_data], bie_file=bie_model_path, input_names=["input_1_o0"], radix=radix)
+out_data = ktc.kneron_inference([in_data], bie_file=bie_model_path, input_names=["input_1_o0"], platform=720)
 
 # bie output data processing
 det_res = postprocess(out_data, [input_image.size[1], input_image.size[0]])
@@ -306,7 +301,7 @@ The result will be displayed on your terminal like this:
 
 This is slightly different from the result in Step 3: we lost one bounding box after quantization. Note that this loss is acceptable after quantization.
 
-*If you are running the example using 720 as the hardware platform, there might be one extra bounding box. This is normal. We may observe different behaviour from 520 and 720.*
+*If you are running the example using 720 as the hardware platform, there might be one extra bounding box. This is normal.*
 
 ## Step 7: Compile
 
@@ -318,7 +313,7 @@ nef_model_path = ktc.compile([km])
 print("\nCompile done. Save Nef file to '" + str(nef_model_path) + "'")
 ```
 
-You can find the NEF file under `/data1/batch_compile/models_520.nef`. `models_520.nef` is the final compiled model.
+You can find the NEF file under `/data1/batch_compile/models_720.nef`. `models_720.nef` is the final compiled model.
 
 
 ## (optional) Step 8. Check NEF model
@@ -326,8 +321,6 @@ You can find the NEF file under `/data1/batch_compile/models_520.nef`. `models_5
 Toolchain api `ktc.inference` does support NEF model inference. The usage of `ktc.kneron_inference` is similar to the steps in Step 4 and Step 6, with minor differences.
 
 1. The 2nd parameter is changed from to nef_model.
-2. You need to provide the radix value, which can be obtained by `ktc.get_radix` with input images as the parameter.
-3. If the platform is not 520, you need to provide an extra parameter: `platform`, e.g. `platform=720`.
 
 ```python
 # nef model check
@@ -336,11 +329,8 @@ input_image = Image.open('/data1/000000350003.jpg')
 # resize and normalize input data
 in_data = preprocess(input_image)
 
-# check nef radix from quantization data
-radix = ktc.get_radix(img_list)
-
 # nef inference
-out_data = ktc.kneron_inference([in_data], nef_file=nef_model_path, radix=radix)
+out_data = ktc.kneron_inference([in_data], nef_file=nef_model_path, platform=720)
 
 # nef output data processing
 det_res = postprocess(out_data, [input_image.size[1], input_image.size[0]])
@@ -361,17 +351,17 @@ The result will be displayed on your terminal like this:
 
 ## Step 9. Prepare Kneron PLUS (Don't do it in toolchain docker)
 
-To run NEF on KL520, we need help from [Kneron PLUS](http://doc.kneron.com/docs/#plus/getting_started/):
+To run NEF on KL720, we need help from [Kneron PLUS](http://doc.kneron.com/docs/#plus/getting_started/):
 
-1. Connect KL520 USB dongle to your computer
+1. Connect KL720 USB dongle to your computer
 2. Follow the instruction in document([Kneron PLUS](http://doc.kneron.com/docs/#plus/getting_started/)) to setup the environment (Note: python usage document is at "kneron_plus/python/README.md" in Kneron PLUS folder) 
 
-## Step 10. Run our yolo NEF on KL520 with Kneron PLUS
+## Step 10. Run our yolo NEF on KL720 with Kneron PLUS
 
 We leverage the provided the example code in Kneron PLUS to run our YOLO NEF.
 
-1. Replace `kneron_plus/res/models/KL520/tiny_yolo_v3/models_520.nef` with our YOLO NEF.
-2. Modify `kneron_plus/python/example/KL520DemoGenericInferencePostYolo.py` line 20. Change input image from "bike_cars_street_224x224.bmp" to "bike_cars_street_416x416.bmp"
+1. Replace `kneron_plus/res/models/KL720/tiny_yolo_v3/models_720.nef` with our YOLO NEF.
+2. Modify `kneron_plus/python/example/KL720DemoGenericInferencePostYolo.py` line 20. Change input image from "bike_cars_street_224x224.bmp" to "bike_cars_street_416x416.bmp"
 
 <div align="center">
 <img src="../../imgs/yolo_example/kplus_modify_input_img.png">
@@ -385,11 +375,11 @@ We leverage the provided the example code in Kneron PLUS to run our YOLO NEF.
 <p><span style="font-weight: bold;">Figure 3.</span> modify normalization method in example </p>
 </div>
 
-4. Run example `KL520DemoGenericInferencePostYolo.py`
+4. Run example `KL720DemoGenericInferencePostYolo.py`
 
 ```bash
     cd kneron_plus/python/example
-    python KL520DemoGenericInferencePostYolo.py
+    python KL720DemoGenericInferencePostYolo.py
 ```
 
 Then, you should see the YOLO NEF detection result is saved to "./output_bike_cars_street_416x416.bmp" :
@@ -456,7 +446,7 @@ onnx.save(m,'yolo.opt.onnx')
 
 
 # setup ktc config
-km = ktc.ModelConfig(33, "0001", "520", onnx_model=m)
+km = ktc.ModelConfig(33, "0001", "720", onnx_model=m)
 
 # npu(only) performance simulation
 eval_result = km.evaluate()
@@ -490,8 +480,7 @@ print("\nFix point analysis done. Save bie model to '" + str(bie_model_path) + "
 # bie model check
 input_image = Image.open('/data1/000000350003.jpg')
 in_data = preprocess(input_image)
-radix = ktc.get_radix(img_list)
-out_data = ktc.kneron_inference([in_data], bie_file=bie_model_path, input_names=["input_1_o0"], radix=radix, platform=520)
+out_data = ktc.kneron_inference([in_data], bie_file=bie_model_path, input_names=["input_1_o0"], platform=720)
 det_res = postprocess(out_data, [input_image.size[1], input_image.size[0]])
 print(det_res)
 
@@ -503,8 +492,7 @@ print("\nCompile done. Save Nef file to '" + str(nef_model_path) + "'")
 # nef model check
 input_image = Image.open('/data1/000000350003.jpg')
 in_data = preprocess(input_image)
-radix = ktc.get_radix(img_list)
-out_data = ktc.kneron_inference([in_data], nef_file=nef_model_path, radix=radix, platform=520)
+out_data = ktc.kneron_inference([in_data], nef_file=nef_model_path,  platform=720)
 det_res = postprocess(out_data, [input_image.size[1], input_image.size[0]])
 print(det_res)
 ```
