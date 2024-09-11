@@ -254,7 +254,7 @@ There are also other useful tools and informations:
 * [End to End Simulator](appendix/app_flow_manual.md): manual for the E2E simualtor.
 * [Hardware Performance](appendix/performance.md): common model performance table for Kneron hardwares and the supported operator list.
 * [Hardware Supported Operators](appendix/operators.md): operators supported by the hardware.
-* [How to Interpret Fixed-Point Report](appendix/interpret_report.md): manual for interpreting the fixed-point report.
+* [How to Interpret Fixed-Point Report](appendix/fx_report.md): manual for interpreting the fixed-point report.
 * [Kneronnxopt](appendix/kneronnxopt.md): manual for the a more flexible onnx optimizer tool.
 * [ONNX Converters](appendix/converters.md): manual for the script usage of our converter tools. This tool is only for ONNX opset 11/12.
 * [Quantization 1 - Introdution to Post-training Quantization](quantization/1.1_Introdution_to_Post-training_Quantization.md): introduction for the quantization.
