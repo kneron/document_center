@@ -177,11 +177,12 @@ input_images = [preprocess("/workspace/examples/mobilenetv2/images/" + image_nam
 input_mapping = {"images": input_images}
 
 # Quantization the model. `km` is the ModelConfig object defined in the previous section.
-# `fm_cut` is a optional arguments which improves the NPU efficiency but takes longer to analysis.
+# `optimize` is a optional arguments which improves the NPU efficiency but takes longer to analysis.
+# The larger the number, the more optimization is done, but the longer it takes. The default is 0.
 # For more fine-tuning arguments, please check '4. Fixed-Point Model Generation'.
 # The quantized model is saved as a bie file. The path to the bie file is returned as a string.
 # It also generates a html report with more details. Please check `/data1/kneron_flow/model_fx_report.html`
-bie_path = km.analysis(input_mapping, threads = 8, fm_cut="deep_search")
+bie_path = km.analysis(input_mapping, threads = 8, optimize=2)
 ```
 
 ### 1.5.2. Fixed-Point Model Inference

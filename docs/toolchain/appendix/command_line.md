@@ -1,10 +1,15 @@
-# Command Line Script Tools
+# Command Line Script Tools (Deprecated)
 
 ## 0. Introduction
 
 Since toolchain version v0.14.0, we introduce Python API and recommend using it for the general work flow. This document provides the usage of all the script utilities. Note that 530 only has the IP evaluator script. For other tools, please refer to the toolchain document.
 
-**Since toolchain version v0.21.0, most of the command line scripts are removed. Please use the Python API instead.**
+**Since toolchain version v0.21.0, most of the command line scripts are removed or deprecated. Please use the Python API instead.**
+
+**Since toolchain version v0.21.0, most of the command line scripts are removed or deprecated. Please use the Python API instead.**
+
+**Since toolchain version v0.21.0, most of the command line scripts are removed or deprecated. Please use the Python API instead.**
+
 
 ### 1. IP Evaluator
 

@@ -164,8 +164,10 @@ We can see, under KL720, one CPU node called `up_sampling2d_1_o0_kn1` in our ONN
 If we can get correct detection result from the ONNX and provided preprocess and postprocess functions, everything should be correct.
 
 First, we need to check the preprocess and postprocess methods. [Here](<https://github.com/qqwweee/keras-yolo3/blob/master/yolo.py>) is the relevant code.
+We need to move under the `keras_yolo3` before we start in order to import the preprocess and postprocess functions.
 
 The following is the extracted preprocess:
+
 ```python
 from yolo3.utils import letterbox_image
 
@@ -175,10 +177,14 @@ def preprocess(pil_img):
     np_data = np.array(boxed_image, dtype='float32')
 
     np_data /= 255.
+    # Insert batch dimension and transpose to match model's input.
+    np_data = np.expand_dims(np_data, 0)
+    np_data = np.transpose(np_data, (0, 3, 1, 2))
     return np_data
 ```
 
 This is the extracted postprocess:
+
 ```python
 import tensorflow as tf
 import pathlib
@@ -262,7 +268,7 @@ Then, perform quantization. The BIE model will be generated at `/data1/output.bi
 
 ```python
 # fix point analysis
-bie_model_path = km.analysis({"input_1_o0": img_list}, platform=720)
+bie_model_path = km.analysis({"input_1_o0": img_list})
 print("\nFix point analysis done. Save bie model to '" + str(bie_model_path) + "'")
 ```
 
@@ -330,7 +336,7 @@ input_image = Image.open('/data1/000000350003.jpg')
 in_data = preprocess(input_image)
 
 # nef inference
-out_data = ktc.kneron_inference([in_data], nef_file=nef_model_path, platform=720)
+out_data = ktc.kneron_inference([in_data], nef_file=nef_model_path, input_names=["input_1_o0"], platform=720)
 
 # nef output data processing
 det_res = postprocess(out_data, [input_image.size[1], input_image.size[0]])
@@ -436,6 +442,9 @@ def preprocess(pil_img):
     np_data = np.array(boxed_image, dtype='float32')
 
     np_data /= 255.
+    # Insert batch dimension and transpose to match model's input.
+    np_data = np.expand_dims(np_data, 0)
+    np_data = np.transpose(np_data, (0, 3, 1, 2))
     return np_data
 
 
@@ -466,7 +475,7 @@ for (dir_path, _, file_names) in os.walk("/data1/test_image10"):
     for f_n in file_names:
         fullpath = os.path.join(dir_path, f_n)
         print("processing image: " + fullpath)
-        
+
         image = Image.open(fullpath)
         img_data = preprocess(image)
         img_list.append(img_data)
@@ -492,7 +501,7 @@ print("\nCompile done. Save Nef file to '" + str(nef_model_path) + "'")
 # nef model check
 input_image = Image.open('/data1/000000350003.jpg')
 in_data = preprocess(input_image)
-out_data = ktc.kneron_inference([in_data], nef_file=nef_model_path,  platform=720)
+out_data = ktc.kneron_inference([in_data], nef_file=nef_model_path, input_names=["input_1_o0"],  platform=720)
 det_res = postprocess(out_data, [input_image.size[1], input_image.size[0]])
 print(det_res)
 ```
