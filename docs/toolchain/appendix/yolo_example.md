@@ -24,6 +24,12 @@ Go to our mounted folder and download a public keras based YOLOv3 model from Git
 cd /data1 && git clone https://github.com/qqwweee/keras-yolo3.git keras_yolo3
 ```
 
+Switch to the base conda environment.
+
+```bash
+conda activate base
+```
+
 Follow the model's document to save the pretrained model as an `h5` file:
 
 ```bash
@@ -194,6 +200,7 @@ from yolo3.model import yolo_eval
 
 def postprocess(inf_results, ori_image_shape):
     tensor_data = [tf.convert_to_tensor(data, dtype=tf.float32) for data in inf_results]
+    tensor_data = [tf.transpose(data, perm=[0, 2, 3, 1]) for data in tensor_data]   # expects bhwc data
 
     # get anchor info
     anchors_path = "/data1/keras_yolo3/model_data/tiny_yolo_anchors.txt"
@@ -223,7 +230,7 @@ input_image = Image.open('/data1/000000350003.jpg')
 # resize and normalize input data
 in_data = preprocess(input_image)
 
-# onnx inference 
+# onnx inference
 out_data = ktc.kneron_inference([in_data], onnx_file="/data1/yolo.opt.onnx", input_names=["input_1_o0"])
 
 # onnx output data processing
@@ -258,7 +265,7 @@ for (dir_path, _, file_names) in os.walk("/data1/test_image10"):
     for f_n in file_names:
         fullpath = os.path.join(dir_path, f_n)
         print("processing image: " + fullpath)
-        
+
         image = Image.open(fullpath)
         img_data = preprocess(image)
         img_list.append(img_data)
@@ -287,7 +294,7 @@ input_image = Image.open('/data1/000000350003.jpg')
 # resize and normalize input data
 in_data = preprocess(input_image)
 
-# bie inference 
+# bie inference
 out_data = ktc.kneron_inference([in_data], bie_file=bie_model_path, input_names=["input_1_o0"], platform=720)
 
 # bie output data processing
@@ -360,7 +367,7 @@ The result will be displayed on your terminal like this:
 To run NEF on KL720, we need help from [Kneron PLUS](http://doc.kneron.com/docs/#plus/getting_started/):
 
 1. Connect KL720 USB dongle to your computer
-2. Follow the instruction in document([Kneron PLUS](http://doc.kneron.com/docs/#plus/getting_started/)) to setup the environment (Note: python usage document is at "kneron_plus/python/README.md" in Kneron PLUS folder) 
+2. Follow the instruction in document([Kneron PLUS](http://doc.kneron.com/docs/#plus/getting_started/)) to setup the environment (Note: python usage document is at "kneron_plus/python/README.md" in Kneron PLUS folder)
 
 ## Step 10. Run our yolo NEF on KL720 with Kneron PLUS
 
@@ -415,6 +422,7 @@ from yolo3.model import yolo_eval
 
 def postprocess(inf_results, ori_image_shape):
     tensor_data = [tf.convert_to_tensor(data, dtype=tf.float32) for data in inf_results]
+    tensor_data = [tf.transpose(data, perm=[0, 2, 3, 1]) for data in tensor_data]   # expects bhwc data
 
     # get anchor info
     anchors_path = "/data1/keras_yolo3/model_data/tiny_yolo_anchors.txt"

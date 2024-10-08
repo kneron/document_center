@@ -28,6 +28,12 @@ Go to our mounted folder and download a public keras based YOLOv3 model from Git
 cd /data1 && git clone https://github.com/qqwweee/keras-yolo3.git keras_yolo3
 ```
 
+Switch to the base conda environment.
+
+```bash
+conda activate base
+```
+
 Follow the model's document to save the pretrained model as an `h5` file:
 
 ```bash
@@ -210,6 +216,9 @@ def preprocess(pil_img):
     #np_data /= 255.
     np_data -= 128
 
+    # Insert batch dimension and transpose to match model's input.
+    np_data = np.expand_dims(np_data, 0)
+    np_data = np.transpose(np_data, (0, 3, 1, 2))
     return np_data
 ```
 
@@ -224,6 +233,7 @@ from yolo3.model import yolo_eval
 
 def postprocess(inf_results, ori_image_shape):
     tensor_data = [tf.convert_to_tensor(data, dtype=tf.float32) for data in inf_results]
+    tensor_data = [tf.transpose(data, perm=[0, 2, 3, 1]) for data in tensor_data]   # expects bhwc data
 
     # get anchor info
     anchors_path = "/data1/keras_yolo3/model_data/tiny_yolo_anchors.txt"
@@ -288,7 +298,7 @@ for (dir_path, _, file_names) in os.walk("/data1/test_image10"):
     for f_n in file_names:
         fullpath = os.path.join(dir_path, f_n)
         print("processing image: " + fullpath)
-        
+
         image = Image.open(fullpath)
         img_data = preprocess(image)
         img_list.append(img_data)
@@ -322,7 +332,7 @@ in_data = preprocess(input_image)
 # check nef radix from quantization data
 radix = ktc.get_radix(img_list)
 
-# bie inference 
+# bie inference
 out_data = ktc.kneron_inference([in_data], bie_file=bie_model_path, input_names=["input_1_o0"], radix=radix, platform=530)
 
 # bie output data processing
@@ -418,6 +428,7 @@ from yolo3.model import yolo_eval
 
 def postprocess(inf_results, ori_image_shape):
     tensor_data = [tf.convert_to_tensor(data, dtype=tf.float32) for data in inf_results]
+    tensor_data = [tf.transpose(data, perm=[0, 2, 3, 1]) for data in tensor_data]   # expects bhwc data
 
     # get anchor info
     anchors_path = "/data1/keras_yolo3/model_data/tiny_yolo_anchors.txt"
@@ -448,6 +459,9 @@ def preprocess(pil_img):
     #np_data /= 255.
     np_data -= 128
 
+    # Insert batch dimension and transpose to match model's input.
+    np_data = np.expand_dims(np_data, 0)
+    np_data = np.transpose(np_data, (0, 3, 1, 2))
     return np_data
 
 
@@ -456,7 +470,7 @@ m = ktc.onnx_optimizer.keras2onnx_flow("/data1/yolo.h5", input_shape = [1,416,41
 m = ktc.onnx_optimizer.onnx2onnx_flow(m)
 
 # add pixel modify node:
-#   1. scaling 1/255 for every channel due to original normalize method, 
+#   1. scaling 1/255 for every channel due to original normalize method,
 #   2. shift 0.5 to change input range from 0~255 to -128 to 127
 ktc.onnx_optimizer.pixel_modify(m,[1/255,1/255,1/255],[0.5,0.5,0.5])
 
@@ -487,7 +501,7 @@ for (dir_path, _, file_names) in os.walk("/data1/test_image10"):
     for f_n in file_names:
         fullpath = os.path.join(dir_path, f_n)
         print("processing image: " + fullpath)
-        
+
         image = Image.open(fullpath)
         img_data = preprocess(image)
         img_list.append(img_data)
