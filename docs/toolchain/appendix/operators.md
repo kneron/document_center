@@ -104,4 +104,4 @@ Notes:
 12. 720 only supports Resize nodes which work as upsampleing. Same limitation as the Upsample.
 13. 530 and 630 only support SpaceToDepth with blocksize set to 2 or 4.
 14. 720 only supports Upsample with mode set to bilinear or nearest.
-
+15. LSTM, GRU and RNN currently are only supported in onnx opset 13 after using ONNX Converter conversion.
