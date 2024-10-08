@@ -24,6 +24,22 @@
 
 ## Toolchain Change log
 
+* **[v0.26.0]**
+  * Optimize compiler for 730 graph cutting.
+  * Supports the flash attention model.
+  * Add producer name in kneronnxopt.
+  * Fix bugs.
+* **[v0.25.1]**
+  * ktc supports non-str platform conversion.
+  * Fix kneronnxopt argument name.
+  * Update conda environment
+    * base:
+      - numpy-1.21.0
+      - pandas-1.2.0
+    * onnx1.13:
+      - numpy-1.26.4
+      - pandas-2.2.2
+  * Fix bugs.
 * **[v0.25.0]**
     * **IP evaluator add arguments `weight_bandwidth` and `dma_bandwidth`.**
     * 730 toolchain full upgrade.
