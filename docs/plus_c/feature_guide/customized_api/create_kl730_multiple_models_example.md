@@ -84,9 +84,9 @@
     */
     typedef struct
     {
-        float pd_class_socre;   /**< a pedestrian classification score */
+        float pd_class_score;   /**< a pedestrian classification score */
         kp_bounding_box_t pd;   /**< a pedestrian box information */
-    } __attribute__((aligned(4))) one_pd_classification_result_t;
+    } __attribute__((aligned(4))) my_KL730_my_KL730_one_pd_classification_result_t;
 
     /**
     * @brief describe a pedestrian detect classification output result
@@ -94,8 +94,8 @@
     typedef struct
     {
         uint32_t box_count;                                     /**< boxes of all classes */
-        one_pd_classification_result_t pds[PD_BOX_MAX];         /**< pedestrian detect information */
-    } __attribute__((aligned(4))) pd_classification_result_t;
+        my_KL730_one_pd_classification_result_t pds[PD_BOX_MAX];         /**< pedestrian detect information */
+    } __attribute__((aligned(4))) my_KL730_pd_classification_result_t;
 
     typedef struct
     {
@@ -110,7 +110,7 @@
     {
         /* header stamp is necessary for data transfer between host and device */
         kp_inference_header_stamp_t header_stamp;
-        pd_classification_result_t pd_classification_result;
+        my_KL730_pd_classification_result_t pd_classification_result;
     } __attribute__((aligned(4))) my_KL730_mul_example_result_t;
 
     ```
@@ -217,7 +217,7 @@
         /******* prepare input and output header/buffers *******/
         my_KL730_mul_example_header_t input_header;
         my_KL730_mul_example_result_t output_result;
-        pd_classification_result_t* pd_classification_result = &output_result.pd_classification_result;
+        my_KL730_pd_classification_result_t* pd_classification_result = &output_result.pd_classification_result;
 
         input_header.header_stamp.job_id = MY_KL730_MUL_EXAMPLE_JOB_ID;
         input_header.header_stamp.total_image = 1;
@@ -286,7 +286,6 @@
 
     ```cpp
     #include "kp_struct.h"
-    #include "model_res.h"
 
     #define MY_KL730_MUL_EXAMPLE_JOB_ID 4003
     #define PD_BOX_MAX                  80
@@ -296,18 +295,18 @@
     */
     typedef struct
     {
-        float pd_class_socre;   /**< a pedestrian classification score */
+        float pd_class_score;   /**< a pedestrian classification score */
         kp_bounding_box_t pd;   /**< a pedestrian box information */
-    } __attribute__((aligned(4))) one_pd_classification_result_t;
+    } __attribute__((aligned(4))) my_KL730_one_pd_classification_result_t;
 
     /**
     * @brief describe a pedestrian detect classification output result
     */
     typedef struct
     {
-        uint32_t box_count;                                     /**< boxes of all classes */
-        one_pd_classification_result_t pds[DME_OBJECT_MAX];     /**< pedestrian detect information */
-    } __attribute__((aligned(4))) pd_classification_result_t;
+        uint32_t box_count;                                         /**< boxes of all classes */
+        my_KL730_one_pd_classification_result_t pds[PD_BOX_MAX];    /**< pedestrian detect information */
+    } __attribute__((aligned(4))) my_KL730_pd_classification_result_t;
 
     typedef struct
     {
@@ -322,10 +321,11 @@
     {
         /* header stamp is necessary for data transfer between host and device */
         kp_inference_header_stamp_t header_stamp;
-        pd_classification_result_t pd_classification_result;
+        my_KL730_pd_classification_result_t pd_classification_result;
     } __attribute__((aligned(4))) my_KL730_mul_example_result_t;
 
     void my_KL730_mul_example_inf(int job_id, int num_input_buf, void **inf_input_buf_list);
+    void my_KL730_mul_example_inf_deinit();
     ```
 
 3. Add *my_KL730_mul_example_inf.c*
@@ -363,13 +363,14 @@
     #include "model_type.h"
     #include "vmf_nnm_inference_app.h"
     #include "vmf_nnm_fifoq_manager.h"
-    #include "demo_customize_inf_multiple_models.h"
-    #include "vmf_nnm_post_proc.h"
-    #include "vmf_nnm_pre_post_proc_params.h"
+    #include "my_KL730_mul_example_inf.h"
+    #include "user_post_process_classifier.h"
+    #include "user_post_process_yolov5.h"
 
     // for pedestrian detection result, should be in DDR
-    static struct yolo_result_s *_yolo_pd_result = NULL;
-    static struct classifier_result_s *_classifier_result = NULL;
+    static bool is_init                                         = false;
+    static struct ex_object_detection_result_s *yolo_pd_result  = NULL;
+    static struct ex_classifier_top_n_result_s *imagenet_result = NULL;
 
     /**
      * @brief describe class labels of pedestrian detection results.
@@ -385,40 +386,58 @@
         KP_APP_PD_CLASS_DOG         = 7
     } kp_app_pd_class_t;
 
-    static VMF_NNM_PRE_POST_PROC_PARAMS_YOLO_t post_proc_params_v5s = {
-        .prob_thresh = 0.3,
-        .nms_thresh = 0.65,
-        .max_detection_per_class = 20,
-        .anchor_row = 3,
-        .anchor_col = 6,
-        .stride_size = 3,
-        .reserved_size = 0,
-        .data = {
-            // anchors[3][6]
-            10, 13, 16, 30, 33, 23,
-            30, 61, 62, 45, 59, 119,
-            116, 90, 156, 198, 373, 326,
-            // strides[3]
-            8, 16, 32,
-        },
+    static ex_yolo_post_proc_config_t post_proc_params_v5s_480_256_3 = {
+        .prob_thresh                = 0.3,
+        .nms_thresh                 = 0.65,
+        .max_detection              = 20,
+        .max_detection_per_class    = PD_BOX_MAX,
+        .nms_mode                   = EX_NMS_MODE_SINGLE_CLASS,
+        .anchor_layer_num           = 3,
+        .anchor_cell_num_per_layer  = 3,
+        .data                       = {{{10, 13}, {16, 30}, {33, 23}},
+                                       {{30, 61}, {62, 45}, {59, 119}},
+                                       {{116, 90}, {156, 198}, {373, 326}},
+                                       {{0, 0}, {0, 0}, {0, 0}},
+                                       {{0, 0}, {0, 0}, {0, 0}}},
     };
 
     static bool init_temp_buffer()
     {
-        // allocate DDR memory for ncpu/npu output restult
-        _yolo_pd_result = (struct yolo_result_s *)calloc(1, sizeof(struct yolo_result_s));
-        if (NULL == _yolo_pd_result)
-            return false;
+        if (false == is_init) {
+            /* allocate DDR memory for ncpu/npu output result */
+            yolo_pd_result = (struct ex_object_detection_result_s *)malloc(sizeof(struct ex_object_detection_result_s));
+            if (NULL == yolo_pd_result)
+                return false;
 
-        _classifier_result = (struct classifier_result_s *)calloc(1, sizeof(struct classifier_result_s));
-        if (NULL == _classifier_result)
-            return false;
+            imagenet_result = (struct ex_classifier_top_n_result_s *)malloc(sizeof(struct ex_classifier_top_n_result_s));
+            if (NULL == imagenet_result)
+                return false;
+
+            is_init = true;
+        }
+
+        return true;
+    }
+
+    static bool deinit_temp_buffer()
+    {
+        if(is_init == true)
+        {
+            // free DDR memory for ncpu/npu output restult
+            if(NULL != yolo_pd_result)
+                free(yolo_pd_result);
+
+            if(NULL != imagenet_result)
+                free(imagenet_result);
+
+            is_init = false;
+        }
 
         return true;
     }
 
     static int inference_pedestrian_detection(my_KL730_mul_example_header_t *_input_header,
-                                              struct yolo_result_s *_pd_result /* output */)
+                                              struct ex_object_detection_result_s *_pd_result /* output */)
     {
         // config image preprocessing and model settings
         VMF_NNM_INFERENCE_APP_CONFIG_T inf_config;
@@ -426,7 +445,7 @@
 
         // image buffer address should be just after the header
         inf_config.num_image = 1;
-        inf_config.image_list[0].image_buf = (void *)((uint32_t)_input_header + sizeof(my_KL730_mul_example_header_t));
+        inf_config.image_list[0].image_buf = (void *)((uintptr_t)_input_header + sizeof(my_KL730_mul_example_header_t));
         inf_config.image_list[0].image_width = _input_header->width;
         inf_config.image_list[0].image_height = _input_header->height;
         inf_config.image_list[0].image_channel = 3;                                                 // assume RGB565
@@ -435,8 +454,11 @@
         inf_config.image_list[0].image_resize = KP_RESIZE_ENABLE;                                   // default: enable resize
         inf_config.image_list[0].image_padding = KP_PADDING_CORNER;                                 // default: enable padding on corner
         inf_config.model_id = KNERON_YOLOV5S_PersonBicycleCarMotorcycleBusTruckCatDog8_256_480_3;   // this depends on model
-        inf_config.user_define_data = (void *)&post_proc_params_v5s;                                // yolo post-process configurations for yolo v5 series
-        inf_config.post_proc_func = VMF_NNM_Post_Proc_Yolov5_No_Sigmoid;
+
+        // setting pre/post-proc configuration
+        inf_config.pre_proc_config              = NULL;
+        inf_config.post_proc_config             = (void *)&post_proc_params_v5s_480_256_3;                              // yolo post-process configurations for yolo v5 series
+        inf_config.post_proc_func               = user_post_yolov5_no_sigmoid;
 
         // set up fd result output buffer for ncpu/npu
         inf_config.ncpu_result_buf = (void *)_pd_result;
@@ -445,8 +467,8 @@
     }
 
     static int inference_pedestrian_classification(my_KL730_mul_example_header_t *_input_header,
-                                                   struct bounding_box_s *_box,
-                                                   struct classifier_result_s * _imagenet_result/* output */)
+                                                   struct ex_bounding_box_s *_box,
+                                                   struct ex_classifier_top_n_result_s * _imagenet_result/* output */)
     {
         // config image preprocessing and model settings
         VMF_NNM_INFERENCE_APP_CONFIG_T inf_config;
@@ -459,7 +481,7 @@
 
         // image buffer address should be just after the header
         inf_config.num_image = 1;
-        inf_config.image_list[0].image_buf = (void *)((uint32_t)_input_header + sizeof(my_KL730_mul_example_header_t));
+        inf_config.image_list[0].image_buf = (void *)((uintptr_t)_input_header + sizeof(my_KL730_mul_example_header_t));
         inf_config.image_list[0].image_width = _input_header->width;
         inf_config.image_list[0].image_height = _input_header->height;
         inf_config.image_list[0].image_channel = 3;                         // assume RGB565
@@ -477,10 +499,14 @@
         inf_config.image_list[0].crop_area.height = bottom - top;
 
         inf_config.model_id = KNERON_PERSONCLASSIFIER_MB_56_48_3;           // this depends on model
-        inf_config.post_proc_func = VMF_NNM_Post_Proc_Classifier;
+
+        // setting pre/post-proc configuration
+        inf_config.pre_proc_config = NULL;
+        inf_config.post_proc_config = NULL;
+        inf_config.post_proc_func = user_post_classifier_top_n;
 
         // set up fd result output buffer for ncpu/npu
-        inf_config.ncpu_result_buf = (void *)_classifier_result;
+        inf_config.ncpu_result_buf = (void *)_imagenet_result;
 
         return VMF_NNM_Inference_App_Execute(&inf_config);
     }
@@ -494,8 +520,8 @@
 
         int inf_status;
         int result_buf_size;
-        uint32_t inf_result_buf;
-        uint32_t inf_result_phy_addr;
+        uintptr_t inf_result_buf;
+        uintptr_t inf_result_phy_addr;
 
         /******* Prepare the memory space of result *******/
 
@@ -516,22 +542,16 @@
 
         /******* Prepare the temporary memory space for the result of middle model *******/
 
-        static bool is_init = false;
-
-        if (!is_init) {
-            int status = init_temp_buffer();
-            if (!status) {
-                // notify host error !
-                output_result->header_stamp.status_code = KP_FW_DDR_MALLOC_FAILED_102;
-                VMF_NNM_Fifoq_Manager_Result_Enqueue(inf_result_buf, inf_result_phy_addr, result_buf_size, -1, false);
-                return;
-            }
-
-            is_init = true;
+        int status = init_temp_buffer();
+        if (!status) {
+            // notify host error !
+            output_result->header_stamp.status_code = KP_FW_DDR_MALLOC_FAILED_102;
+            VMF_NNM_Fifoq_Manager_Result_Enqueue(inf_result_buf, inf_result_phy_addr, result_buf_size, -1, false);
+            return;
         }
 
         /******* Run face detect model *******/
-        inf_status = inference_pedestrian_detection(input_header, _yolo_pd_result);
+        inf_status = inference_pedestrian_detection(input_header, yolo_pd_result);
         if (inf_status != KP_SUCCESS) {
             // notify host error !
             output_result->header_stamp.status_code = inf_status;
@@ -540,15 +560,15 @@
         }
 
         int box_count = 0;
-        int max_box_count = (pd_result->box_count > PD_BOX_MAX) ? PD_BOX_MAX : _yolo_pd_result->box_count;
-        pd_classification_result_t *pd_result = &output_result->pd_classification_result;
+        my_KL730_pd_classification_result_t *pd_result = &output_result->pd_classification_result;
+        int max_box_count = (pd_result->box_count > PD_BOX_MAX) ? PD_BOX_MAX : yolo_pd_result->box_count;
 
         for (int i = 0; i < max_box_count; i++) {
-            struct bounding_box_s *box = &_yolo_pd_result->boxes[i];
+            struct ex_bounding_box_s *box = &yolo_pd_result->boxes[i];
 
             if (KP_APP_PD_CLASS_PERSON == box->class_num) {
                 // do face landmark for each faces
-                inf_status = inference_pedestrian_classification(input_header, box, _classifier_result);
+                inf_status = inference_pedestrian_classification(input_header, box, imagenet_result);
 
                 if (KP_SUCCESS != inf_status) {
                     // notify host error !
@@ -558,7 +578,10 @@
                 }
 
                 // pedestrian_imagenet_classification result (class 0 : background, class 1: person)
-                pd_result->pds[box_count].pd_class_score = _classifier_result->score[1];
+                if (1 == imagenet_result->top_n_results[0].class_num)
+                    pd_result->pds[box_count].pd_class_score = imagenet_result->top_n_results[0].score;
+                else
+                    pd_result->pds[box_count].pd_class_score = imagenet_result->top_n_results[1].score;
             }
             else{
                 pd_result->pds[box_count].pd_class_score = 0;
@@ -571,10 +594,15 @@
         pd_result->box_count = box_count;
 
         output_result->header_stamp.status_code = KP_SUCCESS;
-        output_result->header_stamp.total_size = sizeof(my_KL730_mul_example_result_t) - sizeof(pd_classification_result_t) +
-                                                 sizeof(pd_result->box_count) + (box_count * sizeof(one_pd_classification_result_t));
+        output_result->header_stamp.total_size = sizeof(my_KL730_mul_example_result_t) - sizeof(my_KL730_pd_classification_result_t) +
+                                                 sizeof(pd_result->box_count) + (box_count * sizeof(my_KL730_one_pd_classification_result_t));
         // send output result buffer back to host SW
         VMF_NNM_Fifoq_Manager_Result_Enqueue(inf_result_buf, inf_result_phy_addr, result_buf_size, -1, false);
+    }
+
+    void my_KL730_mul_example_inf_deinit()
+    {
+        deinit_temp_buffer();
     }
     ```
 
@@ -664,6 +692,36 @@
         }
     }
 
+    static void _app_func_deinit(unsigned int job_id);
+
+    void _app_func_deinit(unsigned int job_id)
+    {
+        switch (job_id)
+        {
+        case KDP2_INF_ID_APP_YOLO:
+            kdp2_app_yolo_inference_deinit();
+            break;
+        case DEMO_KL730_CUSTOMIZE_INF_SINGLE_MODEL_JOB_ID:
+            demo_customize_inf_single_model_deinit();
+            break;
+        case DEMO_KL730_CUSTOMIZE_INF_MULTIPLE_MODEL_JOB_ID:
+            demo_customize_inf_multiple_model_deinit();
+            break;
+        /* ======================================== */
+        /*              Add Line Begin              */
+        /* ======================================== */
+        case MY_KL730_MUL_EXAMPLE_JOB_ID:
+            my_KL730_mul_example_inf_deinit();
+            break;
+        /* ======================================== */
+        /*               Add Line End               */
+        /* ======================================== */
+        default:
+            printf("%s, unsupported job_id %d \n", __func__, job_id);
+            break;
+        }
+    }
+
     void app_initialize(void)
     {
         printf(">> Start running KL730 KDP2 companion mode ...\n");
@@ -679,6 +737,17 @@
 
     void app_destroy(void)
     {
+        _app_func_deinit(KDP2_INF_ID_APP_YOLO);
+        _app_func_deinit(DEMO_KL730_CUSTOMIZE_INF_SINGLE_MODEL_JOB_ID);
+        _app_func_deinit(DEMO_KL730_CUSTOMIZE_INF_MULTIPLE_MODEL_JOB_ID);
+        /* ======================================== */
+        /*              Add Line Begin              */
+        /* ======================================== */
+        _app_func_deinit(MY_KL730_MUL_EXAMPLE_JOB_ID);
+        /* ======================================== */
+        /*               Add Line End               */
+        /* ======================================== */
+
         VMF_NNM_Inference_App_Destroy();
         VMF_NNM_Fifoq_Manager_Destroy();
     }

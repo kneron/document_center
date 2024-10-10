@@ -1,6 +1,6 @@
-## Compatible with Kneron PLUS 2  
+## Compatible with Kneron PLUS 3  
 
-The Kneron PLUS 2 provides `kp.v1` for temporary backward compatibility with V1.x APIs. The legacy code can be easily migrated to Kneron PLUS 2 by **kp.v1** module.  
+The Kneron PLUS 3 provides `kp.v1` for temporary backward compatibility with V1.x APIs. The legacy code can be easily migrated to Kneron PLUS 3 by **kp.v1** module.  
 
 For example, the V1.x basic include header can be rewritten like the following code block. (For more examples, please reference sample code in kneron_plus/python/example_legacy)  
 
@@ -35,7 +35,7 @@ For example, the V1.x basic include header can be rewritten like the following c
     ...
     ```
 
-- V2
+- V2 and V3
 
     ```c
     ...
@@ -55,9 +55,9 @@ For example, the V1.x basic include header can be rewritten like the following c
     starting inference work
     """
     kp.v1.inference.generic_raw_inference_send(device_group=device_group,
-                                              generic_raw_image_header=generic_raw_image_header,
-                                              image=img_bgr565,
-                                              image_format=kp.ImageFormat.KP_IMAGE_FORMAT_RGB565)
+                                               generic_raw_image_header=generic_raw_image_header,
+                                               image=img_bgr565,
+                                               image_format=kp.ImageFormat.KP_IMAGE_FORMAT_RGB565)
 
     generic_raw_result = kp.v1.inference.generic_raw_inference_receive(device_group=device_group,
                                                                        generic_raw_image_header=generic_raw_image_header,

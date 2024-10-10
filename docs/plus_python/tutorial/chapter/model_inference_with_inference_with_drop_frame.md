@@ -76,9 +76,13 @@ This tutorial shows how to inference model with drop frame configuration
 
     '''
     [{
-        "width": 7,
-        "height": 7,
-        "channel": 255,
+        "name": "",
+        "shape": [
+            1,
+            255,
+            7,
+            7
+        ],
         "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
         "num_data": 12495,
         "ndarray": [
@@ -97,9 +101,13 @@ This tutorial shows how to inference model with drop frame configuration
             "     -8.153462    -8.49319   ]]]]"
         ]
     }, {
-        "width": 14,
-        "height": 14,
-        "channel": 255,
+        "name": "",
+        "shape": [
+            1,
+            255,
+            14,
+            14
+        ],
         "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
         "num_data": 49980,
         "ndarray": [
@@ -123,9 +131,8 @@ This tutorial shows how to inference model with drop frame configuration
 
     Above shows `kp.InferenceFloatNodeOutput` results, a brief description listed below.
 
-    - **width** : Width of output node.
-    - **height** : Height of output node.
-    - **channel** : Channel of output node.
-    - **channels_ordering** : Channel ordering of feature map. (Options: KP_CHANNEL_ORDERING_HCW, KP_CHANNEL_ORDERING_CHW)
+    - **name** : Name of the tensor.
+    - **shape** : ONNX shape of the tensor.
     - **num_data** : Total number of floating-point values.
     - **ndarray** : N-dimensional numpy.ndarray of feature map.
+    - **channels_ordering** : Channel ordering of feature map. (Options: KP_CHANNEL_ORDERING_HCW, KP_CHANNEL_ORDERING_CHW, KP_CHANNEL_ORDERING_DEFAULT)

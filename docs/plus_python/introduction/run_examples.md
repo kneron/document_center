@@ -154,7 +154,7 @@ The `GenericCommand.py` is an example for showing you how to use few system API:
 
     ```bash
     $ python3 GenericCommand.py --target KL520 --port 33 --cmd system
-    
+
     [Check Device]
     - success
     [Connect Device]
@@ -177,7 +177,7 @@ The `GenericCommand.py` is an example for showing you how to use few system API:
 
     ```bash
     $ python3 GenericCommand.py --target KL520 --port 33 --cmd model
-    
+
     [Check Device]
     - success
     [Connect Device]
@@ -208,19 +208,42 @@ The `GenericCommand.py` is an example for showing you how to use few system API:
                     "0": {
                         "index": 0,
                         "name": "",
-                        "shape_npu": [
-                            1,
-                            3,
-                            224,
-                            224
-                        ],
-                        "shape_onnx": [],
                         "data_layout": "ModelTensorDataLayout.KP_MODEL_TENSOR_DATA_LAYOUT_4W4C8B",
+                        "tensor_shape_info": {
+                            "version": "ModelTensorShapeInformationVersion.KP_MODEL_TENSOR_SHAPE_INFO_VERSION_1",
+                            "data": {
+                                "shape_npu": [
+                                    1,
+                                    3,
+                                    224,
+                                    224
+                                ],
+                                "shape_onnx": [
+                                    1,
+                                    3,
+                                    224,
+                                    224
+                                ],
+                                "axis_permutation_onnx_to_npu": [
+                                    0,
+                                    1,
+                                    2,
+                                    3
+                                ]
+                            }
+                        },
                         "quantization_parameters": {
-                            "quantized_fixed_point_descriptor_list": {
-                                "0": {
-                                    "scale": 1.0,
-                                    "radix": 8
+                            "version": "QuantizationParametersVersion.KP_MODEL_QUANTIZATION_PARAMS_VERSION_1",
+                            "data": {
+                                "quantized_axis": 1,
+                                "quantized_fixed_point_descriptor_list": {
+                                    "0": {
+                                        "scale": {
+                                            "dtype": "DataType.KP_DTYPE_FLOAT32",
+                                            "value": 1.0
+                                        },
+                                        "radix": 8
+                                    }
                                 }
                             }
                         }
@@ -230,19 +253,42 @@ The `GenericCommand.py` is an example for showing you how to use few system API:
                     "0": {
                         "index": 0,
                         "name": "",
-                        "shape_npu": [
-                            1,
-                            255,
-                            7,
-                            7
-                        ],
-                        "shape_onnx": [],
                         "data_layout": "ModelTensorDataLayout.KP_MODEL_TENSOR_DATA_LAYOUT_16W1C8B",
+                        "tensor_shape_info": {
+                            "version": "ModelTensorShapeInformationVersion.KP_MODEL_TENSOR_SHAPE_INFO_VERSION_1",
+                            "data": {
+                                "shape_npu": [
+                                    1,
+                                    255,
+                                    7,
+                                    7
+                                ],
+                                "shape_onnx": [
+                                    1,
+                                    255,
+                                    7,
+                                    7
+                                ],
+                                "axis_permutation_onnx_to_npu": [
+                                    0,
+                                    1,
+                                    2,
+                                    3
+                                ]
+                            }
+                        },
                         "quantization_parameters": {
-                            "quantized_fixed_point_descriptor_list": {
-                                "0": {
-                                    "scale": 1.4717674255371094,
-                                    "radix": 2
+                            "version": "QuantizationParametersVersion.KP_MODEL_QUANTIZATION_PARAMS_VERSION_1",
+                            "data": {
+                                "quantized_axis": 1,
+                                "quantized_fixed_point_descriptor_list": {
+                                    "0": {
+                                        "scale": {
+                                            "dtype": "DataType.KP_DTYPE_FLOAT32",
+                                            "value": 1.4717674255371094
+                                        },
+                                        "radix": 2
+                                    }
                                 }
                             }
                         }
@@ -250,19 +296,42 @@ The `GenericCommand.py` is an example for showing you how to use few system API:
                     "1": {
                         "index": 1,
                         "name": "",
-                        "shape_npu": [
-                            1,
-                            255,
-                            14,
-                            14
-                        ],
-                        "shape_onnx": [],
                         "data_layout": "ModelTensorDataLayout.KP_MODEL_TENSOR_DATA_LAYOUT_16W1C8B",
+                        "tensor_shape_info": {
+                            "version": "ModelTensorShapeInformationVersion.KP_MODEL_TENSOR_SHAPE_INFO_VERSION_1",
+                            "data": {
+                                "shape_npu": [
+                                    1,
+                                    255,
+                                    14,
+                                    14
+                                ],
+                                "shape_onnx": [
+                                    1,
+                                    255,
+                                    14,
+                                    14
+                                ],
+                                "axis_permutation_onnx_to_npu": [
+                                    0,
+                                    1,
+                                    2,
+                                    3
+                                ]
+                            }
+                        },
                         "quantization_parameters": {
-                            "quantized_fixed_point_descriptor_list": {
-                                "0": {
-                                    "scale": 1.4307060241699219,
-                                    "radix": 2
+                            "version": "QuantizationParametersVersion.KP_MODEL_QUANTIZATION_PARAMS_VERSION_1",
+                            "data": {
+                                "quantized_axis": 1,
+                                "quantized_fixed_point_descriptor_list": {
+                                    "0": {
+                                        "scale": {
+                                            "dtype": "DataType.KP_DTYPE_FLOAT32",
+                                            "value": 1.4307060241699219
+                                        },
+                                        "radix": 2
+                                    }
                                 }
                             }
                         }
@@ -274,7 +343,7 @@ The `GenericCommand.py` is an example for showing you how to use few system API:
                 "setup_file_schema_version": {
                     "version": "0.0.0"
                 },
-                "max_raw_out_size": 86076
+                "max_raw_out_size": 86180
             }
         }
     }
@@ -352,11 +421,11 @@ The main difference between **Generic Inference** and **Customized Inference** i
 
 Below will demonstrate only usage in two examples for **Generic Image inference** and **Generic Data inference**. For **Customized inference (C Language Only)**, please refer the [**C language documents**](../../plus_c/feature_guide/customized_api/introduction.md).
 
-### 5.1 Generic Inference Example  
+### 5.1 Generic Inference Example
 
-**Generic Inference** includes two sets of APIs, **Generic Image Inference API** and **Generic Data Inference API**.  
+**Generic Inference** includes two sets of APIs, **Generic Image Inference API** and **Generic Data Inference API**.
 
-For the detail introduction, please refer the documents in [Generic Inference](./../feature_guide/chapter/generic_inference.md).  
+For the detail introduction, please refer the documents in [Generic Inference](./../feature_guide/chapter/generic_inference.md).
 
 ---
 
@@ -391,46 +460,54 @@ $ python3 KL520DemoGenericInferenceMultiThread.py
  - Success
 [Result]
 [{
-    "width": 7,
-    "height": 7,
-    "channel": 255,
+    "name": "",
+    "shape": [
+        1,
+        255,
+        7,
+        7
+    ],
     "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
     "num_data": 12495,
     "ndarray": [
-        "[[[[  1.3589103    0.33972758   0.50959134 ...   0.16986379",
+        "[[[[  1.3589103    0.33972758   0.5095914  ...   0.16986379",
         "      0.33972758  -0.849319  ]",
-        "   [  1.698638    -0.50959134   0.50959134 ...  -0.16986379",
+        "   [  1.698638    -0.5095914    0.5095914  ...  -0.16986379",
         "     -0.16986379  -0.849319  ]",
-        "   [  1.5287741    0.50959134   0.16986379 ...   0.",
-        "     -0.33972758  -0.50959134]",
+        "   [  1.5287741    0.5095914    0.16986379 ...   0.",
+        "     -0.33972758  -0.5095914 ]",
         "  ...",
-        "   [ -7.6438704   -9.682236   -10.361691   ...  -9.002781",
+        "   [ -7.643871    -9.682237   -10.361691   ...  -9.002781",
         "    -10.021964    -9.172645  ]",
-        "   [ -7.304143   -10.701419   -12.400057   ...  -9.682236",
-        "     -9.682236    -9.002781  ]",
-        "   [ -6.1150966   -8.153461    -9.342508   ...  -7.983598",
-        "     -8.153461    -8.49319   ]]]]"
+        "   [ -7.304143   -10.701419   -12.400057   ...  -9.682237",
+        "     -9.682237    -9.002781  ]",
+        "   [ -6.1150966   -8.153462    -9.342508   ...  -7.983598",
+        "     -8.153462    -8.49319   ]]]]"
     ]
 }, {
-    "width": 14,
-    "height": 14,
-    "channel": 255,
+    "name": "",
+    "shape": [
+        1,
+        255,
+        14,
+        14
+    ],
     "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
     "num_data": 49980,
     "ndarray": [
-        "[[[[  0.8736945  -0.3494778  -0.1747389 ...   0.         -0.1747389",
-        "     -0.6989556]",
-        "   [  0.6989556  -0.8736945  -0.6989556 ...  -0.5242167  -0.1747389",
-        "     -0.5242167]",
-        "   [  0.5242167  -0.8736945  -0.6989556 ...  -0.1747389   0.1747389",
-        "     -0.8736945]",
+        "[[[[  0.87369454  -0.3494778   -0.1747389  ...   0.",
+        "     -0.1747389   -0.6989556 ]",
+        "   [  0.6989556   -0.87369454  -0.6989556  ...  -0.5242167",
+        "     -0.1747389   -0.5242167 ]",
+        "   [  0.5242167   -0.87369454  -0.6989556  ...  -0.1747389",
+        "      0.1747389   -0.87369454]",
         "  ...",
-        "   [-11.18329   -15.377023  -18.172846  ... -13.105417  -12.581201",
-        "    -10.833812 ]",
-        "   [-10.134856  -14.153851  -16.774935  ... -10.659073   -9.61064",
-        "     -8.387467 ]",
-        "   [ -9.086423  -12.231723  -12.930678  ... -10.134856   -9.261162",
-        "     -7.3390336]]]]"
+        "   [-11.18329    -15.377024   -18.172846   ... -13.105417",
+        "    -12.581201   -10.833812  ]",
+        "   [-10.134856   -14.1538515  -16.774935   ... -10.659073",
+        "     -9.61064     -8.387467  ]",
+        "   [ -9.086423   -12.231723   -12.930678   ... -10.134856",
+        "     -9.261162    -7.339034  ]]]]"
     ]
 }]
 ```
@@ -515,9 +592,13 @@ $ python3 KL520DemoGenericImageInferenceFifoqConfig.py
  - Success
 [Result]
 [{
-    "width": 7,
-    "height": 7,
-    "channel": 255,
+    "name": "",
+    "shape": [
+        1,
+        255,
+        7,
+        7
+    ],
     "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
     "num_data": 12495,
     "ndarray": [
@@ -536,9 +617,13 @@ $ python3 KL520DemoGenericImageInferenceFifoqConfig.py
         "     -8.153462    -8.49319   ]]]]"
     ]
 }, {
-    "width": 14,
-    "height": 14,
-    "channel": 255,
+    "name": "",
+    "shape": [
+        1,
+        255,
+        14,
+        14
+    ],
     "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
     "num_data": 49980,
     "ndarray": [

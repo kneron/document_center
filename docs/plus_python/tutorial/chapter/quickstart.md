@@ -128,9 +128,13 @@ model_nef_descriptor = kp.core.load_model_from_file(device_group=device_group,
 
     '''
     [{
-        "width": 7,
-        "height": 7,
-        "channel": 255,
+        "name": "",
+        "shape": [
+            1,
+            255,
+            7,
+            7
+        ],
         "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
         "num_data": 12495,
         "ndarray": [
@@ -149,9 +153,13 @@ model_nef_descriptor = kp.core.load_model_from_file(device_group=device_group,
             "     -8.153462    -8.49319   ]]]]"
         ]
     }, {
-        "width": 14,
-        "height": 14,
-        "channel": 255,
+        "name": "",
+        "shape": [
+            1,
+            255,
+            14,
+            14
+        ],
         "channels_ordering": "ChannelOrdering.KP_CHANNEL_ORDERING_CHW",
         "num_data": 49980,
         "ndarray": [

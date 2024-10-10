@@ -12,6 +12,6 @@ The following sections describe the significant features provide in Kneron PLUS:
 - [Introduction](../introduction/index.md)
 - [Tutorial](../tutorial/index.md)
 - [Kneron ModelZoo](../modelzoo/index.md)
-- [Migrate to Kneron PLUS 2](../api_migration/index.md)
+- [Migrate to Kneron PLUS 3](../api_migration/index.md)
 - [API Document](http://doc.kneron.com/docs/#plus_python/api_document/)
 - [Appendix](../../plus_c/appendix/index.md)

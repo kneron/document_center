@@ -1,21 +1,21 @@
-## Kneron PLUS 1.X and Kneron PLUS 2 APIs Mapping Table
+## Kneron PLUS 1.X, Kneron PLUS 2.X and Kneron PLUS 3 APIs Mapping Table
 
 ---
 
-## For Migrate to Kneron PLUS 2
+## For Migrate to Kneron PLUS 3
 
 ### Inference API  
 
-| Inference Data Type | Kneron PLUS 1.x (kp)                                               | Kneron PLUS 2 (kp)                                                    |
-| ------------------- | ------------------------------------------------------------------ | --------------------------------------------------------------------- |
-| Image               | kp.inference.generic\_raw\_inference\_send()                       | kp.inference.generic\_image\_inference\_send()                        |
-| Image               | kp.inference.generic\_raw\_inference\_receive()                    | kp.inference.generic\_image\_inference\_receive()                     |
-| Raw Data            | kp.inference.generic\_raw\_inference\_bypass\_pre\_proc\_send()    | kp.inference.generic\_data\_inference\_send()                         |
-| Raw Data            | kp.inference.generic\_raw\_inference\_bypass\_pre\_proc\_receive() | kp.inference.generic\_data\_inference\_receive()                      |  
+| Inference Data Type | Kneron PLUS 1.x (kp)                                               | Kneron PLUS 2 and Kneron PLUS 3 (kp)              |
+|---------------------|--------------------------------------------------------------------|---------------------------------------------------|
+| Image               | kp.inference.generic\_raw\_inference\_send()                       | kp.inference.generic\_image\_inference\_send()    |
+| Image               | kp.inference.generic\_raw\_inference\_receive()                    | kp.inference.generic\_image\_inference\_receive() |
+| Raw Data            | kp.inference.generic\_raw\_inference\_bypass\_pre\_proc\_send()    | kp.inference.generic\_data\_inference\_send()     |
+| Raw Data            | kp.inference.generic\_raw\_inference\_bypass\_pre\_proc\_receive() | kp.inference.generic\_data\_inference\_receive()  |  
 
 ### Inference Object  
 
-| Inference Data Type | Kneron PLUS 1.x (kp)                   | Kneron PLUS 2 (kp)                        |
+| Inference Data Type | Kneron PLUS 1.x (kp)                   | Kneron PLUS 2 and Kneron PLUS 3  (kp)     |
 | ------------------- | -------------------------------------- | ----------------------------------------- |
 | Image               | N/A                                    | kp.GenericInputNodeImage                  |
 | Image               | kp.GenericRawImageHeader               | kp.GenericImageInferenceDescriptor        |
@@ -28,12 +28,12 @@
 
 ---
 
-## For Compatible with Kneron PLUS 2
+## For Compatible with Kneron PLUS 3
 
 ### Inference API Compat V1.x  
 
-| Inference Data Type | Kneron PLUS 1.x (kp)                                               | Kneron PLUS 2 - Compat (kp.v1)                                        |
-| ------------------- | ------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| Inference Data Type | Kneron PLUS 1.x (kp)                                               | Kneron PLUS 2 and Kneron PLUS 3 - Compat (kp.v1)                      |
+|---------------------|--------------------------------------------------------------------|-----------------------------------------------------------------------|
 | Image               | kp.inference.generic\_raw\_inference\_send()                       | kp.v1.inference.generic\_raw\_inference\_send()                       |
 | Image               | kp.inference.generic\_raw\_inference\_receive()                    | kp.v1.inference.generic\_raw\_inference\_receive()                    |
 | Raw Data            | kp.inference.generic\_raw\_inference\_bypass\_pre\_proc\_send()    | kp.v1.inference.generic\_raw\_inference\_bypass\_pre\_proc\_send()    |
@@ -41,11 +41,11 @@
 
 ### Inference Object Compat V1.x  
 
-| Inference Data Type | Kneron PLUS 1.x (kp)                   | Kneron PLUS 2 - Compat (kp.v1)            |
-| ------------------- | -------------------------------------- | ----------------------------------------- |
-| Image               | kp.GenericRawImageHeader               | kp.v1.GenericRawImageHeader               |
-| Image               | kp.GenericRawResultHeader              | kp.v1.GenericRawResultHeader              |
-| Image               | kp.GenericRawResult                    | kp.v1.GenericRawResult                    |
-| Raw Data            | kp.GenericRawBypassPreProcImageHeader  | kp.v1.GenericRawBypassPreProcImageHeader  |
-| Raw Data            | kp.GenericRawBypassPreProcResultHeader | kp.v1.GenericRawBypassPreProcResultHeader |
-| Raw Data            | kp.GenericRawBypassPreProcResult       | kp.v1.GenericRawBypassPreProcResult       |  
+| Inference Data Type | Kneron PLUS 1.x (kp)                   | Kneron PLUS 2 and Kneron PLUS 3 - Compat (kp.v1) |
+|---------------------|----------------------------------------|--------------------------------------------------|
+| Image               | kp.GenericRawImageHeader               | kp.v1.GenericRawImageHeader                      |
+| Image               | kp.GenericRawResultHeader              | kp.v1.GenericRawResultHeader                     |
+| Image               | kp.GenericRawResult                    | kp.v1.GenericRawResult                           |
+| Raw Data            | kp.GenericRawBypassPreProcImageHeader  | kp.v1.GenericRawBypassPreProcImageHeader         |
+| Raw Data            | kp.GenericRawBypassPreProcResultHeader | kp.v1.GenericRawBypassPreProcResultHeader        |
+| Raw Data            | kp.GenericRawBypassPreProcResult       | kp.v1.GenericRawBypassPreProcResult              |  

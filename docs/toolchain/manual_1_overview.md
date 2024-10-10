@@ -4,8 +4,8 @@
 
 # 1. Toolchain Overview
 
-**2024 Feb**
-**Toolchain v0.24.0**
+**2024 Jun**
+**Toolchain v0.25.0**
 
 ## 1.1. Introduction
 
@@ -20,17 +20,16 @@ In this document, you'll learn:
 
 **Major changes of the current version**
 
-* **[v0.24.0]**
-    * **`ktc.ModelConfig.analysis` rename 'fm_cut' to 'compiler_tiling'.**
-    * `ktc.ModelConfig.analysis` change `datapath_bitwidth_mode` and `weight_bitwidth_mode` to support mix-bitwidth mode "mix light" and "mix balance". (exclude 520).
-    * Knerex support for Quantized Awareness Training (QAT).
-    * Support ONNX opset 18.
-    * Optimize customized node support.
-    * Support multiple output operators.
-    * Support per-channel quantization
-    * WebGUI Auto-detect model input node information, make convert onnx or tflite to nef more easier.
-    * Docker update the parallel package version.
-    * Fix known bugs and improve performance.
+* **[v0.25.0]**
+    * **IP evaluator add arguments `weight_bandwidth` and `dma_bandwidth`.**
+    * 730 toolchain full upgrade.
+    * Optimize batch compiler efficiency.
+    * Optimize batch compiler memory management algorithm.
+    * Support fmap over 4D.
+    * Support more operators (Abs, Log, Pow, Sign).
+    * Support mix accuracy mode.
+    * Update environment packages.
+    * Fix bugs.
 
 ## 1.2. Workflow Overview
 
@@ -178,11 +177,12 @@ input_images = [preprocess("/workspace/examples/mobilenetv2/images/" + image_nam
 input_mapping = {"images": input_images}
 
 # Quantization the model. `km` is the ModelConfig object defined in the previous section.
-# `fm_cut` is a optional arguments which improves the NPU efficiency but takes longer to analysis.
+# `optimize` is a optional arguments which improves the NPU efficiency but takes longer to analysis.
+# The larger the number, the more optimization is done, but the longer it takes. The default is 0.
 # For more fine-tuning arguments, please check '4. Fixed-Point Model Generation'.
 # The quantized model is saved as a bie file. The path to the bie file is returned as a string.
 # It also generates a html report with more details. Please check `/data1/kneron_flow/model_fx_report.html`
-bie_path = km.analysis(input_mapping, threads = 8, fm_cut="deep_search")
+bie_path = km.analysis(input_mapping, threads = 8, optimize=2)
 ```
 
 ### 1.5.2. Fixed-Point Model Inference
@@ -255,7 +255,7 @@ There are also other useful tools and informations:
 * [End to End Simulator](appendix/app_flow_manual.md): manual for the E2E simualtor.
 * [Hardware Performance](appendix/performance.md): common model performance table for Kneron hardwares and the supported operator list.
 * [Hardware Supported Operators](appendix/operators.md): operators supported by the hardware.
-* [How to Interpret Fixed-Point Report](appendix/interpret_report.md): manual for interpreting the fixed-point report.
+* [How to Interpret Fixed-Point Report](appendix/fx_report.md): manual for interpreting the fixed-point report.
 * [Kneronnxopt](appendix/kneronnxopt.md): manual for the a more flexible onnx optimizer tool.
 * [ONNX Converters](appendix/converters.md): manual for the script usage of our converter tools. This tool is only for ONNX opset 11/12.
 * [Quantization 1 - Introdution to Post-training Quantization](quantization/1.1_Introdution_to_Post-training_Quantization.md): introduction for the quantization.

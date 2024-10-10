@@ -95,20 +95,20 @@ When SCPU activates NCPU to run models, **kmdw_inference_app_config_t** (KL520/K
 
 - **user_define_data** (KL520/KL720/KL630)
     - type: void*
-    - The user define data for the pre-processing and post-processing in NCPU.
+    - The user define data for the pre-processing/post-processing in NCPU.
 
 - **pre_proc_config** (KL730)
     - type: void*
-    - The user define data for the pre-processing in NCPU.
+    - The user define data for pre-processing in NCPU.
 
 - **post_proc_config** (KL730)
     - type: void*
-    - The user define data for the post-processing in NCPU.
+    - The user define data for post-processing in NCPU.
 
 - **pre_proc_func** (KL630/KL730)
-    - type: void*
+    - type: VMF_NNM_INFERENCE_PRE_PROC_FUNC_T*
     - The pointer for the customized pre-processing function.
 
 - **post_proc_func** (KL630/KL730)
-    - type: void*
+    - type: VMF_NNM_INFERENCE_POST_PROC_FUNC_T*
     - The pointer for the customized post-processing function.
