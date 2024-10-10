@@ -4,8 +4,8 @@
 
 # 1. Toolchain Overview
 
-**2024 Jun**
-**Toolchain v0.25.0**
+**2024 Oct**
+**Toolchain v0.26.0**
 
 ## 1.1. Introduction
 
@@ -20,16 +20,11 @@ In this document, you'll learn:
 
 **Major changes of the current version**
 
-* **[v0.25.0]**
-    * **IP evaluator add arguments `weight_bandwidth` and `dma_bandwidth`.**
-    * 730 toolchain full upgrade.
-    * Optimize batch compiler efficiency.
-    * Optimize batch compiler memory management algorithm.
-    * Support fmap over 4D.
-    * Support more operators (Abs, Log, Pow, Sign).
-    * Support mix accuracy mode.
-    * Update environment packages.
-    * Fix bugs.
+* **[v0.26.0]**
+  * Optimize compiler for 730 graph cutting.
+  * Supports the flash attention model.
+  * Add producer name in kneronnxopt.
+  * Fix bugs.
 
 ## 1.2. Workflow Overview
 
