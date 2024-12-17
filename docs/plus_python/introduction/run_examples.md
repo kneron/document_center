@@ -2,7 +2,7 @@
 
 The provided examples are designed to show how to use KP APIs and present Kneron Device features. Error handling, wording and application layer features are not covered. They are open for more creatives.
 
-> **Note 1**: In the inference related examples, we are using KL520 for most demo. If you wish to use KL630, KL720, or KL730, just change the prefix of the example name from kl520 to kl630, kl720, or kl730.
+> **Note 1**: In the inference related examples, we are using KL520 for most demo. If you wish to use KL630, KL720, or KL730 (alpha), just change the prefix of the example name from kl520 to kl630, kl720, or kl730.
 
 > **Note 2**: **[Ubuntu]** Please update Kneron device USB permission before following steps on Ubuntu. See the [Installation
 ](./install_dependency.md) for details.
