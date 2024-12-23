@@ -4,43 +4,43 @@
 
 | Model                | Size    | FPS (npu only) | Time(npu only) | Has CPU node(s)? |
 | -------------------- | ------- | -------------- | -------------- | ---------------- |
-| Inception v3         | 224x224 |    6.17        | 162  ms        |        No        |
-| Inception v4         | 299x299 |    1.45        | 687  ms        |        No        |
-| Mobilenet v1         | 224x224 |    56.8        | 17.6 ms        |        No        |
-| Mobilenet v2         | 224x224 |    54.1        | 18.4 ms        |        No        |
-| Mobilenet v2 ssdlite | 300x300 |    28.5        | 35.1 ms        |        No        |
-| Resnet50 v1.5        | 224x224 |    6.92        | 144  ms        |        No        |
+| Inception v3         | 224x224 |    6.177       | 161.9  ms      |        No        |
+| Inception v4         | 299x299 |    1.454       | 687.7  ms      |        No        |
+| Mobilenet v1         | 224x224 |    56.80       | 17.60 ms       |        No        |
+| Mobilenet v2         | 224x224 |    54.18       | 18.46 ms       |        No        |
+| Mobilenet v2 ssdlite | 300x300 |    28.48       | 35.11 ms       |        No        |
+| Resnet50 v1.5        | 224x224 |    6.925       | 144.4  ms      |        No        |
 | OpenPose             | 256x256 |    0.637       | 1569 ms        |        No        |
-| SRCNN                | 384x384 |    11.0        | 90.9 ms        |        No        |
-| Tiny YOLOv3          | 416x416 |    21.8        | 45.9 ms        |        Yes       |
-| YOLOv3               | 416x416 |    1.44        | 693  ms        |        Yes       |
-| YOLOv5s              | 640x640 |    3.65        | 274  ms        |        Yes       |
-| Lite-HRNet           | 256x192 |    9.23        | 108  ms        |        Yes       |
+| SRCNN                | 384x384 |    11.00       | 90.90 ms       |        No        |
+| Tiny YOLOv3          | 416x416 |    21.80       | 45.85 ms       |        Yes       |
+| YOLOv3               | 416x416 |    1.443       | 692.7  ms      |        Yes       |
+| YOLOv5s              | 640x640 |    3.653       | 273.7  ms      |        Yes       |
+| Lite-HRNet           | 256x192 |    9.233       | 108.2  ms      |        Yes       |
 
 *Performance simulation result on NPU KDP720:*
 
 | Model                | Size    | FPS (npu only) | Time(npu only) | Has CPU node(s)? |
 | -------------------- | ------- | -------------- | -------------- | ---------------- |
-| Inception v3         | 224x224 |    84.99       | 11.76 ms        |        No        |
-| Inception v4         | 299x299 |    21.11       | 47.36 ms        |        No        |
-| Mobilenet v1         | 224x224 |    432.6       | 2.311 ms        |        No        |
-| Mobilenet v2         | 224x224 |    683.1       | 1.463 ms        |        No        |
-| Mobilenet v2 ssdlite | 300x300 |    314.9       | 3.175 ms        |        No        |
-| Resnet50 v1.5        | 224x224 |    54.89       | 18.21 ms        |        No        |
-| OpenPose             | 256x256 |    5.111       | 195.6 ms        |        No        |
-| SRCNN                | 384x384 |    133.8       | 7.468 ms        |        No        |
-| Tiny YOLOv3          | 416x416 |    155.2       | 6.441 ms        |        No        |
-| YOLOv3               | 416x416 |    10.23       | 97.72 ms        |        No        |
-| YOLOv5s              | 640x640 |    25.36       | 39.41 ms        |        No        |
-| Centernet res101     | 512x512 |    2.876       | 347.6 ms        |        No        |
-| Lite-HRNet           | 256x192 |    27.40       | 36.49 ms        |        No        |
+| Inception v3         | 224x224 |    84.99       | 11.76 ms       |        No        |
+| Inception v4         | 299x299 |    21.11       | 47.36 ms       |        No        |
+| Mobilenet v1         | 224x224 |    432.6       | 2.311 ms       |        No        |
+| Mobilenet v2         | 224x224 |    683.1       | 1.463 ms       |        No        |
+| Mobilenet v2 ssdlite | 300x300 |    314.9       | 3.175 ms       |        No        |
+| Resnet50 v1.5        | 224x224 |    54.89       | 18.21 ms       |        No        |
+| OpenPose             | 256x256 |    5.111       | 195.6 ms       |        No        |
+| SRCNN                | 384x384 |    133.9       | 7.469 ms       |        No        |
+| Tiny YOLOv3          | 416x416 |    155.2       | 6.441 ms       |        No        |
+| YOLOv3               | 416x416 |    10.23       | 97.72 ms       |        No        |
+| YOLOv5s              | 640x640 |    25.36       | 39.41 ms       |        No        |
+| Centernet res101     | 512x512 |    2.877       | 347.6 ms       |        No        |
+| Lite-HRNet           | 256x192 |    27.40       | 36.49 ms       |        No        |
 
 *Performance simulation result on NPU KDP530:*
 
 | Model                | Size    | FPS (npu only) | Time(npu only) | Has CPU node(s)? |
 | -------------------- | ------- | -------------- | -------------- | ---------------- |
-| Inception v3         | 224x224 |    62.0        | 16.1  ms       |        No        |
-| Inception v4         | 299x299 |    14.56       | 68.7  ms       |        No        |
+| Inception v3         | 224x224 |    62.00       | 16.12  ms      |        No        |
+| Inception v4         | 299x299 |    14.56       | 68.68  ms      |        No        |
 | Mobilenet v1         | 224x224 |    284.7       | 3.51  ms       |        No        |
 | Mobilenet v2         | 224x224 |    342.3       | 2.92  ms       |        No        |
 | Mobilenet v2 ssdlite | 300x300 |    202.6       | 4.94  ms       |        No        |
@@ -77,17 +77,17 @@
 
 | Model                | Size    | FPS (npu only) | Time(npu only) | Has CPU node(s)? |
 | -------------------- | ------- | -------------- | -------------- | ---------------- |
-| Inception v3         | 224x224 |    127.1       | 7.861 ms       |        No        |
-| Inception v4         | 299x299 |    37.86       | 26.41 ms       |        No        |
-| Mobilenet v1         | 224x224 |    609.4       | 1.640 ms       |        No        |
-| Mobilenet v2         | 224x224 |    811.1       | 1.232 ms       |        No        |
-| Mobilenet v2 ssdlite | 300x300 |    393.9       | 2.538 ms       |        No        |
+| Inception v3         | 224x224 |    127.2       | 7.860 ms       |        No        |
+| Inception v4         | 299x299 |    37.85       | 26.42 ms       |        No        |
+| Mobilenet v1         | 224x224 |    610.0       | 1.640 ms       |        No        |
+| Mobilenet v2         | 224x224 |    812.5       | 1.230 ms       |        No        |
+| Mobilenet v2 ssdlite | 300x300 |    392.2       | 2.549 ms       |        No        |
 | Resnet50 v1.5        | 224x224 |    79.03       | 12.65 ms       |        No        |
-| OpenPose             | 256x256 |    10.45       | 95.62 ms       |        No        |
-| SRCNN                | 384x384 |    159.0       | 6.289 ms       |        No        |
-| Tiny YOLOv3          | 416x416 |    199.4       | 5.013 ms       |        No        |
-| YOLOv3               | 416x416 |    16.70       | 59.85 ms       |        No        |
-| YOLOv5s              | 640x640 |    50.79       | 19.68 ms       |        No        |
-| Unet                 | 384x384 |    3.867       | 258.5 ms       |        No        |
-| Lite-HRNet           | 256x192 |    201.0       | 4.974 ms       |        No        |
-| CenterNet            | 512x512 |    6.529       | 153.1 ms       |        No        |
+| OpenPose             | 256x256 |    10.46       | 95.59 ms       |        No        |
+| SRCNN                | 384x384 |    163.2       | 6.127 ms       |        No        |
+| Tiny YOLOv3          | 416x416 |    201.9       | 4.951 ms       |        No        |
+| YOLOv3               | 416x416 |    16.78       | 59.58 ms       |        No        |
+| YOLOv5s              | 640x640 |    51.82       | 19.30 ms       |        No        |
+| Unet                 | 384x384 |    3.903       | 256.1 ms       |        No        |
+| Lite-HRNet           | 256x192 |    200.8       | 4.980 ms       |        No        |
+| CenterNet            | 512x512 |    6.657       | 150.2 ms       |        No        |
