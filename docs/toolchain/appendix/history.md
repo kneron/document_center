@@ -24,6 +24,11 @@
 
 ## Toolchain Change log
 
+* **[v0.27.0]**
+  * Adjust batch compiler internal behavior to improve robustness.
+  * Optimize compiler to improve feature map cut search speed.
+  * Optimize data converter to improve speed.
+  * Fix bugs.
 * **[v0.26.0]**
   * Optimize compiler for 730 graph cutting.
   * Supports the flash attention model.

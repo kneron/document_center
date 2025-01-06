@@ -2,7 +2,7 @@
 
 In this document, we provide a step by step example on how to utilize our tools to compile and test with a newly downloaded YOLOv3 model.
 
-> This document is writen for toolchain v0.26.0. If any description is not consistent with the latest toolchain, please refer to the main toolchain manual.
+> This document is writen for toolchain v0.27.0. If any description is not consistent with the latest toolchain, please refer to the main toolchain manual.
 
 ## Step 0: Prepare environment and data
 
@@ -80,7 +80,6 @@ import numpy as np
 import os
 import onnx
 from PIL import Image
-import numpy as np
 ```
 
 ## Step 2: Convert and optimize the pretrain model
