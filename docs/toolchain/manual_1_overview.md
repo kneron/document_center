@@ -4,8 +4,8 @@
 
 # 1. Toolchain Overview
 
-**2024 Oct**
-**Toolchain v0.26.0**
+**2024 Dev**
+**Toolchain v0.27.0**
 
 ## 1.1. Introduction
 
@@ -20,10 +20,10 @@ In this document, you'll learn:
 
 **Major changes of the current version**
 
-* **[v0.26.0]**
-  * Optimize compiler for 730 graph cutting.
-  * Supports the flash attention model.
-  * Add producer name in kneronnxopt.
+* **[v0.27.0]**
+  * Adjust batch compiler internal behavior to improve robustness.
+  * Optimize compiler to improve feature map cut search speed.
+  * Optimize data converter to improve speed.
   * Fix bugs.
 
 ## 1.2. Workflow Overview
