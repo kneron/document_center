@@ -66,15 +66,33 @@ $ sudo sh KneronDFUT.sh --help
     --scpu                : [argument required]   self pointed scpu firmware file path (.bin)
     --ncpu                : [argument required]   self pointed ncpu firmware file path (.bin)
 
-[Update firmware file to flash memory in dongles (Only works for KL720)
+[Update dongles to usb boot] (Only works for KL630)
+    --kl630-usb-boot      : [no argument]         choose update to Usb Boot
+    --port                : [argument required]   port id set ("all" or specified multiple port ids "13,537")
+
+[Update dongles to usb boot] (Only works for KL630)
+    --kl630-flash-boot    : [no argument]         choose update to Flash Boot
+    --port                : [argument required]   port id set ("all" or specified multiple port ids "13,537")
+    --scpu                : [argument required]   self pointed firmware file path (.tar)
+
+[Update dongles to usb boot] (Only works for KL730)
+    --kl730-usb-boot      : [no argument]         choose update to Usb Boot
+    --port                : [argument required]   port id set ("all" or specified multiple port ids "13,537")
+
+[Update dongles to usb boot] (Only works for KL730)
+    --kl730-flash-boot    : [no argument]         choose update to Flash Boot
+    --port                : [argument required]   port id set ("all" or specified multiple port ids "13,537")
+    --scpu                : [argument required]   self pointed firmware file path (.tar)
+
+[Update firmware file to flash memory in dongles] (Only works for KL720)
     --kl720-update        : [no argument]         choose write firmware to flash memory
     --port                : [argument required]   port id set ("all" or specified multiple port ids "13,537")
     --scpu                : [argument required]   self pointed scpu firmware file path (.bin)
     --ncpu                : [argument required]   self pointed ncpu firmware file path (.bin)
 
-[Update model file to flash memory in dongles
+[Update model file to flash memory in dongles]
     --model-to-flash      : [argument required]   self pointed model file path (.nef)
-    --type                : [argument required]   type of device ("KL520" or "KL720")
+    --type                : [argument required]   type of device ("KL520", "KL630", "KL720", or "KL730")
     --port                : [argument required]   port id set ("all" or specified multiple port ids "13,537")
 
 [Enable Graphic User Interface]
@@ -140,6 +158,34 @@ $ sudo sh KneronDFUT.sh --help
       \(**Update to USB Boot** should be checked by default\)
 
     ![](./imgs/dfut_kl630_usb_boot.png)
+
+2. Use Command Line to Update AI Device
+
+    ```bash
+    $ sudo sh KneronDFUT.sh --list
+    ```
+
+    ```bash
+    ===========================================
+    Index:          1
+    Port Id:        13
+    Kn Number:      0x09011004
+    Device Type:    KL630
+    FW Type:        KDP2
+    Usb Speed:      High-Speed
+    Connectable:    true
+    ===========================================
+    ```
+
+    ```bash
+    $ sudo sh KneronDFUT.sh --kl630-usb-boot --port 13
+    ```
+
+    ```bash
+    Start Update Device with Port Id 13 to USB Boot
+
+    ==== Update of Device with Port Id: 13 Succeeded ====
+    ```
 
 ### 2.3 KL720
 

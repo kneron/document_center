@@ -1,6 +1,6 @@
-## Compatible with Kneron PLUS 2  
+## Compatible with Kneron PLUS 3  
 
-The Kneron PLUS 2 provides `include/legacy/kp_inference_v1.h` and `include/legacy/kp_struct_v1.h` for temporary backward compatibility with V1.x APIs. The legacy code can be easily migrated to Kneron PLUS 2 by changing the **include header**.  
+The Kneron PLUS 3 provides `include/legacy/kp_inference_v1.h` and `include/legacy/kp_struct_v1.h` for temporary backward compatibility with V1.x APIs. The legacy code can be easily migrated to Kneron PLUS 3 by changing the **include header**.  
 
 For example, the V1.x basic include header can be rewritten like the following code block. (For more examples, please reference sample code in kneron_plus/examples_legacy)  
 
@@ -16,7 +16,7 @@ For example, the V1.x basic include header can be rewritten like the following c
     ...
     ```
 
-- V2
+- V2 and V3
 
     ```c
     ...

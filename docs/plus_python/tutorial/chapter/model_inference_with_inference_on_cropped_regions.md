@@ -1,6 +1,6 @@
 ## Model Inference - Inference on Cropped Regions  
 
-This tutorial shows how to inference model with **Generic Inference** with cropped regions. The **crop configuration** will do cropping image on device, execute inference only on the cropped areas of image, get the raw output from device, and does post-processing in the software.  
+This tutorial shows how to infer the model with **Generic Inference** with cropped regions. The **crop configuration** will crop the image on the device, execute inference only on the cropped areas of the image, get the raw output from the device, and do post-processing in the software.  
 
 The flow in concept:  
 

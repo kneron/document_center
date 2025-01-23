@@ -1,6 +1,6 @@
 ## Model Inference - Image Inference  
 
-This tutorial shows how to inference image data by Kneron devices **with built-in hardware image pre-processing**. The `kp` module support following image inference interfaces:  
+This tutorial shows how to infer image data with Kneron devices **with built-in hardware image pre-processing**. The `kp` module supports the following image inference interfaces:  
 
 1. [Inference general format image](#inference-general-format-image)
 2. [Inference binary image data](#inference-binary-image-data)

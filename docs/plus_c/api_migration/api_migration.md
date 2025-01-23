@@ -14,11 +14,14 @@ In Kneron PLUS 1. x, the `kp_model_nef_descriptor_t` provides basic and essentia
 
 But some API usage, such as using data inference (without hardware image pre-processing) needs more model information (e.g. model input NPU data layout, model input quantization parameters ...) to deal with software pre-processing on the host PC.
 
-To provide more model information, we redesign the `kp_model_nef_descriptor_t` in the Kneron PLUS 2.
+In the Kneron PLUS 3 platform, the classes `kp_tensor_shape_info_t` and `kp_quantization_parameters_t` play a crucial role in ensuring compatibility with all model information.  
 
-- Change model input size access usage
+**Note**: For new information added in `kp_model_nef_descriptor_t`, please reference `kp_model_nef_descriptor_t` definition.  
 
-    - V1.x
+- Change model input size access usage  
+    The `kp_tensor_shape_info_t` records the tensor information version in the `version` member variable, and the specified tensor information can be accessed by the corresponding member variable `v1`/`v2` (v1 for KL520/KL630/KL720; v2 for KL730).  
+
+    - V1.x (Only Support KL520/KL720)
 
         ```c
         ...
@@ -26,14 +29,14 @@ To provide more model information, we redesign the `kp_model_nef_descriptor_t` i
         kp_model_nef_descriptor_t _model_desc;
         int ret = kp_load_model_from_file(_device, _model_file_path, &_model_desc);
 
-        uint32_t model_input_channel = _model_desc.models[0].channel;
-        uint32_t model_input_height = _model_desc.models[0].height;
-        uint32_t model_input_width = _model_desc.models[0].width;
+        uint32_t model_input_channel    = _model_desc.models[0].channel;
+        uint32_t model_input_height     = _model_desc.models[0].height;
+        uint32_t model_input_width      = _model_desc.models[0].width;
 
         ...
         ```
 
-    - V2
+    - V2.x (Only Support KL520/KL630/KL720)
 
         ```c
         ...
@@ -42,24 +45,24 @@ To provide more model information, we redesign the `kp_model_nef_descriptor_t` i
         int ret = kp_load_model_from_file(_device, _model_file_path, &_model_desc);
 
         /* shape order: BxCxHxW */
-        uint32_t model_input_channel = _model_desc.models[0].input_nodes[0]->shape_npu[1];
-        uint32_t model_input_height = _model_desc.models[0].input_nodes[0]->shape_npu[2];
-        uint32_t model_input_width = _model_desc.models[0].input_nodes[0]->shape_npu[3];
+        uint32_t model_input_channel    = _model_desc.models[0].input_nodes[0]->shape_npu[1];
+        uint32_t model_input_height     = _model_desc.models[0].input_nodes[0]->shape_npu[2];
+        uint32_t model_input_width      = _model_desc.models[0].input_nodes[0]->shape_npu[3];
 
         ...
         ```
 
     - V3
+        - `kp_tensor_shape_info_v1_t` for KL520/KL630/KL720
 
-        ```c
-        ...
+            ```c
+            ...
 
-        kp_model_nef_descriptor_t _model_desc;
-        int ret = kp_load_model_from_file(_device, _model_file_path, &_model_desc);
-        kp_tensor_descriptor_t *input_node_0 = &(_model_desc.models[0].input_nodes[0]);
-        int shape_info_version = input_node_0->tensor_shape_info.version;
+            kp_model_nef_descriptor_t _model_desc;
+            int ret = kp_load_model_from_file(_device, _model_file_path, &_model_desc);
+            kp_tensor_descriptor_t *input_node_0 = &(_model_desc.models[0].input_nodes[0]);
+            int shape_info_version = input_node_0->tensor_shape_info.version;
 
-        if (KP_MODEL_TENSOR_SHAPE_INFO_VERSION_1 == shape_info_version) {
             kp_tensor_shape_info_v1_t* tensor_shape_info    = &(input_node_0->tensor_shape_info.tensor_shape_info_data.v1);
             uint32_t npu_data_channel                       = tensor_shape_info->shape_npu[1];
             uint32_t npu_data_height                        = tensor_shape_info->shape_npu[2];
@@ -67,15 +70,27 @@ To provide more model information, we redesign the `kp_model_nef_descriptor_t` i
             uint32_t onnx_data_channel                      = tensor_shape_info->shape_onnx[1];
             uint32_t onnx_data_height                       = tensor_shape_info->shape_onnx[2];
             uint32_t onnx_data_width                        = tensor_shape_info->shape_onnx[3];
-        } else if (KP_MODEL_TENSOR_SHAPE_INFO_VERSION_2 == shape_info_version) {
+
+            ...
+            ```
+
+        - `kp_tensor_shape_info_v2_t` for KL730
+
+            ```c
+            ...
+
+            kp_model_nef_descriptor_t _model_desc;
+            int ret = kp_load_model_from_file(_device, _model_file_path, &_model_desc);
+            kp_tensor_descriptor_t *input_node_0 = &(_model_desc.models[0].input_nodes[0]);
+            int shape_info_version = input_node_0->tensor_shape_info.version;
+
             kp_tensor_shape_info_v2_t* tensor_shape_info    = &(input_node_0->tensor_shape_info.tensor_shape_info_data.v2);
             uint32_t onnx_data_channel                      = tensor_shape_info->shape[1];
             uint32_t onnx_data_height                       = tensor_shape_info->shape[2];
             uint32_t onnx_data_width                        = tensor_shape_info->shape[3];
-        }
 
-        ...
-        ```
+            ...
+            ```
 
 - Release `kp_model_nef_descriptor_t` by `kp_release_model_nef_descriptor()` in V2
 
@@ -94,6 +109,43 @@ To provide more model information, we redesign the `kp_model_nef_descriptor_t` i
         ```
 
     **Note**: For new information added in `kp_model_nef_descriptor_t`, please reference `kp_model_nef_descriptor_t` struct definition.
+
+- Change quantization parameters access usage  
+    In addition, the `kp_quantization_parameters_v1_t` in `kp_quantization_parameters_t` contains the `quantized_axis` member variable, that can represent the quantization axis for channel-wise quantization parameters.  
+
+    - V2.x (Only Support KL520/KL630/KL720)
+
+        ```c
+        ...
+
+        kp_model_nef_descriptor_t _model_desc;
+        int ret = kp_load_model_from_file(_device, _model_file_path, &_model_desc);
+
+        /* get model input radix and scale */
+        kp_tensor_descriptor_t *input_node_0    = &(_model_desc.models[0].input_nodes[0]);
+        int32_t model_input_radix               = input_node_0->quantization_parameters.quantized_fixed_point_descriptor[0].radix;
+        float model_input_scale                 = input_node_0->quantization_parameters.quantized_fixed_point_descriptor[0].scale;
+
+        ...
+        ```
+
+    - V3
+        - `kp_quantization_parameters_v1_t` for KL520/KL630/KL720/KL730
+
+            ```c
+            ...
+
+            kp_model_nef_descriptor_t _model_desc;
+            int ret = kp_load_model_from_file(_device, _model_file_path, &_model_desc);
+
+            /* get model input radix and scale */
+            kp_tensor_descriptor_t *input_node_0            = &(_model_desc.models[0].input_nodes[0]);
+            uint32_t model_input_quantized_axis             = input_node_0->quantization_parameters.quantization_parameters_data.v1.quantized_axis;
+            int32_t model_input_radix                       = input_node_0->quantization_parameters.quantization_parameters_data.v1.quantized_fixed_point_descriptor[0].radix;
+            float model_input_scale                         = input_node_0->quantization_parameters.quantization_parameters_data.v1.quantized_fixed_point_descriptor[0].scale.scale_float32;
+
+            ...
+            ```
 
 ### 2. Replace inference usage
 

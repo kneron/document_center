@@ -10,6 +10,7 @@ For more detailed information, please visit the following documents:
 - For the detail feature explain, please refer [**Feature Guide**](./feature_guide/index.md)
 - For the Kneron ModelZoo, please refer [**Kneron ModelZoo**](./modelzoo/index.md)
 - For the migrate to Kneron PLUS 2, please refer [**Migrate to Kneron PLUS 2**](./api_migration/index.md)
+- For the release note, please refer [**Release Note**](./release_note/index.md)
 
 Kneron PLUS is compatible with the platform and OS listed below:
 

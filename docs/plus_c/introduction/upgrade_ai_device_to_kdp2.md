@@ -464,7 +464,7 @@ $ sudo sh KneronDFUT.sh
     Kn Number:      0x270A265C
     Device Type:    KL730
     FW Type:        KDP2
-    Usb Speed:      High-Speed
+    Usb Speed:      Super-Speed
     Connectable:    true
     ===========================================
     ```
@@ -521,7 +521,7 @@ $ sudo sh KneronDFUT.sh
     Kn Number:      0x09011004
     Device Type:    KL730
     FW Type:        KDP2
-    Usb Speed:      High-Speed
+    Usb Speed:      Super-Speed
     Connectable:    true
     ===========================================
     ```
