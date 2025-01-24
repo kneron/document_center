@@ -117,6 +117,8 @@ Note: This feature is only provided in Kneron PLUS v1.3.0 and above.
 
     - Click "Install Driver" button.
 
+    **Note**: If the KL730 device has been sync up to KL730 SDK v1.2.0 or later, and using the KL730 firmware built-in PLUS v3.1.0 or later, this driver installation could be ignored.
+
 
 
 

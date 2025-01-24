@@ -42,6 +42,7 @@ Kneron AI consists the following components:
 
 Versions                 | KL520 SDK version | KL720 SDK version | KL630 SDK version (NNM version) | KL730 SDK version
 :------------------------|:------------------|:------------------|:------------------------------- | :----------------
+Kneron PLUS v3.1.0       | 2.2.x             | 2.2.x             | 2.5.6 (1.3.x)                   | 1.2.0
 Kneron PLUS v3.0.0       | 2.2.x             | 2.2.x             | 2.5.5 (1.2.x)                   | 1.0.0
 Kneron PLUS v2.3.x-alpha | 2.2.x             | 2.2.x             | 2.5.5 (1.2.x)                   | 1.0.0-alpha
 Kneron PLUS v2.2.x       | 2.2.x             | 2.2.x             | 2.5.5 (1.2.x)                   | Not supported
