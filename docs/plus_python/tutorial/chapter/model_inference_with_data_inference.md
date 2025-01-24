@@ -1,10 +1,10 @@
-## Model Inference - Data Inference
+## Model Inference - Data Inference  
 
-In some application fields, the model input data cannot leverage image inference (with built-in hardware image pre-processing). In this case, data inference (without built-in hardware image pre-processing) would be the best solution.
+In some application fields, the model input data cannot leverage image inference (with built-in hardware image preprocessing). Data inference (without built-in hardware image preprocessing) would be the best solution.  
 
-This tutorial shows how to inference none image data (raw data) by Kneron devices **without built-in hardware image pre-processing**.
+This tutorial shows how to infer non-image data (raw data) by Kneron devices **without built-in hardware image preprocessing**.  
 
-In order to infer without hardware image preprocessing, the input data must do the following steps for fitting NPU input format:
+To infer without hardware image preprocessing, the input data must do the following steps to fit the NPU input format:  
 
 1. Normalization
 2. Quantization (convert to 8-bit fixed point)

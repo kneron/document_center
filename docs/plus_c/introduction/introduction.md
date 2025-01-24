@@ -2,7 +2,7 @@
 
 ## Basic Features
 
-**Kneron PLUS** stands for *Platform Library Unified Software* which is a framework comprising new software(SW) and firmware(FW) design for KL520, KL720, and KL630 (and alpha for KL730).
+**Kneron PLUS** stands for *Platform Library Unified Software* which is a framework comprising new software(SW) and firmware(FW) design for KL520, KL720, KL630 and KL730.
 
 In order to run the inference of models on Kneron AI devices, there are three parts of AI application development are required:
 
@@ -117,7 +117,7 @@ Index   | Category              | Supported Item                                
 9       |                       | Upload Firmware via Usb for No-Flash Device               | v2.0.0                    |                     |                     |   X   |       | X     | X
 10      |                       | Read / Write Device Memory                                |                           |                     |                     |       |       | X     | X
 11      |                       | Access Firmware Log via USB                               |                           |                     |                     |   X   |       | X     | X
-12      |                       | Hico Cam Inference [***1***] [***2***] [***3***]          |                           | v2.1.1              |                     |       |       |       | X
+12      |                       | Hico Cam Inference [***1***] [***2***] [***3***]          |                           | v2.1.1              | v3.1.0              |       |       |       |
 13      |                       | Hico ToF Inference (Kneron ToF module is required)        | v1.3.0                    |                     |                     |   X   |       | X     | X
 
 **Note**:

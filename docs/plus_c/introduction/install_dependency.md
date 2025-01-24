@@ -145,15 +145,15 @@ To build and run these examples, you need to install OpenCV.
 
 This section will show how to install the pre-build opencv downloaded from [OpenCV-MinGW-Build](https://github.com/huihut/OpenCV-MinGW-Build).
 
-- Execute **MSYS2 MinGW 64-bit** to build OpenCV
+- Execute **MSYS2 MinGW 64-bit** to download OpenCV
 
     Note: To execute **MSYS2 MinGW 64-bit**, please use the shortcut or `c:\msys64\msys2_shell.cmd -mingw64` instead of `c:\msys64\mingw64.exe`.
 
     ```bash
-    $ wget https://github.com/huihut/OpenCV-MinGW-Build/archive/refs/tags/OpenCV-3.4.8-x64.zip
-    $ unzip OpenCV-3.4.8-x64.zip
-    $ mv OpenCV-MinGW-Build-OpenCV-3.4.8-x64 /c/opencv_348
-    $ rm OpenCV-3.4.8-x64.zip
+    $ wget https://github.com/huihut/OpenCV-MinGW-Build/archive/refs/tags/OpenCV-4.5.5-x64.zip
+    $ unzip OpenCV-4.5.5-x64.zip
+    $ mv OpenCV-MinGW-Build-OpenCV-4.5.5-x64 /c/opencv_455
+    $ rm OpenCV-4.5.5-x64.zip
     ```
 
 - Add OpenCV into environment value
@@ -167,7 +167,7 @@ This section will show how to install the pre-build opencv downloaded from [Open
     - Click "Environment Variables".
     ![](../imgs/windows_system_properties.png)
 
-    - Add "OpenCV_DIR" and set the value to "C:\opencv_348".
+    - Add "OpenCV_DIR" and set the value to "C:\opencv_455".
     ![](../imgs/windows_add_opencv_path_for_pre_build.png)
 
     - Edit "Path", and add "%OpenCV_DIR%\x64\mingw\bin" and "%OpenCV_DIR%".
@@ -201,18 +201,18 @@ This section will show how to build and install OpenCV from source code.
 
     ```bash
     $ cd /c/
-    $ mkdir opencv_348
-    $ cd opencv_348
+    $ mkdir opencv_455
+    $ cd opencv_455
 
-    $ wget https://github.com/opencv/opencv/archive/3.4.8.zip
-    $ unzip 3.4.8.zip
-    $ rm 3.4.8.zip
-    $ mv opencv-3.4.8 opencv
+    $ wget https://github.com/opencv/opencv/archive/4.5.5.zip
+    $ unzip 4.5.5.zip
+    $ rm 4.5.5.zip
+    $ mv opencv-4.5.5 opencv
 
-    $ wget https://github.com/opencv/opencv_contrib/archive/3.4.8.zip
-    $ unzip 3.4.8.zip
-    $ rm 3.4.8.zip
-    $ mv opencv_contrib-3.4.8 opencv_contrib
+    $ wget https://github.com/opencv/opencv_contrib/archive/4.5.5.zip
+    $ unzip 4.5.5.zip
+    $ rm 4.5.5.zip
+    $ mv opencv_contrib-4.5.5 opencv_contrib
 
     $ cd opencv
     $ mkdir build
@@ -233,7 +233,7 @@ This section will show how to build and install OpenCV from source code.
     - Click "Environment Variables".
     ![](../imgs/windows_system_properties.png)
 
-    - Add "OpenCV_DIR" and set the value to "C:\opencv_348\opencv\build\install".
+    - Add "OpenCV_DIR" and set the value to "C:\opencv_455\opencv\build\install".
     ![](../imgs/windows_add_opencv_path.png)
 
     - Edit "Path", and add "%OpenCV_DIR%\x64\mingw\bin" and "%OpenCV_DIR%".

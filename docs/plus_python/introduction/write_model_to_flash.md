@@ -269,7 +269,7 @@ $ sudo sh KneronDFUT.sh
     ===========================================
     ```
 
-3. Write model into the selected KL730 devices using the port id
+2. Write model into the selected KL730 devices using the port id
 
     ```bash
     $ sudo sh KneronDFUT.sh --model-to-flash ${MODEL_FILE_PATH} --port 13 -- type KL730

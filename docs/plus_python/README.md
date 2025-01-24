@@ -13,6 +13,7 @@ For more detailed information, please visit the following documents:
 - For the migrate to Kneron PLUS 3, please refer [**Migrate to Kneron PLUS 3**](./api_migration/index.md)
 - For the API support list, please refer [**API Support List**](./../plus_c/appendix/api_support_list.md)
 - For the API document, please refer [**API document**](http://doc.kneron.com/docs/#plus_python/api_document/)
+- For the release note, please refer [**Release Note**](./../plus_c/release_note/index.md)
 
 Kneron PLUS is compatible with the platform, OS and Python version listed below:  
 

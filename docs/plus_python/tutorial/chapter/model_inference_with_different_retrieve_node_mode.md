@@ -1,6 +1,6 @@
 ## Model Inference - Retrieve Node Mode  
 
-This tutorial shows how to inference model by Kneron devices in the following two retrieve node modes:  
+This tutorial shows how to infer the model using Kneron devices in the following two retrieve node modes:  
 
 1. [Retrieve floating-point node](#retrieve-floating-point-node)
 2. [Retrieve fixed-point node](#retrieve-fixed-point-node)
