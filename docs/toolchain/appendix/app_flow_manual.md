@@ -1,4 +1,4 @@
-# Kneron End to End Simulator v0.27.0
+# Kneron End to End Simulator v0.28.0
 
 This project allows users to perform image inference using Kneron's built in simulator. We encourage users to use simply use the kneron_inference function to perform the tests on your inputs.
 
