@@ -4,8 +4,8 @@
 
 # 1. Toolchain Overview
 
-**2024 Dev**
-**Toolchain v0.27.0**
+**2025 Jan**
+**Toolchain v0.28.0**
 
 ## 1.1. Introduction
 
@@ -20,10 +20,12 @@ In this document, you'll learn:
 
 **Major changes of the current version**
 
-* **[v0.27.0]**
-  * Adjust batch compiler internal behavior to improve robustness.
-  * Optimize compiler to improve feature map cut search speed.
-  * Optimize data converter to improve speed.
+* **[v0.28.0]**
+  * **Change conda environment due to license issue.**
+  * **Remove caffe support.**
+  * Add `--opt-matmul` flag to kneronnxopt for kneron hardware matmul optimization.
+  * Add `--overwrite-input-shapes` and `--skip-fuse-qkv` flags to kneronnxopt large model processing.
+  * Support GRU, LSTM, and RNN operators defusion in kneronnxopt.
   * Fix bugs.
 
 ## 1.2. Workflow Overview
