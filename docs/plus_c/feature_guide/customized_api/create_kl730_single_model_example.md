@@ -18,7 +18,7 @@
 
     Note: **{KL730_SDK_TOP_FOLDER_PATH}** will be used below for representing the unzipped folder path of KL730 Develop Package.
 
-5. Unzip {KL730_SDK_TOP_FOLDER_PATH}/03_SDK/02_Software_Tool_Kit/sdk_vX.X.X.tar.gz
+5. Unzip {KL730_SDK_TOP_FOLDER_PATH}/02_APP/02_Software_Tool_Kit/sdk_vX.X.X.tar.gz
 
     Note: **{KL730_SDK_FOLDER_PATH}** will be used below for representing the unzipped folder path of KL730 SDK.
 
@@ -255,7 +255,7 @@
 
 ## 3. Firmware Development
 
-**Note**: For further information of KL730 VMF_NNM, please refer **Vienna_NNM_Programming_Guide.pdf** in {KL730_SDK_TOP_FOLDER_PATH}/03_SDK/01_Documents/
+**Note**: For further information of KL730 VMF_NNM, please refer **Leipzig_SDK_Multimedia_Framework_Programming_Guide.pdf** in {KL730_SDK_TOP_FOLDER_PATH}/02_APP/01_Documents/
 
 1. Go to App Flow Folder {KL730_SDK_FOLDER_PATH}/apps/vmf_nnm/solution/app_flow
 

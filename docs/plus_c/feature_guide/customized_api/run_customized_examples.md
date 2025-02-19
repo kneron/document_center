@@ -134,7 +134,7 @@ $ bash build.sh
 
 *If build succeeded, **kp_firmware.tar** will be put into {KL730_SDK_FOLDER_PATH}/apps/vmf_nnm/bin/
 
-*For further information of building firmware of KL730, please refer **Leipzig_NNM_Example_User_Guide.pdf** in {KL730_SDK_TOP_FOLDER_PATH}/03_SDK/01_Documents/
+*For further information of building firmware of KL730, please refer **Leipzig_SDK_Examples_User_Guide.pdf** in {KL730_SDK_TOP_FOLDER_PATH}/02_APP/01_Documents/
 
 ---
 
