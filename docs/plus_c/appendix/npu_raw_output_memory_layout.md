@@ -1,6 +1,6 @@
 ## NPU Raw Output Memory Layout
 
-**Note**: For more information of *NPU data layout formate*, please reference [Supported NPU Data Layout Format](./../appendix/supported_npu_data_layout_format.md)
+**Note**: For more information of *NPU data layout formate*, please reference [Supported NPU Data Layout Format (KL520, KL720 and KL630)](./../appendix/supported_npu_data_layout_format.md)
 
 ---
 

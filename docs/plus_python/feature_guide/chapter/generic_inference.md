@@ -27,7 +27,8 @@ The pre-processing on Host includes but not limited to:
 Please refer following sections for according information:  
 
 - [Supported Image Format](./../../../plus_c/appendix/supported_image_format.md) for the supported image format of hardware image pre-processing.
-- [Supported NPU Data Layout Format](./../../../plus_c/appendix/supported_npu_data_layout_format.md) for the NPU layout format.
+- [Supported NPU Data Layout Format (KL520, KL720 and KL630)](./../../../plus_c/appendix/supported_npu_data_layout_format.md) for the NPU layout format.
+- [Convert ONNX & NPU Data on the KL730 Platform](./../../../plus_c/appendix/convert_onnx_data_to_npu_data_on_kl730.md) for the KL730 ONNX/NPU data conversion.
 - [3.1 Generic Data Inference With Pre-Processing on Host](#31-generic-data-inference-with-pre-processing-on-host) for the demonstration of the pre-processing.
 
 Furthermore, **Generic Inference** provide following functions to retrieve specific output node data (More information please reference *API Reference/Inference API*):

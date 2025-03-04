@@ -67,7 +67,9 @@ nav:
         - V1.3.0:                                                   plus_c/release_note/v1/v1_3_0.md
     - Appendix:
       - Index:                                                      plus_c/appendix/index.md
-      - Supported NPU Data Layout Format:                           plus_c/appendix/supported_npu_data_layout_format.md
+      - Supported NPU Data Layout Format (KL520, KL720 and KL630):  plus_c/appendix/supported_npu_data_layout_format.md
+      - Supported NPU Data Layout Format (KL730):                   plus_c/appendix/supported_npu_data_layout_format_kl730.md
+      - Convert ONNX & NPU Data on the KL730 Platform:              plus_c/appendix/convert_onnx_data_to_npu_data_on_kl730.md
       - Supported Image Format:                                     plus_c/appendix/supported_image_format.md
       - NPU Raw Output Memory Layout:                               plus_c/appendix/npu_raw_output_memory_layout.md
       - Yolo Object Name Mapping:                                   plus_c/appendix/yolo_object_name_mapping.md
@@ -256,7 +258,9 @@ nav:
     - Appendix:
       - Index:                                                      plus_c/appendix/index.md
       - API Support List:                                           plus_c/appendix/api_support_list.md
-      - Supported NPU Data Layout Format:                           plus_c/appendix/supported_npu_data_layout_format.md
+      - Supported NPU Data Layout Format (KL520, KL720 and KL630):  plus_c/appendix/supported_npu_data_layout_format.md
+      - Supported NPU Data Layout Format (KL730):                   plus_c/appendix/supported_npu_data_layout_format_kl730.md
+      - Convert ONNX & NPU Data on the KL730 Platform:              plus_c/appendix/convert_onnx_data_to_npu_data_on_kl730.md
       - Supported Image Format:                                     plus_c/appendix/supported_image_format.md
       - Yolo Object Name Mapping:                                   plus_c/appendix/yolo_object_name_mapping.md
 
