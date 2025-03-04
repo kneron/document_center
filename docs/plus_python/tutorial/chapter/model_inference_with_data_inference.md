@@ -80,7 +80,7 @@ To infer without hardware image preprocessing, the input data must do the follow
         - Re-layout data to fit NPU data layout format
             - For KL520
 
-                > 1. More information about *NPU data layout format*,please refer to [Supported NPU Data Layout Format](../../../plus_c/appendix/supported_npu_data_layout_format.md)  
+                > 1. More information about *NPU data layout format*,please refer to [Supported NPU Data Layout Format (KL520, KL720 and KL630)](../../../plus_c/appendix/supported_npu_data_layout_format.md)  
                 > 2. For the KL520 hardware limitation, the '4W' in '4W4C8B' need to be width aligned to 16  
 
                 ```python
@@ -127,7 +127,7 @@ To infer without hardware image preprocessing, the input data must do the follow
 
             - For KL630 and KL720
 
-                > More information about *NPU data layout format*, please refer to [Supported NPU Data Layout Format](../../../plus_c/appendix/supported_npu_data_layout_format.md)  
+                > More information about *NPU data layout format*, please refer to [Supported NPU Data Layout Format (KL520, KL720 and KL630)](../../../plus_c/appendix/supported_npu_data_layout_format.md)  
 
                 ```python
                 # re-layout the data to fit NPU data layout format
@@ -176,7 +176,10 @@ To infer without hardware image preprocessing, the input data must do the follow
                 npu_input_buffer = re_layout_data.tobytes()
                 ```
 
-    - For KL730
+    - For KL730  
+
+        > More information about *ONNX/NPU data Conversion for KL730*, please refer to [Convert ONNX & NPU Data on the KL730 Platform](../../../plus_c/appendix/convert_onnx_data_to_npu_data_on_kl730.md)  
+
         - Get required model/data information
 
             ```python

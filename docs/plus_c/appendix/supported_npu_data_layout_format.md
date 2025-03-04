@@ -1,4 +1,4 @@
-## Supported NPU Data Layout Format
+## Supported NPU Data Layout Format (KL520, KL720 and KL630)
 
 **Symbol Description**: P *n* CH *m* is *m*-th channel in *n*-th pixel.  
 
