@@ -97,7 +97,7 @@ Notes:
 4. 530 and 630 only support DepthToSpace with blocksize set to 2 or 4.
 5. 530 and 630 only support Expand on channel or column and row.
 6. 520 and 720 only support Flatten before Gemm.
-7. 520, 530, 630 and 720 only supports GlobalAveragePool when the total size of the input and the output is less than the runtime memory size. 
+7. For GlobalAveragePool, 520 and 530 support up to 524888 pixels (input and output together, 8 bit, same for the platforms following). 630 supports 262144 pixels. 720 supports up to 1048576 pixels. 
 8. For MaxPool kernel size, 520 and 720 support square kernel up to 3x3. while 530 and 630 also support non-square kernel up to 3x3.
 9. NPUs only support constant pad mode and constant value set to 0.
 10. NPUs only support power set to 2.
