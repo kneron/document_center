@@ -89,14 +89,14 @@ Table below shows the list of operators supports base on ONNX operators.
 | Upsample<sup>14</sup>         |  N  |  Y  |  Y  |  Y  |  Y  |
 
 Notes:
-
+0. Kneron hardware runtime memory size: 520, 530 - 512KB; 630 - 256KBl; 720, 730 - 1024KB. 
 1. For AveragePool kernel size, 520 and 720 support square kernel up to 3x3. while 530 and 630 also support non-square kernel up to 3x3.
 2. All hardware only support Clip with min set to 0.
 3. 720 only supports ConvTranspose with stride set to 2.
 4. 530 and 630 only support DepthToSpace with blocksize set to 2 or 4.
 5. 530 and 630 only support Expand on channel or column and row.
 6. 520 and 720 only support Flatten before Gemm.
-7. 520 only supports GlobalAveragePool on input within 256 pixels while other hardware support up 16384 pixels.
+7. 520, 530, 630 and 720 only supports GlobalAveragePool when the total size of the input and the output is less than the runtime memory size. 
 8. For MaxPool kernel size, 520 and 720 support square kernel up to 3x3. while 530 and 630 also support non-square kernel up to 3x3.
 9. NPUs only support constant pad mode and constant value set to 0.
 10. NPUs only support power set to 2.
