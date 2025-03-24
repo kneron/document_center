@@ -89,6 +89,7 @@ Table below shows the list of operators supports base on ONNX operators.
 | Upsample<sup>14</sup>         |  N  |  Y  |  Y  |  Y  |  Y  |
 
 Notes:
+
 0. Kneron hardware runtime memory size: 520, 530 - 512KB; 630 - 256KBl; 720, 730 - 1024KB. 
 1. For AveragePool kernel size, 520 and 720 support square kernel up to 3x3. while 530 and 630 also support non-square kernel up to 3x3.
 2. All hardware only support Clip with min set to 0.
