@@ -24,6 +24,12 @@
 
 ## Toolchain Change log
 
+* **[v0.28.2]**
+  * Fix the batch compiler bug that nef files do not contain version information.
+  * Optimize kneronnxopt for processing large models.
+  * Fix other bugs.
+* **[v0.28.1]**
+  * Change default miniconda channel due to the license issue.
 * **[v0.28.0]**
   * **Change conda environment due to license issue.**
   * **Remove caffe support.**
@@ -61,6 +67,7 @@
     * Support more operators (Abs, Log, Pow, Sign).
     * Support mix accuracy mode.
     * Update environment packages.
+    * Change default environment to `onnx1.13`.
     * Fix bugs.
 * **[v0.24.0]**
     * **`ktc.ModelConfig.analysis` rename 'fm_cut' to 'compiler_tiling'.**

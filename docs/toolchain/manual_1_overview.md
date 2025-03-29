@@ -4,8 +4,8 @@
 
 # 1. Toolchain Overview
 
-**2025 Jan**
-**Toolchain v0.28.0**
+**2025 Mar**
+**Toolchain v0.28.2**
 
 ## 1.1. Introduction
 
@@ -19,7 +19,12 @@ In this document, you'll learn:
 3. How to utilize the tools through Python API.
 
 **Major changes of the current version**
-
+* **[v0.28.2]**
+  * Fix the batch compiler bug that nef files do not contain version information.
+  * Optimize kneronnxopt for processing large models.
+  * Fix other bugs.
+* **[v0.28.1]**
+  * Change default miniconda channel due to the license issue.
 * **[v0.28.0]**
   * **Change conda environment due to license issue.**
   * **Remove caffe support.**
@@ -83,11 +88,13 @@ The following model optimization code is in Python since we are using the Python
 import onnx
 # Import the ktc package which is our Python API.
 import ktc
+# Import the onnx optimizer which is used to optimize the onnx model.
+import kneronnxopt
 
 # Load the model.
 original_m = onnx.load("/workspace/examples/mobilenetv2/mobilenetv2_zeroq.origin.onnx")
 # Optimize the model using optimizer for onnx model.
-optimized_m = ktc.onnx_optimizer.onnx2onnx_flow(original_m)
+optimized_m = kneronnxopt.optimize(original_m)
 # Save the onnx object optimized_m to path /data1/optimized.onnx.
 onnx.save(optimized_m, '/data1/optimized.onnx')
 ```
