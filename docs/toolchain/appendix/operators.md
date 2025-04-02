@@ -58,6 +58,7 @@ Table below shows the list of operators supports base on ONNX operators.
 | Pow<sup>10</sup>              |  N  |  Y  |  Y  |  Y  |  Y  |
 | PRelu                         |  Y  |  Y  |  Y  |  Y  |  Y  |
 | RandomUniformLike             |  N  |  N  |  N  |  N  |  N  |
+| Reciprocal                    |  N  |  Y  |  Y  |  Y  |  Y  |
 | ReduceLogSum                  |  N  |  N  |  N  |  N  |  N  |
 | ReduceLogSumExp               |  N  |  N  |  Y  |  Y  |  Y  |
 | ReduceMax                     |  N  |  N  |  N  |  N  |  Y  |
@@ -73,7 +74,7 @@ Table below shows the list of operators supports base on ONNX operators.
 | Shrink                        |  N  |  N  |  N  |  N  |  N  |
 | Sigmoid                       |  N  |  Y  |  Y  |  Y  |  Y  |
 | Slice                         |  N  |  Y  |  Y  |  Y  |  Y  |
-| Softmax                       |  N  |  N  |  N  |  N  |  N  |
+| Softmax                       |  N  |  N  |  N  |  N  |  Y  |
 | Softplus                      |  N  |  N  |  Y  |  Y  |  Y  |
 | Softsign                      |  N  |  N  |  Y  |  Y  |  Y  |
 | SpaceToDepth<sup>13</sup>     |  N  |  N  |  Y  |  Y  |  Y  |

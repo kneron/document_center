@@ -14,7 +14,7 @@ We do not provide model conversion tools from other frameworks to ONNX in the `o
 
 ### 3.1.2. ONNX Optimization
 
-We provide a general onnx optimize API. We strongly recommend that all the onnx, including the onnx generated from other conversion tools, shall pass this API before going into the next section. This general onnx optimization API would modify the onnx graph to fit the toolchain and Kneron hardware specification. The optimization includes: inference internal value_info shapes, fuse consecutive operators, eliminate do-nothing operators, replace high-cost operators with low-cost operators, etc..
+We provide a general ONNX optimize API. We strongly recommend that all ONNX models, including the onnx generated from other conversion tools, should pass this API before going into the next section. This general onnx optimization API would modify the onnx graph to fit the toolchain and Kneron hardware specification. The optimization includes: inferencing internal value_info shapes, fusing consecutive operators, eliminating do-nothing operators, replacing high-cost operators with low-cost operators, etc..
 
 > This ONNX optimizer is for the default `onnx1.13` environment. If you are using the `base` environment, please check [ONNX Converter](appendix/converters.md).
 
