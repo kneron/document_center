@@ -1,4 +1,4 @@
-# ONNX Converter (Derpecated)
+# ONNX Converter (Deprecated)
 
 > This document is for toolchain before v0.25.0. For users using later toolchain dockers, you can also manually switch 
 > to the `base` environment by running `conda activate base`. However, this is not recommended as this tool is 
@@ -132,7 +132,7 @@ cd /workspace/libs/ONNX_Convertor/keras-onnx && python rgba2yynn.py input_hdf5_f
 
 ## 2 Pytorch to ONNX
 
-We recommend using the Pytorch exported `onnx` file instead of the `pth` file, since the Pytorch do not has a
+We recommend using the Pytorch exported `onnx` file instead of the `pth` file, since the Pytorch does not has a
 very good model save and load API. You can check TIPS below on how to export models to onnx.
 
 We currently only support models exported by Pytorch version >=1.0.0, <=1.7.1, no matter it is a `pth` file or an `onnx`
@@ -141,7 +141,7 @@ file exported by `torch.onnx`. The PyTorch version in the toolchain docker is 1.
 > TIPS
 >
 > You can use `torch.onnx` to export your model into onnx format. Here is the
-> [Pytorch 1.7.1 version document](https://pytorch.org/docs/1.7.1/onnx.html) for `onnx.torch`. An example code for
+> [Pytorch 1.7.1 version document](https://pytorch.org/docs/1.7.1/onnx.html) for `torch.onnx`. An example code for
 > exporting the model is:
 
 ```python
@@ -184,7 +184,7 @@ ktc.onnx_optimizer.torch_exported_onnx_flow(m, disable_fuse_bn=False):
 ```
 
 Return the optimized model. Optimize the Pytorch exported onnx. Note that onnx2onnx_flow is still needed after
-running this optimizaiton.
+running this optimization.
 
 Args:
 
@@ -223,7 +223,7 @@ There might be some warning log printed out by the Pytorch because our example m
 *__Crash due to name conflict (Python API)__*
 
 If you meet the errors related to `node not found` or `invalid input`, this might be caused by a bug in the onnx library.
-Please try set `disable_fuse_bn` to `True`. The code would be:
+Please try setting `disable_fuse_bn` to `True`. The code would be:
 
 ```python
 #[API]
@@ -372,7 +372,7 @@ Args:
 * m (ModelProto): the input onnx ModelProto
 * disable_fuse_bn (bool, optional): do not fuse BN into Conv. Defaults to False.
 * bgr (bool, optional): add an Conv layer to convert rgb input to bgr. Defaults to False.
-* norm (bool, optional): add an Conv layer to add 0.5 tp the input. Defaults to False.
+* norm (bool, optional): add an Conv layer to add 0.5 to the input. Defaults to False.
 * rgba2yynn (bool, optional): add an Conv layer to convert rgb input to yynn . Defaults to False.
 * eliminate_tail (bool, optional): remove the trailing NPU unsupported nodes. Defaults to False.
 * opt_matmul (bool, optional): optimize the MatMul layers according to the NPU limit. Defaults to False.
@@ -430,7 +430,7 @@ it is the output of a `Gemm`, there is no need to do any more edition.
 the output, then the model is transposed into channel first. We can use the model editor to safely remove the
 `Transpose`.
 
-**Step 3:** If the input shape is not availble or invalid, we can usethe editor to give it a valid shape.
+**Step 3:** If the input shape is not availble or invalid, we can use the editor to give it a valid shape.
 
 **Step 4:** The model need to pass `onnx2onnx.py` again after running the editor.  See
 [section 6](#6-onnx-to-onnx-onnx-optimization).
@@ -463,7 +463,7 @@ editor.py [-h] [-c CUT_NODE [CUT_NODE ...]]
              [--add-bn ADD_BN [ADD_BN ...]]
              in_file out_file
 
-Edit an ONNX model. The processing sequense is 'delete nodes/values' -> 'add nodes' -> 'change shapes' -> 'cut node'.
+Edit an ONNX model. The processing sequence is 'delete nodes/values' -> 'add nodes' -> 'change shapes' -> 'cut node'.
 Cutting is not recommended to be done with other operations together.
 
 positional arguments:
@@ -690,4 +690,4 @@ Here is an example usage.
 new_m = ktc.onnx_optimizer.convert_opset_9_to_11(old_m)
 ```
 
-In this line of python code, `ktc.onnx_optimizer.convert_opset_9_to_11` is the function that takes an old version onnx object and upgrade it. The return value `new_m` is the converted onnx object. It need to take one more optimization step (section 3.1.5) before going into the next section. Even if you have already passed optimizar before, we still recommend you do it again after this upgrade.
+In this line of python code, `ktc.onnx_optimizer.convert_opset_9_to_11` is the function that takes an old version onnx object and upgrade it. The return value `new_m` is the converted onnx object. It need to take one more optimization step (section 3.1.5) before going into the next section. Even if you have already passed optimizer before, we still recommend you do it again after this upgrade.
