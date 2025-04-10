@@ -24,6 +24,14 @@
 
 ## Toolchain Change log
 
+* **[v0.29.0]**
+  * **Introduce `mixbw` for fixed-point analysis, an automated quantization mode that optimizes 8/16-bit configurations for Conv nodes, balancing accuracy (SNR) and speed (FPS).**
+  * Add onnx_vs_onnx command line entrance for kneronnxopt to compare two onnx models.
+  * Optimize log printing for ktc.
+  * Optimize compiler runtime based on partial graph comparison.
+  * Fix the bug that knerex could not handle last nodes properly in some cases.
+  * Fix the bug that knerex could not handle Add constant node input properly.
+  * Fix other known bugs.
 * **[v0.28.2]**
   * Fix the batch compiler bug that nef files do not contain version information.
   * Optimize kneronnxopt for processing large models.

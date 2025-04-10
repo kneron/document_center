@@ -4,8 +4,8 @@
 
 # 1. Toolchain Overview
 
-**2025 Mar**
-**Toolchain v0.28.2**
+**2025 Apr**
+**Toolchain v0.29.0**
 
 ## 1.1. Introduction
 
@@ -19,19 +19,14 @@ In this document, you'll learn:
 3. How to utilize the tools through Python API.
 
 **Major changes of the current version**
-* **[v0.28.2]**
-  * Fix the batch compiler bug that nef files do not contain version information.
-  * Optimize kneronnxopt for processing large models.
-  * Fix other bugs.
-* **[v0.28.1]**
-  * Change default miniconda channel due to the license issue.
-* **[v0.28.0]**
-  * **Change conda environment due to license issue.**
-  * **Remove caffe support.**
-  * Add `--opt-matmul` flag to kneronnxopt for kneron hardware matmul optimization.
-  * Add `--overwrite-input-shapes` and `--skip-fuse-qkv` flags to kneronnxopt large model processing.
-  * Support GRU, LSTM, and RNN operators defusion in kneronnxopt.
-  * Fix bugs.
+* **[v0.29.0]**
+  * **Introduce `mixbw` for fixed-point analysis, an automated quantization mode that optimizes 8/16-bit configurations for Conv nodes, balancing accuracy (SNR) and speed (FPS).**
+  * Add onnx_vs_onnx command line entrance for kneronnxopt to compare two onnx models.
+  * Optimize log printing for ktc.
+  * Optimize compiler runtime based on partial graph comparison.
+  * Fix the bug that knerex could not handle last nodes properly in some cases.
+  * Fix the bug that knerex could not handle Add constant node input properly.
+  * Fix other known bugs.
 
 ## 1.2. Workflow Overview
 

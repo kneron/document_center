@@ -60,7 +60,7 @@ Table below shows the list of operators supports base on ONNX operators.
 | RandomUniformLike             |  N  |  N  |  N  |  N  |  N  |
 | Reciprocal                    |  N  |  Y  |  Y  |  Y  |  Y  |
 | ReduceLogSum                  |  N  |  N  |  N  |  N  |  N  |
-| ReduceLogSumExp               |  N  |  N  |  Y  |  Y  |  Y  |
+| ReduceLogSumExp               |  N  |  N  |  N  |  N  |  N  |
 | ReduceMax                     |  N  |  N  |  N  |  N  |  Y  |
 | ReduceMean<sup>11</sup>       |  Y  |  Y  |  Y  |  Y  |  Y  |
 | ReduceSum                     |  Y  |  Y  |  Y  |  Y  |  Y  |
