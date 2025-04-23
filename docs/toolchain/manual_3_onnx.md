@@ -6,7 +6,7 @@ Our toolchain utilities take ONNX files as inputs. The ONNX workflow is mainly a
 
 The conversion tools are different for different onnx versions. The environment is managed by miniconda. Current default environment is `onnx1.13`. It supports ONNX opset up to 18.
 
-There is also a `base` environment which is the default environment for the toolchain before v0.25.0. This `base` environment supports opset 8 to 12. It is not recommended to use this environment for new models. But if you have a model using those opsets, you can still use this environment. The following documents are all based on the `onnx1.13` environment. If you are using the `base` environment, please check the [ONNX Converters](appendix/converters.md) for the API usage.
+There is also a `base` environment which is the default environment for the toolchain before v0.25.0. This `base` environment supports opset 8 to 12. It is not recommended to use this environment for new models. But if you have a model using those opsets, you can still use this environment. The following documents are all based on the `onnx1.13` environment. If you are using the `base` environment, please check the [ONNX Converters](appendix/converters.md) for the API usage. **`base` environment DOES NOT support 730 toolchain.**
 
 ### 3.1.1. Convert models to ONNX
 
