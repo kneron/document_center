@@ -38,7 +38,7 @@ Table below shows the list of operators supports base on ONNX operators.
 | LeakyRelu                     |  Y  |  Y  |  Y  |  Y  |  Y  |
 | LpNormalization               |  N  |  N  |  N  |  N  |  N  |
 | LRN                           |  N  |  N  |  N  |  N  |  N  |
-| LSTM                          |  N  |  Y  |  Y  |  Y  |  Y  |
+| LSTM                          |  N  |  N  |  N  |  N  |  Y  |
 | MatMul                        |  N  |  Y  |  Y  |  Y  |  Y  |
 | MaxPool<sup>8</sup>           |  Y  |  Y  |  Y  |  Y  |  Y  |
 | MaxRoiPool                    |  N  |  Y  |  Y  |  Y  |  Y  |
