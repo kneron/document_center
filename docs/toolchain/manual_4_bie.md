@@ -26,11 +26,12 @@ Args:
 * percentile (float, optional): used under 'mmse' mode. The range to search. The larger the value, the larger the search range, the better the performance but the longer the simulation time. Defaults to 0.001,
 * outlier_factor (float, optional): used under 'mmse' mode. The factor applied on outliers. For example, if clamping data is sensitive to your model, set outlier_factor to 2 or higher. Higher outlier_factor will reduce outlier removal by increasing range. Defaults to 1.0.
 * percentage (float, optional): used under 'percentage' mode. Suggest to set value between 0.999 and 1.0. Use 1.0 for detection models. Defaults to 0.999.
-* datapath_bitwidth_mode: choose from "int8"/"int16"/"mix balance"/"mix light". ("int16" is not supported in kdp520. "mix balance" and "mix light" are combines of int8 and int16 mode. "mix balance" prefers int16 while "mix light" prefers int8.)
-* weight_bitwidth_mode: choose from "int8"/"int16"/"int4"/"mix balance"/"mix light". ("int16" is not supported in kdp520. "int4" is not supported in kdp720. "mix balance" and "mix light" are combines of int8 and int16 mode. "mix balance" prefers int16 while "mix light" prefers int8.)
-* model_in_bitwidth_mode: choose from "int8"/"int16". ("int16" is not supported in kdp520.)
-* model_out_bitwidth_mode: choose from "int8"/"int16". ("int16" is not supported in kdp520.)
-* cpu_node_bitwidth_mode: choose from "int8"/"int16". ("int16" is not supported in kdp520.)
+* datapath_bitwidth_mode: choose from "int8"/"int16"/"mix balance"/"mix light"/"mixbw". ("int16" is not supported in kdp520. "mixbw", "mix balance" and "mix light" are combines of int8 and int16 mode. "mix balance" prefers int16 while "mix light" prefers int8. "mixbw" automatically select the best bitwidth for each layer.)
+* weight_bitwidth_mode: choose from "int8"/"int16"/"int4"/"mix balance"/"mix light". ("int16" is not supported in kdp520. "int4" is not supported in kdp720. "mixbw", "mix balance" and "mix light" are combines of int8 and int16 mode. "mix balance" prefers int16 while "mix light" prefers int8. "mixbw" automatically select the best bitwidth for each layer.)
+* model_in_bitwidth_mode: choose from "int8"/"int16". ("int16" is not supported in kdp520. When "mixbw" is set, this parameter is ignored.)
+* model_out_bitwidth_mode: choose from "int8"/"int16". ("int16" is not supported in kdp520. When "mixbw" is set, this parameter is ignored.)
+* cpu_node_bitwidth_mode: choose from "int8"/"int16". ("int16" is not supported in kdp520. When "mixbw" is set, this parameter is ignored.)
+* flops_ratio (float, optional): the ratio of the flops of the model. The larger the value, the better the performance but the longer the simulation time. Defaults to 0.2.
 * compiler_tiling (str, optional): could be "default" or "deep_search". Get a better image cut method through deep search, so as to improve the efficiency of our NPU. Defaults to "default".
 * mode (int, optional): running mode for the analysis. Defaults to 1.
     - 0: run ip_evaluator only. This mode will not output bie file.
