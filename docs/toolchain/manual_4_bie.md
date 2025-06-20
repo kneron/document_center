@@ -38,12 +38,12 @@ Args:
     - 1: run knerex (for quantization) only.
     - 2: run knerex with 1 image verification (dynasty, compiler, csim and bit-true-match check).
     - 3: run knerex with all images verification (dynasty, compiler, csim and bit-true-match check). WARNING: This option takes very long time.
-* optimize (int, optional): level of optimization. 0-4, the larger number, the better model performance, but takes longer. Defaults to 0.
+* optimize (int, optional): level of featuremap optimization, which is a search runtime optimization based on partial graph comparison. Worse performance than deep search. It is recommended to enable when model is huge or search runtime is long. 0-4, the larger number, the better model performance, but takes longer. Defaults to 0.
     * 0: the knerex generated quantization model.
-    * 1: bias adjust parallel, no firmware cut improvement.
-    * 2: bias adjust parallel, with firmware cut improvement.
-    * 3: bias adjust sequential, no firmware cut improvement. SLOW!
-    * 4: bias adjust sequential, with firmware cut improvement.  SLOW!
+    * 1: bias adjust parallel, no featuremap cut improvement.
+    * 2: bias adjust parallel, with featuremap cut improvement.
+    * 3: bias adjust sequential, no featuremap cut improvement. SLOW!
+    * 4: bias adjust sequential, with featuremap cut improvement.  SLOW!
 
 Please also note that this step would be very time-consuming since it analysis the model with every input data you provide.
 
