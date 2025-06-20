@@ -24,6 +24,13 @@
 
 ## Toolchain Change log
 
+* **[v0.30.0]**
+  * **Introduce `input_fmt` for `ModelConfig` to specify the input format of the model.**
+  * **`bie` files may not be compatible with previous versions.**
+  * Fix kneronnxopt to duplicate shared weights for not supported cases.
+  * Update knerex to support alpha&beta hardsigmoid.
+  * Update webgui to support conda environment selection.
+  * Bug fixes and performance improvements.
 * **[v0.29.0]**
   * **Introduce `mixbw` for fixed-point analysis, an automated quantization mode that optimizes 8/16-bit configurations for Conv nodes, balancing accuracy (SNR) and speed (FPS).**
   * Add onnx_vs_onnx command line entrance for kneronnxopt to compare two onnx models.

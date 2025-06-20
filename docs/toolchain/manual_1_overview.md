@@ -4,8 +4,8 @@
 
 # 1. Toolchain Overview
 
-**2025 Apr**
-**Toolchain v0.29.0**
+**2025 Jun**
+**Toolchain v0.30.0**
 
 ## 1.1. Introduction
 
@@ -19,14 +19,13 @@ In this document, you'll learn:
 3. How to utilize the tools through Python API.
 
 **Major changes of the current version**
-* **[v0.29.0]**
-  * **Introduce `mixbw` for fixed-point analysis, an automated quantization mode that optimizes 8/16-bit configurations for Conv nodes, balancing accuracy (SNR) and speed (FPS).**
-  * Add onnx_vs_onnx command line entrance for kneronnxopt to compare two onnx models.
-  * Optimize log printing for ktc.
-  * Optimize compiler runtime based on partial graph comparison.
-  * Fix the bug that knerex could not handle last nodes properly in some cases.
-  * Fix the bug that knerex could not handle Add constant node input properly.
-  * Fix other known bugs.
+* **[v0.30.0]**
+  * **Introduce `input_fmt` for `ModelConfig` to specify the input format of the model.**
+  * **`bie` files may not be compatible with previous versions.**
+  * Fix kneronnxopt to duplicate shared weights for not supported cases.
+  * Update knerex to support alpha&beta hardsigmoid.
+  * Update webgui to support conda environment selection.
+  * Bug fixes and performance improvements.
 
 ## 1.2. Workflow Overview
 
