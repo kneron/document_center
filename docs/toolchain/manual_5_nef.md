@@ -133,3 +133,35 @@ ktc.combine_nef(['/data1/model_32769.nef', '/data1/model_32770.nef', '/data1/mod
 ```
 
 **Please note that nef files for 720 hardware generated using the default configuration after toolchain v0.20.0 cannot be combined with the nef files generated previously. This is caused by the default setting for flatbuffer has been changed from False to True for the 720 hardware.**
+
+### Input Format (Optional)
+
+You can also specify the input format anytime before `compile` or `encrypt_compile`. It is a variable of ModelConfig object. Here are the available formats: <id: (name, bitwidth)>
+
+* 0: ("1W16C8B_CH_COMPACT", 8),
+* 1: ("1W16C8BHL_CH_COMPACT", 16),
+* 2: ("4W4C8B", 8),
+* 3: ("4W4C8BHL", 16),
+* 4: ("16W1C8B", 8),
+* 5: ("16W1C8BHL", 16),
+* 6: ("8W1C16B", 16),
+* 7: ("PS_1W16C24B", 24),
+* 8: ("1W16C8B", 8),
+* 9: ("1W16C8BHL", 16),
+* 10: ("HW4C8B_KEEP_A", 8),  # inproc
+* 11: ("HW4C8B_DROP_A", 8),  # inproc
+* 12: ("HW1C8B", 8),         # inproc
+* 13: ("HW1C16B_LE", 16),    # inproc
+* 14: ("HW1C16B_BE", 16),    # inproc
+* 100: ("RAW8", 8),
+* 102: ("RAW16", 16),
+* 103: ("RAW_FLOAT", 32)
+
+Here is an example of how to set the input format:
+
+```python
+km_0.input_format = "4W4C8B"
+km_1.input_format = "16W1C8B"
+ktc.compile([km_0, km_1])
+```
+
