@@ -20,6 +20,7 @@ The provided examples are designed to show how to use KP APIs and present Kneron
 7. [Drop Frame Usage Example](#7-drop-frame-usage-example)
 8. [Model Zoo Examples](#8-model-zoo-examples)
 9. [Device Memory Usage Control Example](#9-device-memory-usage-control-example)
+10. [Get Model Information Example](#10-get-model-information-example)
 
 ---
 
@@ -642,4 +643,182 @@ $ python3 KL520DemoGenericImageInferenceFifoqConfig.py
         "     -9.261162    -7.339034  ]]]]"
     ]
 }]
+```
+
+## 10. Get Model Information Example  
+
+This example demonstrates how to use `kp.core.load_model_from_file()` to parse the NEF file and retrieve model information from the NEF descriptor `kp.ModelNefDescriptor`. This tool allows you to quickly probe the model metadata.  
+
+```bash
+$ python3 ModelInformation.py -t KL520 -p 25 -m ../../res/models/KL520/tiny_yolo_v3/models_520.nef
+
+[Connect Device]
+ - Success
+[Set Device Timeout]
+ - Success
+[Upload Firmware]
+ - Success
+[Load Model]
+ - Success
+{
+    "magic": "0x5AA55AA5",
+    "metadata": {
+        "kn_number": "0x0",
+        "toolchain_version": "kneron_compiler version: 2024-12-02(7b261fd55a)/kneron_nef_utils version: 2025-01-07(d9ea70a);",
+        "compiler_version": "",
+        "nef_schema_version": {
+            "version": "0.0.1"
+        },
+        "platform": ""
+    },
+    "target_chip": "ModelTargetChip.KP_MODEL_TARGET_CHIP_KL520",
+    "crc": "0x6CBF1FF9",
+    "models": {
+        "0": {
+            "target_chip": "ModelTargetChip.KP_MODEL_TARGET_CHIP_KL520",
+            "version": "0x1",
+            "id": 19,
+            "input_nodes": {
+                "0": {
+                    "index": 0,
+                    "name": "",
+                    "data_layout": "ModelTensorDataLayout.KP_MODEL_TENSOR_DATA_LAYOUT_4W4C8B",
+                    "tensor_shape_info": {
+                        "version": "ModelTensorShapeInformationVersion.KP_MODEL_TENSOR_SHAPE_INFO_VERSION_1",
+                        "data": {
+                            "shape_npu": [
+                                1,
+                                3,
+                                224,
+                                224
+                            ],
+                            "shape_onnx": [
+                                1,
+                                3,
+                                224,
+                                224
+                            ],
+                            "axis_permutation_onnx_to_npu": [
+                                0,
+                                1,
+                                2,
+                                3
+                            ]
+                        }
+                    },
+                    "quantization_parameters": {
+                        "version": "QuantizationParametersVersion.KP_MODEL_QUANTIZATION_PARAMS_VERSION_1",
+                        "data": {
+                            "quantized_axis": 1,
+                            "quantized_fixed_point_descriptor_list": {
+                                "0": {
+                                    "scale": {
+                                        "dtype": "DataType.KP_DTYPE_FLOAT32",
+                                        "value": 1.0
+                                    },
+                                    "radix": 8
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "output_nodes": {
+                "0": {
+                    "index": 0,
+                    "name": "",
+                    "data_layout": "ModelTensorDataLayout.KP_MODEL_TENSOR_DATA_LAYOUT_16W1C8B",
+                    "tensor_shape_info": {
+                        "version": "ModelTensorShapeInformationVersion.KP_MODEL_TENSOR_SHAPE_INFO_VERSION_1",
+                        "data": {
+                            "shape_npu": [
+                                1,
+                                255,
+                                7,
+                                7
+                            ],
+                            "shape_onnx": [
+                                1,
+                                255,
+                                7,
+                                7
+                            ],
+                            "axis_permutation_onnx_to_npu": [
+                                0,
+                                1,
+                                2,
+                                3
+                            ]
+                        }
+                    },
+                    "quantization_parameters": {
+                        "version": "QuantizationParametersVersion.KP_MODEL_QUANTIZATION_PARAMS_VERSION_1",
+                        "data": {
+                            "quantized_axis": 1,
+                            "quantized_fixed_point_descriptor_list": {
+                                "0": {
+                                    "scale": {
+                                        "dtype": "DataType.KP_DTYPE_FLOAT32",
+                                        "value": 1.4717674255371094
+                                    },
+                                    "radix": 2
+                                }
+                            }
+                        }
+                    }
+                },
+                "1": {
+                    "index": 1,
+                    "name": "",
+                    "data_layout": "ModelTensorDataLayout.KP_MODEL_TENSOR_DATA_LAYOUT_16W1C8B",
+                    "tensor_shape_info": {
+                        "version": "ModelTensorShapeInformationVersion.KP_MODEL_TENSOR_SHAPE_INFO_VERSION_1",
+                        "data": {
+                            "shape_npu": [
+                                1,
+                                255,
+                                14,
+                                14
+                            ],
+                            "shape_onnx": [
+                                1,
+                                255,
+                                14,
+                                14
+                            ],
+                            "axis_permutation_onnx_to_npu": [
+                                0,
+                                1,
+                                2,
+                                3
+                            ]
+                        }
+                    },
+                    "quantization_parameters": {
+                        "version": "QuantizationParametersVersion.KP_MODEL_QUANTIZATION_PARAMS_VERSION_1",
+                        "data": {
+                            "quantized_axis": 1,
+                            "quantized_fixed_point_descriptor_list": {
+                                "0": {
+                                    "scale": {
+                                        "dtype": "DataType.KP_DTYPE_FLOAT32",
+                                        "value": 1.4307060241699219
+                                    },
+                                    "radix": 2
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "setup_schema_version": {
+                "version": "0.0.0"
+            },
+            "setup_file_schema_version": {
+                "version": "0.0.0"
+            },
+            "max_raw_out_size": 86180
+        }
+    }
+}
 ```

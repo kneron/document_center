@@ -12,6 +12,11 @@ markdown_extensions:
   - pymdownx.magiclink
   - pymdownx.superfences
   - pymdownx.tilde
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_javascript:
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
 
 nav:
   - Kneron AI:                                                      index.md
@@ -42,6 +47,7 @@ nav:
         - Create Multiple Model Example for KL720:                  plus_c/feature_guide/customized_api/create_kl720_multiple_models_example.md
         - Create Single Model Example for KL730:                    plus_c/feature_guide/customized_api/create_kl730_single_model_example.md
         - Create Multiple Model Example for KL730:                  plus_c/feature_guide/customized_api/create_kl730_multiple_models_example.md
+        - Create Single Model with Software NPU Format Convert Example for KL730: plus_c/feature_guide/customized_api/create_kl730_single_model_with_sw_npu_format_convert_example.md
         - NCPU Firmware Configuration:                              plus_c/feature_guide/customized_api/ncpu_firmware_configuration.md
         - Run Customized Examples:                                  plus_c/feature_guide/customized_api/run_customized_examples.md
       - Device DDR Management:                                      plus_c/feature_guide/device_ddr_management.md
@@ -55,7 +61,9 @@ nav:
     - Release Note:
       - Index:                                                      plus_c/release_note/index.md
       - Version 3:
-        - V3.1.0 (Latest Version):                                  plus_c/release_note/v3/v3_1_0.md
+        - V3.1.2 (Latest Version):                                  plus_c/release_note/v3/v3_1_2.md
+        - V3.1.1:                                                   plus_c/release_note/v3/v3_1_1.md
+        - V3.1.0:                                                   plus_c/release_note/v3/v3_1_0.md
         - V3.0.0:                                                   plus_c/release_note/v3/v3_0_0.md
       - Version 2:
         - V2.3.0:                                                   plus_c/release_note/v2/v2_3_0.md
@@ -67,20 +75,28 @@ nav:
         - V1.3.0:                                                   plus_c/release_note/v1/v1_3_0.md
     - Appendix:
       - Index:                                                      plus_c/appendix/index.md
+      - API Support List:                                           plus_c/appendix/api_support_list.md
       - Supported NPU Data Layout Format (KL520, KL720 and KL630):  plus_c/appendix/supported_npu_data_layout_format.md
       - Supported NPU Data Layout Format (KL730):                   plus_c/appendix/supported_npu_data_layout_format_kl730.md
       - Convert ONNX & NPU Data on the KL730 Platform:              plus_c/appendix/convert_onnx_data_to_npu_data_on_kl730.md
+      - Hardware Image Preprocessing:                               plus_c/appendix/hardware_image_preprocessing.md
       - Supported Image Format:                                     plus_c/appendix/supported_image_format.md
       - NPU Raw Output Memory Layout:                               plus_c/appendix/npu_raw_output_memory_layout.md
       - Yolo Object Name Mapping:                                   plus_c/appendix/yolo_object_name_mapping.md
     - API Reference:
-      - v3.1.x:
-        - Data Structure:                                           plus_c_api/api_reference_3.1.x/kp_struct.h.md
-        - Core API:                                                 plus_c_api/api_reference_3.1.x/kp_core.h.md
-        - Inference API:                                            plus_c_api/api_reference_3.1.x/kp_inference.h.md
-        - (legacy)Data Structure:                                   plus_c_api/api_reference_3.1.x/kp_struct_v1.h.md
-        - (legacy)Inference API:                                    plus_c_api/api_reference_3.1.x/kp_inference_v1.h.md
+      - v3.1.2:
+        - Data Structure:                                           plus_c_api/api_reference_3.1.2/kp_struct.h.md
+        - Core API:                                                 plus_c_api/api_reference_3.1.2/kp_core.h.md
+        - Inference API:                                            plus_c_api/api_reference_3.1.2/kp_inference.h.md
+        - (legacy)Data Structure:                                   plus_c_api/api_reference_3.1.2/kp_struct_v1.h.md
+        - (legacy)Inference API:                                    plus_c_api/api_reference_3.1.2/kp_inference_v1.h.md
       - Archive:
+        - v3.1.0:
+          - Data Structure:                                         plus_c_api/api_reference_3.1.0/kp_struct.h.md
+          - Core API:                                               plus_c_api/api_reference_3.1.0/kp_core.h.md
+          - Inference API:                                          plus_c_api/api_reference_3.1.0/kp_inference.h.md
+          - (legacy)Data Structure:                                 plus_c_api/api_reference_3.1.0/kp_struct_v1.h.md
+          - (legacy)Inference API:                                  plus_c_api/api_reference_3.1.0/kp_inference_v1.h.md
         - v3.0.x:
           - Data Structure:                                         plus_c_api/api_reference_3.0.x/kp_struct.h.md
           - Core API:                                               plus_c_api/api_reference_3.0.x/kp_core.h.md
@@ -168,7 +184,18 @@ nav:
       - Compatible with V1.x API:                                   plus_python/api_migration/chapter/api_compatible_legacy.md
     - API Document:
       - Index:                                                      plus_python/api_document/index.md
-      - V3.1.0 (Latest Version):
+      - V3.1.2 (Latest Version):
+        - Index:                                                    plus_python/api_document/V3.1.2/index.md
+        - kp.core:                                                  plus_python/api_document/V3.1.2/kp/core.md
+        - kp.inference:                                             plus_python/api_document/V3.1.2/kp/inference.md
+        - kp value:                                                 plus_python/api_document/V3.1.2/kp/value.md
+        - kp enum:                                                  plus_python/api_document/V3.1.2/kp/enum.md
+        - kp exception:                                             plus_python/api_document/V3.1.2/kp/exception.md
+        - kp const:                                                 plus_python/api_document/V3.1.2/kp/const.md
+        - kp.v1 (Legacy Module):
+          - kp.v1.inference:                                        plus_python/api_document/V3.1.2/kp/v1/inference.md
+          - kp.v1 value:                                            plus_python/api_document/V3.1.2/kp/v1/value.md
+      - V3.1.0:
         - Index:                                                    plus_python/api_document/V3.1.0/index.md
         - kp.core:                                                  plus_python/api_document/V3.1.0/kp/core.md
         - kp.inference:                                             plus_python/api_document/V3.1.0/kp/inference.md
@@ -245,7 +272,9 @@ nav:
     - Release Note:
       - Index:                                                      plus_c/release_note/index.md
       - Version 3:
-        - V3.1.0 (Latest Version):                                  plus_c/release_note/v3/v3_1_0.md
+        - V3.1.2 (Latest Version):                                  plus_c/release_note/v3/v3_1_2.md
+        - V3.1.1:                                                   plus_c/release_note/v3/v3_1_1.md
+        - V3.1.0:                                                   plus_c/release_note/v3/v3_1_0.md
         - V3.0.0:                                                   plus_c/release_note/v3/v3_0_0.md
       - Version 2:
         - V2.3.0:                                                   plus_c/release_note/v2/v2_3_0.md
@@ -261,7 +290,9 @@ nav:
       - Supported NPU Data Layout Format (KL520, KL720 and KL630):  plus_c/appendix/supported_npu_data_layout_format.md
       - Supported NPU Data Layout Format (KL730):                   plus_c/appendix/supported_npu_data_layout_format_kl730.md
       - Convert ONNX & NPU Data on the KL730 Platform:              plus_c/appendix/convert_onnx_data_to_npu_data_on_kl730.md
+      - Hardware Image Preprocessing:                               plus_c/appendix/hardware_image_preprocessing.md
       - Supported Image Format:                                     plus_c/appendix/supported_image_format.md
+      - NPU Raw Output Memory Layout:                               plus_c/appendix/npu_raw_output_memory_layout.md
       - Yolo Object Name Mapping:                                   plus_c/appendix/yolo_object_name_mapping.md
 
   - Firmware SDK:

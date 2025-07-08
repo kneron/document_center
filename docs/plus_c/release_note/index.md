@@ -1,7 +1,9 @@
 ## Release Note  
 
 ### KneronPLUS 3  
-- [3.1.0 (Latest Version)](./v3/v3_1_0.md)
+- [3.1.2 (Latest Version)](./v3/v3_1_2.md)
+- [3.1.1](./v3/v3_1_1.md)
+- [3.1.0](./v3/v3_1_0.md)
 - [3.0.0](./v3/v3_0_0.md)
 
 ### KneronPLUS 2  

@@ -26,6 +26,7 @@ The provided examples are designed to show how to use KP APIs and present Kneron
     - [1.5 Generic Command Example](#15-generic-command-example)
     - [1.6 DFUT_console](#16-dfut_console)
     - [1.7 Device FIFO Queue Config Example](#17-device-fifo-queue-config-example)
+    - [1.8 Get Model Information Example](#18-get-model-information-example)
 - [2. Inference API Examples](#2-inference-api-examples)
     - [2.1 Generic Inference Example](#21-generic-inference-example)
     - [2.2 Customized Inference Example](#22-customized-inference-example)
@@ -369,7 +370,7 @@ Therefore, all the functions in console mode, other than executable file name, a
 11. For writing model into KL730, please refer [Write Model Into KL730](./write_model_to_flash.md#62-use-command-line-to-write-model-into-ai-device).
 
 
-## 1.7 Device FIFO Queue Config Example
+### 1.7 Device FIFO Queue Config Example
 
 This example is to show how to configure the `kp_ddr_manage_attr_t` and the usage of `kp_store_ddr_manage_attr()`.
 
@@ -419,6 +420,80 @@ dumped node 0 output to 'output_bike_cars_street_224x224_node0_7x7x255.txt'
 dumped node 1 output to 'output_bike_cars_street_224x224_node1_14x14x255.txt'
 ```
 
+
+### 1.8 Get Model Information Example  
+
+This example demonstrates how to use `kp_load_model_from_file()` to parse the NEF file and retrieve model information from the NEF descriptor `kp_model_nef_descriptor_t`. This tool allows you to quickly probe the model metadata.  
+
+```bash
+$ sudo ./model_information -port 25 -target KL520 -model ../../res/models/KL520/tiny_yolo_v3/models_520.nef
+```
+
+```bash
+-h       : help
+-target  : [target platform] (KL520, KL720, KL630, KL730) = KL520
+-port    : [port id set] = 25 (all, auto or specified port id set, can also be "13,537" for multiple devices)
+-model  : [model file path] (.nef) = ../../res/models/KL520/tiny_yolo_v3/models_520.nef
+
+connect device ... OK
+upload firmware ... OK
+upload model from usb ... OK
+=======================================================
+[nef metadata]
+=======================================================
+    target: KL520
+    crc: 0x6CBF1FF9
+    num_models: 1
+=======================================================
+    kn_num: 0
+    toolchain_version: kneron_compiler version: 2024-12-02(7b261fd55a)/kneron_nef_utils version: 2025-01-07(d9ea70a);
+    compiler_version:
+    nef_schema_version: 0.0.1
+    platform:
+=======================================================
+[Model #0]
+=======================================================
+    target: KL520
+    version: 0x1
+    id: 19
+    setup_bin_schema_version: 0.0.0
+    file_schema_version: 0.0.0
+=======================================================
+[input node]
+=======================================================
+    index: 0
+    name:
+    data_layout: 4W4C8B
+    quantization parameter version: 1
+    quantized_axis: 1
+    quantization_parameter[0]: scale 1.000000 radix 8
+    input shape npu: [ 1, 3, 224, 224]
+    input shape onnx: [ 1, 3, 224, 224]
+    input axis permutation onnx to npu: [ 0, 1, 2, 3]
+=======================================================
+[output node]
+=======================================================
+    index: 0
+    name:
+    data_layout: 16W1C8B
+    quantization parameter version: 1
+    quantized_axis: 1
+    quantization_parameter[0]: scale 1.471767 radix 2
+    output shape npu: [ 1, 255, 7, 7]
+    output shape onnx: [ 1, 255, 7, 7]
+    output axis permutation onnx to npu: [ 0, 1, 2, 3]
+=======================================================
+    index: 1
+    name:
+    data_layout: 16W1C8B
+    quantization parameter version: 1
+    quantized_axis: 1
+    quantization_parameter[0]: scale 1.430706 radix 2
+    output shape npu: [ 1, 255, 14, 14]
+    output shape onnx: [ 1, 255, 14, 14]
+    output axis permutation onnx to npu: [ 0, 1, 2, 3]
+=======================================================
+```
 
 ---
 

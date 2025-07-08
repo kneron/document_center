@@ -12,6 +12,7 @@ Documents in **Customized API** explain the usage of create customized API in So
 - [Create Multiple Model Example for KL720](./create_kl720_multiple_models_example.md)
 - [Create Single Model Example for KL730](./create_kl730_single_model_example.md)
 - [Create Multiple Model Example for KL730](./create_kl730_multiple_models_example.md)
+- [Create Single Model with Software NPU Format Convert Example for KL730](./create_kl730_single_model_with_sw_npu_format_convert_example.md)
 - [NCPU Firmware Configuration](./ncpu_firmware_configuration.md)
 - [Run Customized Examples](./run_customized_examples.md)
 

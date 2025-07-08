@@ -29,7 +29,7 @@
 
 ![](../imgs/generic_inference_flow.svg)
 
-For **Generic Image Inference API**, images (RGB565, RGBA8888, YUYV422,...) can be provided as the input for the Kneron Device. And Kneron Device provides the automatic hardware image pre-processing including resize, padding, normalization and data re-layout before NPU inference.
+For **Generic Image Inference API**, images (RGB565, RGBA8888, YUYV422,...) can be provided as the input for the Kneron Device. And Kneron Device provides the automatic [hardware image preprocessing](../appendix/hardware_image_preprocessing.md) including resize, padding, normalization and data re-layout before NPU inference.
 
 For **Generic Data Inference API**, data (or images), which is not supported by automatic hardware image pre-processing, can be used as the input for NPU inference, if and only if the data has been performed pre-processing on Host to the format that model requests on NPU.
 
@@ -42,10 +42,12 @@ The pre-processing on Host includes but not limited to:
 
 Please refer following sections for according information:
 
-- [Supported Image Format](../../plus_c/appendix/supported_image_format.md) for the supported image format of hardware image pre-processing.
-- [Supported NPU Data Layout Format (KL520, KL720 and KL630)](../../plus_c/appendix/supported_npu_data_layout_format.md) for the NPU layout format.
-- [Convert ONNX & NPU Data on the KL730 Platform](../../plus_c/appendix/convert_onnx_data_to_npu_data_on_kl730.md) for the KL730 ONNX/NPU data conversion.
-- [3.1 Generic Data Inference With Pre-Processing on Host](#31-generic-data-inference-with-pre-processing-on-host) for the demonstration of the pre-processing.
+- [Supported Image Format](../../plus_c/appendix/supported_image_format.md) for the supported image format of hardware image pre-processing.  
+- [Supported NPU Data Layout Format (KL520, KL720 and KL630)](../../plus_c/appendix/supported_npu_data_layout_format.md) for the KL520, KL720 and KL630 NPU layout format.
+- [Supported NPU Data Layout Format (KL730)](../../plus_c/appendix/supported_npu_data_layout_format.md) for the KL730 NPU layout format.  
+- [Hardware Image Preprocessing](../appendix/hardware_image_preprocessing.md) for the efficient image preprocessing  
+- [Convert ONNX & NPU Data on the KL730 Platform](../../plus_c/appendix/convert_onnx_data_to_npu_data_on_kl730.md) for the KL730 ONNX/NPU data conversion.  
+- [3.1 Generic Data Inference With Pre-Processing on Host](#31-generic-data-inference-with-pre-processing-on-host) for the demonstration of the pre-processing.  
 
 Furthermore, **Generic Inference** provide following functions to retrieve specific output node data (More information please reference *API Reference/Inference API*):
 
@@ -70,7 +72,7 @@ Generic image inference examples are using the **Generic Image Inference API**, 
 
 However, **Generic Image Inference API** can only provide the raw output from the model without post-processing. If you wish to get the result with post-processing, you may implement the corresponding post-processing in Software (Please refer [2.2 Generic Image Inference With Post-Processing on Host](#22-generic-image-inference-with-post-processing-on-host) for the demonstration).
 
-In **Generic Image Inference API**, you may customized what to do in the pre-processing. There are few items are provided:
+In **Generic Image Inference API**, you may customized what to do in the [hardware image preprocessing](../appendix/hardware_image_preprocessing.md). There are few items are provided:
 
 1. Image Resize
     - You can choose to do or not to do the image resize by setting `resize_mode` in `kp_generic_input_node_image_t` of `kp_generic_image_inference_desc_t`.
@@ -85,6 +87,7 @@ In **Generic Image Inference API**, you may customized what to do in the pre-pro
 5. Data Normalization
     - You can choose to do *Kneron Normalization*, *Tensor Flow Normalization*, *Yolo Normalization*, or other *Customized Normalization* by setting `normalize_mode` in `kp_generic_input_node_image_t` of `kp_generic_image_inference_desc_t`.
 
+>The **limitations** for the specified model input NPU format can be found in the [hardware image preprocessing](../appendix/hardware_image_preprocessing.md#limitation) documentation.  
 
 ### 2.1 Generic Image Inference With Raw Output
 
