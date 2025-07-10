@@ -53,6 +53,33 @@ To infer by Kneron NPU, the input/output data must be re-layout by the following
             | Entry #1 | P15CH1      | P14CH1      | P13CH1      | P12CH1     | P11CH1    | P10CH1    | P9CH1     | P8CH1     | P7CH1     | P6CH1     | P5CH1     | P4CH1     | P3CH1     | P2CH1     | P1CH1    | P0CH1    |
             | Entry #2 | P15CH2      | P14CH2      | P13CH2      | P12CH2     | P11CH2    | P10CH2    | P9CH2     | P8CH2     | P7CH2     | P6CH2     | P5CH2     | P4CH2     | P3CH2     | P2CH2     | P1CH2    | P0CH2    |  
 
+        - **HW4C8B_KEEP_A** - Flexible Column 4 Channel 8-Bits Feature Map Format  
+            This format utilizes a 4-channel structure to store RGBA input images, optimizing memory usage. Note that this format is intended solely for input and cannot be used as an output format.
+
+            | Bits     | \[127:120\] | \[119:112\] | \[111:104\] | \[103:96\] | \[95:88\] | \[87:80\] | \[79:72\] | \[71:64\] | \[63:56\] | \[55:48\] | \[47:40\] | \[39:32\] | \[31:24\] | \[23:16\] | \[15:8\] | \[7:0\] |
+            | -------- | ----------- | ----------- | ----------- | ---------- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | -------- | ------- |
+            | Entry #0 | P3CH3       | P3CH2       | P3CH1       | P3CH0      | P2CH3     | P2CH2     | P2CH1     | P2CH0     | P1CH3     | P1CH2     | P1CH1     | P1CH0     | P0CH3     | P0CH2     | P0CH1    | P0CH0   |
+            | Entry #1 | P7CH3       | P7CH2       | P7CH1       | P7CH0      | P6CH3     | P6CH2     | P6CH1     | P6CH0     | P5CH3     | P5CH2     | P5CH1     | P5CH0     | P4CH3     | P4CH2     | P4CH1    | P4CH0   |
+            | Entry #2 | P11CH3      | P11CH2      | P11CH1      | P11CH0     | P10CH3    | P10CH2    | P10CH1    | P10CH0    | P9CH3     | P9CH2     | P9CH1     | P9CH0     | P8CH3     | P8CH2     | P8CH1    | P8CH0   |  
+
+        - **HW4C8B_DROP_A** - Flexible Column 4-Channel 8-Bit Feature Map Format  
+            This format utilizes four channels to store RGB input images without an alpha channel, thereby optimizing memory usage. Please note that this format is intended solely for input and cannot be used for output.  
+
+            | Bits     | \[127:120\] | \[119:112\] | \[111:104\] | \[103:96\] | \[95:88\] | \[87:80\] | \[79:72\] | \[71:64\] | \[63:56\] | \[55:48\] | \[47:40\] | \[39:32\] | \[31:24\] | \[23:16\] | \[15:8\] | \[7:0\] |
+            |----------|-------------|-------------|-------------|------------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|----------|---------|
+            | Entry #0 | 0           | P3CH2       | P3CH1       | P3CH0      | 0         | P2CH2     | P2CH1     | P2CH0     | 0         | P1CH2     | P1CH1     | P1CH0     | 0         | P0CH2     | P0CH1    | P0CH0   |
+            | Entry #1 | 0           | P7CH2       | P7CH1       | P7CH0      | 0         | P6CH2     | P6CH1     | P6CH0     | 0         | P5CH2     | P5CH1     | P5CH0     | 0         | P4CH2     | P4CH1    | P4CH0   |
+            | Entry #2 | 0           | P11CH2      | P11CH1      | P11CH0     | 0         | P10CH2    | P10CH1    | P10CH0    | 0         | P9CH2     | P9CH1     | P9CH0     | 0         | P8CH2     | P8CH1    | P8CH0   |  
+
+        - **HW1C8B** - Flexible Column 1 Channel 8-Bits Feature Map Format  
+            Using 1-channel format to store grayscale input image to save memory space. This format cannot be an output format. Only use as input format.  
+
+            | Bits     | \[127:120\] | \[119:112\] | \[111:104\] | \[103:96\] | \[95:88\] | \[87:80\] | \[79:72\] | \[71:64\] | \[63:56\] | \[55:48\] | \[47:40\] | \[39:32\] | \[31:24\] | \[23:16\] | \[15:8\] | \[7:0\] |
+            | -------- | ----------- | ----------- | ----------- | ---------- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | -------- | ------- |
+            | Entry #0 | P15CH0      | P14CH0      | P13CH0      | P12CH0     | P11CH0    | P10CH0    | P9CH0     | P8CH0     | P7CH0     | P6CH0     | P5CH0     | P4CH0     | P3CH0     | P2CH0     | P1CH0    | P0CH0   |
+            | Entry #1 | P31CH0      | P30CH0      | P29CH0      | P28CH0     | P27CH0    | P26CH0    | P25CH0    | P24CH0    | P23CH0    | P22CH0    | P21CH0    | P20CH0    | P19CH0    | P18CH0    | P17CH0   | P16CH0  |
+            | Entry #2 | P47CH0      | P46CH0      | P45CH0      | P44CH0     | P43CH0    | P42CH0    | P41CH0    | P40CH0    | P39CH0    | P38CH0    | P37CH0    | P36CH0    | P35CH0    | P34CH0    | P33CH0   | P32CH0  |  
+
     - 16-Bits Data  
         - **8W1C16B** - 8 Column 1 Channel 16-Bits Feature Map Format  
 
@@ -119,6 +146,22 @@ To infer by Kneron NPU, the input/output data must be re-layout by the following
             | Entry #0 | P7CH0       | P6CH0      | P5CH0     | P4CH0     | P3CH0     | P2CH0     | P1CH0     | P0CH0     |
             | Entry #1 | P15CH1      | P14CH1     | P13CH1    | P12CH1    | P11CH1    | P10CH1    | P9CH1     | P8CH1     |
             | Entry #2 | P23CH2      | P22CH2     | P21CH2    | P20CH2    | P19CH2    | P18CH2    | P17CH2    | P16CH2    |  
+
+        - **HW1C16B_LE** - Flexible Column 1 Channel 16-Bits Feature Map Format (Store in Little-Endian)  
+
+            | Bits     | \[127:120\] | \[119:112\] | \[111:104\] | \[103:96\] | \[95:88\] | \[87:80\] | \[79:72\] | \[71:64\] | \[63:56\] | \[55:48\] | \[47:40\] | \[39:32\] | \[31:24\] | \[23:16\] | \[15:8\] | \[7:0\] |
+            |----------|-------------|-------------|-------------|------------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|----------|---------|
+            | Entry #0 | P7CH0H      | P7CH0L      | P6CH0H      | P6CH0L     | P5CH0H    | P5CH0L    | P4CH0H    | P4CH0L    | P3CH0H    | P3CH0L    | P2CH0H    | P2CH0L    | P1CH0H    | P1CH0L    | P0CH0H   | P0CH0L  |
+            | Entry #1 | P15CH0H     | P15CH0L     | P14CH0H     | P14CH0L    | P13CH0H   | P13CH0L   | P12CH0H   | P12CH0L   | P11CH0H   | P11CH0L   | P10CH0H   | P10CH0L   | P9CH0H    | P9CH0L    | P8CH0H   | P8CH0L  |
+            | Entry #2 | P23CH0H     | P23CH0L     | P22CH0H     | P22CH0L    | P21CH0H   | P21CH0L   | P20CH0H   | P20CH0L   | P19CH0H   | P19CH0L   | P18CH0H   | P18CH0L   | P17CH0H   | P17CH0L   | P16CH0H  | P16CH0L |  
+
+        - **HW1C16B_BE** - Flexible Column 1 Channel 16-Bits Feature Map Format (Store in Big-Endian)  
+
+            | Bits     | \[127:120\] | \[119:112\] | \[111:104\] | \[103:96\] | \[95:88\] | \[87:80\] | \[79:72\] | \[71:64\] | \[63:56\] | \[55:48\] | \[47:40\] | \[39:32\] | \[31:24\] | \[23:16\] | \[15:8\] | \[7:0\] |
+            |----------|-------------|-------------|-------------|------------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|----------|---------|
+            | Entry #0 | P7CH0L      | P7CH0H      | P6CH0L      | P6CH0H     | P5CH0L    | P5CH0H    | P4CH0L    | P4CH0H    | P3CH0L    | P3CH0H    | P2CH0L    | P2CH0H    | P1CH0L    | P1CH0H    | P0CH0L   | P0CH0H  |
+            | Entry #1 | P15CH0L     | P15CH0H     | P14CH0L     | P14CH0H    | P13CH0L   | P13CH0H   | P12CH0L   | P12CH0H   | P11CH0L   | P11CH0H   | P10CH0L   | P10CH0H   | P9CH0L    | P9CH0H    | P8CH0L   | P8CH0H  |
+            | Entry #2 | P23CH0L     | P23CH0H     | P22CH0L     | P22CH0H    | P21CH0L   | P21CH0H   | P20CH0L   | P20CH0H   | P19CH0L   | P19CH0H   | P18CH0L   | P18CH0H   | P17CH0L   | P17CH0H   | P16CH0L  | P16CH0H |  
 
 - Output Data Layout  
     - 8-Bits Data  

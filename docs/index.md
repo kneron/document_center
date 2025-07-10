@@ -42,6 +42,8 @@ Kneron AI consists the following components:
 
 Versions                 | KL520 SDK version | KL720 SDK version | KL630 SDK version (NNM version) | KL730 SDK version
 :------------------------|:------------------|:------------------|:------------------------------- | :----------------
+Kneron PLUS v3.1.2       | 2.2.x             | 2.2.x             | 2.5.7 (1.3.x)                   | 1.3.0
+Kneron PLUS v3.1.1       | 2.2.x             | 2.2.x             | 2.5.7 (1.3.x)                   | 1.2.1
 Kneron PLUS v3.1.0       | 2.2.x             | 2.2.x             | 2.5.6 (1.3.x)                   | 1.2.0
 Kneron PLUS v3.0.0       | 2.2.x             | 2.2.x             | 2.5.5 (1.2.x)                   | 1.0.0
 Kneron PLUS v2.3.x-alpha | 2.2.x             | 2.2.x             | 2.5.5 (1.2.x)                   | 1.0.0-alpha
@@ -61,7 +63,7 @@ host_lib    v0.9.x       | 1.4.0.x           | Not supported     | Not supported
 
 **Kneron PLUS** provides low barrier AI inference experience to touch AI.
 
-Please see [Kneron PLUS-C - Getting Started](./plus_c/getting_started.md) \(or [Python - Getting Started](./plus_python/getting_start.md)\) as a start
+Please see [Kneron PLUS-C - Getting Started](./plus_c/getting_started.md) (or [Python - Getting Started](./plus_python/getting_start.md)) as a start
 
 ---
 ## References

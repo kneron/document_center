@@ -1,9 +1,10 @@
 ## kp API Document
 
 * Leatest Version
-    - [V3.1.0](./V3.1.0/index.md)
+    - [V3.1.2](./V3.1.2/index.md)
 
 * Archive
+    - [V3.1.0](./V3.1.0/index.md)
     - [V3.0.0](./V3.0.0/index.md)
     - [V2.3.0](./V2.3.0/index.md)
     - [V2.2.0](./V2.2.0/index.md)

@@ -177,7 +177,6 @@ To infer without hardware image preprocessing, the input data must do the follow
                 ```
 
     - For KL730  
-
         > More information about *ONNX/NPU data Conversion for KL730*, please refer to [Convert ONNX & NPU Data on the KL730 Platform](../../../plus_c/appendix/convert_onnx_data_to_npu_data_on_kl730.md)  
 
         - Get required model/data information
