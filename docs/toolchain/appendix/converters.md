@@ -337,7 +337,7 @@ If the tflite model provided is a quantized model, use the same command above to
 
 We strongly recommend that all the onnx, including the onnx generated from the previous subsections, shall pass this API before going into the next section. This general onnx optimization API would modify the onnx graph to fit the toolchain and Kneron hardware specification. The optimization includes: inference internal value_info shapes, fuse consecutive operators, eliminate do-nothing operators, replace high-cost operators with low-cost operators, etc..
 
-> This ONNX optimizer is for ONNX with opset 12 or under. If you have a model with later opset, please check [Kneronnxopt](appendix/kneronnxopt.md).
+> This ONNX optimizer is for ONNX with opset 12 or under. If you have a model with later opset, please check [Kneronnxopt](kneronnxopt.md).
 
 Suppose your model is `input.onnx` and the output model is called `output.onnx`:
 
