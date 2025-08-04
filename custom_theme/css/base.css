@@ -129,7 +129,7 @@ body {
   height: 100%;
   width: 100%;
   z-index: 0;
-  padding-left: 250px;
+  padding-left: 330px;
   transition: padding-left 0.3s;
   /* required for iPhone to scroll the contained iframe */
   -webkit-overflow-scrolling: touch;
@@ -171,7 +171,7 @@ body {
   display: none;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 900px) {
   .wm-small-hide {
     display: none;
   }
