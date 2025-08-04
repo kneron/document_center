@@ -35,13 +35,13 @@ The Kneron's unique features:
                 $$
         - We support the following normalization formula template:  
             - $RGB/256 - 0.5,\quad \text{where } RGB \in [0, 255]$  
-                - Quantization facetor: Radix=8, Scale=1.0  
+                - Quantization factor: Radix=8, Scale=1.0  
                 - Hardware operation: SUB128  
             - $RGB/128 - 1.0,\quad \text{where } RGB \in [0, 255]$  
-                - Quantization facetor: Radix=7, Scale=1.0  
+                - Quantization factor: Radix=7, Scale=1.0  
                 - Hardware operation: SUB128  
             - $RGB/256,\quad \text{where } RGB \in [0, 255]$  
-                - Quantization facetor: Radix=9, Scale=1.0  
+                - Quantization factor: Radix=7, Scale=1.0  
                 - Hardware operation: DIV2  
 - Limited NPU format conversion  
     - The Kneron NPU is a hardware accelerator designed specifically for neural networks, enabling efficient data processing that aligns with the hardware's preferred data layout and bit width. In Kneron devices, we offer limited conversions for NPU data layouts to optimize the speed of inference for vision models.  
