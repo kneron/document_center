@@ -31,7 +31,18 @@ Args:
 * model_in_bitwidth_mode: choose from "int8"/"int16". ("int16" is not supported in kdp520. When "mixbw" is set, this parameter is ignored.)
 * model_out_bitwidth_mode: choose from "int8"/"int16". ("int16" is not supported in kdp520. When "mixbw" is set, this parameter is ignored.)
 * cpu_node_bitwidth_mode: choose from "int8"/"int16". ("int16" is not supported in kdp520. When "mixbw" is set, this parameter is ignored.)
-* flops_ratio (float, optional): the ratio of the flops of the model. The larger the value, the better the performance but the longer the simulation time. Defaults to 0.2.
+* flops_ratio (float, optional): used under 'mixbw' mode to set the ratio of the flops of the model. The larger the value, the better the performance but the longer the simulation time. Defaults to 0.2.
+* quan_config (Dict, optional): Supported on KDP730. Allows manually setting output bitwidth for specific node by name to override automatic selection. e.g: {"523_kn": {
+        "bitwidth": {
+            "all": 8
+        }
+    },
+    "510_kn": {
+        "bitwidth": {
+            "all": 15
+        }
+    }}
+
 * compiler_tiling (str, optional): could be "default" or "deep_search". Get a better image cut method through deep search, so as to improve the efficiency of our NPU. Defaults to "default".
 * mode (int, optional): running mode for the analysis. Defaults to 1.
     - 0: run ip_evaluator only. This mode will not output bie file.
