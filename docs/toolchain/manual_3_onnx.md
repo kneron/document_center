@@ -78,6 +78,8 @@ By the way, to save the model, you can use the following function from the onnx 
 onnx.save(optimized_m, '/data1/optimized.onnx')
 ```
 
+We also provide a command line tool for both model optimization and evaluation. Please check FAQ 3.4.4 for details.
+
 ### 3.1.3. ONNX Editing
 
 KL520/KL720/KL530 NPU supports most of the compute extensive OPs, such as Conv, BatchNormalization, Fully Connect/GEMM, in order to speed up the model inference run time. On the other hand, there are some OPs that KL520 NPU cannot support well, such as `Softmax` or `Sigmod`. However, these OPs usually are not compute extensive and they are better to execute in CPU.
@@ -187,6 +189,8 @@ Please check the report to see if the performance meets your expectation. Please
 > You can find the profiling configuration under `/workspace/scripts/res`. The configuration files are named like `ip_config_<platform>.json`. You can change the
 > bandwidth according to your scenario .
 
+We also provide a command line tool for both model optimization and evaluation. Please check FAQ 3.4.4 for details.
+
 ## 3.3. E2E Simulator Check (Floating Point)
 
 Before going into the next section of quantization, we need to ensure the optimized onnx file can produce the same result as the originally designed model.
@@ -274,4 +278,43 @@ ASSERT img_data.shape == (224, 224, 3)
 # Now we use the API to convert the image into channel first format, which is (1, 3, 224, 224)
 new_img_data = ktc.convert_channel_last_to_first(img_data)
 ASSERT new_img_data.shape == (1, 3, 224, 224)
+```
+
+### 3.4.4 Is there any command line tool instead of Python API for quick model optimization or evaluation?
+
+Yes, we provide a command line tool for both model optimization and evaluation. The tool is called `ktc.opt_and_eval`.
+
+Here is an example command line usage for model optimization and evaluation:
+
+```bash
+python -m ktc.opt_and_eval 730 /workspace/examples/mobilenetv2/mobilenetv2_zeroq.origin.onnx
+```
+
+The first parameter is the platform, which should be one of "520", "720", "530", "630", "730". The second parameter is the path to the input onnx file. The optimized onnx file would be saved in the same folder as the input onnx file with suffix `.opt.onnx` by default. The evaluation report would be saved in `/data/kneron_flow ` with the filename `model_fx_report.html` by default.
+
+You can use `-o` or `--optimizer-only` to only run the optimization step without evaluation. You can use `-e` or `--evaluator-only` to only run the evaluation step without optimization. It also supports bie file as input which only runs the evaluation step.
+
+**This script is only a quick tool for simple model optimization and evaluation. For advanced usage, please use the Python API.**
+
+You can use `-h` or `--help` to see all the options.
+
+```
+usage: python -m ktc.opt_and_eval [-h] [-e] [-E EVALUATOR_REPORT_PATH] [-o] [-O OPTIMIZED_PATH] [--deep-search] {520,720,530,630,730} path
+
+Optimize ONNX model and run IP Evaluator
+
+positional arguments:
+  {520,720,530,630,730}
+                        Target hardware platform.
+  path                  Path to the ONNX/BIE model file.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -e, --evaluator-only  Evaluator only, skip optimization step.
+  -E EVALUATOR_REPORT_PATH, --evaluator-report-path EVALUATOR_REPORT_PATH
+                        Path to the directory to save the evaluator report.
+  -o, --optimizer-only  Optimizer only, skip evaluator step.
+  -O OPTIMIZED_PATH, --optimized-path OPTIMIZED_PATH
+                        Path to save the optimized ONNX model.
+  --deep-search         Use deep search for optimization, which may take longer but can yield better performance.
 ```

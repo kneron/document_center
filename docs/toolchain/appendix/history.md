@@ -24,55 +24,75 @@
 
 ## Toolchain Change log
 
+* **[v0.31.0]**
+    * **Introduce `quan_config` for `ModelConfig.analysis` for more detailed quantization configuration.**
+    * **Add `ktc.opt_and_eval` command for quick onnx optimization and evaluation.**
+    * **Remove deprecated `compilerIpevaluator_730.sh` and add warning messages to other depecated scritps.**
+    * Add `compiler_tiling` option for IP evaluator.
+    * Add `--clear-shapes` and `--replace-avgpool-with-conv` flags to kneronnxopt.
+    * Add `--seperate` flag to kneronnxopt.onnx_vs_onnx for detailed output comparison.
+    * Update knerex shared weight combination logic.
+    * Update knerex and dynasty to support empty Constant nodes.
+    * Update compiler for better message logging.
+    * Update dynasty and compiler for `softmax` support.
+    * Update regression for longer timeout setting.
+    * Improve `model_fx_report.html` readability.
+    * Speed up compilerfor large model.
+    * Fix the ktc error message for not supported special characters in model path.
+    * Fix the ktc bug that logging module not imported.
+    * Fix the kneronnxopt bug that flip nodes are eliminated incorrectly.
+    * Fix the kneronnxopt bug that replacing Add/Sub/Mul/Div with BatchNormalization node incorrectly.
+    * Fix the nef utility bug that 520 nef combination generates invalid nef files.
+    * Other bug fixes and performance improvements.
 * **[v0.30.0]**
-  * **Introduce `input_fmt` for `ModelConfig` to specify the input format of the model.**
-  * **`bie` files may not be compatible with previous versions.**
-  * Fix kneronnxopt to duplicate shared weights for not supported cases.
-  * Update knerex to support alpha&beta hardsigmoid.
-  * Update webgui to support conda environment selection.
-  * Bug fixes and performance improvements.
+    * **Introduce `input_fmt` for `ModelConfig` to specify the input format of the model.**
+    * **`bie` files may not be compatible with previous versions.**
+    * Fix kneronnxopt to duplicate shared weights for not supported cases.
+    * Update knerex to support alpha&beta hardsigmoid.
+    * Update webgui to support conda environment selection.
+    * Bug fixes and performance improvements.
 * **[v0.29.0]**
-  * **Introduce `mixbw` for fixed-point analysis, an automated quantization mode that optimizes 8/16-bit configurations for Conv nodes, balancing accuracy (SNR) and speed (FPS).**
-  * Add onnx_vs_onnx command line entrance for kneronnxopt to compare two onnx models.
-  * Optimize log printing for ktc.
-  * Optimize compiler runtime based on partial graph comparison.
-  * Fix the bug that knerex could not handle last nodes properly in some cases.
-  * Fix the bug that knerex could not handle Add constant node input properly.
-  * Fix other known bugs.
+    * **Introduce `mixbw` for fixed-point analysis, an automated quantization mode that optimizes 8/16-bit configurations for Conv nodes, balancing accuracy (SNR) and speed   (FPS).**
+    * Add onnx_vs_onnx command line entrance for kneronnxopt to compare two onnx models.
+    * Optimize log printing for ktc.
+    * Optimize compiler runtime based on partial graph comparison.
+    * Fix the bug that knerex could not handle last nodes properly in some cases.
+    * Fix the bug that knerex could not handle Add constant node input properly.
+    * Fix other known bugs.
 * **[v0.28.2]**
-  * Fix the batch compiler bug that nef files do not contain version information.
-  * Optimize kneronnxopt for processing large models.
-  * Fix other bugs.
+    * Fix the batch compiler bug that nef files do not contain version information.
+    * Optimize kneronnxopt for processing large models.
+    * Fix other bugs.
 * **[v0.28.1]**
-  * Change default miniconda channel due to the license issue.
+    * Change default miniconda channel due to the license issue.
 * **[v0.28.0]**
-  * **Change conda environment due to license issue.**
-  * **Remove caffe support.**
-  * Add `--opt-matmul` flag to kneronnxopt for kneron hardware matmul optimization.
-  * Add `--overwrite-input-shapes` and `--skip-fuse-qkv` flags to kneronnxopt large model processing.
-  * Support GRU, LSTM, and RNN operators defusion in kneronnxopt.
-  * Fix bugs.
+    * **Change conda environment due to license issue.**
+    * **Remove caffe support.**
+    * Add `--opt-matmul` flag to kneronnxopt for kneron hardware matmul optimization.
+    * Add `--overwrite-input-shapes` and `--skip-fuse-qkv` flags to kneronnxopt large model processing.
+    * Support GRU, LSTM, and RNN operators defusion in kneronnxopt.
+    * Fix bugs.
 * **[v0.27.0]**
-  * Adjust batch compiler internal behavior to improve robustness.
-  * Optimize compiler to improve feature map cut search speed.
-  * Optimize data converter to improve speed.
-  * Fix bugs.
+    * Adjust batch compiler internal behavior to improve robustness.
+    * Optimize compiler to improve feature map cut search speed.
+    * Optimize data converter to improve speed.
+    * Fix bugs.
 * **[v0.26.0]**
-  * Optimize compiler for 730 graph cutting.
-  * Supports the flash attention model.
-  * Add producer name in kneronnxopt.
-  * Fix bugs.
+    * Optimize compiler for 730 graph cutting.
+    * Supports the flash attention model.
+    * Add producer name in kneronnxopt.
+    * Fix bugs.
 * **[v0.25.1]**
-  * ktc supports non-str platform conversion.
-  * Fix kneronnxopt argument name.
-  * Update conda environment
-    * base:
-      - numpy-1.21.0
-      - pandas-1.2.0
-    * onnx1.13:
-      - numpy-1.26.4
-      - pandas-2.2.2
-  * Fix bugs.
+    * ktc supports non-str platform conversion.
+    * Fix kneronnxopt argument name.
+    * Update conda environment
+        * base:
+            - numpy-1.21.0
+            - pandas-1.2.0
+        * onnx1.13:
+            - numpy-1.26.4
+            - pandas-2.2.2
+    * Fix bugs.
 * **[v0.25.0]**
     * **IP evaluator add arguments `weight_bandwidth` and `dma_bandwidth`.**
     * 730 toolchain full upgrade.

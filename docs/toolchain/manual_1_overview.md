@@ -4,8 +4,8 @@
 
 # 1. Toolchain Overview
 
-**2025 Jun**
-**Toolchain v0.30.0**
+**2025 Sep**
+**Toolchain v0.31.0**
 
 ## 1.1. Introduction
 
@@ -19,13 +19,26 @@ In this document, you'll learn:
 3. How to utilize the tools through Python API.
 
 **Major changes of the current version**
-* **[v0.30.0]**
-  * **Introduce `input_fmt` for `ModelConfig` to specify the input format of the model.**
-  * **`bie` files may not be compatible with previous versions.**
-  * Fix kneronnxopt to duplicate shared weights for not supported cases.
-  * Update knerex to support alpha&beta hardsigmoid.
-  * Update webgui to support conda environment selection.
-  * Bug fixes and performance improvements.
+* **[v0.31.0]**
+    * **Introduce `quan_config` for `ModelConfig.analysis` for more detailed quantization configuration.**
+    * **Add `ktc.opt_and_eval` command for quick onnx optimization and evaluation.**
+    * **Remove deprecated `compilerIpevaluator_730.sh` and add warning messages to other depecated scritps.**
+    * Add `compiler_tiling` option for IP evaluator.
+    * Add `--clear-shapes` and `--replace-avgpool-with-conv` flags to kneronnxopt.
+    * Add `--seperate` flag to kneronnxopt.onnx_vs_onnx for detailed output comparison.
+    * Update knerex shared weight combination logic.
+    * Update knerex and dynasty to support empty Constant nodes.
+    * Update compiler for better message logging.
+    * Update dynasty and compiler for `softmax` support.
+    * Update regression for longer timeout setting.
+    * Improve `model_fx_report.html` readability.
+    * Speed up compilerfor large model.
+    * Fix the ktc error message for not supported special characters in model path.
+    * Fix the ktc bug that logging module not imported.
+    * Fix the kneronnxopt bug that flip nodes are eliminated incorrectly.
+    * Fix the kneronnxopt bug that replacing Add/Sub/Mul/Div with BatchNormalization node incorrectly.
+    * Fix the nef utility bug that 520 nef combination generates invalid nef files.
+    * Other bug fixes and performance improvements.
 
 ## 1.2. Workflow Overview
 
