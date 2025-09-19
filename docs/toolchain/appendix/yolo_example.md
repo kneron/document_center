@@ -34,7 +34,7 @@ Follow the model's document to save the pretrained model as an `h5` file:
 
 ```bash
 cd keras_yolo3
-wget https://pjreddie.com/media/files/yolov3-tiny.weights
+wget https://data.pjreddie.com/files/yolov3.weights
 python convert.py yolov3-tiny.cfg yolov3-tiny.weights /data1/yolo.h5
 ```
 
@@ -62,7 +62,7 @@ cp /workspace/E2E_Simulator/app/test_image_folder/yolo/000000350003.jpg ./.
 Now we have image `000000350003.jpg` at `/data1` for testing.
 
 ```bash
-wget ttps://doc.kneron.com/docs/toolchain/res/yolo.opt.onnx --no-check-certificate
+wget https://doc.kneron.com/docs/toolchain/res/yolo.opt.onnx --no-check-certificate
 ```
 Now we provide a ready-made 'keras to onnx' model for testing in the following steps
 
