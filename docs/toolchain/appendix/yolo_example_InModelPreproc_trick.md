@@ -38,7 +38,7 @@ Follow the model's document to save the pretrained model as an `h5` file:
 
 ```bash
 cd keras_yolo3
-wget https://pjreddie.com/media/files/yolov3-tiny.weights
+wget https://data.pjreddie.com/files/yolov3.weights
 python convert.py yolov3-tiny.cfg yolov3-tiny.weights /data1/yolo.h5
 ```
 
