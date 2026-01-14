@@ -6,7 +6,7 @@ Table below shows the list of operators supports base on ONNX operators.
 
 | Node                          | 520 | 720 | 530 | 630 | 730 |
 | ----------------------------- | --- | --- | --- | --- |-----|
-| Add                           |  Y  |  Y  |  Y  |  Y  |  Y  |
+| Add                           |  Y  |  Y  |  Y  |  <span title="conditions: rank <= 4D">Y</span> |  Y  |
 | AveragePool<sup>1</sup>       |  Y  |  Y  |  Y  |  Y  |  Y  |
 | BatchNormalization            |  Y  |  Y  |  Y  |  Y  |  Y  |
 | BitShift                      |  N  |  N  |  N  |  N  |  N  |
