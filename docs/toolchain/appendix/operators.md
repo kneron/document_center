@@ -1,7 +1,3 @@
-<style>
-.cond { text-decoration: underline dashed; cursor: help; }
-</style>
-
 # Hardware Supported Operators
 
 Table below shows the list of operators supports base on ONNX operators.
@@ -10,7 +6,7 @@ Table below shows the list of operators supports base on ONNX operators.
 
 | Node                          | 520 | 720 | 530 | 630 | 730 |
 | ----------------------------- | --- | --- | --- | --- |-----|
-| Add                           |  <span class="cond" title="rank <= 4D">Y</span>  |  <span class="cond" title="rank <= 4D">Y</span>  |  <span class="cond" title="rank <= 4D">Y</span>  |  <span class="cond" title="rank <= 4D">Y</span> |  Y  |
+| Add                           |  Y<sup>16</sup>  |  Y<sup>16</sup>  |  Y<sup>16</sup>  |  Y<sup>16</sup>  |  Y  |
 | AveragePool<sup>1</sup>       |  Y  |  Y  |  Y  |  Y  |  Y  |
 | BatchNormalization            |  Y  |  Y  |  Y  |  Y  |  Y  |
 | BitShift                      |  N  |  N  |  N  |  N  |  N  |
@@ -110,3 +106,4 @@ Notes:
 13. 530 and 630 only support SpaceToDepth with blocksize set to 2 or 4.
 14. 720 only supports Upsample with mode set to bilinear or nearest.
 15. LSTM, GRU and RNN currently are only supported in onnx opset 13 after using ONNX Converter conversion.
+16. conditions: rank <= 4D
