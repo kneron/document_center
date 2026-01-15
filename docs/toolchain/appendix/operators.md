@@ -50,22 +50,22 @@ Table below shows the list of operators supports base on ONNX operators.
 | Dropout | N | N | N | N | N |
 | DynamicQuantizeLinear | N | N | N | N | N |
 | Einsum | N | N | N | N | N |
-| Elu | N | N | Y<sub>14</sub> | Y<sub>14</sub> | Y<sub>14</sub> |
+| Elu | N | N | Y | Y | Y |
 | Equal | N | N | N | N | N |
 | Erf | N | N | Y | Y | Y |
-| Exp | N | Y | Y | Y | Y |
-| Expand | N | Y | Y | Y | Y |
+| Exp | N | Y<sub>14</sub> | Y | Y | Y |
+| Expand | N | Y<sub>15</sub> | Y<sub>16</sub> | Y<sub>16</sub> | Y<sub>16</sub> |
 | EyeLike | N | N | N | N | N |
-| Flatten | N | Y | Y | Y | Y |
+| Flatten | N | Y<sub>17</sub> | Y<sub>17</sub> | Y<sub>17</sub> | Y<sub>17</sub> |
 | Floor | N | N | N | N | N |
 | GRU | N | N | N | N | N |
 | GatherElements | N | N | N | N | N |
 | GatherND | N | N | N | N | N |
-| Gather | Y | Y | Y | Y | Y |
+| Gather | Y<sub>18</sub> | Y<sub>18</sub> | Y<sub>18</sub> | Y<sub>18</sub> | Y<sub>18</sub> |
 | Gemm | Y | Y | Y | Y | Y |
-| GlobalAveragePool | Y | Y | Y | Y | Y |
+| GlobalAveragePool | Y<sub>19</sub> | Y<sub>20</sub> | Y<sub>20</sub> | Y<sub>20</sub> | Y<sub>20</sub> |
 | GlobalLpPool | N | N | N | N | N |
-| GlobalMaxPool | Y | Y | Y | Y | Y |
+| GlobalMaxPool | Y<sub>21</sub> | Y | Y | Y | Y |
 | Greater | N | N | N | N | N |
 | GreaterOrEqual | N | N | N | N | N |
 | GridSample | N | N | N | N | N |
@@ -91,9 +91,9 @@ Table below shows the list of operators supports base on ONNX operators.
 | LpNormalization | N | N | N | N | N |
 | LpPool | N | N | N | N | N |
 | MatMulInteger | N | N | N | N | N |
-| MatMul | N | Y | Y | Y | Y |
+| MatMul | N | Y<sub>22</sub> | Y<sub>22</sub> | Y<sub>22</sub> | Y<sub>23</sub> |
 | Max | N | N | N | N | Y |
-| MaxPool | Y | Y | Y | Y | Y |
+| MaxPool | Y<sub>24</sub> | Y<sub>24</sub> | Y<sub>25</sub> | Y<sub>25</sub> | Y<sub>25</sub> |
 | MaxRoiPool | N | Y | Y | Y | Y |
 | MaxUnpool | N | N | N | N | N |
 | Mean | N | N | N | N | N |
@@ -102,7 +102,7 @@ Table below shows the list of operators supports base on ONNX operators.
 | Min | N | N | N | N | N |
 | Mish | N | N | N | N | N |
 | Mod | N | N | N | N | N |
-| Mul | N | Y | Y | Y | Y |
+| Mul | N | Y<sub>1</sub> | Y<sub>1</sub> | Y<sub>1</sub> | Y |
 | Multinomial | N | N | N | N | N |
 | Neg | Y | Y | Y | Y | Y |
 | NegativeLogLikelihoodLoss | N | N | N | N | N |
@@ -112,8 +112,8 @@ Table below shows the list of operators supports base on ONNX operators.
 | OneHot | N | N | N | N | N |
 | Or | N | N | N | N | N |
 | PRelu | Y | Y | Y | Y | Y |
-| Pad | Y | Y | Y | Y | Y |
-| Pow | N | Y | Y | Y | Y |
+| Pad | Y<sub>26</sub> | Y<sub>26</sub> | Y<sub>26</sub> | Y<sub>26</sub> | Y<sub>27</sub> |
+| Pow | N<sub>28</sub> | Y<sub>29</sub> | Y<sub>29</sub> | Y<sub>29</sub> | Y<sub>29</sub> |
 | QLinearConv | N | N | N | N | N |
 | QLinearMatMul | N | N | N | N | N |
 | QuantizeLinear | N | N | N | N | N |
@@ -127,15 +127,15 @@ Table below shows the list of operators supports base on ONNX operators.
 | ReduceL2 | N | N | N | N | N |
 | ReduceLogSumExp | N | N | N | N | N |
 | ReduceLogSum | N | N | N | N | N |
-| ReduceMax | Y | Y | Y | Y | Y |
-| ReduceMean | N | Y | Y | Y | Y |
+| ReduceMax | Y<sub>30</sub> | Y<sub>30</sub> | Y<sub>30</sub> | Y<sub>30</sub> | Y<sub>30</sub> |
+| ReduceMean | N | Y<sub>31</sub> | Y<sub>31</sub> | Y<sub>31</sub> | Y<sub>31</sub> |
 | ReduceMin | N | N | N | N | Y |
 | ReduceProd | N | N | N | N | N |
-| ReduceSum | Y | Y | Y | Y | Y |
+| ReduceSum | Y<sub>32</sub> | Y<sub>33</sub> | Y<sub>33</sub> | Y<sub>33</sub> | Y |
 | ReduceSumSquare | N | N | N | N | N |
 | Relu | Y | Y | Y | Y | Y |
 | Reshape | N | Y | Y | Y | Y |
-| Resize | Y | Y | Y | Y | Y |
+| Resize | Y<sub>34</sub> | Y<sub>35</sub> | Y<sub>36</sub> | Y<sub>36</sub> | Y<sub>36</sub> |
 | ReverseSequence | N | N | N | N | N |
 | RNN | N | N | N | N | N |
 | RoiAlign | N | N | N | N | N |
@@ -159,13 +159,13 @@ Table below shows the list of operators supports base on ONNX operators.
 | Sinh | N | N | N | N | N |
 | Size | N | N | N | N | N |
 | SliceHeader | N | N | N | N | N |
-| Slice | N | Y | Y | Y | Y |
+| Slice | N | Y<sub>37</sub> | Y<sub>37</sub> | Y<sub>37</sub> | Y<sub>38</sub> |
 | SliceTail | N | N | N | N | N |
 | SoftmaxCrossEntropyLoss | N | N | N | N | N |
-| Softmax | N | N | Y | Y | Y |
+| Softmax | N | N<sub>39</sub> | Y<sub>40</sub> | Y<sub>40</sub> | Y<sub>40</sub> |
 | Softplus | N | N | N | N | N |
 | Softsign | N | N | N | N | N |
-| SpaceToDepth | N | N | Y | Y | Y |
+| SpaceToDepth | N | N | Y<sub>41</sub> | Y<sub>41</sub> | Y<sub>41</sub> |
 | Split | N | N | N | N | Y |
 | Sqrt | N | N | Y | Y | Y |
 | Squeeze | N | N | N | N | N |
@@ -176,11 +176,11 @@ Table below shows the list of operators supports base on ONNX operators.
 | ThresholdedRelu | N | N | N | N | N |
 | Tile | N | N | N | N | N |
 | TopK | N | N | N | N | N |
-| Transpose | N | Y | Y | Y | Y |
+| Transpose | N | Y<sub>42</sub> | Y<sub>43</sub> | Y<sub>43</sub> | Y |
 | Trilu | N | N | N | N | N |
 | Unique | N | N | N | N | N |
 | Unsqueeze | N | N | N | N | N |
-| Upsample | Y | Y | Y | Y | Y |
+| Upsample | Y<sub>44</sub> | Y<sub>45</sub> | Y<sub>46</sub> | Y<sub>46</sub> | Y<sub>46</sub> |
 | Where | N | N | N | N | N |
 | Xor | N | N | N | N | N |
 
@@ -218,7 +218,77 @@ Notes:
 11. decompose contidion: in_shape = 1x4x?x? && out_shape = 1x1x?x? && mode = CRD && blocksize = 2
 12. conditions: blocksize == 2 or 4
 13. decompose to reciprocal or kneron_inv_sqrt
+14. decompose to constant + log2 + mul + pow2
+15. conditions: expend on column or row
+16. conditions: expend on channel or column or row
+17. conditions: axis == 1
+18. conditions: single index
+19. conditions: rank <= 4 && row * col <= 256
+20. conditions: rank <= 4 && row * col <= 16384
+21. decompose condition: row > 3
+22. conditions:
+    - if second input is const
+        - const input shape must be WxV or 1x1xWxV
+    - else
+        - rank = 4
+23. conditions:
+    - if second input is const
+        - const input shape must be WxV or 1x1xWxV
+    - else
+        - 3 <= rank <= 5
+24. Maxpool
+    - decompose conditions:
+        - 1. ceil_mode=0, dilations={1,1}, kernel = 1 and stride > 1 (Pure DonwSampling)
+        - 2. ceil_mode=0, dilations={1,1}, kernel_h=kernel_w=stride_h=stride_w=K where K is power of 2 and K > 3 (DonwSampling)
+        - 3. ceil_mode=0, kernel > 3
+    - directly support conditions:
+        - 2D pool, dilation == 1, kernel is kxk & stride is sxs where 2 <= k <= 3 and s <= k
+25. Maxpool
+    - decompose conditions:
+        - 1. ceil_mode=0, dilations={1,1}, kernel = 1 and stride > 1 (Pure DonwSampling)
+        - 2. ceil_mode=0, dilations={1,1}, kernel_h=kernel_w=stride_h=stride_w=K where K is power of 2 and K > 3 (DonwSampling)
+        - 3. ceil_mode=0, kernel > 3
+    - directly support conditions:
+        - 2D pool,
+        - dilation == 1,
+        - kernel is kxk & stride is sxs where n and s <= 3 or
+        - kernel_w & stride_w are 1 and kernel_h & stride_h <= 3 or
+        - kernel_h & stride_h are 1 and kernel_w = stride_w <= 3
+26. conditions: not pad in batch && any pad in spacial < 32 && constant mode with 0 const_val
+27. conditions: not pad in batch && any of pad < 32 && constant mode with 0 const_val
+28. power is 2 will be decomposed to KneronSquareNode but npu still not support
+29. conditions: power is 2
+30. conditions: keepdims = 1 will be decomposed to MaxPool
+31. decompose conditions: keepdims = 1 will be decomposed to ReduceSum + KneronScale
+32. decompose contitions: keepdims = 1 && reduce in ch will be decomposed to Conv
+33. ReduceSum:
+    - decompose contitions: keepdims = 1 && reduce in ch will be decomposed to Conv
+    - direct support conditions: keepdims = 1 && reduce not in batch
+34. Resize:
+    - decompose conditions: mode != cubic && extrapolation_value is 0 will be decomposed to KneronResizeNode
+    - supported KneronResizeNode: mode = nearest && near_mode = floor
+35. Resize:
+    - decompose conditions: mode != cubic && extrapolation_value is 0 will be decomposed to KneronResizeNode
+    - supported KneronResizeNode: delta_v <= 1 && delta_h <= 1 && not both delta_v and delta_h != 1
+36. Resize:
+    - decompose conditions: mode != cubic && extrapolation_value is 0 will be decomposed to KneronResizeNode
+37. conditions: rank <= 4 && all of steps are 1
+38. conditions: all of steps are 1
+39. will be decompose to ReduceSum + Div + Exp 
+40. will be decompose to ReduceSum + Div + Neg + Add + Exp 
+41. conditions: blocksize is 2 or 4
+42. conditions: row_col_transpose && ch_row_transpose
+43. conditions: transpose not in batch
+44. Upsample
+    - conditions: mode is nearest or linear or bilinear or align_corner will be decompose to KneronResizeNode
+    - supported KneronResizeNode: mode = nearest && near_mode = floor
+45. Upsample
+    - conditions: mode is nearest or linear or bilinear or align_corner will be decompose to KneronResizeNode
+    - supported KneronResizeNode: delta_v <= 1 && delta_h <= 1 && not both delta_v and delta_h != 1
+46. Upsample: conditions: mode is nearest or linear or bilinear or align_corner will be decompose to KneronResizeNode
 
+
+# 以下为原文. 审核后删除.
 
 | Node                          | 520 | 720 | 530 | 630 | 730 |
 | ----------------------------- | --- | --- | --- | --- |-----|
