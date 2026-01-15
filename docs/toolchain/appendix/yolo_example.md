@@ -5,9 +5,9 @@ In this document, we provide a step by step example on how to utilize our tools 
 > This document is writen for toolchain v0.30.0. If any description is not consistent with the latest toolchain, please refer to the main toolchain manual.
 
 ## Tricks for deploying yolo-type detection models and anker based detection models
-1. set quantization config
+1. set quantization config (for 730 only)
 	1. input 8bit
-	2. const input 16bit (next version will have , this version no such setting)
+	2. const input 16bit 
 	3. output 8bit
 	4. weight mixlight or 8bit
 	5. data mixlight or mixbalance
