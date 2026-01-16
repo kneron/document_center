@@ -190,15 +190,15 @@ Notes:
 2. AveragePool 520:
     - decompose conditions:
         - ceil_mode=0, count_include_pad=0, kernel is nxn, stride is nxn where n is power of 2 and n > 3
-        - ceil_mode=0, dilations={1,1}, kernel = 1 and stride > 1 (Pure DonwSampling)
-        - ceil_mode=0, count_include_pad=0, stride is sxs where s > 3 (DonwSampling)
+        - ceil_mode=0, dilations={1,1}, kernel = 1 and stride > 1 (Pure DownSampling)
+        - ceil_mode=0, count_include_pad=0, stride is sxs where s > 3 (DownSampling)
     - directly support conditions:
         - 2D pool, dilation == 1, kernel is kxk & stride is sxs where k <= 3 and s <= k
 3. AveragePool 720/530/630:
     - decompose conditions:
         - ceil_mode=0, count_include_pad=0, kernel is nxn, stride is nxn where n is power of 2 and n > 3
-        - ceil_mode=0, dilations={1,1}, kernel = 1 and stride > 1 (Pure DonwSampling)
-        - ceil_mode=0, count_include_pad=0, stride is sxs where s > 3 (DonwSampling)
+        - ceil_mode=0, dilations={1,1}, kernel = 1 and stride > 1 (Pure DownSampling)
+        - ceil_mode=0, count_include_pad=0, stride is sxs where s > 3 (DownSampling)
     - directly support conditions:
         - 2D pool, dilation == 1, kernel is kxk & stride is sxs where k and s <= 3 or kernel_w & stride_w are 1 and kernel_h & stride_h <= 3 or kernel_h & stride_h are 1 and kernel_w = stride_w <= 3
 4. AveragePool 730:
@@ -238,15 +238,15 @@ Notes:
         - 3 <= rank <= 5
 24. Maxpool
     - decompose conditions:
-        - 1. ceil_mode=0, dilations={1,1}, kernel = 1 and stride > 1 (Pure DonwSampling)
-        - 2. ceil_mode=0, dilations={1,1}, kernel_h=kernel_w=stride_h=stride_w=K where K is power of 2 and K > 3 (DonwSampling)
+        - 1. ceil_mode=0, dilations={1,1}, kernel = 1 and stride > 1 (Pure DownSampling)
+        - 2. ceil_mode=0, dilations={1,1}, kernel_h=kernel_w=stride_h=stride_w=K where K is power of 2 and K > 3 (DownSampling)
         - 3. ceil_mode=0, kernel > 3
     - directly support conditions:
         - 2D pool, dilation == 1, kernel is kxk & stride is sxs where 2 <= k <= 3 and s <= k
 25. Maxpool
     - decompose conditions:
-        - 1. ceil_mode=0, dilations={1,1}, kernel = 1 and stride > 1 (Pure DonwSampling)
-        - 2. ceil_mode=0, dilations={1,1}, kernel_h=kernel_w=stride_h=stride_w=K where K is power of 2 and K > 3 (DonwSampling)
+        - 1. ceil_mode=0, dilations={1,1}, kernel = 1 and stride > 1 (Pure DownSampling)
+        - 2. ceil_mode=0, dilations={1,1}, kernel_h=kernel_w=stride_h=stride_w=K where K is power of 2 and K > 3 (DownSampling)
         - 3. ceil_mode=0, kernel > 3
     - directly support conditions:
         - 2D pool,
