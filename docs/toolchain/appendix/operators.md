@@ -193,35 +193,35 @@ Notes:
         - ceil_mode=0, dilations={1,1}, kernel = 1 and stride > 1 (Pure DownSampling)
         - ceil_mode=0, count_include_pad=0, stride is sxs where s > 3 (DownSampling)
     - directly support conditions:
-        - 2D pool, dilation == 1, kernel is kxk & stride is sxs where k <= 3 and s <= k
+        - 2D pool, dilation = 1, kernel is kxk & stride is sxs where k <= 3 and s <= k
 3. AveragePool 720/530/630:
     - decompose conditions:
         - ceil_mode=0, count_include_pad=0, kernel is nxn, stride is nxn where n is power of 2 and n > 3
         - ceil_mode=0, dilations={1,1}, kernel = 1 and stride > 1 (Pure DownSampling)
         - ceil_mode=0, count_include_pad=0, stride is sxs where s > 3 (DownSampling)
     - directly support conditions:
-        - 2D pool, dilation == 1, kernel is kxk & stride is sxs where k and s <= 3 or kernel_w & stride_w are 1 and kernel_h & stride_h <= 3 or kernel_h & stride_h are 1 and kernel_w = stride_w <= 3
+        - 2D pool, dilation = 1, kernel is kxk & stride is sxs where k and s <= 3 or kernel_w & stride_w are 1 and kernel_h & stride_h <= 3 or kernel_h & stride_h are 1 and kernel_w = stride_w <= 3
 4. AveragePool 730:
     - decompose conditions:
         - ceil_mode=0, count_include_pad=0, kernel is nxn and stride is nxn where n is power of 2 and n > 3
         - ceil_mode=0, count_include_pad=0, dilation = 1, kernel = 1 and stride > 1 (Pure DownSampling)
         - ceil_mode=0, count_include_pad=0, stride is sxs and s > 3 (DownSampling)
     - directly support conditions:
-        - 1D/2D pool, dilation == 1, kernel is kxk & stride is sxs where k and s <= 3 or kernel is kx1 & stride is sx1 where k and s <= 3 or kernel is 1xn & stride is 1xn where n <= 3
+        - 1D/2D pool, dilation = 1, kernel is kxk & stride is sxs where k and s <= 3 or kernel is kx1 & stride is sx1 where k and s <= 3 or kernel is 1xn & stride is 1xn where n <= 3
 
-5. conditions: min == 0 && max >= 0
+5. conditions: min = 0 && max >= 0
 6. conditions: rank <= 4 && kernel <= 12 && stride_w <= 16 && stride_h <= 4
 7. conditions: rank <= 4 && stride_w <= 16 && stride_h <= 4
 8. conditions: rank <= 4
 9. condition: stride is sxs where s = 2
 10. condition: stride is sxs
 11. decompose contidion: in_shape = 1x4x?x? && out_shape = 1x1x?x? && mode = CRD && blocksize = 2
-12. conditions: blocksize == 2 or 4
+12. conditions: blocksize = 2 or 4
 13. decompose to reciprocal or kneron_inv_sqrt
 14. decompose to constant + log2 + mul + pow2
 15. conditions: expend on column or row
 16. conditions: expend on channel or column or row
-17. conditions: axis == 1
+17. conditions: axis = 1
 18. conditions: single index
 19. conditions: rank <= 4 && row * col <= 256
 20. conditions: rank <= 4 && row * col <= 16384
@@ -242,7 +242,7 @@ Notes:
         - 2. ceil_mode=0, dilations={1,1}, kernel_h=kernel_w=stride_h=stride_w=K where K is power of 2 and K > 3 (DownSampling)
         - 3. ceil_mode=0, kernel > 3
     - directly support conditions:
-        - 2D pool, dilation == 1, kernel is kxk & stride is sxs where 2 <= k <= 3 and s <= k
+        - 2D pool, dilation = 1, kernel is kxk & stride is sxs where 2 <= k <= 3 and s <= k
 25. Maxpool
     - decompose conditions:
         - 1. ceil_mode=0, dilations={1,1}, kernel = 1 and stride > 1 (Pure DownSampling)
@@ -250,7 +250,7 @@ Notes:
         - 3. ceil_mode=0, kernel > 3
     - directly support conditions:
         - 2D pool,
-        - dilation == 1,
+        - dilation = 1,
         - kernel is kxk & stride is sxs where n and s <= 3 or
         - kernel_w & stride_w are 1 and kernel_h & stride_h <= 3 or
         - kernel_h & stride_h are 1 and kernel_w = stride_w <= 3
