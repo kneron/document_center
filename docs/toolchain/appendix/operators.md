@@ -46,7 +46,7 @@ Table below shows the list of operators supports base on ONNX operators.
 | DepthToSpace               | Y<sub>11</sub>     | Y<sub>11</sub>     | Y<sub>12</sub>     | Y<sub>12</sub>     | Y<sub>12</sub>     |
 | DequantizeLinear           | N                  | N                  | N                  | N                  | N                  |
 | Det                        | N                  | N                  | N                  | N                  | N                  |
-| Div                        | N<sub>13</sub>     | N<sub>13</sub>     | Y                  | Y                  | Y                  |
+| Div                        | N                  | N                  | Y                  | Y                  | Y                  |
 | Dropout                    | N                  | N                  | N                  | N                  | N                  |
 | DynamicQuantizeLinear      | N                  | N                  | N                  | N                  | N                  |
 | Einsum                     | N                  | N                  | N                  | N                  | N                  |
@@ -113,7 +113,7 @@ Table below shows the list of operators supports base on ONNX operators.
 | Or                         | N                  | N                  | N                  | N                  | N                  |
 | PRelu                      | Y                  | Y                  | Y                  | Y                  | Y                  |
 | Pad                        | Y<sub>26</sub>     | Y<sub>26</sub>     | Y<sub>26</sub>     | Y<sub>26</sub>     | Y<sub>27</sub>     |
-| Pow                        | N<sub>28</sub>     | Y<sub>29</sub>     | Y<sub>29</sub>     | Y<sub>29</sub>     | Y<sub>29</sub>     |
+| Pow                        | N                  | Y<sub>29</sub>     | Y<sub>29</sub>     | Y<sub>29</sub>     | Y<sub>29</sub>     |
 | QLinearConv                | N                  | N                  | N                  | N                  | N                  |
 | QLinearMatMul              | N                  | N                  | N                  | N                  | N                  |
 | QuantizeLinear             | N                  | N                  | N                  | N                  | N                  |
@@ -131,7 +131,7 @@ Table below shows the list of operators supports base on ONNX operators.
 | ReduceMean                 | N                  | Y<sub>31</sub>     | Y<sub>31</sub>     | Y<sub>31</sub>     | Y<sub>31</sub>     |
 | ReduceMin                  | N                  | N                  | N                  | N                  | Y                  |
 | ReduceProd                 | N                  | N                  | N                  | N                  | N                  |
-| ReduceSum                  | Y<sub>32</sub>     | Y<sub>33</sub>     | Y<sub>33</sub>     | Y<sub>33</sub>     | Y                  |
+| ReduceSum                  | Y<sub>32</sub>     | Y<sub>31</sub>     | Y<sub>31</sub>     | Y<sub>31</sub>     | Y                  |
 | ReduceSumSquare            | N                  | N                  | N                  | N                  | N                  |
 | Relu                       | Y                  | Y                  | Y                  | Y                  | Y                  |
 | Reshape                    | N                  | Y                  | Y                  | Y                  | Y                  |
@@ -187,28 +187,24 @@ Table below shows the list of operators supports base on ONNX operators.
 Notes:
 
 1. Conditions: rank <= 4D
-2. AveragePool 520:
-    - decompose conditions:
-        - ceil_mode=0, count_include_pad=0, kernel is nxn, stride is nxn where n is power of 2 and n > 3
-        - ceil_mode=0, dilations={1,1}, kernel = 1 and stride > 1 (Pure DownSampling)
-        - ceil_mode=0, count_include_pad=0, stride is sxs where s > 3 (DownSampling)
-    - directly support conditions:
-        - 2D pool, dilation = 1, kernel is kxk & stride is sxs where k <= 3 and s <= k
-3. AveragePool 720/530/630:
-    - decompose conditions:
-        - ceil_mode=0, count_include_pad=0, kernel is nxn, stride is nxn where n is power of 2 and n > 3
-        - ceil_mode=0, dilations={1,1}, kernel = 1 and stride > 1 (Pure DownSampling)
-        - ceil_mode=0, count_include_pad=0, stride is sxs where s > 3 (DownSampling)
-    - directly support conditions:
-        - 2D pool, dilation = 1, kernel is kxk & stride is sxs where k and s <= 3 or kernel_w & stride_w are 1 and kernel_h & stride_h <= 3 or kernel_h & stride_h are 1 and kernel_w = stride_w <= 3
-4. AveragePool 730:
-    - decompose conditions:
-        - ceil_mode=0, count_include_pad=0, kernel is nxn and stride is nxn where n is power of 2 and n > 3
-        - ceil_mode=0, count_include_pad=0, dilation = 1, kernel = 1 and stride > 1 (Pure DownSampling)
-        - ceil_mode=0, count_include_pad=0, stride is sxs and s > 3 (DownSampling)
-    - directly support conditions:
-        - 1D/2D pool, dilation = 1, kernel is kxk & stride is sxs where k and s <= 3 or kernel is kx1 & stride is sx1 where k and s <= 3 or kernel is 1xn & stride is 1xn where n <= 3
-
+2. AveragePool 520 conditions:
+    - (ceil_mode=0, count_include_pad=0, kernel is nxn, stride is nxn where n is power of 2 and n > 3) or
+    - (ceil_mode=0, dilations={1,1}, kernel = 1 and stride > 1) or
+    - (ceil_mode=0, count_include_pad=0, stride is sxs where s > 3) or
+    - (2D pool, dilation == 1, kernel is kxk & stride is sxs where k <= 3 and s <= k)
+3. AveragePool 720/530/630 conditions:
+    - (ceil_mode=0, count_include_pad=0, kernel is nxn, stride is nxn where n is power of 2 and n > 3) or
+    - (ceil_mode=0, dilations={1,1}, kernel = 1 and stride > 1) or
+    - (ceil_mode=0, count_include_pad=0, stride is sxs where s > 3) or
+    - (2D pool, dilation == 1, kernel is kxk & stride is sxs where k and s <= 3 or kernel_w & stride_w are 1 and kernel_h & stride_h <= 3 or kernel_h & stride_h are 1 and kernel_w = stride_w <= 3)
+4. AveragePool 730 conditions:
+    - (ceil_mode=0, count_include_pad=0, kernel is nxn and stride is nxn where n is power of 2 and n > 3) or
+    - (ceil_mode=0, count_include_pad=0, dilation = 1, kernel = 1 and stride > 1) or
+    - (ceil_mode=0, count_include_pad=0, stride is sxs and s > 3) or
+    - (1D/2D pool, dilation == 1,
+        - kernel is kxk & stride is sxs where k and s <= 3 or
+        - kernel is kx1 & stride is sx1 where k and s <= 3 or
+        - kernel is 1xn & stride is 1xn where n <= 3)
 5. conditions: min = 0 && max >= 0
 6. conditions: rank <= 4 && kernel <= 12 && stride_w <= 16 && stride_h <= 4
 7. conditions: rank <= 4 && stride_w <= 16 && stride_h <= 4
@@ -217,7 +213,6 @@ Notes:
 10. condition: stride is sxs
 11. decompose contidion: in_shape = 1x4x?x? && out_shape = 1x1x?x? && mode = CRD && blocksize = 2
 12. conditions: blocksize = 2 or 4
-13. decompose to reciprocal or kneron_inv_sqrt
 14. decompose to constant + log2 + mul + pow2
 15. conditions: expend on column or row
 16. conditions: expend on channel or column or row
@@ -225,7 +220,7 @@ Notes:
 18. conditions: single index
 19. conditions: rank <= 4 && row * col <= 256
 20. conditions: rank <= 4 && row * col <= 16384
-21. decompose condition: row > 3
+21. conditions: row > 3
 22. conditions:
     - if second input is const
         - const input shape must be WxV or 1x1xWxV
@@ -236,42 +231,29 @@ Notes:
         - const input shape must be WxV or 1x1xWxV
     - else
         - 3 <= rank <= 5
-24. Maxpool
-    - decompose conditions:
-        - 1. ceil_mode=0, dilations={1,1}, kernel = 1 and stride > 1 (Pure DownSampling)
-        - 2. ceil_mode=0, dilations={1,1}, kernel_h=kernel_w=stride_h=stride_w=K where K is power of 2 and K > 3 (DownSampling)
-        - 3. ceil_mode=0, kernel > 3
-    - directly support conditions:
-        - 2D pool, dilation = 1, kernel is kxk & stride is sxs where 2 <= k <= 3 and s <= k
-25. Maxpool
-    - decompose conditions:
-        - 1. ceil_mode=0, dilations={1,1}, kernel = 1 and stride > 1 (Pure DownSampling)
-        - 2. ceil_mode=0, dilations={1,1}, kernel_h=kernel_w=stride_h=stride_w=K where K is power of 2 and K > 3 (DownSampling)
-        - 3. ceil_mode=0, kernel > 3
-    - directly support conditions:
-        - 2D pool,
-        - dilation = 1,
+24. Maxpool conditions:
+    - (ceil_mode=0, dilations={1,1}, kernel = 1 and stride > 1) or
+    - (ceil_mode=0, dilations={1,1}, kernel_h=kernel_w=stride_h=stride_w=K where K is power of 2 and K > 3) or
+    - (ceil_mode=0, kernel > 3) or
+    - (2D pool, dilation == 1, kernel is kxk & stride is sxs where 2 <= k <= 3 and s <= k)
+25. Maxpool conditions:
+    - (ceil_mode=0, dilations={1,1}, kernel = 1 and stride > 1) or
+    - (ceil_mode=0, dilations={1,1}, kernel_h=kernel_w=stride_h=stride_w=K where K is power of 2 and K > 3) or
+    - (ceil_mode=0, kernel > 3) or
+    - (2D pool,
+        - dilation == 1,
         - kernel is kxk & stride is sxs where n and s <= 3 or
         - kernel_w & stride_w are 1 and kernel_h & stride_h <= 3 or
-        - kernel_h & stride_h are 1 and kernel_w = stride_w <= 3
+        - kernel_h & stride_h are 1 and kernel_w = stride_w <= 3)
 26. conditions: not pad in batch && any pad in spacial < 32 && constant mode with 0 const_val
 27. conditions: not pad in batch && any of pad < 32 && constant mode with 0 const_val
-28. power is 2 will be decomposed to KneronSquareNode but npu still not support
 29. conditions: power is 2
-30. conditions: keepdims = 1 will be decomposed to MaxPool
-31. decompose conditions: keepdims = 1 will be decomposed to ReduceSum + KneronScale
-32. decompose contitions: keepdims = 1 && reduce in ch will be decomposed to Conv
-33. ReduceSum:
-    - decompose contitions: keepdims = 1 && reduce in ch will be decomposed to Conv
-    - direct support conditions: keepdims = 1 && reduce not in batch
-34. Resize:
-    - decompose conditions: mode != cubic && extrapolation_value is 0 will be decomposed to KneronResizeNode
-    - supported KneronResizeNode: mode = nearest && near_mode = floor
-35. Resize:
-    - decompose conditions: mode != cubic && extrapolation_value is 0 will be decomposed to KneronResizeNode
-    - supported KneronResizeNode: delta_v <= 1 && delta_h <= 1 && not both delta_v and delta_h != 1
-36. Resize:
-    - decompose conditions: mode != cubic && extrapolation_value is 0 will be decomposed to KneronResizeNode
+30. conditions: keepdims = 1
+31. contitions: keepdims = 1 && reduce not in batch
+32. contitions: keepdims = 1 && reduce in ch
+34. conditions: mode != cubic && extrapolation_value is 0 && rank is 4 && phase_init is {0,0} && nearest_mode is floor if mode is nearest && coordinate_transformation_mode != tf_crop_and_resize
+35. conditions: mode != cubic && extrapolation_value is 0 && rank is 4 && not both vus_en and hus_en enabled && phase_init_v >= 0 and delta_v <= 1 if vus_en enabled && phase_init_h >= 0 and delta_h <= 1 if hus_en enabled
+36. conditions: mode != cubic && extrapolation_value is 0
 37. conditions: rank <= 4 && all of steps are 1
 38. conditions: all of steps are 1
 39. will be decompose to ReduceSum + Div + Exp 
@@ -279,11 +261,7 @@ Notes:
 41. conditions: blocksize is 2 or 4
 42. conditions: row_col_transpose && ch_row_transpose
 43. conditions: transpose not in batch
-44. Upsample
-    - conditions: mode is nearest or linear or bilinear or align_corner will be decompose to KneronResizeNode
-    - supported KneronResizeNode: mode = nearest && near_mode = floor
-45. Upsample
-    - conditions: mode is nearest or linear or bilinear or align_corner will be decompose to KneronResizeNode
-    - supported KneronResizeNode: delta_v <= 1 && delta_h <= 1 && not both delta_v and delta_h != 1
-46. Upsample: conditions: mode is nearest or linear or bilinear or align_corner will be decompose to KneronResizeNode
+44. conditions: rank is 4 && upsample in spatial && mode is nearest or linear or bilinear or align_corner
+45. conditions: rank is 4 && upsample in row or column but not both && mode is nearest or linear or bilinear or align_corner
+46. conditions: rank is 4 && upsample in spatial && mode is nearest or linear or bilinear or align_corner
 
