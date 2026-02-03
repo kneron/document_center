@@ -24,6 +24,18 @@
 
 ## Toolchain Change log
 
+* **[v0.31.1]**
+    * Add `const_in_bitwidth_mode` option for quantization. The default is int16. Unless the customer particularly desires to increase the speed, it can be changed to int8
+    * Update analyzer exception log.
+    * Update kneronnxopt to set expanding dilated Conv to False by default.
+    * Update kneronnxopt to diable fusing BatchNormalization into Conv by default.
+    * Update compiler for the deep search memory estimation algorithm.
+    * Update compiler to extend the timeout for deep search.
+    * Update compiler to change expt/log/softmax to 16b.
+    * Fix the ktc bug in some default output path names.
+    * Fix the kneronnxopt bug in duplicating shared weights.
+    * Fix the compiler bug in broadcasting.
+    * Fix the compiler bug that Concat channel axis not supported.
 * **[v0.31.0]**
     * **Introduce `quan_config` for `ModelConfig.analysis` for more detailed quantization configuration.**
     * **Add `ktc.opt_and_eval` command for quick onnx optimization and evaluation.**

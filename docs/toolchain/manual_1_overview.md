@@ -4,8 +4,8 @@
 
 # 1. Toolchain Overview
 
-**2025 Sep**
-**Toolchain v0.31.0**
+**2025 Nov**
+**Toolchain v0.31.1**
 
 ## 1.1. Introduction
 
@@ -19,26 +19,18 @@ In this document, you'll learn:
 3. How to utilize the tools through Python API.
 
 **Major changes of the current version**
-* **[v0.31.0]**
-    * **Introduce `quan_config` for `ModelConfig.analysis` for more detailed quantization configuration.**
-    * **Add `ktc.opt_and_eval` command for quick onnx optimization and evaluation.**
-    * **Remove deprecated `compilerIpevaluator_730.sh` and add warning messages to other depecated scritps.**
-    * Add `compiler_tiling` option for IP evaluator.
-    * Add `--clear-shapes` and `--replace-avgpool-with-conv` flags to kneronnxopt.
-    * Add `--seperate` flag to kneronnxopt.onnx_vs_onnx for detailed output comparison.
-    * Update knerex shared weight combination logic.
-    * Update knerex and dynasty to support empty Constant nodes.
-    * Update compiler for better message logging.
-    * Update dynasty and compiler for `softmax` support.
-    * Update regression for longer timeout setting.
-    * Improve `model_fx_report.html` readability.
-    * Speed up compilerfor large model.
-    * Fix the ktc error message for not supported special characters in model path.
-    * Fix the ktc bug that logging module not imported.
-    * Fix the kneronnxopt bug that flip nodes are eliminated incorrectly.
-    * Fix the kneronnxopt bug that replacing Add/Sub/Mul/Div with BatchNormalization node incorrectly.
-    * Fix the nef utility bug that 520 nef combination generates invalid nef files.
-    * Other bug fixes and performance improvements.
+* **[v0.31.1]**
+    * Add `const_in_bitwidth_mode` option for quantization. The default is int16. Unless the customer particularly desires to increase the speed, it can be changed to int8
+    * Update analyzer exception log.
+    * Update kneronnxopt to set expanding dilated Conv to False by default.
+    * Update kneronnxopt to diable fusing BatchNormalization into Conv by default.
+    * Update compiler for the deep search memory estimation algorithm.
+    * Update compiler to extend the timeout for deep search.
+    * Update compiler to change expt/log/softmax to 16b.
+    * Fix the ktc bug in some default output path names.
+    * Fix the kneronnxopt bug in duplicating shared weights.
+    * Fix the compiler bug in broadcasting.
+    * Fix the compiler bug that Concat channel axis not supported.
 
 ## 1.2. Workflow Overview
 
