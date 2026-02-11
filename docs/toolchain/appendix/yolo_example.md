@@ -4,6 +4,27 @@ In this document, we provide a step by step example on how to utilize our tools 
 
 > This document is writen for toolchain v0.30.0. If any description is not consistent with the latest toolchain, please refer to the main toolchain manual.
 
+## Tricks for deploying yolo-type detection models and anker based detection models
+
+1. set quantization config (for 730 only)
+	1. input 8bit
+	2. const input 16bit 
+	3. output 8bit
+	4. weight mixlight or 8bit
+	5. data mixlight or mixbalance
+
+2. Model structure
+	1. anker based detection model has the following outputs
+		1. class scores with shape 1x class # x pixel # at scale 0, 1x class # x pixel # at scale 1, ..., 1x class # x pixel # at scale S.
+		2. bbox coordinates with shape 1x4xpixel # at scale 0, 1x4xpixel # at scale 1, ...,1x4xpixel # at scale S
+		3. Trick: Do NOT concat class scores at different scales. Output class scores for each scale separately.
+		4. Trick: Do NOT concat class score and coordinates at the same scale. Output class scores and bbox coordinates separately.
+		5. Trick: Do NOT concat bbox coordinates at differnt scales. Output bbox coordinates for each scale separately.
+		6. Trick: Typically, class scores need to pass activation fuctions such as exp, sigmoid or even softmax. Make sure these activation fucntions are in the model so that quantiztion algorithm can optimize the quantizaiton setting accordingly.
+		7. Trick: sometimes, bbox coordinates need to pass exp function or other activation function. Make sure these activation fucntions are in the model so that quantiztion algorithm can optimize the quantizaiton setting accordingly.
+		8. Trick: Do NOT concat some outputs and then split in the model. Make sure the computation of all these outputs are separate. If these computation needs to use the same op, the quantization algorithm can detect this situation and share the weights of the same op.
+
+
 ## Step 0: Prepare environment and data
 
 We need to download the latest toolchain docker image which contains all the tools we need.
