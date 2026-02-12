@@ -213,6 +213,7 @@ Notes:
 10. condition: stride is sxs
 11. decompose contidion: in_shape = 1x4x?x? && out_shape = 1x1x?x? && mode = CRD && blocksize = 2
 12. conditions: blocksize = 2 or 4
+13. -
 14. decompose to constant + log2 + mul + pow2
 15. conditions: expend on column or row
 16. conditions: expend on channel or column or row
@@ -247,10 +248,12 @@ Notes:
         - kernel_h & stride_h are 1 and kernel_w = stride_w <= 3)
 26. conditions: not pad in batch && any pad in spacial < 32 && constant mode with 0 const_val
 27. conditions: not pad in batch && any of pad < 32 && constant mode with 0 const_val
+28. -
 29. conditions: power is 2
 30. conditions: keepdims = 1
 31. contitions: keepdims = 1 && reduce not in batch
 32. contitions: keepdims = 1 && reduce in ch
+33. -
 34. conditions: mode != cubic && extrapolation_value is 0 && rank is 4 && phase_init is {0,0} && nearest_mode is floor if mode is nearest && coordinate_transformation_mode != tf_crop_and_resize
 35. conditions: mode != cubic && extrapolation_value is 0 && rank is 4 && not both vus_en and hus_en enabled && phase_init_v >= 0 and delta_v <= 1 if vus_en enabled && phase_init_h >= 0 and delta_h <= 1 if hus_en enabled
 36. conditions: mode != cubic && extrapolation_value is 0
