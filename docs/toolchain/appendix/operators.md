@@ -186,6 +186,7 @@ Table below shows the list of operators supports base on ONNX operators.
 
 Notes:
 
+<<<<<<< HEAD
 1. Conditions: rank <= 4D
 2. AveragePool 520 conditions:
     - (ceil_mode=0, count_include_pad=0, kernel is nxn, stride is nxn where n is power of 2 and n > 3) or
@@ -268,3 +269,100 @@ Notes:
 45. conditions: rank is 4 && upsample in row or column but not both && mode is nearest or linear or bilinear or align_corner
 46. conditions: rank is 4 && upsample in spatial && mode is nearest or linear or bilinear or align_corner
 
+||||||| a16d309
+1. For AveragePool kernel size, 520 and 720 support square kernel up to 3x3. while 530 and 630 also support non-square kernel up to 3x3.
+2. All hardware only support Clip with min set to 0.
+3. 720 only supports ConvTranspose with stride set to 2.
+4. 530 and 630 only support DepthToSpace with blocksize set to 2 or 4.
+5. 530 and 630 only support Expand on channel or column and row.
+6. 520 and 720 only support Flatten before Gemm.
+7. For GlobalAveragePool, 520 and 530 support up to 524888 pixels (input and output together, 8 bit, same for the platforms following). 630 supports up to 262144 pixels. 720 supports up to 1048576 pixels. 
+8. For MaxPool kernel size, 520 and 720 support square kernel up to 3x3. while 530 and 630 also support non-square kernel up to 3x3.
+9. NPUs only support constant pad mode and constant value set to 0.
+10. NPUs only support power set to 2.
+11. NPUs only support ReduceMean nodes that behave the same as GlobalAveragePool. And it has the same limitation, too.
+12. 720 only supports Resize nodes which work as upsampleing. Same limitation as the Upsample.
+13. 530 and 630 only support SpaceToDepth with blocksize set to 2 or 4.
+14. 720 only supports Upsample with mode set to bilinear or nearest.
+15. LSTM, GRU and RNN currently are only supported in onnx opset 13 after using ONNX Converter conversion.
+=======
+1. Conditions: rank <= 4D
+2. AveragePool 520 conditions:
+    - (ceil_mode=0, count_include_pad=0, kernel is nxn, stride is nxn where n is power of 2 and n > 3) or
+    - (ceil_mode=0, dilations={1,1}, kernel = 1 and stride > 1) or
+    - (ceil_mode=0, count_include_pad=0, stride is sxs where s > 3) or
+    - (2D pool, dilation == 1, kernel is kxk & stride is sxs where k <= 3 and s <= k)
+3. AveragePool 720/530/630 conditions:
+    - (ceil_mode=0, count_include_pad=0, kernel is nxn, stride is nxn where n is power of 2 and n > 3) or
+    - (ceil_mode=0, dilations={1,1}, kernel = 1 and stride > 1) or
+    - (ceil_mode=0, count_include_pad=0, stride is sxs where s > 3) or
+    - (2D pool, dilation == 1, kernel is kxk & stride is sxs where k and s <= 3 or kernel_w & stride_w are 1 and kernel_h & stride_h <= 3 or kernel_h & stride_h are 1 and kernel_w = stride_w <= 3)
+4. AveragePool 730 conditions:
+    - (ceil_mode=0, count_include_pad=0, kernel is nxn and stride is nxn where n is power of 2 and n > 3) or
+    - (ceil_mode=0, count_include_pad=0, dilation = 1, kernel = 1 and stride > 1) or
+    - (ceil_mode=0, count_include_pad=0, stride is sxs and s > 3) or
+    - (1D/2D pool, dilation == 1,
+        - kernel is kxk & stride is sxs where k and s <= 3 or
+        - kernel is kx1 & stride is sx1 where k and s <= 3 or
+        - kernel is 1xn & stride is 1xn where n <= 3)
+5. conditions: min = 0 && max >= 0
+6. conditions: rank <= 4 && kernel <= 12 && stride_w <= 16 && stride_h <= 4
+7. conditions: rank <= 4 && stride_w <= 16 && stride_h <= 4
+8. conditions: rank <= 4
+9. condition: stride is sxs where s = 2
+10. condition: stride is sxs
+11. decompose contidion: in_shape = 1x4x?x? && out_shape = 1x1x?x? && mode = CRD && blocksize = 2
+12. conditions: blocksize = 2 or 4
+14. decompose to constant + log2 + mul + pow2
+15. conditions: expend on column or row
+16. conditions: expend on channel or column or row
+17. conditions: axis = 1
+18. conditions: single index
+19. conditions: rank <= 4 && row * col <= 256
+20. conditions: rank <= 4 && row * col <= 16384
+21. conditions: row > 3
+22. conditions:
+    - if second input is const
+        - const input shape must be WxV or 1x1xWxV
+    - else
+        - rank = 4
+23. conditions:
+    - if second input is const
+        - const input shape must be WxV or 1x1xWxV
+    - else
+        - 3 <= rank <= 5
+24. Maxpool conditions:
+    - (ceil_mode=0, dilations={1,1}, kernel = 1 and stride > 1) or
+    - (ceil_mode=0, dilations={1,1}, kernel_h=kernel_w=stride_h=stride_w=K where K is power of 2 and K > 3) or
+    - (ceil_mode=0, kernel > 3) or
+    - (2D pool, dilation == 1, kernel is kxk & stride is sxs where 2 <= k <= 3 and s <= k)
+25. Maxpool conditions:
+    - (ceil_mode=0, dilations={1,1}, kernel = 1 and stride > 1) or
+    - (ceil_mode=0, dilations={1,1}, kernel_h=kernel_w=stride_h=stride_w=K where K is power of 2 and K > 3) or
+    - (ceil_mode=0, kernel > 3) or
+    - (2D pool,
+        - dilation == 1,
+        - kernel is kxk & stride is sxs where n and s <= 3 or
+        - kernel_w & stride_w are 1 and kernel_h & stride_h <= 3 or
+        - kernel_h & stride_h are 1 and kernel_w = stride_w <= 3)
+26. conditions: not pad in batch && any pad in spacial < 32 && constant mode with 0 const_val
+27. conditions: not pad in batch && any of pad < 32 && constant mode with 0 const_val
+29. conditions: power is 2
+30. conditions: keepdims = 1
+31. contitions: keepdims = 1 && reduce not in batch
+32. contitions: keepdims = 1 && reduce in ch
+34. conditions: mode != cubic && extrapolation_value is 0 && rank is 4 && phase_init is {0,0} && nearest_mode is floor if mode is nearest && coordinate_transformation_mode != tf_crop_and_resize
+35. conditions: mode != cubic && extrapolation_value is 0 && rank is 4 && not both vus_en and hus_en enabled && phase_init_v >= 0 and delta_v <= 1 if vus_en enabled && phase_init_h >= 0 and delta_h <= 1 if hus_en enabled
+36. conditions: mode != cubic && extrapolation_value is 0
+37. conditions: rank <= 4 && all of steps are 1
+38. conditions: all of steps are 1
+39. will be decompose to ReduceSum + Div + Exp 
+40. will be decompose to ReduceSum + Div + Neg + Add + Exp 
+41. conditions: blocksize is 2 or 4
+42. conditions: row_col_transpose && ch_row_transpose
+43. conditions: transpose not in batch
+44. conditions: rank is 4 && upsample in spatial && mode is nearest or linear or bilinear or align_corner
+45. conditions: rank is 4 && upsample in row or column but not both && mode is nearest or linear or bilinear or align_corner
+46. conditions: rank is 4 && upsample in spatial && mode is nearest or linear or bilinear or align_corner
+
+>>>>>>> aeafc963f2f9506010fc99b66e0a793e127c6d4f
