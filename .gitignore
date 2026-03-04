@@ -4,3 +4,4 @@ scripts/generated_tests/
 nohup.out
 error.log
 *.pyc
+.vscode/settings.json
