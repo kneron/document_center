@@ -167,6 +167,7 @@ Args:
 * cpu_node_bitwidth_mode: choose from "int8"/"int16". ("int16" is not supported in kdp520.)
 * weight_bandwidth: weight bandwidth in gbps. Defaults to None to use the default value for the specific hardware. This only affect the evaluation result.
 * dma_bandwidth: dma bandwidth in gbps. Defaults to None to use the default value for the specific hardware. This only affect the evaluation result.
+* compiler_tiling: `fm_cut` option before. could be "default" or "deep_search". Deep search mode optimizes the performance but takes longer. Defaults to "default".
 
 Return the evaluation result as `str`. The IP evaluator gives an estimation of the model running performance. It can run
 with either onnx or bie. Below is an example usage.
