@@ -72,7 +72,7 @@ Now, we go through all toolchain flow by KTC (Kneron Toolchain) using the Python
 * Run "python" to open to Python shell:
 
 <div align="center">
-<img src="../../imgs/yolo_example/python_shell.png">
+<a href="../../imgs/yolo_example/python_shell.png" ><img src="../../imgs/yolo_example/python_shell.png"></a>
 <p><span style="font-weight: bold;">Figure 1.</span> python shell</p>
 </div>
 

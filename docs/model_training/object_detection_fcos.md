@@ -164,9 +164,9 @@ We will use mean Average Precision (mAP) for evaluation. You can find the script
 
 `mAP`: mAP is the average of Average Precision (AP). AP summarizes a precision-recall curve as the weighted mean of precisions achieved at each threshold, with the increase in recall from the previous threshold used as the weight:
 
-<img src="https://latex.codecogs.com/svg.image?AP&space;=&space;\sum_n&space;(R_n-R_{n-1})P_n&space;" title="AP = \sum_n (R_n-R_{n-1})P_n " />
+<a href="https://latex.codecogs.com/svg.image?AP&space;=&space;\sum_n&space;(R_n-R_{n-1})P_n&space;" ><img src="https://latex.codecogs.com/svg.image?AP&space;=&space;\sum_n&space;(R_n-R_{n-1})P_n&space;" title="AP = \sum_n (R_n-R_{n-1})P_n " /></a>
 
-where <img src="https://latex.codecogs.com/svg.image?R_n" title="R_n" />  and <img src="https://latex.codecogs.com/svg.image?P_n" title="P_n" /> are the precision and recall at the nth threshold. The mAP compares the ground-truth bounding box to the detected box and returns a score. The higher the score, the more accurate the model is in its detections.
+where <a href="https://latex.codecogs.com/svg.image?R_n" ><img src="https://latex.codecogs.com/svg.image?R_n" title="R_n" /></a>  and <a href="https://latex.codecogs.com/svg.image?P_n" ><img src="https://latex.codecogs.com/svg.image?P_n" title="P_n" /></a> are the precision and recall at the nth threshold. The mAP compares the ground-truth bounding box to the detected box and returns a score. The higher the score, the more accurate the model is in its detections.
 
 ## Evaluation on a Dataset
 For evaluating the trained model on dataset:

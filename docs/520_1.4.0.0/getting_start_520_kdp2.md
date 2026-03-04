@@ -17,7 +17,7 @@ When referring to a complete AI application development, actually three parts ar
 Below diagram depicts three parts of development in a big picture.
 
 <div align="center">
-<img src="../imgs/getting_start_imgs_520_kdp2/KL520_develop_flow.png">
+<a href="../imgs/getting_start_imgs_520_kdp2/KL520_develop_flow.png" ><img src="../imgs/getting_start_imgs_520_kdp2/KL520_develop_flow.png"></a>
 </div>
 
 &nbsp;
@@ -60,7 +60,7 @@ Here we will demonstrate below diagram scenario with followings:
 
 
 <div align="center">
-<img src="../imgs/getting_start_imgs_520_kdp2/KL520_develop_flow_sw.png">
+<a href="../imgs/getting_start_imgs_520_kdp2/KL520_develop_flow_sw.png" ><img src="../imgs/getting_start_imgs_520_kdp2/KL520_develop_flow_sw.png"></a>
 </div>
 
 &nbsp;
@@ -314,7 +314,7 @@ disconnecting device ...
 Besides output results in the screen console, it also draws detected objects in a new-created **ex_kdp2_tiny_yolo_v3.bmp**.
 
 <div align="center">
-<img src="../imgs/getting_start_imgs_520_kdp2/ex_kdp2_tiny_yolo_v3.bmp">
+<a href="../imgs/getting_start_imgs_520_kdp2/ex_kdp2_tiny_yolo_v3.bmp" ><img src="../imgs/getting_start_imgs_520_kdp2/ex_kdp2_tiny_yolo_v3.bmp"></a>
 </div>
 
 The key features of APP inference are listed below:
@@ -415,7 +415,7 @@ From the console output, it can be observed that the information of models in th
 If [post process] is set to 'yolo_v3', it draws detected objects in a new-created **ex_kdp2_generic_inference_raw.bmp**. 
 
 <div align="center">
-<img src="../imgs/getting_start_imgs_520_kdp2/ex_kdp2_generic_inference_raw.bmp">
+<a href="../imgs/getting_start_imgs_520_kdp2/ex_kdp2_generic_inference_raw.bmp" ><img src="../imgs/getting_start_imgs_520_kdp2/ex_kdp2_generic_inference_raw.bmp"></a>
 </div>
 
 &nbsp;

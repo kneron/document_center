@@ -105,28 +105,28 @@ For the docker toolbox, it is actually based on the VirtualBox virtual machine. 
 * Open the VirtualBox management tool.
 
 <div align="center">
-<img src="https://www.kneron.com/forum/uploads/482/12PLQFMGH9BV.jpg">
+<a href="https://www.kneron.com/forum/uploads/482/12PLQFMGH9BV.jpg" ><img src="https://www.kneron.com/forum/uploads/482/12PLQFMGH9BV.jpg"></a>
 <p><span style="font-weight: bold;">Figure FAQ3.1</span> VirtualBox</p>
 </div>
 
 * Check the status. There should be only one virtual machine running if there is no other virtual machines started manually by the user.
 
 <div align="center">
-<img src="https://www.kneron.com/forum/uploads/216/ASLEVYP50EBB.jpg">
+<a href="https://www.kneron.com/forum/uploads/216/ASLEVYP50EBB.jpg" ><img src="https://www.kneron.com/forum/uploads/216/ASLEVYP50EBB.jpg"></a>
 <p><span style="font-weight: bold;">Figure FAQ3.2</span> VM status</p>
 </div>
 
 * Close the docker terminal and shutdown the virtual machine before we adjust the resources usage.
 
 <div align="center">
-<img src="https://www.kneron.com/forum/uploads/610/2U405146XBZ5.jpg">
+<a href="https://www.kneron.com/forum/uploads/610/2U405146XBZ5.jpg" ><img src="https://www.kneron.com/forum/uploads/610/2U405146XBZ5.jpg"></a>
 <p><span style="font-weight: bold;">Figure FAQ3.3</span> VM shutdown</p>
 </div>
 
 * Adjust the memory usage in the virtual machine settings. You can also change the cpu count here as well.
 
 <div align="center">
-<img src="https://www.kneron.com/forum/uploads/558/E0TXAFQZE8S5.jpg">
+<a href="https://www.kneron.com/forum/uploads/558/E0TXAFQZE8S5.jpg" ><img src="https://www.kneron.com/forum/uploads/558/E0TXAFQZE8S5.jpg"></a>
 <p><span style="font-weight: bold;">Figure FAQ3.4</span> VM settings</p>
 </div>
 
