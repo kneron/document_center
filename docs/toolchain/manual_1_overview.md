@@ -1,5 +1,5 @@
 <div align="center">
-<a href="https://doc.kneron.com/docs/toolchain/imgs/manual/kneron_log.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/manual/kneron_log.png"></a>
+<a href="https://doc.kneron.com/docs/toolchain/imgs/manual/kneron_log.png"  target="_blank" rel="noopener noreferrer" data-wm-adjusted="done"><img src="../imgs/manual/kneron_log.png"></a>
 </div>
 
 # 1. Toolchain Overview
@@ -39,7 +39,7 @@ In the following parts of this page, you can go through the basic toolchain work
 Below is a breif diagram showing the workflow of how to generate the binary from a floating-point model using the toolchain.
 
 <div align="center">
-<a href="https://doc.kneron.com/docs/toolchain/imgs/manual/Manual_Flow_Chart.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/manual/Manual_Flow_Chart.png"></a>
+<a href="https://doc.kneron.com/docs/toolchain/imgs/manual/Manual_Flow_Chart.png"  target="_blank" rel="noopener noreferrer" data-wm-adjusted="done"><img src="../imgs/manual/Manual_Flow_Chart.png"></a>
 <p><span style="font-weight: bold;">Figure 1.</span> Diagram of working flow</p>
 </div>
 
