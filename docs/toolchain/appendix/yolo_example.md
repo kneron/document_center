@@ -95,7 +95,7 @@ Now, we go through all toolchain flow by KTC (Kneron Toolchain) using the Python
 * Run "python" or 'ipython'to open to Python shell:
 
 <div align="center">
-<a href="https://doc.kneron.com/docs/toolchain/imgs/yolo_example/python_shell.png"  target="_blank" rel="noopener noreferrer"><img src="../../imgs/yolo_example/python_shell.png"></a>
+<a href="https://doc.kneron.com/docs/toolchain/imgs/yolo_example/python_shell.png"  target="_blank" rel="noopener noreferrer" data-wm-adjusted="done"><img src="../../imgs/yolo_example/python_shell.png"></a>
 <p><span style="font-weight: bold;">Figure 1.</span> python shell</p>
 </div>
 
@@ -381,14 +381,14 @@ We leverage the provided the example code in Kneron PLUS to run our YOLO NEF.
 2. Modify `kneron_plus/python/example/KL720DemoGenericInferencePostYolo.py` line 20. Change input image from "bike_cars_street_224x224.bmp" to "bike_cars_street_416x416.bmp"
 
 <div align="center">
-<a href="https://doc.kneron.com/docs/toolchain/imgs/yolo_example/kplus_modify_input_img.png"  target="_blank" rel="noopener noreferrer"><img src="../../imgs/yolo_example/kplus_modify_input_img.png"></a>
+<a href="https://doc.kneron.com/docs/toolchain/imgs/yolo_example/kplus_modify_input_img.png"  target="_blank" rel="noopener noreferrer" data-wm-adjusted="done"><img src="../../imgs/yolo_example/kplus_modify_input_img.png"></a>
 <p><span style="font-weight: bold;">Figure 2.</span> modify input image in example </p>
 </div>
 
 3. Modify line 105. change normaization method in preprocess config from "Kneron" mode to "Yolo" mode
 
 <div align="center">
-<a href="https://doc.kneron.com/docs/toolchain/imgs/yolo_example/preprocess_from_KnMod_to_YoloMod.png"  target="_blank" rel="noopener noreferrer"><img src="../../imgs/yolo_example/preprocess_from_KnMod_to_YoloMod.png"></a>
+<a href="https://doc.kneron.com/docs/toolchain/imgs/yolo_example/preprocess_from_KnMod_to_YoloMod.png"  target="_blank" rel="noopener noreferrer" data-wm-adjusted="done"><img src="../../imgs/yolo_example/preprocess_from_KnMod_to_YoloMod.png"></a>
 <p><span style="font-weight: bold;">Figure 3.</span> modify normalization method in example </p>
 </div>
 
@@ -402,7 +402,7 @@ We leverage the provided the example code in Kneron PLUS to run our YOLO NEF.
 Then, you should see the YOLO NEF detection result is saved to "./output_bike_cars_street_416x416.bmp" :
 
 <div align="center">
-<a href="https://doc.kneron.com/docs/toolchain/imgs/yolo_example/detection_res.png"  target="_blank" rel="noopener noreferrer"><img src="../../imgs/yolo_example/detection_res.png"></a>
+<a href="https://doc.kneron.com/docs/toolchain/imgs/yolo_example/detection_res.png"  target="_blank" rel="noopener noreferrer" data-wm-adjusted="done"><img src="../../imgs/yolo_example/detection_res.png"></a>
 <p><span style="font-weight: bold;">Figure 4.</span> detection result </p>
 </div>
 
