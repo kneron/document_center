@@ -219,13 +219,13 @@ if (1) {
 Run the executable binaries, and we can see initialization messages, and the buffer depth is 3. Image index is keep increasing and the expected 5 and 3 objects are toggling because we ping pong transfer two images, so the results are ping pong as 5 objects and 3 objects as well
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/4_1_1.png" ><img src="../imgs/getting_start_imgs/4_1_1.png"></a>
+<a href="../imgs/getting_start_imgs/4_1_1.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/4_1_1.png"></a>
 </div>
 
 Lastly, we can see the average FPS for running 1000 images is 12.4, each image take average 81ms to finish.
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/4_1_2.png" ><img src="../imgs/getting_start_imgs/4_1_2.png"></a>
+<a href="../imgs/getting_start_imgs/4_1_2.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/4_1_2.png"></a>
 </div>
 
 ### 4.2. Python Example
@@ -287,13 +287,13 @@ print("Average FPS is ", fps)
 Run the Python example, and we can see initialization messages, and the buffer depth is 3. Image index keeps increasing and the number of detected objects are outputted
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/4_2_1.png" ><img src="../imgs/getting_start_imgs/4_2_1.png"></a>
+<a href="../imgs/getting_start_imgs/4_2_1.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/4_2_1.png"></a>
 </div>
 
 Lastly, we can see the average FPS for running 1000 images is 12.2, each image take average 82ms to finish.
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/4_2_2.png" ><img src="../imgs/getting_start_imgs/4_2_2.png"></a>
+<a href="../imgs/getting_start_imgs/4_2_2.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/4_2_2.png"></a>
 </div>
 
 ## 5. Run OTA to Swap Another Pre-build Application Binary Mask Face Detection
@@ -306,7 +306,7 @@ Besides Tiny Yolo v3, Kneron also provides many other applications:
 * Ssd_fd: Mask face detection, detect face with mask and without mask
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/5_1.png" ><img src="../imgs/getting_start_imgs/5_1.png"></a>
+<a href="../imgs/getting_start_imgs/5_1.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/5_1.png"></a>
 </div>
 
 In order to swap the KL520 application, Kneron provides update application feature to update the firmware via USB. Here is an introduction how to do it.
@@ -314,32 +314,32 @@ In order to swap the KL520 application, Kneron provides update application featu
 First, user can copy the target application into app_binaries/ota/ready_to_load. Here we will load the mask fd application into KL520. As you can see, there are 3 files, fw_ncpu.bin fw_scpu.bin, and model_ota.bin. Fw_ncpu.bin and Fw_scpu.bin are program binaries that run in the two cpu in KL520. And model_ota.bin is the binary for deep learning models.
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/5_2.png" ><img src="../imgs/getting_start_imgs/5_2.png"></a>
+<a href="../imgs/getting_start_imgs/5_2.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/5_2.png"></a>
 </div>
 
 Then we can go to build/bin, and run ./update_app. This will load all 3 binaries into KL520, and program them into the flash so that even without power, the KL520 can still maintain the applications. Since the model are relatively large and flash programming is slow, users need to wait for couple mins to update the application. It takes about 3 minutes here.
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/5_3.png" ><img src="../imgs/getting_start_imgs/5_3.png"></a>
+<a href="../imgs/getting_start_imgs/5_3.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/5_3.png"></a>
 </div>
 
 As you can see the log, the SCPU and NCPU firmware are updated successfully, and model update successfully. Last, it will print out the SCPU firmware id and NCPU firmware id to ensure it is updated with the correct version of code.
 After KL520 is updated with the mask face detection, we can start to run this corresponding example. We are going to try the interactive with camera example, therefore, we will make sure we build the apps require opencv. Make sure to do “cmake -DBUILD_OPENCV_EX=on ..” and “make -j” again to make the cam application.
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/5_4.png" ><img src="../imgs/getting_start_imgs/5_4.png"></a>
+<a href="../imgs/getting_start_imgs/5_4.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/5_4.png"></a>
 </div>
 
 A Camera output window will pop out and use light blue box to get the human face.
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/5_5.png" ><img src="../imgs/getting_start_imgs/5_5.png"></a>
+<a href="../imgs/getting_start_imgs/5_5.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/5_5.png"></a>
 </div>
 
 And when you put on the mask, there will be a green bounding box around the human face. After 1000 inference, the program will stop.
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/5_6.png" ><img src="../imgs/getting_start_imgs/5_6.png"></a>
+<a href="../imgs/getting_start_imgs/5_6.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/5_6.png"></a>
 </div>
 
 ## 6. Build new model binary based on MobileNet V2 image classification 
@@ -358,7 +358,7 @@ model.save('MobileNetV2.h5')
 After getting the keras model, copy the model and a folder of jpg/png images which fall into the categories of ImageNet to /data1 of vm. The recommended size of images is more than 100, which the tools will use it for quantization.
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/6_1.png" ><img src="../imgs/getting_start_imgs/6_1.png"></a>
+<a href="../imgs/getting_start_imgs/6_1.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/6_1.png"></a>
 </div>
 
 Run toolchain in vm and map ~/data1 folder of vm into /data1 of toolchain
@@ -368,7 +368,7 @@ Run toolchain in vm and map ~/data1 folder of vm into /data1 of toolchain
 After that, we will enter toolchain docker container, and it is at workspace/. Check if the /data1 is mapped with the external folder successfully or not.
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/6_2.png" ><img src="../imgs/getting_start_imgs/6_2.png"></a>
+<a href="../imgs/getting_start_imgs/6_2.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/6_2.png"></a>
 </div>
 
  Then we can run toolchain in vm to convert the keras model into onnx model. The command is:
@@ -378,7 +378,7 @@ After that, we will enter toolchain docker container, and it is at workspace/. C
 Then we can see that a MobileNetV2 ONNX model is created under /data1
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/6_3.png" ><img src="../imgs/getting_start_imgs/6_3.png"></a>
+<a href="../imgs/getting_start_imgs/6_3.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/6_3.png"></a>
 </div>
 
 
@@ -387,7 +387,7 @@ Then we can see that a MobileNetV2 ONNX model is created under /data1
 When we check the MobileNetV2 ONNX model with Netron, we can see that the network's final output layer is a softmax layer, which cannot be handled by KL520 NPU. It is very common to see the softmax layer at the end of classification network, but it is not computation extensive layer, and we can move this softmax layer into network's post process.  
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/6_4.png" ><img src="../imgs/getting_start_imgs/6_4.png"></a>
+<a href="../imgs/getting_start_imgs/6_4.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/6_4.png"></a>
 </div>
 
 Toolchain provides the Python script (onnx2onnx.py) to optimize the onnx model, and the script (editor.py) to cut layers starting from a specific layer. To remove the softmax layer, we can just simply run the onnx2onnx.py as follow:
@@ -397,11 +397,11 @@ Toolchain provides the Python script (onnx2onnx.py) to optimize the onnx model, 
 After running onnx2onnx.py script, the optimized model MobileNetV2_opt.h5.onnx is saved in /data1. The final layer of the optimized onnx model is Gemm layer now.
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/6_5.png" ><img src="../imgs/getting_start_imgs/6_5.png"></a>
+<a href="../imgs/getting_start_imgs/6_5.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/6_5.png"></a>
 </div>
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/6_6.png" ><img src="../imgs/getting_start_imgs/6_6.png"></a>
+<a href="../imgs/getting_start_imgs/6_6.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/6_6.png"></a>
 </div>
 
 
@@ -410,7 +410,7 @@ After running onnx2onnx.py script, the optimized model MobileNetV2_opt.h5.onnx i
 Copy the /workspace/examples/batch_compile_input_params.json into /data1 and modify it before batch-compiling MobileNetV2.
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/6_7.png" ><img src="../imgs/getting_start_imgs/6_7.png"></a>
+<a href="../imgs/getting_start_imgs/6_7.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/6_7.png"></a>
 </div>
 
 The batch_compile_input_params.json is modified as:  
@@ -426,7 +426,7 @@ specify the model "input_onnx_file" to be "/data1/MobileNetV2_opt.h5.onnx", whic
 Modify the model_id to be 1000 for MobileNetV2.
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/6_8.png" ><img src="../imgs/getting_start_imgs/6_8.png"></a>
+<a href="../imgs/getting_start_imgs/6_8.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/6_8.png"></a>
 </div>
 
 Execute the command to batch-compile MobileNetV2 model. 
@@ -434,13 +434,13 @@ Execute the command to batch-compile MobileNetV2 model.
        cd /workspace/scripts && ./fpAnalyserBatchCompiler.sh.x       
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/6_9.png" ><img src="../imgs/getting_start_imgs/6_9.png"></a>
+<a href="../imgs/getting_start_imgs/6_9.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/6_9.png"></a>
 </div>
 
 After batch-compilation, a new batch_compile folder with all_models.bin and fw_info.bin is present in /data1. These two binaries will be used for running the model in KL520 later.  
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/6_10.png" ><img src="../imgs/getting_start_imgs/6_10.png"></a>
+<a href="../imgs/getting_start_imgs/6_10.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/6_10.png"></a>
 </div>
 
 ### 6.4. Estimated NPU Run Time for Model
@@ -449,13 +449,13 @@ We can use Toolchain to get the evaluation result of NPU performance for Kneron 
 Firstly copy the input_params.json under /workspace/examples to /data1. Same as doing batch compile
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/6_11.png" ><img src="../imgs/getting_start_imgs/6_11.png"></a>
+<a href="../imgs/getting_start_imgs/6_11.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/6_11.png"></a>
 </div>
 
 Modify the input_params.json as:  tensorflow for public MobileNetV2 as img_preprocess_method, False for add_norm.
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/6_12.png" ><img src="../imgs/getting_start_imgs/6_12.png"></a>
+<a href="../imgs/getting_start_imgs/6_12.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/6_12.png"></a>
 </div>
 
 Execute the command to run evaluation for MobileNetV2 model. 
@@ -463,19 +463,19 @@ Execute the command to run evaluation for MobileNetV2 model.
        cd /workspace/scripts && ./fpAnalyserCompilerIpevaluator.sh.x
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/6_13.png" ><img src="../imgs/getting_start_imgs/6_13.png"></a>
+<a href="../imgs/getting_start_imgs/6_13.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/6_13.png"></a>
 </div>
 
 After the evaluation process is finished, we can get the evaluation_result.txt under /data1/compiler.
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/6_14.png" ><img src="../imgs/getting_start_imgs/6_14.png"></a>
+<a href="../imgs/getting_start_imgs/6_14.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/6_14.png"></a>
 </div>
 
 The evaluation result does not count in the time to do pre/post process and cpu node process. For this MobileNetV2 model, it will take around 15.7ms (total time)
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/6_15.png" ><img src="../imgs/getting_start_imgs/6_15.png"></a>
+<a href="../imgs/getting_start_imgs/6_15.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/6_15.png"></a>
 </div>
 
 
@@ -524,25 +524,25 @@ finish the tasks:
 With this data format, host needs to converts it back to a shared structure `struct kdp_image_s` that can easily identify each output nodes parameters, such as channel, height, width, radix, and scales.
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/7_2_1.png" ><img src="../imgs/getting_start_imgs/7_2_1.png"></a>
+<a href="../imgs/getting_start_imgs/7_2_1.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/7_2_1.png"></a>
 </div>
 
 2. Host will call actual model post process function `post_imgnet_classificaiton()` in example/post_processing_ex.c
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/7_2_2.png" ><img src="../imgs/getting_start_imgs/7_2_2.png"></a>
+<a href="../imgs/getting_start_imgs/7_2_2.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/7_2_2.png"></a>
 </div>
 
 In KL520, the results are in 16-byte aligned format for each row, and these values are in fixed point. As a result, host need to convert these values back to floating by using the radix and scale value for each output node. `do_div_scale()` is for this purpose.
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/7_2_3.png" ><img src="../imgs/getting_start_imgs/7_2_3.png"></a>
+<a href="../imgs/getting_start_imgs/7_2_3.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/7_2_3.png"></a>
 </div>
 
 After converting all the output values back to float, host post process program need to add back the softmax layer, which was cut in model editor (onnx2onnx.py). Lastly, host use qsort to find the top N probability from the 1000 classes. 
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/7_2_4.png" ><img src="../imgs/getting_start_imgs/7_2_4.png"></a>
+<a href="../imgs/getting_start_imgs/7_2_4.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/7_2_4.png"></a>
 </div>
 
 ### 7.3. How to config DME based on the input images
@@ -552,13 +552,13 @@ After getting the parameters of input images and models, we can set DME configur
 The following settings mean that the host would send 640x480 RGB565 image to KL520, and KL520 will resize it to 224x224 for model input. Then KL520 will send back raw NPU output back to Host, which suggests host side need to perform post process in order to get the results. Please note that when we compile the model in section 6, we assign model id 1000 to this MobileNetV2 model, and we need to pass this model id in the dme config as well.
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/7_3_1.png" ><img src="../imgs/getting_start_imgs/7_3_1.png"></a>
+<a href="../imgs/getting_start_imgs/7_3_1.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/7_3_1.png"></a>
 </div>
 
 Then we can call API `kdp_dme_configure()` to config DME.
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/7_3_2.png" ><img src="../imgs/getting_start_imgs/7_3_2.png"></a>
+<a href="../imgs/getting_start_imgs/7_3_2.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/7_3_2.png"></a>
 </div>
 
 ### 7.4. Run DME App
@@ -566,13 +566,13 @@ Then we can call API `kdp_dme_configure()` to config DME.
 After building the example code using `make -j`, we can run the MobileNetV2 example in command line.
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/7_4_1.png" ><img src="../imgs/getting_start_imgs/7_4_1.png"></a>
+<a href="../imgs/getting_start_imgs/7_4_1.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/7_4_1.png"></a>
 </div>
 
 The top 5 results for each image is printed out. After finishing the inference for 100 images, the average time of each frame and the fps is calculated and printed out.
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/7_4_2.png" ><img src="../imgs/getting_start_imgs/7_4_2.png"></a>
+<a href="../imgs/getting_start_imgs/7_4_2.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/7_4_2.png"></a>
 </div>
 
 We can compare the classification index results with the index list on here: [Imagenet Class Index](<https://gist.github.com/yrevar/942d3a0ac09ec9e5eb3a>)
@@ -588,7 +588,7 @@ When IPL (Initial Program Loader) in ROM starts to run on SCPU after power-on or
 Both SCPU and NCPU firmware run RTOS with SCPU handling application, media input/output and peripheral drivers and NCPU handling CNN model pre/post processing. Two CPUs use interrupts and shared memory to achieve IPC (Inter Processor Communication).
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/8_1_1.png" ><img src="../imgs/getting_start_imgs/8_1_1.png"></a>
+<a href="../imgs/getting_start_imgs/8_1_1.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/8_1_1.png"></a>
 </div>
 
 The examples of SDK here are for SCPU RTOS firmware and NCPU RTOS firmware. Both uses ARM Keil RTX.
@@ -629,7 +629,7 @@ A host mode application means that camera(s) and maybe display are located on th
 Tiny Yolo is a single model application with streamlined processing. Both companion mode and host mode are supported. Figure below is a companion mode example. 
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/8_3_1.png" ><img src="../imgs/getting_start_imgs/8_3_1.png"></a>
+<a href="../imgs/getting_start_imgs/8_3_1.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/8_3_1.png"></a>
 </div>
 
 
@@ -844,11 +844,11 @@ There is also a PDF file to briefly describe the peripheral APIs. Please downloa
 ### 10.1. Board Overview
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/10_1_1.png" ><img src="../imgs/getting_start_imgs/10_1_1.png"></a>
+<a href="../imgs/getting_start_imgs/10_1_1.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/10_1_1.png"></a>
 </div>
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/10_1_2.png" ><img src="../imgs/getting_start_imgs/10_1_2.png"></a>
+<a href="../imgs/getting_start_imgs/10_1_2.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/10_1_2.png"></a>
 </div>
 
 ### 10.2. Hardware Setting
@@ -858,7 +858,7 @@ There is also a PDF file to briefly describe the peripheral APIs. Please downloa
 UART0: Command Port
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/10_2_1.png" ><img src="../imgs/getting_start_imgs/10_2_1.png"></a>
+<a href="../imgs/getting_start_imgs/10_2_1.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/10_2_1.png"></a>
 </div>
 
 #### 10.2.2. Connecting 5V power and trun on power switch
@@ -866,7 +866,7 @@ UART0: Command Port
 Power from Adapter or from Power Bank (USB PD)
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/10_2_2.png" ><img src="../imgs/getting_start_imgs/10_2_2.png"></a>
+<a href="../imgs/getting_start_imgs/10_2_2.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/10_2_2.png"></a>
 </div>
 
 #### 10.2.3. Wake up chip from RTC power domain by pressing PTN button
@@ -874,7 +874,7 @@ Power from Adapter or from Power Bank (USB PD)
 Please do it every time after plugging in the power
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/10_2_3.png" ><img src="../imgs/getting_start_imgs/10_2_3.png"></a>
+<a href="../imgs/getting_start_imgs/10_2_3.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/10_2_3.png"></a>
 </div>
 
 ### 10.3. Program Flash via UART0 Interface
@@ -898,7 +898,7 @@ Please do it every time after plugging in the power
    EX: COM_ID = 3 # COM3
 
    <div align="center">
-    <a href="../imgs/getting_start_imgs/10_3_1.png" ><img src="../imgs/getting_start_imgs/10_3_1.png"></a>
+    <a href="../imgs/getting_start_imgs/10_3_1.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/10_3_1.png"></a>
    </div>
 
 #### 10.3.3 Flash Chip Programming (FW + DATA)
@@ -908,13 +908,13 @@ Please do it every time after plugging in the power
 Please press RESET BTN while you are seeing “Please press reset button!!”
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/10_3_2.png" ><img src="../imgs/getting_start_imgs/10_3_2.png"></a>
+<a href="../imgs/getting_start_imgs/10_3_2.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/10_3_2.png"></a>
 </div>
 
 Afterwards, just wait until all progresses are finished (erase, program, verify)
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/10_3_3.png" ><img src="../imgs/getting_start_imgs/10_3_3.png"></a>
+<a href="../imgs/getting_start_imgs/10_3_3.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/10_3_3.png"></a>
 </div>
 
 **Note**:
@@ -944,7 +944,7 @@ To program specific bin file to specific flash address
 Connect JTAG/SWD.
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/10_4_1.png" ><img src="../imgs/getting_start_imgs/10_4_1.png"></a>
+<a href="../imgs/getting_start_imgs/10_4_1.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/10_4_1.png"></a>
 </div>
 
 #### 10.4.2. Edit flash_prog.jlink device setting
@@ -971,7 +971,7 @@ Connect JTAG/SWD.
 Afterwards, just wait until all progresses are finished (chip erase, program, verify)
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/10_4_2.png" ><img src="../imgs/getting_start_imgs/10_4_2.png"></a>
+<a href="../imgs/getting_start_imgs/10_4_2.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/10_4_2.png"></a>
 </div>
 
 #### 10.4.4. Check programming result
@@ -979,7 +979,7 @@ Afterwards, just wait until all progresses are finished (chip erase, program, ve
 Please ensure all the results are "O.K.", and enter "qc" to quit and close J-Link commander
 
 <div align="center">
-<a href="../imgs/getting_start_imgs/10_4_3.png" ><img src="../imgs/getting_start_imgs/10_4_3.png"></a>
+<a href="../imgs/getting_start_imgs/10_4_3.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/10_4_3.png"></a>
 </div>
 
 #### 10.4.5. Edit flash_prog_partial.jlink device setting(optional)
@@ -1018,7 +1018,7 @@ To program specific bin file to specific flash address
 
     EX:
     <div align="center">
-    <a href="../imgs/getting_start_imgs/10_4_4.png" ><img src="../imgs/getting_start_imgs/10_4_4.png"></a>
+    <a href="../imgs/getting_start_imgs/10_4_4.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/getting_start_imgs/10_4_4.png"></a>
     </div>
 
 

@@ -41,12 +41,12 @@ After using a tool like [CVAT](https://github.com/openvinotoolkit/cvat), [makese
 - Class numbers are zero-indexed (start from 0).
 
 <div align="center">
-<a href="../imgs/readme_img.jpg" ><img src="../imgs/readme_img.jpg" width="50%" /></a> 
+<a href="../imgs/readme_img.jpg"  target="_blank" rel="noopener noreferrer"><img src="../imgs/readme_img.jpg" width="50%" /></a> 
 </div>
 
 The label file corresponding to the above image contains 2 persons (class 0) and a tie (class 27):
 <div align="center">
-<a href="../imgs/readme_img2.png" ><img src="../imgs/readme_img2.png" width="40%" /></a> 
+<a href="../imgs/readme_img2.png"  target="_blank" rel="noopener noreferrer"><img src="../imgs/readme_img2.png" width="40%" /></a> 
 </div>
 
 ###  Directory Organization
@@ -216,9 +216,9 @@ We will use mean Average Precision (mAP) for evaluation. You can find the script
 
 `mAP`: mAP is the average of Average Precision (AP). AP summarizes a precision-recall curve as the weighted mean of precisions achieved at each threshold, with the increase in recall from the previous threshold used as the weight:
 
-<a href="https://latex.codecogs.com/svg.image?AP&space;=&space;\sum_n&space;(R_n-R_{n-1})P_n&space;" ><img src="https://latex.codecogs.com/svg.image?AP&space;=&space;\sum_n&space;(R_n-R_{n-1})P_n&space;" title="AP = \sum_n (R_n-R_{n-1})P_n " /></a>
+<a href="https://latex.codecogs.com/svg.image?AP&space;=&space;\sum_n&space;(R_n-R_{n-1})P_n&space;"  target="_blank" rel="noopener noreferrer"><img src="https://latex.codecogs.com/svg.image?AP&space;=&space;\sum_n&space;(R_n-R_{n-1})P_n&space;" title="AP = \sum_n (R_n-R_{n-1})P_n " /></a>
 
-where <a href="https://latex.codecogs.com/svg.image?R_n" ><img src="https://latex.codecogs.com/svg.image?R_n" title="R_n" /></a>  and <a href="https://latex.codecogs.com/svg.image?P_n" ><img src="https://latex.codecogs.com/svg.image?P_n" title="P_n" /></a> are the precision and recall at the nth threshold. The mAP compares the ground-truth bounding box to the detected box and returns a score. The higher the score, the more accurate the model is in its detections.
+where <a href="https://latex.codecogs.com/svg.image?R_n"  target="_blank" rel="noopener noreferrer"><img src="https://latex.codecogs.com/svg.image?R_n" title="R_n" /></a>  and <a href="https://latex.codecogs.com/svg.image?P_n"  target="_blank" rel="noopener noreferrer"><img src="https://latex.codecogs.com/svg.image?P_n" title="P_n" /></a> are the precision and recall at the nth threshold. The mAP compares the ground-truth bounding box to the detected box and returns a score. The higher the score, the more accurate the model is in its detections.
 
 ## Evaluation on a Dataset
 
