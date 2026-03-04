@@ -6,26 +6,26 @@ information table.
 
 ## Summary
 
-The summary will show the ip evaluator information. Below are some examples of report:
+The summary will show the IP evaluator information. Below are some examples of report:
 
 <div align="center">
 <a href="https://doc.kneron.com/docs/toolchain/imgs/fx_report/table_summary_520.png" target="_blank" rel="noopener noreferrer"><img src="../../imgs/fx_report/table_summary_520.png"></a>
-<p><span style="font-weight: bold;">Figure 1.</span> Summary for platform 520, mode 0 (ip evaluator only) </p>
+<p><span style="font-weight: bold;">Figure 1.</span> Summary for platform 520, mode 0 (IP evaluator only) </p>
 </div>
 
 <div align="center">
 <a href="https://doc.kneron.com/docs/toolchain/imgs/fx_report/table_summary_530.png" target="_blank" rel="noopener noreferrer"><img src="../../imgs/fx_report/table_summary_530.png"></a>
-<p><span style="font-weight: bold;">Figure 2.</span> Summary for platform 530, mode 0 (ip evaluator only) </p>
+<p><span style="font-weight: bold;">Figure 2.</span> Summary for platform 530, mode 0 (IP evaluator only) </p>
 </div>
 
 <div align="center">
 <a href="https://doc.kneron.com/docs/toolchain/imgs/fx_report/table_summary_520_mode1.png" target="_blank" rel="noopener noreferrer"><img src="../../imgs/fx_report/table_summary_520_mode1.png"></a>
-<p><span style="font-weight: bold;">Figure 3.</span> Summary for platform 520, mode 1 (with fix model generated) </p>
+<p><span style="font-weight: bold;">Figure 3.</span> Summary for platform 520, mode 1 (with fixed-point model generated) </p>
 </div>
 
 <div align="center">
 <a href="https://doc.kneron.com/docs/toolchain/imgs/fx_report/table_summary_730_mode2.png" target="_blank" rel="noopener noreferrer"><img src="../../imgs/fx_report/table_summary_730_mode2.png"></a>
-<p><span style="font-weight: bold;">Figure 4.</span> Summary for platform 730, model 2 (with fix model generated and snr check.) </p>
+<p><span style="font-weight: bold;">Figure 4.</span> Summary for platform 730, mode 2 (with fixed-point model generated and snr check.) </p>
 </div>
 
 | **name**                | **explaination**                                                               | **availability**                 |
@@ -57,28 +57,28 @@ The summary will show the ip evaluator information. Below are some examples of r
 
 <div align="center">
 <a href="https://doc.kneron.com/docs/toolchain/imgs/fx_report/table_detailed_520.png" target="_blank" rel="noopener noreferrer"><img src="../../imgs/fx_report/table_detailed_520.png"></a>
-<p><span style="font-weight: bold;">Figure 5.</span> Node details for platform 520, mode 0 (ip evaluator only). </p>
+<p><span style="font-weight: bold;">Figure 5.</span> Node details for platform 520, mode 0 (IP evaluator only). </p>
 </div>
 
 <div align="center">
 <a href="https://doc.kneron.com/docs/toolchain/imgs/fx_report/table_detailed_530.png" target="_blank" rel="noopener noreferrer"><img src="../../imgs/fx_report/table_detailed_530.png"></a>
-<p><span style="font-weight: bold;">Figure 6.</span> Node details for platform 530, mode 0 (ip evaluator only). </p>
+<p><span style="font-weight: bold;">Figure 6.</span> Node details for platform 530, mode 0 (IP evaluator only). </p>
 </div>
 
 <div align="center">
 <a href="https://doc.kneron.com/docs/toolchain/imgs/fx_report/table_detailed_520_mode1.png" target="_blank" rel="noopener noreferrer"><img src="../../imgs/fx_report/table_detailed_520_mode1.png"></a>
-<p><span style="font-weight: bold;">Figure 7.</span> Node details for platform 520, mode 1 (with fix model generated). </p>
+<p><span style="font-weight: bold;">Figure 7.</span> Node details for platform 520, mode 1 (with fixed-point model generated). </p>
 </div>
 
 <div align="center">
 <a href="https://doc.kneron.com/docs/toolchain/imgs/fx_report/table_detailed_730_mode2.png" target="_blank" rel="noopener noreferrer"><img src="../../imgs/fx_report/table_detailed_730_mode2.png"></a>
-<p><span style="font-weight: bold;">Figure 8.</span> NOde details for platform 730, mode 2 (with fix model generated and snr check). </p>
+<p><span style="font-weight: bold;">Figure 8.</span> Node details for platform 730, mode 2 (with fixed-point model generated and SNR check). </p>
 </div>
 
 | **column**                     | **explanation**                                                                                                                                                                                                                            | **availability**                                        |
 |--------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | **node**                       | model operation node name after node fusion and decomposition     |                                                         |
-| **SNR**                        | SNR score between fix point model and orignal model (per layer)                                                                                                                                                                            | every layer for mode 3 and only output layer for mode 2 |
+| **SNR**                        | SNR score between fixed-point model and original model (per layer)                                                                                                                                                                            | every layer for mode 3 and only output layer for mode 2 |
 | **node origin**                | corresponding operation node name in original onnx before node fusion and decomposition  |                                                         |
 | **type**                       | NPU / FUSED / CPU                                                                                                                                                                                                                          |                                                         |
 | **node backend**               | corresponding backend node name                                                                                                                                                                                                            |                                                         |
