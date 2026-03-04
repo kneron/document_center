@@ -427,13 +427,13 @@ Kneron@ubuntu:~/host_lib/build/bin$ ./k520_cam_isi_async_ssd_fd
 A Camera output window will pop out and use light blue box to get the human face.
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/5_5.png">
+<a href="../imgs/getting_start_imgs/5_5.png" ><img src="../imgs/getting_start_imgs/5_5.png"></a>
 </div>
 
 And when you put on the mask, there will be a green bounding box around the human face. After 1000 inference, the program will stop.
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/5_6.png">
+<a href="../imgs/getting_start_imgs/5_6.png" ><img src="../imgs/getting_start_imgs/5_6.png"></a>
 </div>
 
 
@@ -503,7 +503,7 @@ images/ 	MobileNetV2.h5	 MobileNetV2.h5.onnx
 When we check the MobileNetV2 ONNX model with Netron, we can see that the network's final output layer is a softmax layer, which cannot be handled by KL520 NPU. It is very common to see the softmax layer at the end of classification network, but it is not computation extensive layer, and we can move this softmax layer into network's post process.  
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/6_4.png">
+<a href="../imgs/getting_start_imgs/6_4.png" ><img src="../imgs/getting_start_imgs/6_4.png"></a>
 </div>
 
 Toolchain provides the Python script (onnx2onnx.py) to optimize the onnx model, and the script (editor.py) to cut layers starting from a specific layer. To remove the softmax layer, we can just simply run the onnx2onnx.py as follow:
@@ -519,7 +519,7 @@ images/ 	MobileNetV2.h5	 MobileNetV2.h5.onnx   MobileNetV2_opt.h5.onnx
 
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/6_6.png">
+<a href="../imgs/getting_start_imgs/6_6.png" ><img src="../imgs/getting_start_imgs/6_6.png"></a>
 </div>
 
 
@@ -578,13 +578,13 @@ Execute the command to batch-compile MobileNetV2 model.
     $ cd /workspace/scripts && ./fpAnalyserBatchCompiler.sh.x       
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/6_9.png">
+<a href="../imgs/getting_start_imgs/6_9.png" ><img src="../imgs/getting_start_imgs/6_9.png"></a>
 </div>
 
 After batch-compilation, a new batch_compile folder with .nef file is present in /data1. This file will be used for running the model in KL520 later.  
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/6_10.png">
+<a href="../imgs/getting_start_imgs/6_10.png" ><img src="../imgs/getting_start_imgs/6_10.png"></a>
 </div>
 
 
@@ -594,7 +594,7 @@ We can use Toolchain to get the evaluation result of NPU performance for Kneron 
 Firstly copy the input_params.json under /workspace/examples to /data1. Same as doing batch compile
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/6_11.png">
+<a href="../imgs/getting_start_imgs/6_11.png" ><img src="../imgs/getting_start_imgs/6_11.png"></a>
 </div>
 Modify the input_params.json as:  tensorflow for public MobileNetV2 as img_preprocess_method, False for add_norm.
 
@@ -648,7 +648,7 @@ Execute the command to run evaluation for MobileNetV2 model.
 ```
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/6_13.png">
+<a href="../imgs/getting_start_imgs/6_13.png" ><img src="../imgs/getting_start_imgs/6_13.png"></a>
 </div>
 After the evaluation process is finished, we can get the evaluation_result.txt under /data1/compiler.
 
@@ -915,7 +915,7 @@ When IPL (Initial Program Loader) in ROM starts to run on SCPU after power-on or
 Both SCPU and NCPU firmware run RTOS with SCPU handling application, media input/output and peripheral drivers and NCPU handling CNN model pre/post processing. Two CPUs use interrupts and shared memory to achieve IPC (Inter Processor Communication).
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/8_1_1.png">
+<a href="../imgs/getting_start_imgs/8_1_1.png" ><img src="../imgs/getting_start_imgs/8_1_1.png"></a>
 </div>
 The examples of SDK here are for SCPU RTOS firmware and NCPU RTOS firmware. Both uses ARM Keil RTX.
 
@@ -958,7 +958,7 @@ A host mode application means that camera(s) and maybe display are located on th
 Tiny Yolo is a single model application with streamlined processing. Both companion mode and host mode are supported. Figure below is a companion mode example. 
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/8_3_1.png">
+<a href="../imgs/getting_start_imgs/8_3_1.png" ><img src="../imgs/getting_start_imgs/8_3_1.png"></a>
 </div>
 
 
@@ -1189,11 +1189,11 @@ There is also a PDF file to briefly describe the peripheral APIs. Please downloa
 ### 10.1. Board Overview
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/10_1_1.png">
+<a href="../imgs/getting_start_imgs/10_1_1.png" ><img src="../imgs/getting_start_imgs/10_1_1.png"></a>
 </div>
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/10_1_2.png">
+<a href="../imgs/getting_start_imgs/10_1_2.png" ><img src="../imgs/getting_start_imgs/10_1_2.png"></a>
 </div>
 
 
@@ -1204,7 +1204,7 @@ There is also a PDF file to briefly describe the peripheral APIs. Please downloa
 UART0: Command Port
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/10_2_1.png">
+<a href="../imgs/getting_start_imgs/10_2_1.png" ><img src="../imgs/getting_start_imgs/10_2_1.png"></a>
 </div>
 
 #### 10.2.2. Connecting 5V power and trun on power switch
@@ -1212,7 +1212,7 @@ UART0: Command Port
 Power from Adapter or from Power Bank (USB PD)
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/10_2_2.png">
+<a href="../imgs/getting_start_imgs/10_2_2.png" ><img src="../imgs/getting_start_imgs/10_2_2.png"></a>
 </div>
 
 #### 10.2.3. Wake up chip from RTC power domain by pressing PTN button
@@ -1220,7 +1220,7 @@ Power from Adapter or from Power Bank (USB PD)
 Please do it every time after plugging in the power
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/10_2_3.png">
+<a href="../imgs/getting_start_imgs/10_2_3.png" ><img src="../imgs/getting_start_imgs/10_2_3.png"></a>
 </div>
 
 #### 10.2.4. Set bootstrap settings to manual boot mode (Program Flash via UART0 Interface)
@@ -1229,7 +1229,7 @@ Please do it every time after plugging in the power
 2. Reset pin or power must be controllable to enter manual boot mode.
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/10_2_4.png">
+<a href="../imgs/getting_start_imgs/10_2_4.png" ><img src="../imgs/getting_start_imgs/10_2_4.png"></a>
 </div>
 
 ### 10.3. Program Flash via UART0 Interface
@@ -1253,7 +1253,7 @@ Please do it every time after plugging in the power
    EX: COM_ID = 3 # COM3
 
    <div align="center">
-   <img src="../imgs/getting_start_imgs/10_3_1.png">
+    <a href="../imgs/getting_start_imgs/10_3_1.png" ><img src="../imgs/getting_start_imgs/10_3_1.png"></a>
    </div>
 
 #### 10.3.3 Firmware Binary Generation (FW + MODELS)
@@ -1300,13 +1300,13 @@ $ python flash_programmer.py -a flash_image.bin
 Please press RESET BTN while you are seeing “Please press reset button!!”
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/10_3_2.png">
+<a href="../imgs/getting_start_imgs/10_3_2.png" ><img src="../imgs/getting_start_imgs/10_3_2.png"></a>
 </div>
 
 Afterwards, just wait until all progresses are finished (erase, program, verify)
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/10_3_3.png">
+<a href="../imgs/getting_start_imgs/10_3_3.png" ><img src="../imgs/getting_start_imgs/10_3_3.png"></a>
 </div>
 
 **Note**:
@@ -1345,7 +1345,7 @@ $ python flash_programmer.py -i 0x00002000 -p fw_scpu.bin
 Connect JTAG/SWD.
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/10_4_1.png">
+<a href="../imgs/getting_start_imgs/10_4_1.png" ><img src="../imgs/getting_start_imgs/10_4_1.png"></a>
 </div>
 
 #### 10.4.2. Edit flash_prog.jlink device setting
@@ -1372,7 +1372,7 @@ Connect JTAG/SWD.
 Afterwards, just wait until all progresses are finished (chip erase, program, verify)
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/10_4_2.png">
+<a href="../imgs/getting_start_imgs/10_4_2.png" ><img src="../imgs/getting_start_imgs/10_4_2.png"></a>
 </div>
 
 #### 10.4.4. Check programming result
@@ -1380,7 +1380,7 @@ Afterwards, just wait until all progresses are finished (chip erase, program, ve
 Please ensure all the results are "O.K.", and enter "qc" to quit and close J-Link commander
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/10_4_3.png">
+<a href="../imgs/getting_start_imgs/10_4_3.png" ><img src="../imgs/getting_start_imgs/10_4_3.png"></a>
 </div>
 
 #### 10.4.5. Edit flash_prog_partial.jlink device setting(optional)
@@ -1418,7 +1418,7 @@ device KL520-GD-P	//GigaDevice
 
     EX:
     <div align="left">
-    <img src="../imgs/getting_start_imgs/10_4_4.png">
+    <a href="../imgs/getting_start_imgs/10_4_4.png" ><img src="../imgs/getting_start_imgs/10_4_4.png"></a>
     </div>
 
 ## 11. UART Device Firmware Write (DFW) Boot 
@@ -1440,7 +1440,7 @@ You can download firmware bin file to KL520 internal Memory space through UART a
 3.	NCPU FW starts from 0x28000000
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/11.2.1.png">
+<a href="../imgs/getting_start_imgs/11.2.1.png" ><img src="../imgs/getting_start_imgs/11.2.1.png"></a>
 </div>
 
 #### 11.2.2 UART_DFW_Boot Workflow
@@ -1448,7 +1448,7 @@ You can download firmware bin file to KL520 internal Memory space through UART a
 2.	Minion is the bridge to handle host command, collect bin data and then save it into internal memory space
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/11.2.2.png">
+<a href="../imgs/getting_start_imgs/11.2.2.png" ><img src="../imgs/getting_start_imgs/11.2.2.png"></a>
 </div>
 
 #### 11.2.3 Host control principle
@@ -1550,14 +1550,14 @@ $ python uart_dfu_boot.py -s
 Please press RESET BTN while you are seeing “Please press reset button!!”
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/11.3.2.png">
+<a href="../imgs/getting_start_imgs/11.3.2.png" ><img src="../imgs/getting_start_imgs/11.3.2.png"></a>
 </div>
 
 
 Afterwards, just wait until seeing “Xmodem sends Minion file DONE!!!”
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/11.3.3.png">
+<a href="../imgs/getting_start_imgs/11.3.3.png" ><img src="../imgs/getting_start_imgs/11.3.3.png"></a>
 </div>
 
 
@@ -1568,7 +1568,7 @@ $ python uart_dfu_boot.py -i 0x10102000 -p fw_scpu.bin
 ```
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/11.3.4.png">
+<a href="../imgs/getting_start_imgs/11.3.4.png" ><img src="../imgs/getting_start_imgs/11.3.4.png"></a>
 </div>
 
 
@@ -1579,7 +1579,7 @@ $ python uart_dfu_boot.py -i 0x28000000 -p fw_ncpu.bin
 ```
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/11.3.5.png">
+<a href="../imgs/getting_start_imgs/11.3.5.png" ><img src="../imgs/getting_start_imgs/11.3.5.png"></a>
 </div>
 
 
@@ -1590,7 +1590,7 @@ $ python uart_dfu_boot.py -i 0x10102000 -r
 ```
 
 <div align="center">
-<img src="../imgs/getting_start_imgs/11.3.6.png">
+<a href="../imgs/getting_start_imgs/11.3.6.png" ><img src="../imgs/getting_start_imgs/11.3.6.png"></a>
 </div>
 
 **Note**:
@@ -1618,7 +1618,7 @@ Refer to host_lib\README_CPP.md for further information.
 
     EX:
     <div align="center">
-    <img src="../imgs/getting_start_imgs/11.5.1.png">
+    <a href="../imgs/getting_start_imgs/11.5.1.png" ><img src="../imgs/getting_start_imgs/11.5.1.png"></a>
     </div>
 
 
@@ -1693,5 +1693,5 @@ Kneron KL520 series AI SoC Development Kit
 
 
     <div align="center">
-    <img src="../imgs/getting_start_imgs/appendix.png">
+    <a href="../imgs/getting_start_imgs/appendix.png" ><img src="../imgs/getting_start_imgs/appendix.png"></a>
     </div>

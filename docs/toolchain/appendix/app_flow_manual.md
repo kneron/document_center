@@ -91,7 +91,7 @@ The memory layout for the output node data after CSIM inference is different bet
 Let's look at an example where c = 4, h = 12, and w = 12. Indexing starts at 0 for this example.
 
 <div align="center">
-<img src="../../imgs/python_app/memory_layouts.png">
+<a href="../../imgs/python_app/memory_layouts.png" ><img src="../../imgs/python_app/memory_layouts.png"></a>
 <p>Memory layouts</p>
 </div>
 
