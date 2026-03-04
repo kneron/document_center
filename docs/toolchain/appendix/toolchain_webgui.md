@@ -74,7 +74,7 @@ After running the command above successfully, you can access the web GUI at <htt
 Here is a brief introduction on how to use the web GUI.
 
 <div align="center">
-<a href="../../imgs/webgui/webgui_0.png"  target="_blank" rel="noopener noreferrer"><img src="../../imgs/webgui/webgui_0.png"></a>
+<a href="https://doc.kneron.com/docs/toolchain/imgs/webgui/webgui_0.png"  target="_blank" rel="noopener noreferrer"><img src="../../imgs/webgui/webgui_0.png"></a>
 </div>
 
 Notes:

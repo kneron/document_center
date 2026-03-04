@@ -436,7 +436,7 @@ the output, then the model is transposed into channel first. We can use the mode
 [section 6](#6-onnx-to-onnx-onnx-optimization).
 
 <div align="center">
-<a href="../../imgs/manual/fig4_pre_edited_model.png"  target="_blank" rel="noopener noreferrer"><img src="../../imgs/manual/fig4_pre_edited_model.png"></a>
+<a href="https://doc.kneron.com/docs/toolchain/imgs/manual/fig4_pre_edited_model.png"  target="_blank" rel="noopener noreferrer"><img src="../../imgs/manual/fig4_pre_edited_model.png"></a>
 <p><span style="font-weight: bold;">Figure 4.</span> Pre-edited model </p>
 </div>
 
