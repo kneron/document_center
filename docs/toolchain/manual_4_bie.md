@@ -53,9 +53,9 @@ Args:
 * optimize (int, optional): level of featuremap optimization, which is a search runtime optimization based on partial graph comparison. Worse performance than deep search. It is recommended to enable when model is huge or search runtime is long. 0-4, the larger number, the better model performance, but takes longer. Defaults to 0.
     * 0: the knerex generated quantization model.
     * 1: bias adjust parallel, no featuremap cut improvement.
-    * 2: bias adjust parallel, with featuremap cut improvement.
+    * 2: bias adjust parallel, with featuremap cut improvement (same as `compiler_tiling="deep_search"`).
     * 3: bias adjust sequential, no featuremap cut improvement. SLOW!
-    * 4: bias adjust sequential, with featuremap cut improvement.  SLOW!
+    * 4: bias adjust sequential, with featuremap cut improvement (same as `compiler_tiling="deep_search"`).  SLOW!
 
 Please also note that this step would be very time-consuming since it analysis the model with every input data you provide.
 
@@ -71,7 +71,7 @@ input_images = [preprocess("/workspace/examples/mobilenetv2/images/" + image_nam
 input_mapping = {"images": input_images}
 
 # Quantization with only deep_search enabled.
-bie_path = km.analysis(input_mapping, threads = 4, fm_cut='deep_search')
+bie_path = km.analysis(input_mapping, threads = 4, compiler_tiling='deep_search')
 ```
 
 Since toolchain v0.21.0, the analysis step also generates a detailed report in html format. You can find it under

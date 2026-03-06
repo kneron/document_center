@@ -24,6 +24,18 @@
 
 ## Toolchain Change log
 
+* **[v0.32.0]**
+    * Add Einsum defusion in kneronnxopt.
+    * Support Cast to int64 in knerex and compiler.
+    * Support HardSwish, Topk and Split nodes in knerex and compiler.
+    * Update the regression flow log printing. Print success log seperately from errors to avoid confusing.
+    * Update IP evaluator for DMA with small length.
+    * Fix the kneronnxopt bug in `replace_Gather_with_Slice`.
+    * Fix the knerex bug: node Concat channel mismatch.
+    * Fix the dynasty float bug in InstanceNorm pad edge mode.
+    * Fix knerex/compiler bug in CPU node settings for Resize node.
+    * Verified opset18 operator validity for knerex and compiler.
+    * Reduce memory usage (especially for large models) for compiler.
 * **[v0.31.1]**
     * Add `const_in_bitwidth_mode` option for quantization. The default is int16. Unless the customer particularly desires to increase the speed, it can be changed to int8
     * Update analyzer exception log.

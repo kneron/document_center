@@ -4,8 +4,8 @@
 
 # 1. Toolchain Overview
 
-**2025 Nov**
-**Toolchain v0.31.1**
+**2026 Mar**
+**Toolchain v0.32.0**
 
 ## 1.1. Introduction
 
@@ -19,18 +19,18 @@ In this document, you'll learn:
 3. How to utilize the tools through Python API.
 
 **Major changes of the current version**
-* **[v0.31.1]**
-    * Add `const_in_bitwidth_mode` option for quantization. The default is int16. Unless the customer particularly desires to increase the speed, it can be changed to int8
-    * Update analyzer exception log.
-    * Update kneronnxopt to set expanding dilated Conv to False by default.
-    * Update kneronnxopt to diable fusing BatchNormalization into Conv by default.
-    * Update compiler for the deep search memory estimation algorithm.
-    * Update compiler to extend the timeout for deep search.
-    * Update compiler to change expt/log/softmax to 16b.
-    * Fix the ktc bug in some default output path names.
-    * Fix the kneronnxopt bug in duplicating shared weights.
-    * Fix the compiler bug in broadcasting.
-    * Fix the compiler bug that Concat channel axis not supported.
+* **[v0.32.0]**
+    * Add Einsum defusion in kneronnxopt.
+    * Support Cast to int64 in knerex and compiler.
+    * Support HardSwish, Topk and Split nodes in knerex and compiler.
+    * Update the regression flow log printing. Print success log seperately from errors to avoid confusing.
+    * Update IP evaluator for DMA with small length.
+    * Fix the kneronnxopt bug in `replace_Gather_with_Slice`.
+    * Fix the knerex bug: node Concat channel mismatch.
+    * Fix the dynasty float bug in InstanceNorm pad edge mode.
+    * Fix knerex/compiler bug in CPU node settings for Resize node.
+    * Verified opset18 operator validity for knerex and compiler.
+    * Reduce memory usage (especially for large models) for compiler.
 
 ## 1.2. Workflow Overview
 
