@@ -86,14 +86,14 @@ KL520/KL720/KL530 NPU supports most of the compute extensive OPs, such as Conv, 
 
 Therefore, we recommend users move certain OPs to preprocess or postprocess. We recommend using the ONNX utils api `onnx.utils.extract_model` for ONNX editing. For details, please refer to the [onnx.utils.extract_model](https://onnx.ai/onnx/api/utils.html).
 
-**Please run the optimzier again after modify the model.**
+**Please run the optimizer again after modify the model.**
 
 ## 3.2. IP Evaluation
 
 Before we start quantizing the model and try simulating the model, we need to test if the model can be taken by the toolchain structure and estimate the performance.
 IP evaluator is such a tool which can estimate the performance of your model and check if there is any operator or structure not supported by our toolchain.
 
-We need to create a `ktc.ModelConfig` object. The `ktc.ModelConfig` is the class which contains the basic needed information of a model. You can initilize it through the API below.
+We need to create a `ktc.ModelConfig` object. The `ktc.ModelConfig` is the class which contains the basic needed information of a model. You can initialize it through the API below.
 
 ```python
 #[API]
@@ -238,7 +238,7 @@ Since we do not actually has any source model here for the simplicity of example
 ### 3.4.1. What if the E2E simulator results from the original model and the optimized onnx mismatch?
 
 Please double check if the final layers are cut due to unsupported by NPU.
-If so, please add the deleted operator as part of the E2E simulater post process and test again.
+If so, please add the deleted operator as part of the E2E simulator post process and test again.
 Otherwise, please search on forum <https://www.kneron.com/forum/categories/ai-model-migration>. You can also contact us through the forum if no match issue found. The technical support would reply directly to your post.
 
 ### 3.4.2 What if I get "RuntimeError: Inferred shape and existing shape differ in rank: (0) vs (3)'?

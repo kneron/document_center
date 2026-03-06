@@ -14,8 +14,8 @@
     POST_ENC        : -E(--enc) <nef_file_path> -n(--KN) "kn_number"; [Linux Only]
 
   options:
-    -o, --output    : output file name prefix, defautl is "model_(target)"
-    -O, --folder    : output folder, defautl is "output/"
+    -o, --output    : output file name prefix, default is "model_(target)"
+    -O, --folder    : output folder, default is "output/"
     -V, --version   : show version number
     -H, --help      : show this message
 

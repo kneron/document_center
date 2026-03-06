@@ -28,7 +28,7 @@
     * Add Einsum defusion in kneronnxopt.
     * Support Cast to int64 in knerex and compiler.
     * Support HardSwish, Topk and Split nodes in knerex and compiler.
-    * Update the regression flow log printing. Print success log seperately from errors to avoid confusing.
+    * Update the regression flow log printing. Print success log separately from errors to avoid confusing.
     * Update IP evaluator for DMA with small length.
     * Fix the kneronnxopt bug in `replace_Gather_with_Slice`.
     * Fix the knerex bug: node Concat channel mismatch.
@@ -40,7 +40,7 @@
     * Add `const_in_bitwidth_mode` option for quantization. The default is int16. Unless the customer particularly desires to increase the speed, it can be changed to int8
     * Update analyzer exception log.
     * Update kneronnxopt to set expanding dilated Conv to False by default.
-    * Update kneronnxopt to diable fusing BatchNormalization into Conv by default.
+    * Update kneronnxopt to disable fusing BatchNormalization into Conv by default.
     * Update compiler for the deep search memory estimation algorithm.
     * Update compiler to extend the timeout for deep search.
     * Update compiler to change expt/log/softmax to 16b.
@@ -51,7 +51,7 @@
 * **[v0.31.0]**
     * **Introduce `quan_config` for `ModelConfig.analysis` for more detailed quantization configuration.**
     * **Add `ktc.opt_and_eval` command for quick onnx optimization and evaluation.**
-    * **Remove deprecated `compilerIpevaluator_730.sh` and add warning messages to other depecated scritps.**
+    * **Remove deprecated `compilerIpevaluator_730.sh` and add warning messages to other deprecated scripts.**
     * Add `compiler_tiling` option for IP evaluator.
     * Add `--clear-shapes` and `--replace-avgpool-with-conv` flags to kneronnxopt.
     * Add `--seperate` flag to kneronnxopt.onnx_vs_onnx for detailed output comparison.
@@ -188,7 +188,7 @@
     * Support text procssing models.
     * Set flatbuffer as the default 720 compiling mode.
     * Refactor compiler and analyser inner structure.
-    * **Due to the structure change, batch compiler do not backwark support previous bie files.**
+    * **Due to the structure change, batch compiler do not backward support previous bie files.**
     * Refactor toolchain manual.
     * Bug fixes.
 * **[v0.19.0]**
@@ -198,10 +198,10 @@
     * ktc: Add `mode`, `optimize`, `export_dynasty_dump` argument to analysis.
     * ktc: Set `skip_verify` in analysis as deprecated.
     * regression: Add optimize option for optimization level selection.
-    * regression: Fix interface to asure platform is integer.
+    * regression: Fix interface to assure platform is integer.
     * converter: Add 720 batch process with `--opt-720` flag.
     * converter: Add enable shared weight duplication flag `-d`. By default, shared weights are no longer duplicated.
-    * converter: Remove `-s` flag since it is now the default behavious.
+    * converter: Remove `-s` flag since it is now the default behavior.
     * converter: Optimize debug output.
     * compiler: Fix RDMA not correctly executed.
     * E2E simulator: Change dynasty library fetching method.

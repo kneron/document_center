@@ -93,12 +93,12 @@ their usage:
 
 To ensure the quantization tool can work, we recommend the docker has at least 4GB of memory. The actual required size depends on your model size and the image number of quantization.
 
-For Linux uses, by default, docker can share all the CPU and memory resouces of their host machine. So, this isn't a problem.
+For Linux uses, by default, docker can share all the CPU and memory resources of their host machine. So, this isn't a problem.
 But for Windows users, not like Linux, the system resources are not shared. User might want to adjust the resources usage by themselves.
 
-For the docker based on wsl2, as we recommended in the section 1 of this document, it can use update to 50% of your total system memory and all the CPU resources. And here is a artical introduce [how to manage the system resources used by wsl2](https://ryanharrison.co.uk/2021/05/13/wsl2-better-managing-system-resources.html#:~:text=1%20Setting%20a%20WSL2%20Memory%20Limit.%20By%20default,the%20WSL2%20Virtual%20Disk.%20...%204%20Docker.%20).
+For the docker based on wsl2, as we recommended in the section 1 of this document, it can use update to 50% of your total system memory and all the CPU resources. And here is a article introduce [how to manage the system resources used by wsl2](https://ryanharrison.co.uk/2021/05/13/wsl2-better-managing-system-resources.html#:~:text=1%20Setting%20a%20WSL2%20Memory%20Limit.%20By%20default,the%20WSL2%20Virtual%20Disk.%20...%204%20Docker.%20).
 
-For the docker based on wsl, users can find the management of the system resouces directly in the setting of the docker.
+For the docker based on wsl, users can find the management of the system resources directly in the setting of the docker.
 
 For the docker toolbox, it is actually based on the VirtualBox virtual machine. So, user need find which virtual machine the docker is using first. User need to start the docker terminal to ensure the docker is running before we start. And here is following precedue
 

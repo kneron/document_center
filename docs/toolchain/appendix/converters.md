@@ -430,7 +430,7 @@ it is the output of a `Gemm`, there is no need to do any more edition.
 the output, then the model is transposed into channel first. We can use the model editor to safely remove the
 `Transpose`.
 
-**Step 3:** If the input shape is not availble or invalid, we can use the editor to give it a valid shape.
+**Step 3:** If the input shape is not available or invalid, we can use the editor to give it a valid shape.
 
 **Step 4:** The model need to pass `onnx2onnx.py` again after running the editor.  See
 [section 6](#6-onnx-to-onnx-onnx-optimization).
@@ -469,7 +469,7 @@ Cutting is not recommended to be done with other operations together.
 positional arguments:
 
 in_file   input ONNX FILE
-out_file  ouput ONNX FILE
+out_file  output ONNX FILE
 
 optional arguments:
 

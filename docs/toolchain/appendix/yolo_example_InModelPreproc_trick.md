@@ -6,7 +6,7 @@ In this document, we provide a step by step example on how to utilize our tools 
 > 1. Step 2: Convert and optimize the pretrain model.
 > 2. Step 4: Check ONNX model and preprocess and postprocess are good.
 
-> This document is writen for toolchain v0.22.0. If any description is not consistent with the latest toolchain, please refer to the main toolchain manual.
+> This document is written for toolchain v0.22.0. If any description is not consistent with the latest toolchain, please refer to the main toolchain manual.
 
 ## Step 0: Prepare environment and data
 
@@ -44,7 +44,7 @@ python convert.py yolov3-tiny.cfg yolov3-tiny.weights /data1/yolo.h5
 
 We now have `yolo.h5` under our mounted folder `/data1`.
 
-We also need to preprare some images under the mounted folder. We have provided some example input images at <http://doc.kneron.com/docs/toolchain/res/test_image10.zip>.
+We also need to prepare some images under the mounted folder. We have provided some example input images at <http://doc.kneron.com/docs/toolchain/res/test_image10.zip>.
 
 Here is how you can get it:
 
@@ -106,7 +106,7 @@ m = ktc.onnx_optimizer.onnx2onnx_flow(m)
 
 Now, in order to make model porting easier, we do In-Model-Preprocess trick. We add a Batchnormalization layer at model front, this Batchnormalization layer will do the following things:
 1. divide 255 for every pixel (data normalization required by this model)
-2. add 0.5 (hardware require -128 to 127 input but source data is 0 to 255, so we will substract 128 for source data due to hardware requirement, and add back at model's front)
+2. add 0.5 (hardware require -128 to 127 input but source data is 0 to 255, so we will subtract 128 for source data due to hardware requirement, and add back at model's front)
 
 
 ```python
@@ -128,7 +128,7 @@ onnx.save(m, 'yolo.opt.onnx')
 
 ## Step 3: IP Evaluation
 
-To make sure the onnx model is as expected, we should check the onnx model's performance and see if there are any unsupprted operators (or CPU nodes).
+To make sure the onnx model is as expected, we should check the onnx model's performance and see if there are any unsupported operators (or CPU nodes).
 
 ```python
 # npu (only) performance simulation
