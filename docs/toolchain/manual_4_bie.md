@@ -1,6 +1,6 @@
 # 4. BIE Workflow
 
-As mentioned briefly in the previous section, the bie file is the model file which is usually generated after quantization. It is encrpyted and not available for visuanlization.
+As mentioned briefly in the previous section, the bie file is the model file which is usually generated after quantization. It is encrypted and not available for visualization.
 In this chapter, we would go through the steps of quantization.
 
 ## 4.1. Quantization
@@ -22,7 +22,7 @@ Args:
 * output_dir (str, optional): path to the output directory. Defaults to "/data1/kneron_flow"".
 * threads (int, optional): multithread setting. Defaults to 4.
 * quantize_mode (str, optional): quantize_mode setting. Currently support default and post_sigmoid. Defaults to "default".
-* datapath_range_method (str, optional): could be 'mmse' or 'percentage. mmse: use snr-based-range method. percentage: use arbitary percentage. Default to 'percentage'.
+* datapath_range_method (str, optional): could be 'mmse' or 'percentage. mmse: use snr-based-range method. percentage: use arbitrary percentage. Default to 'percentage'.
 * percentile (float, optional): used under 'mmse' mode. The range to search. The larger the value, the larger the search range, the better the performance but the longer the simulation time. Defaults to 0.001,
 * outlier_factor (float, optional): used under 'mmse' mode. The factor applied on outliers. For example, if clamping data is sensitive to your model, set outlier_factor to 2 or higher. Higher outlier_factor will reduce outlier removal by increasing range. Defaults to 1.0.
 * percentage (float, optional): used under 'percentage' mode. Suggest to set value between 0.999 and 1.0. Use 1.0 for detection models. **Must be smaller than or equal to percentage_16b.** Defaults to 0.999.
@@ -59,7 +59,7 @@ Args:
 
 Please also note that this step would be very time-consuming since it analysis the model with every input data you provide.
 
-Here as a simple example, we only use four input image as exmaple and run it with the `ktc.ModelConfig` object `km` created in section 3.2:
+Here as a simple example, we only use four input image as example and run it with the `ktc.ModelConfig` object `km` created in section 3.2:
 
 ```python
 # Preprocess images as the quantization inputs. The preprocess function is defined in the previous section.
@@ -122,7 +122,7 @@ Raises:
 
 ## 4.3. FAQ
 
-### 4.3.1. What if the E2E simulator results of floating-point and fixed-point lost too match accuracy?
+### 4.3.1. What if the E2E simulator results of floating-point and fixed-point lost too much accuracy?
 
 Please try the following solutions:
 
@@ -148,7 +148,7 @@ Please consider replace the unsupported nodes with other nodes.
 
 **Causes**:
 
-This error can be caused by many differenct reasons. Here are the possible reasons:
+This error can be caused by many different reasons. Here are the possible reasons:
 
 1. The most common ones are that the input image number is too large, the thread number is too large and the model is too large which causes the FP analyser killed by the system.
 2. The path in the configuration file is invalid. Thus, the updater failed to load it.
