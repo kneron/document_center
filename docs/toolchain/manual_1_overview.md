@@ -23,7 +23,7 @@ In this document, you'll learn:
     * Add Einsum defusion in kneronnxopt.
     * Support Cast to int64 in knerex and compiler.
     * Support HardSwish, Topk and Split nodes in knerex and compiler.
-    * Update the regression flow log printing. Print success log seperately from errors to avoid confusing.
+    * Update the regression flow log printing. Print success log separately from errors to avoid confusing.
     * Update IP evaluator for DMA with small length.
     * Fix the kneronnxopt bug in `replace_Gather_with_Slice`.
     * Fix the knerex bug: node Concat channel mismatch.
@@ -36,7 +36,7 @@ In this document, you'll learn:
 
 In the following parts of this page, you can go through the basic toolchain working process to get familiar with the toolchain.
 
-Below is a breif diagram showing the workflow of how to generate the binary from a floating-point model using the toolchain.
+Below is a brief diagram showing the workflow of how to generate the binary from a floating-point model using the toolchain.
 
 <div align="center">
 <a href="https://doc.kneron.com/docs/toolchain/imgs/manual/Manual_Flow_Chart.png"  target="_blank" rel="noopener noreferrer" data-wm-adjusted="done"><img src="../imgs/manual/Manual_Flow_Chart.png"></a>
@@ -253,15 +253,15 @@ improve your model performance on-chip waiting in other section. Please check.
 * [4. Fixed-Point Model Generation](manual_4_bie.md)
 * [5. Compilation](manual_5_nef.md)
 
-There are also other useful tools and informations:
+There are also other useful tools and information:
 
-* [End to End Simulator](appendix/app_flow_manual.md): manual for the E2E simualtor.
+* [End to End Simulator](appendix/app_flow_manual.md): manual for the E2E simulator.
 * [Hardware Performance](appendix/performance.md): common model performance table for Kneron hardwares and the supported operator list.
 * [Hardware Supported Operators](appendix/operators.md): operators supported by the hardware.
 * [How to Interpret Fixed-Point Report](appendix/fx_report.md): manual for interpreting the fixed-point report.
 * [Kneronnxopt](appendix/kneronnxopt.md): manual for the a more flexible onnx optimizer tool.
 * [ONNX Converters](appendix/converters.md): manual for the script usage of our converter tools. This tool is only for ONNX opset 11/12.
-* [Quantization 1 - Introdution to Post-training Quantization](quantization/1.1_Introdution_to_Post-training_Quantization.md): introduction for the quantization.
+* [Quantization 1 - Introduction to Post-training Quantization](quantization/1.1_Introduction_to_Post-training_Quantization.md): introduction for the quantization.
 * [Quantization 2 - Post-training Quantization(PTQ) Flow and Steps](quantization/1.2_Flow_and_Steps.md): manual for the quantization flow and steps.
 * [Script Tools](appendix/command_line.md): manual for deprecated command line tools. Kept for compatibility of toolchain before v0.15.0)
 * [Toolchain History](appendix/history.md): manuals for history version of toolchain and the change log.

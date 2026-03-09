@@ -82,7 +82,7 @@ lite_hrnet
 ```
 
 **For MPII data**, please download from [MPII Human Pose Dataset](http://human-pose.mpi-inf.mpg.de/).
-The original annotation files have been converted into json format, please download them from [mpii_annotations](https://openmmlab.oss-cn-hangzhou.aliyuncs.com/mmpose/datasets/mpii_annotations.tar).
+The original annotation files have been converted into json format, please download them from [mpii_annotations](https://download.openmmlab.com/mmpose/datasets/mpii_annotations.tar).
 Extract them under `$LITE_HRNET/data`, and make them look like this:
 
 ```

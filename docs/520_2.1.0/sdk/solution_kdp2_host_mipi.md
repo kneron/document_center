@@ -27,7 +27,6 @@ User can edit and debug with Keil MDK for further implementation  [keil/MDK docs
     # bin_gen.py will concatenate SCPU/NCPU FW, models_520.nef to generate flash_image.bin  
     # Note that you may need to substitute '/' for '\' in the path
     ```
-```
     
 - **Program the firmware bin image**  
     Reference:  [Jlink programming](../flash_management/flash_management.md#4-program-flash-via-jtagswd-interface)  

@@ -87,7 +87,7 @@ Notes:
 ## 4. Run IP Evaluator only mode
 
 If you only want to evaluate the model to a estimation of the model performance,
-you can turn on the `Run Onnx Flow & IP Evaluator only` switch above the preprocess code seciton.
+you can turn on the `Run Onnx Flow & IP Evaluator only` switch above the preprocess code section.
 Then you can press run directly. The evaluation result would be shown on the right side `Console Output` section.
 
 ## 5. Stop, restart and remove the service

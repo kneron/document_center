@@ -2,7 +2,7 @@
 
 In this document, we provide a step by step example on how to utilize our tools to compile and test with a newly downloaded YOLOv3 model.
 
-> This document is writen for toolchain v0.30.0. If any description is not consistent with the latest toolchain, please refer to the main toolchain manual.
+> This document is written for toolchain v0.30.0. If any description is not consistent with the latest toolchain, please refer to the main toolchain manual.
 
 ## Tricks for deploying yolo-type detection models and anker based detection models
 
@@ -19,9 +19,9 @@ In this document, we provide a step by step example on how to utilize our tools 
 		2. bbox coordinates with shape 1x4xpixel # at scale 0, 1x4xpixel # at scale 1, ...,1x4xpixel # at scale S
 		3. Trick: Do NOT concat class scores at different scales. Output class scores for each scale separately.
 		4. Trick: Do NOT concat class score and coordinates at the same scale. Output class scores and bbox coordinates separately.
-		5. Trick: Do NOT concat bbox coordinates at differnt scales. Output bbox coordinates for each scale separately.
-		6. Trick: Typically, class scores need to pass activation fuctions such as exp, sigmoid or even softmax. Make sure these activation fucntions are in the model so that quantiztion algorithm can optimize the quantizaiton setting accordingly.
-		7. Trick: sometimes, bbox coordinates need to pass exp function or other activation function. Make sure these activation fucntions are in the model so that quantiztion algorithm can optimize the quantizaiton setting accordingly.
+        5. Trick: Do NOT concat bbox coordinates at different scales. Output bbox coordinates for each scale separately.
+        6. Trick: Typically, class scores need to pass activation functions such as exp, sigmoid or even softmax. Make sure these activation functions are in the model so that quantiztion algorithm can optimize the quantizaiton setting accordingly.
+        7. Trick: sometimes, bbox coordinates need to pass exp function or other activation function. Make sure these activation functions are in the model so that quantiztion algorithm can optimize the quantizaiton setting accordingly.
 		8. Trick: Do NOT concat some outputs and then split in the model. Make sure the computation of all these outputs are separate. If these computation needs to use the same op, the quantization algorithm can detect this situation and share the weights of the same op.
 
 
@@ -61,7 +61,7 @@ python convert.py yolov3-tiny.cfg yolov3-tiny.weights /data1/yolo.h5
 
 We now have `yolo.h5` under our mounted folder `/data1`.
 
-We also need to preprare some images under the mounted folder. We have provided some example input images at <http://doc.kneron.com/docs/toolchain/res/test_image10.zip>.
+We also need to prepare some images under the mounted folder. We have provided some example input images at <http://doc.kneron.com/docs/toolchain/res/test_image10.zip>.
 
 Here is how you can get it:
 
@@ -112,7 +112,7 @@ from PIL import Image
 
 ## Step 2: IP Evaluation
 
-To make sure the onnx model is as expected, we should check the onnx model's performance and see if there are any unsupprted operators (or CPU nodes).
+To make sure the onnx model is as expected, we should check the onnx model's performance and see if there are any unsupported operators (or CPU nodes).
 
 ```python
 # npu (only) performance simulation
@@ -145,7 +145,7 @@ The estimated FPS (NPU only) report on your terminal should look similar to this
 There are two things to take note of in this report:
 
 * Found one CPU node 'KneronResize' in our model
-  Tthe estimated FPS is 22.5861, the report is for NPU only
+  The estimated FPS is 22.5861, the report is for NPU only
 
 At the same time, a folder called `compiler` will be generated in your docker mounted folder (`/data1`); the evaluation result will be found in this folder. One important thing is to check the 'ioinfo.csv' in `/data1/compiler`, which looks like this:
 

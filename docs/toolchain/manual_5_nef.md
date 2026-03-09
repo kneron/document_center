@@ -20,7 +20,7 @@ Args:
 * dedicated_output_buffer (bool, optional): dedicated output buffer. Defaults to True.
 * weight_compress (bool, optional): compress weight to slightly reduce the binary file size. Defaults to False.
 * hardware_cut_opt (bool, optional): optimize the hardware memory usage while processing large inputs. This option might cause the compiling time increase. Currently, only available for 720. Defaults to False.
-* flatbuffer (bool, optional): enable new flatbuffer mode for 720. Defauls to True.
+* flatbuffer (bool, optional): enable new flatbuffer mode for 720. Defaults to True.
 
 ```python
 #[API]
@@ -40,7 +40,7 @@ Args:
 * encryption_efuse_key (str, optional): a hex code. Required in mode 2 and optional in mode 1. Defaults to "".
 * weight_compress (bool, optional): compress weight to slightly reduce the binary file size. Defaults to False.
 * hardware_cut_opt (bool, optional): optimize the hardware memory usage while processing large inputs. This option might cause the compiling time increase. Currently, only available for 720. Defaults to False.
-* flatbuffer (bool, optional): enable new flatbuffer mode for 720. Defauls to True.
+* flatbuffer (bool, optional): enable new flatbuffer mode for 720. Defaults to True.
 
 We would start with single model first.
 
@@ -102,13 +102,13 @@ Here we use the same input `input_data` which we used in section 3.3. And the `c
 
 As mentioned above, we do not provide any postprocess. In reality, you may want to have your own postprocess function in Python, too.
 
-For nef file with mutiple models, we can specify the model with model ID:
+For nef file with multiple models, we can specify the model with model ID:
 
 ```python
 hw_results_2 = ktc.kneron_inference(input_data, nef_file=batch_compile_result, input_names=["images"], model_id=32769, platform=720)
 ```
 
-After getting the `hw_results` and post-process it, you may want to compare the result with the `fixed_results` which is generated in section 4.2 to see if the results match. If the results mismatch, please contact us direcly through forum <https://www.kneron.com/forum/>.
+After getting the `hw_results` and post-process it, you may want to compare the result with the `fixed_results` which is generated in section 4.2 to see if the results match. If the results mismatch, please contact us directly through forum <https://www.kneron.com/forum/>.
 
 ## 5.3. NEF Combine (Optional)
 

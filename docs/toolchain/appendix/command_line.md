@@ -172,20 +172,20 @@ Here is an example JSON with comments. **Please remove all the comments in the r
     // [optional]
     // The encryption setting for the batch compiler. Default is not enabled.
     "encryption": {
-        // Whether enable encrytion
+        // Whether enable encryption
         "whether_encryption": false,
-        // Encrytion mode selection
+        // Encryption mode selection
         // Options: 1, 2
         "encryption mode": 1,
-        // Encrytion key. A hex string. Required in mode 1.
+        // Encryption key. A hex string. Required in mode 1.
         "encryption_key": "0x12345678",
-        // Encrytion file. An absolute path. Required in mode 1.
+        // Encryption file. An absolute path. Required in mode 1.
         "key_file": "/data1/enc.txt",
-        // Encrytion key. A hex string. Required in mode 2, optional in mode 1.
+        // Encryption key. A hex string. Required in mode 2, optional in mode 1.
         "encryption_efuse_key": "0x12345678"
     },
     // [optional]
-    // Whether seperate buffers for each model output. Default is true.
+    // Whether separate buffers for each model output. Default is true.
     "dedicated_output_buffer": true,
     // [optional]
     // Whether compress weight for saving space.

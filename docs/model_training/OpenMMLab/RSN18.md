@@ -40,7 +40,7 @@ If mmcv and mmcv-full are both installed, there will be `ModuleNotFoundError`.
 
 # Step 1: Training models on standard datasets
 
-MMPose provides hundreds of existing and existing pose models in [Model Zoo](https://mmpose.readthedocs.io/en/latest/modelzoo.html), and supports several standard datasets like COCO, MPII, FREIHAND, etc. This note demonstrates how to perform common object detection tasks with these existing models and standard datasets, including:
+MMPose provides hundreds of existing and existing pose models in [Model Zoo](https://mmpose.readthedocs.io/en/latest/model_zoo.html), and supports several standard datasets like COCO, MPII, FREIHAND, etc. This note demonstrates how to perform common object detection tasks with these existing models and standard datasets, including:
 
 - Use existing models to inference on given images.
 - Test existing models on standard datasets.
