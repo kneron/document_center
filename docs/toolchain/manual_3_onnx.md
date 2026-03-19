@@ -27,10 +27,15 @@ kneronnxopt.optimize(
     duplicate_shared_weights=1,
     skip_check=False,
     overwrite_input_shapes=None,
+    convert_f16=True,
     skipped_optimizers=None,
     skip_fuse_qkv=False,
     clear_descriptions=False,
     opt_matmul=False,
+    clear_shapes=False,
+    replace_avgpool_with_conv=False,
+    replace_dilated_conv=False,
+    defuse_gaps=False,
 ):
 ```
 
@@ -42,10 +47,15 @@ Args:
 * duplicate_shared_weights (int, optional): by what level, duplicate shared weight. 0-no duplication, 1-duplicate shared weights only when kneron compiler not support, 2-duplicate shared weights always. Default is 1.
 * skip_check (bool): skip the final check or not.
 * overwrite_input_shapes (List\[str\]): overwrite the input shape. The format is "input_name:dim0,dim1,...,dimN" or simply "dim0,dim1,...,dimN" when there is only one input, for example, "data:1,3,224,224" or "1,3,224,224". Note: you might want to use some visualization tools like netron to make sure what the input name and dimension ordering (NCHW or NHWC) is.
-* skipped_optimizers (list): skip the onnx optimizers. Check onnx document for details. Default is None.
+* convert_f16 (bool): convert f16 initializers and constants to f32 or not. Default is True.
+* skipped_optimizers (list): skip selected optimizers. Check onnx-simplifier documents for details. Default is None.
 * skip_fuse_qkv (bool): skip the fuse_qkv optimization or not. By default, fuse_qkv is enabled.
 * clear_descriptions (bool): clear all descriptions in the graph. By default, descriptions are not cleared.
 * opt_matmul (bool): optimize matmul operators for specific kneron compiler. By default, this option is not set.
+* clear_shapes (bool): clear all existing shapes in the graph except for input shapes. By default, shapes are not cleared.
+* replace_avgpool_with_conv (bool): replace AveragePool with depthwise Conv when possible to avoid CPU nodes. By default, this option is not set.
+* replace_dilated_conv (bool): replace dilated Conv patterns when possible. By default, this option is not set.
+* defuse_gaps (bool): defuse GAP patterns when possible. By default, this option is not set.
 
 Suppose we have a onnx object, here is the example python code:
 
@@ -54,7 +64,7 @@ import kneronnxopt
 optimized_m = kneronnxopt.optimize(input_m, skip_fuse_qkv=True)
 ```
 
-In this line of python code, `kneronnxopt.optimize` is the function that takes an onnx object and optimize it. The return value `result_m` is the converted onnx object.
+In this line of python code, `kneronnxopt.optimize` is the function that takes an onnx object and optimize it. The return value `optimized_m` is the optimized onnx object.
 
 The previous `onnx2onnx_flow` API is also available in the `onnx1.13` environment. It is a wrapper of the `kneronnxopt.optimize` API. But not all the previous options are available in the `onnx1.13` environment. We recommend you to use the `kneronnxopt.optimize` API instead of the `onnx2onnx_flow` API.
 
@@ -78,7 +88,7 @@ By the way, to save the model, you can use the following function from the onnx 
 onnx.save(optimized_m, '/data1/optimized.onnx')
 ```
 
-We also provide a command line tool for both model optimization and evaluation. Please check FAQ 3.4.4 for details.
+For kneronnxopt console usage, please check [Kneronnxopt](appendix/kneronnxopt.md). We also provide a command line tool for both model optimization and evaluation. Please check FAQ 3.4.4 for details.
 
 ### 3.1.3. ONNX Editing
 
