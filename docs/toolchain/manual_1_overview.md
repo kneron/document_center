@@ -5,7 +5,7 @@
 # 1. Toolchain Overview
 
 **2026-03**
-**Toolchain v0.32.0**
+**Toolchain v0.32.1**
 
 ## 1.1. Introduction
 
@@ -19,6 +19,12 @@ In this document, you'll learn:
 3. How to utilize the tools through Python API.
 
 **Major changes of the current version**
+* **[v0.32.1]**
+    * Add `dma_bandwidth` and `weight_bandwidth` to IP evaluator arguments.
+    * Change `hardware_cut_opt` to `compiler_tiling` to keep consistent with other toolchain apis.
+    * Update evaluator to raise warning when meeting unsupported operator instead of error.
+    * Update ktc to clean up more intermediate files generated during the flow.
+    * Fix the evaluator bug using wrong 730 frequency.
 * **[v0.32.0]**
     * Add Einsum defusion in kneronnxopt.
     * Support Cast to int64 in knerex and compiler.

@@ -300,7 +300,7 @@ You can use `-o` or `--optimizer-only` to only run the optimization step without
 You can use `-h` or `--help` to see all the options.
 
 ```
-usage: python -m ktc.opt_and_eval [-h] [-e] [-E EVALUATOR_REPORT_PATH] [-o] [-O OPTIMIZED_PATH] [--deep-search] {520,720,530,630,730} path
+usage: python -m ktc.opt_and_eval [-h] [-P] [-e] [-E EVALUATOR_REPORT_PATH] [-o] [-O OPTIMIZED_PATH] [--deep-search] {520,720,530,630,730} path
 
 Optimize ONNX model and run IP Evaluator
 
@@ -318,4 +318,5 @@ optional arguments:
   -O OPTIMIZED_PATH, --optimized-path OPTIMIZED_PATH
                         Path to save the optimized ONNX model.
   --deep-search         Use deep search for optimization, which may take longer but can yield better performance.
+  -P, --print          Print the evaluation result in the terminal.
 ```
