@@ -318,5 +318,5 @@ optional arguments:
   -O OPTIMIZED_PATH, --optimized-path OPTIMIZED_PATH
                         Path to save the optimized ONNX model.
   --deep-search         Use deep search for optimization, which may take longer but can yield better performance.
-  -P, --print          Print the evaluation result in the terminal.
+  -P, --print           Print the evaluation result in the terminal.
 ```

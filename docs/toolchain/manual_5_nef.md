@@ -51,7 +51,6 @@ ktc.encrypt_compile(
     compiler_tiling="default",
     weight_bandwidth=None,
     dma_bandwidth=None,
-    dma_bandwidthh=None,
 )
 ```
 
