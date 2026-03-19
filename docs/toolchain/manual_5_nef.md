@@ -8,7 +8,16 @@ Batch compile turns multiple models into a single binary file. We have two APIs 
 
 ```python
 #[API]
-ktc.compile(model_list, output_dir="/data1/kneron_flow", dedicated_output_buffer=True, weight_compress=False)
+ktc.compile(
+    model_list,
+    output_dir="/data1/kneron_flow",
+    dedicated_output_buffer=True,
+    weight_compress=False,
+    flatbuffer=True,
+    compiler_tiling="default",
+    weight_bandwidth=None,
+    dma_bandwidth=None,
+)
 ```
 
 Compile the models and generate the nef file. The nef path will be returned.
@@ -19,12 +28,28 @@ Args:
 * output_dir (str, optional): output directory. Defaults to "/data1/kneron_flow".
 * dedicated_output_buffer (bool, optional): dedicated output buffer. Defaults to True.
 * weight_compress (bool, optional): compress weight to slightly reduce the binary file size. Defaults to False.
-* hardware_cut_opt (bool, optional): optimize the hardware memory usage while processing large inputs. This option might cause the compiling time increase. Currently, only available for 720. Defaults to False.
+* hardware_cut_opt (bool, optional): DEPRECATED. Use `compiler_tiling="deep_search"` instead. If True and `compiler_tiling` is `"default"`, `compiler_tiling` will be treated as `"deep_search"`. Defaults to False.
 * flatbuffer (bool, optional): enable new flatbuffer mode for 720. Defaults to True.
+* compiler_tiling (str, optional): choose from `"default"`, `"deep_search"`, or `"partial_graph_search"`. Ignored when a model provides its own compiler config json. KDP520 always uses `"default"`. Defaults to `"default"`.
+* weight_bandwidth: weight bandwidth in gbps. Defaults to None to use the platform default for the IP evaluator.
+* dma_bandwidth: dma bandwidth in gbps. Defaults to None to use the platform default for the IP evaluator.
 
 ```python
 #[API]
-ktc.encrypt_compile(model_list, output_dir="/data1/kneron_flow", dedicated_output_buffer=True, mode=None, key="", key_file="", encryption_efuse_key="", weight_compress=False)
+ktc.encrypt_compile(
+    model_list,
+    output_dir="/data1/kneron_flow",
+    dedicated_output_buffer=True,
+    mode=None,
+    key="",
+    key_file="",
+    encryption_efuse_key="",
+    weight_compress=False,
+    flatbuffer=True,
+    compiler_tiling="default",
+    weight_bandwidth=None,
+    dma_bandwidth=None,
+)
 ```
 
 Compile the models, generate an encrypted nef file. The nef path will be returned.
@@ -39,8 +64,13 @@ Args:
 * key_file (str, optional): key file path. Required in mode 1. Defaults to "".
 * encryption_efuse_key (str, optional): a hex code. Required in mode 2 and optional in mode 1. Defaults to "".
 * weight_compress (bool, optional): compress weight to slightly reduce the binary file size. Defaults to False.
-* hardware_cut_opt (bool, optional): optimize the hardware memory usage while processing large inputs. This option might cause the compiling time increase. Currently, only available for 720. Defaults to False.
+* hardware_cut_opt (bool, optional): DEPRECATED. Use `compiler_tiling="deep_search"` instead. If True and `compiler_tiling` is `"default"`, `compiler_tiling` will be treated as `"deep_search"`. Defaults to False.
 * flatbuffer (bool, optional): enable new flatbuffer mode for 720. Defaults to True.
+* compiler_tiling (str, optional): choose from `"default"`, `"deep_search"`, or `"partial_graph_search"`. Ignored when a model provides its own compiler config json. KDP520 always uses `"default"`. Defaults to `"default"`.
+* weight_bandwidth: weight bandwidth in gbps. Defaults to None to use the platform default for the IP evaluator.
+* dma_bandwidth: dma bandwidth in gbps. Defaults to None to use the platform default for the IP evaluator.
+
+If you previously used `hardware_cut_opt=True`, use `compiler_tiling="deep_search"` instead.
 
 We would start with single model first.
 
