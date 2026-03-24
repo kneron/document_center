@@ -190,8 +190,8 @@ You can also specify the input format anytime before `compile` or `encrypt_compi
 Here is an example of how to set the input format:
 
 ```python
-km_0.input_format = "4W4C8B"
-km_1.input_format = "16W1C8B"
+km_0.input_fmt = "4W4C8B"
+km_1.input_fmt = "16W1C8B"
 ktc.compile([km_0, km_1])
 ```
 
