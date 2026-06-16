@@ -11,6 +11,8 @@ The provided examples are designed to show how to use KP APIs and present Kneron
 
 > **Note 4**: If you modify code to change different test image file. Input image aspect ratio is suggested to be aligned to model input aspect ratio.
 
+> **Note 5**: The KL730 pre-built `firmware.tar` included in `Kneron PLUS` v3.2.0 requires the KL730 EVM/HDK BSP to be upgraded to SDK v2.0.0 or later.
+
 1. [Scan Device Example](#1-scan-device-example)
 2. [Install Driver for Windows Example](#2-install-driver-for-windows-example)
 3. [Load Firmware and Model Example](#3-load-firmware-and-model-example)

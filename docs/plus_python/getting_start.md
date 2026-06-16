@@ -6,6 +6,8 @@
 
 > **Note 3**: Refer to [Kneron PLUS Introduction](./introduction/introduction.md) for feature details  
 
+> **Note 4**: The KL730 pre-built `firmware.tar` included in `Kneron PLUS` v3.2.0 requires the KL730 EVM/HDK BSP to be upgraded to SDK v2.0.0 or later.
+
 ## 1. Introduction
 
 In this document, we will introduce **Kneron PLUS** (*Platform Library Unified Software*) framework to demostrate the usage of Kneron AI device from host software. When referring to a complete AI application development, actually three parts are involved:
