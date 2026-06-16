@@ -4,6 +4,8 @@
 
 **Note**: Refer to [Kneron PLUS Introduction](./introduction/introduction.md) for feature details
 
+**Note**: The KL730 pre-built `firmware.tar` included in `Kneron PLUS` v3.2.0 requires the KL730 EVM/HDK BSP to be upgraded to SDK v2.0.0 or later.
+
 ---
 
 ## 1. Introduction

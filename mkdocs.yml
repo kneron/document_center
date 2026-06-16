@@ -61,7 +61,8 @@ nav:
     - Release Note:
       - Index:                                                      plus_c/release_note/index.md
       - Version 3:
-        - V3.1.2 (Latest Version):                                  plus_c/release_note/v3/v3_1_2.md
+        - V3.2.0 (Latest Version):                                  plus_c/release_note/v3/v3_2_0.md
+        - V3.1.2:                                                   plus_c/release_note/v3/v3_1_2.md
         - V3.1.1:                                                   plus_c/release_note/v3/v3_1_1.md
         - V3.1.0:                                                   plus_c/release_note/v3/v3_1_0.md
         - V3.0.0:                                                   plus_c/release_note/v3/v3_0_0.md
@@ -184,7 +185,18 @@ nav:
       - Compatible with V1.x API:                                   plus_python/api_migration/chapter/api_compatible_legacy.md
     - API Document:
       - Index:                                                      plus_python/api_document/index.md
-      - V3.1.2 (Latest Version):
+      - V3.2.0 (Latest Version):
+        - Index:                                                    plus_python/api_document/V3.2.0/index.md
+        - kp.core:                                                  plus_python/api_document/V3.2.0/kp/core.md
+        - kp.inference:                                             plus_python/api_document/V3.2.0/kp/inference.md
+        - kp value:                                                 plus_python/api_document/V3.2.0/kp/value.md
+        - kp enum:                                                  plus_python/api_document/V3.2.0/kp/enum.md
+        - kp exception:                                             plus_python/api_document/V3.2.0/kp/exception.md
+        - kp const:                                                 plus_python/api_document/V3.2.0/kp/const.md
+        - kp.v1 (Legacy Module):
+          - kp.v1.inference:                                        plus_python/api_document/V3.2.0/kp/v1/inference.md
+          - kp.v1 value:                                            plus_python/api_document/V3.2.0/kp/v1/value.md
+      - V3.1.2:
         - Index:                                                    plus_python/api_document/V3.1.2/index.md
         - kp.core:                                                  plus_python/api_document/V3.1.2/kp/core.md
         - kp.inference:                                             plus_python/api_document/V3.1.2/kp/inference.md

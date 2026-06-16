@@ -10,6 +10,8 @@
 
 **Note**: If the Kneron AI device you wish to upgrade is running HICO firmware, please manually reset the device first before the update process.
 
+**Note**: KL730-related features in `Kneron DFUT` v3.2.0 require the KL730 EVM/HDK BSP to be upgraded to SDK v2.0.0 or later.
+
 ---
 
 ## 1. Introduction

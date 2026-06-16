@@ -12,7 +12,7 @@
 
 **Note**: If you modify code to change different test image file. Input image aspect ratio is suggested to be aligned to model input aspect ratio.
 
-
+**Note**: The KL730 pre-built `firmware.tar` included in `Kneron PLUS` v3.2.0 requires the KL730 EVM/HDK BSP to be upgraded to SDK v2.0.0 or later.
 
 The provided examples are designed to show how to use KP APIs and present Kneron Device features. Error handling, wording and application layer features are not covered. They are open for more creatives.
 

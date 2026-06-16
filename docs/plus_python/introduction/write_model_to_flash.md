@@ -6,6 +6,8 @@
 
 **Note**: Please use the latest version of KneronDFUT to avoid problems caused by incompatibility.
 
+**Note**: KL730-related features in `Kneron DFUT` v3.2.0 require the KL730 EVM/HDK BSP to be upgraded to SDK v2.0.0 or later.
+
 ## 1. Introduction
 
 The inference model must be loaded into Kneron AI device before the inference process.
