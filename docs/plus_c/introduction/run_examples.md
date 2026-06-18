@@ -341,7 +341,7 @@ The `generic_command` is an example for showing you how to use few system API:
 
 Note: This tool is only provided in Kneron PLUS v1.3.0 and above.
 
-Please refer [Build with DFUT_console](./build_plus.md#23-build-with-dfutconsole)
+Please refer [Build with DFUT_console](./build_plus.md#23-build-with-dfut_console)
 
 DFUT_console provides only the console interface of the Kneron DFUT.
 
