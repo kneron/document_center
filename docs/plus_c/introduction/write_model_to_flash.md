@@ -1,8 +1,8 @@
 # Write Model To Flash
 
-**Note**: KneronDFUT supports 3 platforms - Windows 10, 11 (x86_64 64-bit) and Ubuntu 18.04 (x86_64 64-bit)
+**Note**: KneronDFUT supports 3 platforms - Windows 10, 11 (x86_64 64-bit) and Ubuntu 24.04 (x86_64 64-bit)
 
-**Note**: If you are not using the 3 platforms, you may use the DFUT_console provided in Kneron PLUS. Please refer [Build with DFUT_console](../../plus_c/introduction/build_plus.md#23-build-with-dfutconsole)
+**Note**: If you are not using the 3 platforms, you may use the DFUT_console provided in Kneron PLUS. Please refer [Build with DFUT_console](../../plus_c/introduction/build_plus.md#23-build-with-dfut_console)
 
 **Note**: Please use the latest version of KneronDFUT to avoid problems caused by incompatibility.
 
