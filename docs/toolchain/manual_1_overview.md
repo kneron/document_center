@@ -4,8 +4,8 @@
 
 # 1. Toolchain Overview
 
-**2026-03**
-**Toolchain v0.32.1**
+**2026-05**
+**Toolchain v0.33.0**
 
 ## 1.1. Introduction
 
@@ -20,24 +20,16 @@ In this document, you'll learn:
 
 **Major changes of the current version**
 
-* **[v0.32.1]**
-    * Add `dma_bandwidth` and `weight_bandwidth` to IP evaluator arguments.
-    * Replace `hardware_cut_opt` with `compiler_tiling` to keep consistent with other toolchain apis. The `hardware_cut_opt` is now deprecated and will be removed in future versions. Please use `compiler_tiling` instead.
-    * Update evaluator to raise warning when meeting unsupported operator instead of error.
-    * Update ktc to clean up more intermediate files generated during the flow.
-    * Fix the evaluator bug using wrong 730 frequency.
-* **[v0.32.0]**
-    * Add Einsum defusion in kneronnxopt.
-    * Support Cast to int64 in knerex and compiler.
-    * Support HardSwish, Topk and Split nodes in knerex and compiler.
-    * Update the regression flow log printing. Print success log separately from errors to avoid confusing.
-    * Update IP evaluator for DMA with small length.
-    * Fix the kneronnxopt bug in `replace_Gather_with_Slice`.
-    * Fix the knerex bug: node Concat channel mismatch.
-    * Fix the dynasty float bug in InstanceNorm pad edge mode.
-    * Fix knerex/compiler bug in CPU node settings for Resize node.
-    * Verified opset18 operator validity for knerex and compiler.
-    * Reduce memory usage (especially for large models) for compiler.
+* **[v0.33.0]**
+    * Update TopK and Split node support.
+    * Improve per-channel radix handling for Mul nodes.
+    * Add warnings for models that may be sensitive to large value ranges or Sigmoid quantization.
+    * Fix Clip handling when the maximum value is set to `FLT_MAX`.
+    * Fix Slice and Concat handling for additional slicing patterns.
+    * Fix KL730 CPU execution for Mod nodes with constant inputs.
+    * Add a ktc warning for workflows with multiple BIE inputs.
+    * Add license information to kneronnxopt.
+    * Minor bug fixes.
 
 ## 1.2. Workflow Overview
 

@@ -24,6 +24,16 @@
 
 ## Toolchain Change log
 
+* **[v0.33.0]**
+    * Update TopK and Split node support.
+    * Improve per-channel radix handling for Mul nodes.
+    * Add warnings for models that may be sensitive to large value ranges or Sigmoid quantization.
+    * Fix Clip handling when the maximum value is set to `FLT_MAX`.
+    * Fix Slice and Concat handling for additional slicing patterns.
+    * Fix KL730 CPU execution for Mod nodes with constant inputs.
+    * Add a ktc warning for workflows with multiple BIE inputs.
+    * Add license information to kneronnxopt.
+    * Minor bug fixes.
 * **[v0.32.1]**
     * Add `dma_bandwidth` and `weight_bandwidth` to IP evaluator arguments.
     * Replace `hardware_cut_opt` with `compiler_tiling` to keep consistent with other toolchain apis. The `hardware_cut_opt` is now deprecated and will be removed in future versions. Please use `compiler_tiling` instead.
