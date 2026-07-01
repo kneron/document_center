@@ -5,3 +5,4 @@ nohup.out
 *.log
 *.pyc
 .vscode/settings.json
+.agents/
