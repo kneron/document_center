@@ -4,8 +4,8 @@
 
 # 1. Toolchain Overview
 
-**2026-05**
-**Toolchain v0.33.0**
+**2026-06**
+**Toolchain v0.33.1**
 
 ## 1.1. Introduction
 
@@ -20,6 +20,11 @@ In this document, you'll learn:
 
 **Major changes of the current version**
 
+* **[v0.33.1]**
+    * Improve LayerNorm decomposition performance.
+    * Improve handling for models that reuse weights across multiple operators.
+    * Improve constant folding reliability.
+    * Support ReduceMean fusion when `keepdims` is set to 0.
 * **[v0.33.0]**
     * Update TopK and Split node support.
     * Improve per-channel radix handling for Mul nodes.
