@@ -28,6 +28,7 @@
     * Improve LayerNorm decomposition performance.
     * Improve handling for models that reuse weights across multiple operators.
     * Improve constant folding reliability.
+    * Improve example scripts for easy platform switching.
     * Support ReduceMean fusion when `keepdims` is set to 0.
 * **[v0.33.0]**
     * Update TopK and Split node support.

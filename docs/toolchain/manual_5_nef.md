@@ -74,7 +74,7 @@ If you previously used `hardware_cut_opt=True`, use `compiler_tiling="deep_searc
 
 We would start with single model first.
 
-The return value is the path for the generated nef file. By default, it is under /data1/batch_compile. It takes a list of `ktc.ModelConfig` object as the input `model_list`. The usage of `kt.ModelConfig` can be found in section 3.2. Note that the ModelConfig onject must have bie file inside. In details, it must be under either of the following status: the ModelConfig is initialized with `bie_path`, the ModelConfig is initialized with `onnx_model` or `onnx_path` but it have successfully run `analysis` function.
+The return value is the path for the generated nef file. By default, it is under `/data1/kneron_flow`. It takes a list of `ktc.ModelConfig` object as the input `model_list`. The usage of `kt.ModelConfig` can be found in section 3.2. Note that the ModelConfig onject must have bie file inside. In details, it must be under either of the following status: the ModelConfig is initialized with `bie_path`, the ModelConfig is initialized with `onnx_model` or `onnx_path` but it have successfully run `analysis` function.
 
 For the MobileNet V2 example, please check the code below. Note that `km` is the `ktc.ModelConfig` object we generate in section 3.2 and quantized in the section 4.
 
@@ -122,10 +122,10 @@ We would use `ktc.kneron_inference` here again. And we are using the generated n
 For the batch compile with only MobileNet V2, the python code would be like:
 
 ```python
-hw_results = ktc.kneron_inference(input_data, nef_file=compile_result, input_names=["images"], platform=720)
+hw_results = ktc.kneron_inference(input_data, nef_file=compile_result, platform=720, input_names=["images"])
 ```
 
-The usage is a little different here. In the code above, `hw_results` is a list of result data. `nef_file` is the path to the input nef. `input_data` is a list of input data after preprocess. The requirement is the same as in section 3.3. If your platform is not 520, you may need an extra parameter `platform`, e.g. `platform=720` or `platform=530`.
+The usage is a little different here. In the code above, `hw_results` is a list of result data. `nef_file` is the path to the input nef. `input_data` is a list of input data after preprocess. The requirement is the same as in section 3.3. The `platform` value should match the `ModelConfig` platform, e.g. `platform=720`.
 The `input_names` is a list of string mapping the input data to specific input on the graph using the sequence.
 
 Here we use the same input `input_data` which we used in section 3.3. And the `compile_result` is the one that generated with only Mobilenet V2 model.

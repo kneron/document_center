@@ -24,6 +24,7 @@ In this document, you'll learn:
     * Improve LayerNorm decomposition performance.
     * Improve handling for models that reuse weights across multiple operators.
     * Improve constant folding reliability.
+    * Improve example scripts for easy platform switching.
     * Support ReduceMean fusion when `keepdims` is set to 0.
 * **[v0.33.0]**
     * Update TopK and Split node support.
@@ -54,7 +55,13 @@ To keep the diagram as clear as possible, some details are omitted. But it is en
 3. Compilation. Batch compile multiple bie models into a nef format binary file. Test the nef file and compare the result with the previous step.
 
 In the following parts, we will use MobileNet V2 as the example. Details will be explained later in other sections.
-And all the code below in this section can be found inside the docker at `/workspace/examples/test_python_api.py`.
+And all the code below in this section can be found inside the docker at `/workspace/examples/mobilenetv2/python_api_workflow.py`.
+The script accepts an optional platform argument. The default platform is 720, and supported values are 520, 530, 630, 720 and 730.
+
+```bash
+python python_api_workflow.py
+python python_api_workflow.py 730
+```
 
 ### 1.3. Toolchain Docker Deployment
 
@@ -108,10 +115,11 @@ Before we start quantizing the model and try simulating the model, we need to te
 IP evaluator is such a tool which can estimate the performance of your model and check if there is any operator or structure not supported by our toolchain.
 
 ```python
+platform = "720"
 # Create a ModelConfig object. For details about this class, please check Appendix Python API.
-# Here we set the model ID to 32769, the version to 8b28 and the target platform to 720
+# Here we set the model ID to 32769, the version to 8b28 and the target platform.
 # The `optimized_m` is from the previous code block.
-km = ktc.ModelConfig(32769, "8b28", "720", onnx_model=optimized_m)
+km = ktc.ModelConfig(32769, "8b28", platform, onnx_model=optimized_m)
 
 # Evaluate the model. The evaluation result is saved as string into `eval_result`.
 eval_result = km.evaluate()
@@ -184,12 +192,10 @@ input_images = [preprocess("/workspace/examples/mobilenetv2/images/" + image_nam
 input_mapping = {"images": input_images}
 
 # Quantization the model. `km` is the ModelConfig object defined in the previous section.
-# `optimize` is a optional arguments which improves the NPU efficiency but takes longer to analysis.
-# The larger the number, the more optimization is done, but the longer it takes. The default is 0.
 # For more fine-tuning arguments, please check '4. Fixed-Point Model Generation'.
 # The quantized model is saved as a bie file. The path to the bie file is returned as a string.
 # It also generates a html report with more details. Please check `/data1/kneron_flow/model_fx_report.html`
-bie_path = km.analysis(input_mapping, threads = 8, optimize=2)
+bie_path = km.analysis(input_mapping, threads = 4)
 ```
 
 ### 1.5.2. Fixed-Point Model Inference
@@ -205,7 +211,7 @@ The python code would be like:
 input_data = [preprocess("/workspace/examples/mobilenetv2/images/000007.jpg")]
 
 # Inference with a bie file. `bie_path` is defined in section 1.5.1.
-fixed_point_inf_results = ktc.kneron_inference(input_data, bie_file=bie_path, input_names=["images"], platform=720)
+fixed_point_inf_results = ktc.kneron_inference(input_data, bie_file=bie_path, input_names=["images"], platform=int(platform))
 
 # Compare `fixed_point_inf_results` and `floating_point_inf_results` to check the precision loss.
 ```
@@ -239,12 +245,12 @@ We would use `ktc.kneron_inference` here again. And we are using the generated n
 
 ```python
 # `nef_path` is defined in section 1.6.1.
-binary_inf_results = ktc.kneron_inference(input_data, nef_file=nef_path, input_names=["images"], platform=720)
+binary_inf_results = ktc.kneron_inference(input_data, nef_file=nef_path, platform=int(platform), input_names=["images"])
 
 # Compare binary_inf_results and fixed_point_inf_results. They should be almost the same.
 ```
 
-After getting the `binary_inf_results` and post-process it, you may want to compare the result with the `fixed_point_inf_results` which is generated in section 1.5.2 to see if the results match. Once the results match, then you can deploy your model onto the chip. Congratulations.
+After getting the `binary_inf_results` and post-process it, you may want to compare the result with the `fixed_point_inf时_results` which is generated in section 1.5.2 to see if the results match. Once the results match, then you can deploy your model onto the chip. Congratulations.
 
 ## 1.7 What's Next
 

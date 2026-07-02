@@ -157,7 +157,8 @@ advanced users. Please leave it to `None`.
 For this example, we create the MobileNet V2 ModelConfig with the following python code:
 
 ```python
-km = ktc.ModelConfig(32769, "8b28", "720", onnx_model=optimized_m)
+platform = "720"
+km = ktc.ModelConfig(32769, "8b28", platform, onnx_model=optimized_m)
 ```
 
 `evaluate` is class function of the `ktc.ModelConfig`.
