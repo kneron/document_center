@@ -59,7 +59,7 @@ Args:
 
 Please also note that this step would be very time-consuming since it analysis the model with every input data you provide.
 
-Here as a simple example, we only use four input image as example and run it with the `ktc.ModelConfig` object `km` created in section 3.2:
+Here as a simple example, we use the images under the MobileNet V2 example folder and run it with the `ktc.ModelConfig` object `km` created in section 3.2:
 
 ```python
 # Preprocess images as the quantization inputs. The preprocess function is defined in the previous section.
@@ -92,10 +92,10 @@ We would use `ktc.kneron_inference` here, too. But here we are using the generat
 The python code would be like:
 
 ```python
-fixed_results = ktc.kneron_inference(input_data, bie_file=bie_path, input_names=["data_out"], platform=720)
+fixed_results = ktc.kneron_inference(input_data, bie_file=bie_path, input_names=["images"], platform=720)
 ```
 
-The usage is almost the same as using onnx. In the code above, `inf_results` is a list of result data. `bie_file` is the path to the input bie. `input_data` is a list of input data after preprocess the `input_names` is a list of model input name. The requirement is the same as in section 3.3. If your platform is not 520, you need an extra parameter `platform`, e.g. `platform=720` or `platform=530`.
+The usage is almost the same as using onnx. In the code above, `fixed_results` is a list of result data. `bie_file` is the path to the input bie. `input_data` is a list of input data after preprocess. The `input_names` is a list of model input names. The requirement is the same as in section 3.3. The `platform` value should match the `ModelConfig` platform, e.g. `platform=720`.
 
 As mentioned above, we do not provide any postprocess. In reality, you may want to have your own postprocess function in Python, too.
 
